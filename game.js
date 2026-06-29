@@ -577,41 +577,55 @@ const Game = {
     }
   },
 
-  // --- inventory (tiered) ---
+  // --- inventory grid: resources (rows) × tiers (columns) ---
   renderInventory() {
-    const bar = $("#inventory-bar"); bar.innerHTML = ""; this._invRefs = {};
+    const bar = $("#inventory-bar"); bar.innerHTML = "";
+    this._invCells = {}; this._invRow = {};
+    const maxT = this.cfg.maxTier;
+    bar.style.setProperty("--tiers", maxT);
+
+    const top = el("div", "inv-top");
+    const cap = el("span", "inv-cap", ""); cap.id = "inv-cap";
+    top.append(el("span", "inv-top-label", "Inventaire"), cap);
+    bar.appendChild(top);
+
+    const head = el("div", "inv-grid-head");
+    head.appendChild(el("div", "inv-hcorner", ""));
+    for (let t = 1; t <= maxT; t++) head.appendChild(el("div", "inv-hcell", "T" + t));
+    bar.appendChild(head);
+
     this.cfg.resourceOrder.forEach((rid) => {
-      const r = this.res(rid);
-      const chip = el("div", "inv-chip");
-      chip.title = `${r.displayName} — raffiner`;
-      const img = this.tierImg(rid, this.bestTier(this.player, rid) || 1);
-      const count = el("span", "inv-count", "0"), tier = el("span", "inv-tier", "");
-      const refine = el("span", "inv-refine", "🔁");
-      chip.append(img, count, tier, refine);
-      if (this.cfg.convert[rid]) chip.onclick = () => this.openConvert(rid);
-      bar.appendChild(chip);
-      this._invRefs[rid] = { count, tier, chip, img, refine, last: -1, lastTier: -1 };
+      const row = el("div", "inv-row");
+      const rowHead = el("div", "inv-row-head");
+      const icon = this.tierImg(rid, this.bestTier(this.player, rid) || 1); icon.className = "inv-row-icon"; icon.title = this.res(rid).displayName;
+      rowHead.append(icon, el("span", "inv-refine", "🔁"));
+      if (this.cfg.convert[rid]) { rowHead.classList.add("clickable"); rowHead.title = `${this.res(rid).displayName} — raffiner`; rowHead.onclick = () => this.openConvert(rid); }
+      row.appendChild(rowHead);
+      this._invCells[rid] = {};
+      for (let t = 1; t <= maxT; t++) {
+        const cell = el("div", "inv-cell", "");
+        row.appendChild(cell);
+        this._invCells[rid][t] = { el: cell, last: -1 };
+      }
+      this._invRow[rid] = row;
+      bar.appendChild(row);
     });
-    const cap = el("div", "inv-cap"); cap.id = "inv-cap"; bar.appendChild(cap);
     this.refreshInventory();
   },
   refreshInventory() {
-    if (!this._invRefs) return;
+    if (!this._invCells) return;
+    const maxT = this.cfg.maxTier;
     this.cfg.resourceOrder.forEach((rid) => {
-      const ref = this._invRefs[rid]; const v = this.stockOf(this.player, rid);
-      const bt = this.bestTier(this.player, rid);
-      if (v !== ref.last) {
-        ref.count.textContent = v; ref.chip.classList.toggle("empty", v === 0);
-        ref.tier.textContent = bt ? "T" + bt : "";
-        if (v > ref.last && ref.last >= 0) { ref.chip.classList.remove("bump"); void ref.chip.offsetWidth; ref.chip.classList.add("bump"); }
-        ref.last = v;
+      for (let t = 1; t <= maxT; t++) {
+        const ref = this._invCells[rid][t]; const v = this.tierCount(this.player, rid, t);
+        if (v !== ref.last) {
+          ref.el.textContent = v > 0 ? v : "";
+          ref.el.classList.toggle("has", v > 0);
+          if (v > ref.last && ref.last >= 0) { ref.el.classList.remove("bump"); void ref.el.offsetWidth; ref.el.classList.add("bump"); }
+          ref.last = v;
+        }
       }
-      const dispTier = bt || 1;
-      if (dispTier !== ref.lastTier) {
-        const ni = this.tierImg(rid, dispTier); ni.title = this.res(rid).displayName; ni.className = ref.img.className;
-        ref.chip.replaceChild(ni, ref.img); ref.img = ni; ref.lastTier = dispTier;
-      }
-      ref.chip.classList.toggle("can-refine", this.anyConvert(rid));
+      if (this._invRow[rid]) this._invRow[rid].classList.toggle("can-refine", this.anyConvert(rid));
     });
     const tot = this.stockTotal(this.player), cap = this.player.storageCap;
     const c = $("#inv-cap"); if (c) { c.textContent = `${tot}/${cap}`; c.classList.toggle("full", tot >= cap); }
@@ -727,19 +741,30 @@ const Game = {
       wrap.appendChild(s);
     });
   },
-  // Each non-empty (resource, tier) stack the seller holds, highest tier first.
+  // Seller inventory on a counter. The player gets a compact per-resource total
+  // (the full per-tier detail lives in the bottom inventory grid); bots show each
+  // non-empty (resource, tier) stack, highest tier first.
   renderCounterInv(c) {
     const wrap = c._invRef; if (!wrap) return;
     wrap.innerHTML = "";
-    this.cfg.resourceOrder.forEach((rid) => {
-      const m = c.stock[rid] || {};
-      Object.keys(m).map(Number).sort((a, b) => b - a).forEach((t) => {
-        if (m[t] <= 0) return;
+    if (c.isPlayer) {
+      this.cfg.resourceOrder.forEach((rid) => {
+        const n = this.stockOf(this.player, rid); if (n <= 0) return;
         const stack = el("div", "cinv-stack");
-        stack.append(this.tierImg(rid, t), el("span", null, m[t]));
+        stack.append(this.tierImg(rid, this.bestTier(this.player, rid) || 1), el("span", null, n));
         wrap.appendChild(stack);
       });
-    });
+    } else {
+      this.cfg.resourceOrder.forEach((rid) => {
+        const m = c.stock[rid] || {};
+        Object.keys(m).map(Number).sort((a, b) => b - a).forEach((t) => {
+          if (m[t] <= 0) return;
+          const stack = el("div", "cinv-stack");
+          stack.append(this.tierImg(rid, t), el("span", null, m[t]));
+          wrap.appendChild(stack);
+        });
+      });
+    }
     if (!wrap.children.length) wrap.appendChild(el("span", "cinv-empty", "vide"));
   },
   // Update money + inventory in place (keeps the hit/money-pop animations alive).

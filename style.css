@@ -239,26 +239,40 @@ button.sell { background: var(--ok); color: #03210a; }
 .flash { animation: flash .4s ease; }
 @keyframes flash { 0%{ background: var(--accent);} 100%{ background: var(--bg-card);} }
 
-/* ---------- Inventory bar (tycoon) ---------- */
+/* ---------- Inventory grid (resources × tiers) ---------- */
 #inventory-bar {
-  display: flex; gap: 8px; justify-content: space-around;
+  --tiers: 6;
   background: var(--bg-panel); border: 2px solid var(--border); border-radius: 12px;
-  padding: 8px 6px; margin-bottom: 2px;
+  padding: 8px 10px; margin-bottom: 2px;
+  display: flex; flex-direction: column; gap: 3px;
 }
-.inv-chip { display: flex; align-items: center; gap: 3px; font-weight: bold; font-size: 15px; }
-.inv-chip img { width: 24px; height: 24px; }
-.inv-chip .inv-count { min-width: 12px; text-align: left; color: var(--text); }
-.inv-chip .inv-tier { font-size: 10px; color: var(--accent-2); font-weight: bold; }
-.inv-chip.empty { opacity: .4; }
-.inv-cap { margin-left: auto; font-size: 13px; font-weight: bold; color: var(--text-dim); display: flex; align-items: center; }
+.inv-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1px; }
+.inv-top-label { font-size: 11px; font-weight: bold; color: var(--text-dim); text-transform: uppercase; letter-spacing: .5px; }
+.inv-cap { font-size: 13px; font-weight: bold; color: var(--text-dim); }
 .inv-cap::before { content: "📦"; margin-right: 3px; }
 .inv-cap.full { color: var(--danger); }
-.inv-chip { position: relative; cursor: pointer; }
-.inv-refine { display: none; position: absolute; top: -6px; right: -7px; font-size: 11px; line-height: 1; filter: drop-shadow(0 1px 1px rgba(0,0,0,.6)); }
-.inv-chip.can-refine .inv-refine { display: block; animation: refinePulse 1.4s ease-in-out infinite; }
+
+.inv-grid-head, .inv-row {
+  display: grid;
+  grid-template-columns: 40px repeat(var(--tiers), 1fr);
+  align-items: center; gap: 3px;
+}
+.inv-hcell { font-size: 10px; font-weight: bold; color: var(--text-dim); text-align: center; }
+.inv-row-head { position: relative; display: flex; align-items: center; justify-content: center; }
+.inv-row-head.clickable { cursor: pointer; }
+.inv-row-icon { width: 26px; height: 26px; }
+.inv-cell {
+  text-align: center; font-size: 13px; font-weight: bold; color: var(--text-dim);
+  background: rgba(0,0,0,.18); border-radius: 5px; min-height: 24px;
+  display: flex; align-items: center; justify-content: center;
+}
+.inv-cell.has { color: var(--text); background: rgba(78,201,176,.2); }
+.inv-cell.bump { animation: invBump .3s ease; }
+@keyframes invBump { 0%{ transform: scale(1);} 40%{ transform: scale(1.3); color: var(--accent-2);} 100%{ transform: scale(1);} }
+
+.inv-refine { display: none; position: absolute; top: -7px; right: -5px; font-size: 11px; line-height: 1; filter: drop-shadow(0 1px 1px rgba(0,0,0,.6)); }
+.inv-row.can-refine .inv-refine { display: block; animation: refinePulse 1.4s ease-in-out infinite; }
 @keyframes refinePulse { 0%,100%{ transform: scale(1); opacity: .85; } 50%{ transform: scale(1.25); opacity: 1; } }
-.inv-chip.bump { animation: invBump .3s ease; }
-@keyframes invBump { 0%{ transform: scale(1);} 40%{ transform: scale(1.25); color: var(--accent-2);} 100%{ transform: scale(1);} }
 
 /* ---------- Shop bar (tycoon) ---------- */
 #shop-bar { display: flex; gap: 10px; margin-bottom: 4px; }
