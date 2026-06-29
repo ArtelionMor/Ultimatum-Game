@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "market-ultimatum-web",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8777", "--directory", "web"],
+      "port": 8777
+    },
+    {
+      "name": "market-ultimatum-preview",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8779", "--directory", "web"],
+      "port": 8779
+    }
+  ]
+}

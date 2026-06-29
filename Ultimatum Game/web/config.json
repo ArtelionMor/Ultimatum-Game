@@ -1,0 +1,115 @@
+{
+  "general": {
+    "startingMoney": 120,
+    "totalRounds": 6,
+    "tycoonPhaseDuration": 45,
+    "startingWorkers": 3,
+    "maxWorkersTotal": 10,
+    "workerHireBaseCost": 60,
+    "workerHireCostGrowth": 1.6,
+    "baseIncomePerRound": 45
+  },
+
+  "resources": [
+    { "id": "wood",  "displayName": "Bois",    "spriteId": "Bois",  "baseSellPrice": 6,  "weight": 4 },
+    { "id": "iron",  "displayName": "Fer",     "spriteId": "Vault", "baseSellPrice": 11, "weight": 3 },
+    { "id": "plank", "displayName": "Planche", "spriteId": "Plank", "baseSellPrice": 16, "weight": 2 },
+    { "id": "sword", "displayName": "Épée",    "spriteId": "Sword", "baseSellPrice": 40, "weight": 1 }
+  ],
+
+  "machines": [
+    {
+      "id": "lumberyard", "displayName": "Bûcheronnage", "spriteId": "Tree",
+      "workersRequired": 1, "maxWorkers": 4, "workerSpeedBonus": 0.6,
+      "productionTime": 3.0,
+      "inputs": [],
+      "outputs": [ { "resourceId": "wood", "quantity": 1 } ],
+      "unlockAtRound": 1,
+      "upgrades": [
+        { "cost": 50,  "speedMult": 1.35, "outputBonus": 0 },
+        { "cost": 120, "speedMult": 1.75, "outputBonus": 1 }
+      ]
+    },
+    {
+      "id": "mine", "displayName": "Mine", "spriteId": "Engine",
+      "workersRequired": 1, "maxWorkers": 4, "workerSpeedBonus": 0.6,
+      "productionTime": 4.0,
+      "inputs": [],
+      "outputs": [ { "resourceId": "iron", "quantity": 1 } ],
+      "unlockAtRound": 1,
+      "upgrades": [
+        { "cost": 60,  "speedMult": 1.35, "outputBonus": 0 },
+        { "cost": 140, "speedMult": 1.75, "outputBonus": 1 }
+      ]
+    },
+    {
+      "id": "sawmill", "displayName": "Scierie", "spriteId": "Gear",
+      "workersRequired": 1, "maxWorkers": 3, "workerSpeedBonus": 0.5,
+      "productionTime": 5.0,
+      "inputs": [ { "resourceId": "wood", "quantity": 2 } ],
+      "outputs": [ { "resourceId": "plank", "quantity": 1 } ],
+      "unlockAtRound": 1,
+      "upgrades": [
+        { "cost": 80,  "speedMult": 1.4, "outputBonus": 0 },
+        { "cost": 180, "speedMult": 1.8, "outputBonus": 1 }
+      ]
+    },
+    {
+      "id": "forge", "displayName": "Forge", "spriteId": "Burning Wood",
+      "workersRequired": 2, "maxWorkers": 4, "workerSpeedBonus": 0.4,
+      "productionTime": 8.0,
+      "inputs": [ { "resourceId": "iron", "quantity": 2 }, { "resourceId": "plank", "quantity": 1 } ],
+      "outputs": [ { "resourceId": "sword", "quantity": 1 } ],
+      "unlockAtRound": 2,
+      "upgrades": [
+        { "cost": 150, "speedMult": 1.4, "outputBonus": 0 },
+        { "cost": 320, "speedMult": 1.8, "outputBonus": 1 }
+      ]
+    }
+  ],
+
+  "marketing": {
+    "levels": [
+      { "cost": 0,   "weight": 1.0 },
+      { "cost": 70,  "weight": 2.0 },
+      { "cost": 160, "weight": 3.5 },
+      { "cost": 320, "weight": 5.5 },
+      { "cost": 600, "weight": 8.0 }
+    ]
+  },
+
+  "market": {
+    "customersPerRound": 10,
+    "customersGrowthPerRound": 2,
+    "spawnInterval": 1.3,
+    "descentSeconds": 4.5,
+    "customerQuantityMin": 1,
+    "customerQuantityMax": 3,
+    "randomness": 0.25
+  },
+
+  "tax": { "baseRate": 0.04, "exponent": 1.35, "freeThreshold": 80 },
+
+  "elimination": { "perRound": 1, "startAtRound": 2 },
+
+  "competitors": [
+    {
+      "id": "bot_timber", "displayName": "Timber & Co", "spriteId": "Tree",
+      "startingMoney": 120, "marketingWeight": 2.0,
+      "stockPerRound": { "wood": 10, "plank": 3 },
+      "stockGrowthPerRound": 1.25, "marketingGrowthPerRound": 1.15
+    },
+    {
+      "id": "bot_ferro", "displayName": "FerroMax", "spriteId": "Vault",
+      "startingMoney": 120, "marketingWeight": 2.5,
+      "stockPerRound": { "iron": 9, "wood": 4 },
+      "stockGrowthPerRound": 1.3, "marketingGrowthPerRound": 1.1
+    },
+    {
+      "id": "bot_forge", "displayName": "ForgeKing", "spriteId": "Sword",
+      "startingMoney": 120, "marketingWeight": 1.5,
+      "stockPerRound": { "iron": 6, "plank": 4, "sword": 1 },
+      "stockGrowthPerRound": 1.35, "marketingGrowthPerRound": 1.2
+    }
+  ]
+}

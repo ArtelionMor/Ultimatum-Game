@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Market Ultimatum</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <header id="hud">
+      <div class="hud-item" id="hud-money"><img class="hud-icon" src="sprites/Coins.png" alt="$" /><span id="money">0</span></div>
+      <div class="hud-item" id="hud-round">R <span id="round">0</span>/<span id="total-rounds">0</span></div>
+      <div class="hud-item" id="hud-phase"><span id="phase-label">—</span></div>
+      <div class="hud-item" id="hud-timer"><span id="timer">0</span></div>
+    </header>
+
+    <div id="phase-banner"></div>
+
+    <main id="content">
+      <!-- TYCOON -->
+      <section id="factory-zone" class="zone">
+        <div id="inventory-bar"></div>
+        <div id="shop-bar"></div>
+        <div id="machine-list"></div>
+      </section>
+
+      <!-- MARKET -->
+      <section id="market-zone" class="zone hidden">
+        <div id="customer-lane"></div>
+        <div id="suppliers"></div>
+      </section>
+    </main>
+
+    <footer id="worker-bar">
+      <div id="worker-hint">Touche un ouvrier puis une machine</div>
+      <div id="worker-icons"></div>
+    </footer>
+  </div>
+
+  <!-- Tax overlay -->
+  <div id="tax-overlay" class="overlay hidden">
+    <div class="panel">
+      <h2 id="tax-title">Impôts</h2>
+      <div class="tax-row"><span>Avant</span><span id="tax-before">0</span></div>
+      <div class="tax-row tax-amount"><span>Impôt</span><span id="tax-amount">0</span></div>
+      <div class="tax-row tax-after"><span>Après</span><span id="tax-after">0</span></div>
+    </div>
+  </div>
+
+  <!-- Results overlay -->
+  <div id="results-overlay" class="overlay hidden">
+    <div class="panel wide">
+      <h2 id="results-title">Classement</h2>
+      <div id="results-list"></div>
+      <button id="results-continue">Round suivant</button>
+    </div>
+  </div>
+
+  <!-- Refining (convert) overlay -->
+  <div id="convert-overlay" class="overlay hidden">
+    <div class="panel wide">
+      <h2 id="convert-title">Raffinage</h2>
+      <div id="convert-list"></div>
+      <button id="convert-close">Fermer</button>
+    </div>
+  </div>
+
+  <!-- Game over overlay -->
+  <div id="gameover-overlay" class="overlay hidden">
+    <div class="panel">
+      <h2 id="gameover-title">Partie terminée</h2>
+      <img class="big-icon" src="sprites/Coins.png" alt="" />
+      <div class="final-score"><span id="final-score">0</span></div>
+      <p id="gameover-rank"></p>
+      <button id="replay-btn">Rejouer</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
