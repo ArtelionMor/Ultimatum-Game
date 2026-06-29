@@ -631,7 +631,7 @@ const Game = {
     });
     const tot = this.stockTotal(this.player), cap = this.player.storageCap;
     const c = $("#inv-cap"); if (c) { c.textContent = `${tot}/${cap}`; c.classList.toggle("full", tot >= cap); }
-    if (this._convertResId && !$("#convert-overlay").classList.contains("hidden")) this.renderConvertList();
+    if (this._convertResId && !$("#convert-overlay").classList.contains("hidden")) this.updateConvertList();
   },
 
   // --- refining overlay (convert table) ---
@@ -643,25 +643,39 @@ const Game = {
     $("#convert-overlay").classList.remove("hidden");
   },
   closeConvert() { this._convertResId = null; $("#convert-overlay").classList.add("hidden"); },
+  // Build the refine list once (stable button elements so clicks register).
   renderConvertList() {
     const resId = this._convertResId; if (!resId) return;
     const list = $("#convert-list"); list.innerHTML = "";
     const rules = this.cfg.convert[resId];
+    this._cvRows = [];
     Object.keys(rules).map(Number).sort((a, b) => a - b).forEach((tier) => {
       const rule = rules[tier];
-      const have = this.tierCount(this.player, resId, tier);
-      const ok = have >= rule.quantity;
-      const row = el("div", "convert-row" + (ok ? "" : " locked"));
+      const row = el("div", "convert-row");
       const from = el("div", "cv-side");
       from.append(this.tierImg(resId, tier), el("span", "cv-q", `${rule.quantity}× T${tier}`));
       const arrow = el("span", "cv-arrow", "→");
       const to = el("div", "cv-side");
       to.append(this.tierImg(rule.resultRes, rule.resultTier), el("span", "cv-q", `${rule.resultQty}× T${rule.resultTier}`));
-      const have$ = el("span", "cv-have", `tu as ${have}`);
-      const btn = el("button", "cv-btn", "Raffiner"); btn.disabled = !ok;
-      btn.onclick = () => { if (this.doConvert(resId, tier)) { this.renderConvertList(); } };
-      row.append(from, arrow, to, have$, btn);
+      const haveEl = el("span", "cv-have", "");
+      const btn = el("button", "cv-btn", "Raffiner");
+      btn.onclick = () => { if (this.doConvert(resId, tier)) this.updateConvertList(); };
+      row.append(from, arrow, to, haveEl, btn);
       list.appendChild(row);
+      this._cvRows.push({ tier, rule, row, haveEl, btn });
+    });
+    this.updateConvertList();
+  },
+  // Lightweight per-frame refresh: update counts/disabled in place, never rebuild.
+  updateConvertList() {
+    if (!this._cvRows || !this._convertResId) return;
+    const resId = this._convertResId;
+    this._cvRows.forEach((r) => {
+      const have = this.tierCount(this.player, resId, r.tier);
+      const ok = have >= r.rule.quantity;
+      r.haveEl.textContent = `tu as ${have}`;
+      r.btn.disabled = !ok;
+      r.row.classList.toggle("locked", !ok);
     });
   },
 
