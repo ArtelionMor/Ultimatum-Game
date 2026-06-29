@@ -1,3 +1,15 @@
+# --- Personal / dev scaffolding — keep out of the public repo ---
+PROJECT_CONTEXT.json
+gemini-code-*.txt
+.claude/settings.local.json
+*.lnk
+# Personal design notes (remove this line if you want the GDD public)
+GDD Market Ultimatum.txt
+# OS / editor junk
+Thumbs.db
+desktop.ini
+.DS_Store
+
 # This .gitignore file should be placed at the root of your Unity project directory
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
