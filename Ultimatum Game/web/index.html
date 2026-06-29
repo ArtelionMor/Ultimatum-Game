@@ -15,20 +15,23 @@
       <div class="hud-item" id="hud-timer"><span id="timer">0</span></div>
     </header>
 
+    <!-- Next-wave demand menu -->
+    <div id="wave-preview"></div>
+
     <div id="phase-banner"></div>
 
     <main id="content">
-      <!-- TYCOON -->
+      <!-- MARKET (top) -->
+      <section id="market-zone" class="zone">
+        <div id="customer-lane"></div>
+        <div id="suppliers"></div>
+      </section>
+
+      <!-- FACTORY (bottom) -->
       <section id="factory-zone" class="zone">
         <div id="inventory-bar"></div>
         <div id="shop-bar"></div>
         <div id="machine-list"></div>
-      </section>
-
-      <!-- MARKET -->
-      <section id="market-zone" class="zone hidden">
-        <div id="customer-lane"></div>
-        <div id="suppliers"></div>
       </section>
     </main>
 
