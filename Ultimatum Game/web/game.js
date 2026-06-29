@@ -232,12 +232,16 @@ const Game = {
     const g = this.cfg.g;
     this.waveActive = false;
     this.prepTimer = g.tycoonPhaseDuration;
+    this._prepDuration = g.tycoonPhaseDuration;
     this.market = null;
     this.player.selectedWorker = false;
 
     // round income (scheduled) to every alive competitor
     const inc = this.cfg.roundIncome[this.round];
     if (inc) this.competitors.forEach((c) => { if (!c.eliminated) c.money += inc.coins; });
+
+    // bots plan their whole round now; their stock is revealed gradually during prep
+    this.competitors.forEach((c) => { if (!c.isPlayer && !c.eliminated) this.planBot(c); });
 
     // unlock machines, keep worker assignments, recompute the available pool
     this.cfg.machines.forEach((m) => { if (m.unlockAtRound === this.round) this.giveMachine(this.player, m.id); });
@@ -263,6 +267,8 @@ const Game = {
       if (m.remaining <= 0 && m.served >= m.total) this.endWave();
     } else {
       this.prepTimer -= dt;
+      const progress = this._prepDuration ? Math.max(0, Math.min(1, 1 - this.prepTimer / this._prepDuration)) : 1;
+      this.competitors.forEach((c) => { if (!c.isPlayer && !c.eliminated) this.releaseBotStock(c, progress); });
       this.updateWavePreviewTimer();
       if (this.prepTimer <= 0) this.startWave();
     }
@@ -272,7 +278,8 @@ const Game = {
   // A wave arrives: bots stock up, customers start falling. Production keeps running.
   startWave() {
     this.waveActive = true;
-    this.competitors.forEach((c) => { if (!c.isPlayer && !c.eliminated) this.simulateBot(c); c.salesThisRound = 0; });
+    // flush any not-yet-revealed bot stock so they reach exactly the planned target
+    this.competitors.forEach((c) => { if (!c.isPlayer && !c.eliminated) this.releaseBotStock(c, 1); c.salesThisRound = 0; });
     const m = this.cfg.market[this.round] || this.cfg.market[Object.keys(this.cfg.market).length];
     this.market = { def: m, remaining: m.customers, total: m.customers, served: 0, spawnTimer: 0, active: 0 };
     $("#customer-lane").innerHTML = "";
@@ -401,6 +408,23 @@ const Game = {
     if (a === "increaseMarketting") { const n = this.cfg.purchases.increaseMarketting[b.buys.increaseMarketting]; b.money -= n.price; b.buys.increaseMarketting++; b.marketing = n.effect; b.upgradesBought++; return; }
     if (a === "increaseStorage") { const n = this.cfg.purchases.increaseStorage[b.buys.increaseStorage]; b.money -= n.price; b.buys.increaseStorage++; b.storageCap += n.effect; b.upgradesBought++; return; }
     const ti = this.tierInfo(a, tier); b.money -= ti.price; this.addStock(b, a, tier, 1);
+  },
+
+  // Plan a bot's whole round (money/upgrades resolved now), then queue its target
+  // stock to be revealed unit-by-unit over the prep so the counter fills gradually.
+  planBot(b) {
+    this.simulateBot(b);                    // produces the round's target into b.stock, spends money
+    const queue = [];
+    for (const rid in b.stock) for (const t in b.stock[rid]) for (let i = 0; i < b.stock[rid][t]; i++) queue.push({ resId: rid, tier: +t });
+    for (let i = queue.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [queue[i], queue[j]] = [queue[j], queue[i]]; } // shuffle for a mixed reveal
+    b._queue = queue; b._queueTotal = queue.length; b._released = 0;
+    b.stock = this.emptyStock();            // start the round empty; reveal over time
+  },
+  // Reveal queued units up to `progress` (0..1) of the prep.
+  releaseBotStock(b, progress) {
+    if (!b._queue) return;
+    const target = Math.min(b._queueTotal, Math.floor(progress * b._queueTotal));
+    while (b._released < target) { const u = b._queue[b._released++]; this.addStock(b, u.resId, u.tier, 1); }
   },
 
   // ---------- Next-wave preview (top menu) ----------
