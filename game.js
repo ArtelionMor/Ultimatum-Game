@@ -23,7 +23,7 @@ const $ = (s) => document.querySelector(s);
 const el = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
 const randInt = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 
-const S = { Setup: "Setup", Tycoon: "Tycoon", Market: "Market", Tax: "Tax", Results: "Results", GameOver: "GameOver" };
+const S = { Setup: "Setup", Play: "Play", Tax: "Tax", Results: "Results", GameOver: "GameOver" };
 
 // ============================================================
 // Config normalization (export format -> engine format)
@@ -89,7 +89,7 @@ function normalize(raw) {
 // Game
 // ============================================================
 const Game = {
-  cfg: null, state: S.Setup, round: 0, phaseTimer: 0,
+  cfg: null, state: S.Setup, round: 0, prepTimer: 0, waveActive: false,
   competitors: [], player: null, lastTime: 0, market: null,
 
   async start() {
@@ -107,14 +107,13 @@ const Game = {
     if (!this.lastTime) this.lastTime = t;
     let dt = (t - this.lastTime) / 1000; this.lastTime = t;
     if (dt > 0.2) dt = 0.2;
-    if (this.state === S.Tycoon) this.updateTycoon(dt);
-    else if (this.state === S.Market) this.updateMarket(dt);
+    if (this.state === S.Play) this.updatePlay(dt);
     requestAnimationFrame((t2) => this.loop(t2));
   },
 
   transitionTo(n) { this.exitState(this.state); this.state = n; this.enterState(n); },
-  enterState(s) { ({ [S.Setup]: () => this.enterSetup(), [S.Tycoon]: () => this.enterTycoon(), [S.Market]: () => this.enterMarket(), [S.Tax]: () => this.enterTax(), [S.Results]: () => this.enterResults(), [S.GameOver]: () => this.enterGameOver() }[s] || (() => {}))(); },
-  exitState(s) { if (s === S.Tycoon) this.exitTycoon(); },
+  enterState(s) { ({ [S.Setup]: () => this.enterSetup(), [S.Play]: () => this.enterPlay(), [S.Tax]: () => this.enterTax(), [S.Results]: () => this.enterResults(), [S.GameOver]: () => this.enterGameOver() }[s] || (() => {}))(); },
+  exitState(s) { void s; },
 
   // ---------- helpers ----------
   res(id) { return this.cfg.resources[id]; },
@@ -206,45 +205,87 @@ const Game = {
       buys: { increaseWorker: 0, increaseMarketting: 0, increaseStorage: 0 }, salesThisRound: 0,
     }));
     this.competitors = [this.player, ...bots];
-    this.transitionTo(S.Tycoon);
+    this._screenReady = false;
+    this.transitionTo(S.Play);
   },
 
   giveMachine(p, id) { if (!p.machines.some((m) => m.id === id)) p.machines.push({ id, level: 1, workers: 0, elapsed: 0, producing: false }); },
 
-  // ---------- Tycoon ----------
-  enterTycoon() {
+  // ---------- Play (single screen: continuous production + customer waves) ----------
+  enterPlay() {
+    if (!this._screenReady) this.setupScreen();
+    this.startPrep();
+  },
+
+  // One-time screen setup: both zones visible, worker bar shown.
+  setupScreen() {
+    this._screenReady = true;
+    $("#factory-zone").classList.remove("hidden");
+    $("#market-zone").classList.remove("hidden");
+    $("#worker-bar").style.display = "flex";
+    $("#customer-lane").innerHTML = "";
+  },
+
+  // Prep window before a wave: production runs, player prepares, top menu shows demand.
+  startPrep() {
     this.round++;
     const g = this.cfg.g;
-    this.phaseTimer = g.tycoonPhaseDuration;
+    this.waveActive = false;
+    this.prepTimer = g.tycoonPhaseDuration;
+    this.market = null;
     this.player.selectedWorker = false;
 
     // round income (scheduled) to every alive competitor
     const inc = this.cfg.roundIncome[this.round];
     if (inc) this.competitors.forEach((c) => { if (!c.eliminated) c.money += inc.coins; });
 
-    // unlock machines
+    // unlock machines, keep worker assignments, recompute the available pool
     this.cfg.machines.forEach((m) => { if (m.unlockAtRound === this.round) this.giveMachine(this.player, m.id); });
-    // keep last round's worker assignments; only recompute the available pool
     let assigned = 0;
-    this.player.machines.forEach((m) => { m.producing = false; m.elapsed = 0; assigned += m.workers; });
+    this.player.machines.forEach((m) => { m.elapsed = 0; assigned += m.workers; });
     this.player.availableWorkers = Math.max(0, this.player.totalWorkers - assigned);
 
-    $("#market-zone").classList.add("hidden");
-    $("#factory-zone").classList.remove("hidden");
-    $("#worker-bar").style.display = "flex";
-    $("#phase-banner").textContent = `Round ${this.round} — Revenu +${inc ? inc.coins : 0}$ · stock max ${this.player.storageCap}`;
-
-    this.renderInventory(); this.renderShop(); this.renderMachines(); this.renderWorkers(); this.refreshHud();
+    $("#phase-banner").textContent = `Round ${this.round} — Revenu +${inc ? inc.coins : 0}$ · prépare-toi`;
+    this.renderInventory(); this.renderShop(); this.renderMachines(); this.renderWorkers();
+    this.renderSuppliers(); this.renderWavePreview(); this.refreshHud();
   },
 
-  updateTycoon(dt) {
-    this.phaseTimer -= dt;
+  updatePlay(dt) {
     this.tickProduction(dt);
-    this.refreshInventory(); this.refreshHud();
-    if (this.phaseTimer <= 0) this.transitionTo(S.Market);
+    this.refreshInventory();
+    this._supTimer = (this._supTimer || 0) - dt;
+    if (this._supTimer <= 0) { this.refreshSuppliers(); this._supTimer = 0.2; }
+
+    if (this.waveActive) {
+      const m = this.market;
+      m.spawnTimer -= dt;
+      if (m.remaining > 0 && m.spawnTimer <= 0) { m.spawnTimer = SPAWN_INTERVAL / (this.cfg.g.customerRate || 1); m.remaining--; this.spawnCustomer(); }
+      if (m.remaining <= 0 && m.served >= m.total) this.endWave();
+    } else {
+      this.prepTimer -= dt;
+      this.updateWavePreviewTimer();
+      if (this.prepTimer <= 0) this.startWave();
+    }
+    this.refreshHud();
   },
 
-  exitTycoon() { this.player.machines.forEach((m) => { m.producing = false; m.elapsed = 0; }); },
+  // A wave arrives: bots stock up, customers start falling. Production keeps running.
+  startWave() {
+    this.waveActive = true;
+    this.competitors.forEach((c) => { if (!c.isPlayer && !c.eliminated) this.simulateBot(c); c.salesThisRound = 0; });
+    const m = this.cfg.market[this.round] || this.cfg.market[Object.keys(this.cfg.market).length];
+    this.market = { def: m, remaining: m.customers, total: m.customers, served: 0, spawnTimer: 0, active: 0 };
+    $("#customer-lane").innerHTML = "";
+    $("#phase-banner").textContent = `Vague ${this.round} — les clients arrivent !`;
+    this.renderSuppliers(); this.renderWavePreview(); this.refreshHud();
+    const content = $("#content"); if (content) content.scrollTo({ top: 0, behavior: "smooth" });
+  },
+
+  // Wave fully served -> tax / elimination (overlays), then back to prep for the next one.
+  endWave() {
+    this.waveActive = false;
+    this.transitionTo(S.Tax);
+  },
 
   lvl(machine) { return this.machineDef(machine.id).levels[machine.level - 1]; },
   effTime(machine) { const L = this.lvl(machine); return Math.max(0.3, L.productionTime * (1 - L.workerSpeedBonus * machine.workers)); },
@@ -362,28 +403,37 @@ const Game = {
     const ti = this.tierInfo(a, tier); b.money -= ti.price; this.addStock(b, a, tier, 1);
   },
 
-  // ---------- Market ----------
-  enterMarket() {
-    this.competitors.forEach((c) => { if (!c.isPlayer && !c.eliminated) this.simulateBot(c); c.salesThisRound = 0; });
-    const m = this.cfg.market[this.round] || this.cfg.market[Object.keys(this.cfg.market).length];
-    this.market = { def: m, remaining: m.customers, total: m.customers, served: 0, spawnTimer: 0, active: 0 };
-
-    this.closeConvert();
-    $("#factory-zone").classList.add("hidden");
-    $("#market-zone").classList.remove("hidden");
-    $("#worker-bar").style.display = "none";
-    $("#phase-banner").textContent = "Les clients arrivent — capte-les !";
-    $("#customer-lane").innerHTML = "";
-    this.renderSuppliers();
-    this.refreshHud();
+  // ---------- Next-wave preview (top menu) ----------
+  // The wave whose demand to advertise: during a wave, the next one; during prep, the
+  // one about to arrive. Returns null when there is no further wave.
+  previewWave() {
+    const keys = Object.keys(this.cfg.market).map(Number);
+    const last = keys.length ? Math.max(...keys) : 0;
+    const pr = this.waveActive ? this.round + 1 : this.round;
+    return pr > last ? null : pr;
   },
-
-  updateMarket(dt) {
-    const m = this.market;
-    m.spawnTimer -= dt;
-    if (m.remaining > 0 && m.spawnTimer <= 0) { m.spawnTimer = SPAWN_INTERVAL / (this.cfg.g.customerRate || 1); m.remaining--; this.spawnCustomer(); }
-    this.refreshHud();
-    if (m.remaining <= 0 && m.served >= m.total) this.transitionTo(S.Tax);
+  renderWavePreview() {
+    const wrap = $("#wave-preview"); if (!wrap) return;
+    const pr = this.previewWave();
+    if (pr == null) { wrap.innerHTML = `<div class="wp-head"><span class="wp-title">Dernière vague</span></div>`; return; }
+    const mk = this.cfg.market[pr];
+    const order = this.cfg.resourceOrder;
+    const totalW = order.reduce((s, r) => s + (mk.weights[r] || 0), 0) || 1;
+    const chips = order.filter((r) => (mk.weights[r] || 0) > 0)
+      .sort((a, b) => (mk.weights[b] || 0) - (mk.weights[a] || 0))
+      .map((r) => `<div class="wp-chip"><img src="${sprite(this.res(r).spriteId)}" title="${this.res(r).displayName}"><span>${Math.round((mk.weights[r] || 0) / totalW * 100)}%</span></div>`)
+      .join("");
+    wrap.innerHTML =
+      `<div class="wp-head"><span class="wp-title">Vague ${pr}</span>` +
+      `<span class="wp-meta">👥 ${mk.customers} · ~${mk.avg}/client</span>` +
+      `<span id="wp-countdown" class="wp-countdown"></span></div>` +
+      `<div class="wp-chips">${chips}</div>`;
+    this.updateWavePreviewTimer();
+  },
+  updateWavePreviewTimer() {
+    const c = $("#wp-countdown"); if (!c) return;
+    c.textContent = this.waveActive ? "en cours" : "↓ " + Math.max(0, Math.ceil(this.prepTimer)) + "s";
+    c.classList.toggle("imminent", !this.waveActive && this.prepTimer <= 5);
   },
 
   pickNeed() {
@@ -474,7 +524,7 @@ const Game = {
     const stillAlive = this.competitors.filter((c) => !c.eliminated);
     const end = this.player.eliminated || stillAlive.length <= 1 || this.round >= this.cfg.g.totalRounds;
     $("#results-continue").textContent = end ? "Voir le résultat" : "Round suivant";
-    $("#results-continue").onclick = () => { $("#results-overlay").classList.add("hidden"); this.transitionTo(end ? S.GameOver : S.Tycoon); };
+    $("#results-continue").onclick = () => { $("#results-overlay").classList.add("hidden"); this.transitionTo(end ? S.GameOver : S.Play); };
   },
 
   enterGameOver() {
@@ -493,9 +543,14 @@ const Game = {
   refreshHud() {
     this.player; $("#money").textContent = this.player.money;
     $("#round").textContent = this.round;
-    $("#phase-label").textContent = ({ [S.Tycoon]: "Production", [S.Market]: "Marché" })[this.state] || "";
-    if (this.state === S.Tycoon) { const s = Math.max(0, Math.ceil(this.phaseTimer)); $("#timer").textContent = s + "s"; $("#hud-timer").classList.toggle("urgent", s <= 10); }
-    else if (this.state === S.Market) { $("#timer").textContent = "👥 " + (this.market ? this.market.remaining : 0); $("#hud-timer").classList.remove("urgent"); }
+    $("#phase-label").textContent = this.state === S.Play ? (this.waveActive ? "Vague" : "Prépa") : "";
+    if (this.state === S.Play && this.waveActive) {
+      $("#timer").textContent = "👥 " + (this.market ? this.market.remaining + this.market.active : 0);
+      $("#hud-timer").classList.remove("urgent");
+    } else if (this.state === S.Play) {
+      const s = Math.max(0, Math.ceil(this.prepTimer)); $("#timer").textContent = s + "s";
+      $("#hud-timer").classList.toggle("urgent", s <= 5);
+    }
   },
 
   // --- inventory (tiered) ---

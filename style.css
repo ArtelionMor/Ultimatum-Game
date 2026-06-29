@@ -57,6 +57,27 @@ img { image-rendering: pixelated; }
 #hud-timer { color: var(--text); min-width: 38px; justify-content: flex-end; }
 #hud-timer.urgent { color: var(--danger); }
 
+/* ---------- Next-wave preview menu ---------- */
+#wave-preview {
+  flex: 0 0 auto;
+  background: linear-gradient(180deg, #2b3142 0%, #242a39 100%);
+  border-bottom: 2px solid var(--border);
+  padding: 7px 14px 9px;
+}
+.wp-head { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.wp-title { font-weight: bold; color: var(--accent); text-transform: uppercase; letter-spacing: .5px; }
+.wp-meta { color: var(--text-dim); }
+.wp-countdown { margin-left: auto; font-weight: bold; color: var(--accent-2); }
+.wp-countdown.imminent { color: var(--danger); animation: wpPulse .7s ease-in-out infinite; }
+@keyframes wpPulse { 0%,100%{ opacity: 1; } 50%{ opacity: .4; } }
+.wp-chips { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+.wp-chip {
+  display: flex; align-items: center; gap: 3px;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+  padding: 2px 7px 2px 4px; font-size: 13px; font-weight: bold;
+}
+.wp-chip img { width: 22px; height: 22px; }
+
 /* ---------- Phase banner ---------- */
 #phase-banner {
   flex: 0 0 auto;
@@ -259,10 +280,10 @@ button.upgrade { background: var(--accent-2); color: #04231d; font-size: 12px; p
 button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
 
 /* ---------- Market: vertical street ---------- */
-#market-zone { height: 100%; display: flex; flex-direction: column; gap: 0; }
+#market-zone { display: flex; flex-direction: column; gap: 0; }
 
 #customer-lane {
-  position: relative; flex: 1 1 auto; min-height: 280px; overflow: hidden;
+  position: relative; height: 240px; flex: 0 0 auto; overflow: hidden;
   background:
     repeating-linear-gradient(180deg, transparent 0 38px, rgba(255,255,255,.025) 38px 40px),
     linear-gradient(180deg, #20283a 0%, #283755 100%);
