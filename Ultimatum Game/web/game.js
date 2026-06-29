@@ -7,7 +7,6 @@
 "use strict";
 
 // ---- config knobs not in the export ----
-const ELIM_AT_TAX_ROUNDS = true;   // eliminate the last competitor at each tax round
 const BASE_MARKETING = 1.0;        // attractiveness baseline before any marketing purchase
 const SPAWN_INTERVAL = 0.45;       // seconds between customers
 const FALL_TIME = 2.6;             // seconds a customer takes to fall
@@ -537,16 +536,12 @@ const Game = {
     setTimeout(() => { $("#tax-overlay").classList.add("hidden"); this.transitionTo(S.Results); }, cost > 0 ? 1900 : 800);
   },
 
-  // ---------- Results / elimination ----------
+  // ---------- Results (standings) ----------
   enterResults() {
-    const alive = this.competitors.filter((c) => !c.eliminated).sort((a, b) => b.money - a.money);
-    const isTaxRound = !!this.cfg.tax[this.round];
-    let elimNow = [];
-    if (ELIM_AT_TAX_ROUNDS && isTaxRound && alive.length > 2) { elimNow = alive.slice(-1); elimNow.forEach((c) => (c.eliminated = true)); }
-    this.renderResults(alive, elimNow);
+    const ranked = this.competitors.sort((a, b) => b.money - a.money);
+    this.renderResults(ranked, []);
 
-    const stillAlive = this.competitors.filter((c) => !c.eliminated);
-    const end = this.player.eliminated || stillAlive.length <= 1 || this.round >= this.cfg.g.totalRounds;
+    const end = this.round >= this.cfg.g.totalRounds;
     $("#results-continue").textContent = end ? "Voir le résultat" : "Round suivant";
     $("#results-continue").onclick = () => { $("#results-overlay").classList.add("hidden"); this.transitionTo(end ? S.GameOver : S.Play); };
   },
