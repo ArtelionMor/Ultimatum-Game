@@ -507,7 +507,11 @@ const Game = {
           cust.classList.add("toShop");
           this.flashStall(winner, gain);
         }
-      } else { cust.classList.add("nobody"); setTimeout(() => cust.classList.add("done"), 200); }
+      } else {
+        cust.classList.add("nobody"); // turns red
+        const x = parseFloat(cust.style.left) || 50;
+        cust.style.left = (x < 50 ? -25 : 125) + "%"; // slide off to the nearest edge
+      }
       setTimeout(() => cust.remove(), 750);
       m.served++; m.active--;
       this.refreshSuppliers();
@@ -620,7 +624,10 @@ const Game = {
           ref.last = v;
         }
       }
-      if (this._invRow[rid]) this._invRow[rid].classList.toggle("can-refine", this.anyConvert(rid));
+      if (this._invRow[rid]) {
+        this._invRow[rid].classList.toggle("can-refine", this.anyConvert(rid));
+        this._invRow[rid].classList.toggle("hidden", this.stockOf(this.player, rid) <= 0); // only show rows that hold stock
+      }
     });
     const tot = this.stockTotal(this.player), cap = this.player.storageCap;
     const c = $("#inv-cap"); if (c) { c.textContent = `${tot}/${cap}`; c.classList.toggle("full", tot >= cap); }
@@ -733,8 +740,60 @@ const Game = {
       c._moneyRef = s.querySelector(".cmoney");
       c._invRef = s.querySelector(".counter-inv");
       this.renderCounterInv(c);
+      s.onclick = () => this.openCompetitor(c);
       wrap.appendChild(s);
     });
+  },
+
+  // --- competitor info widget ---
+  openCompetitor(c) { this._infoC = c; this.renderCompetitorPanel(); $("#competitor-overlay").classList.remove("hidden"); },
+  closeCompetitor() { this._infoC = null; $("#competitor-overlay").classList.add("hidden"); },
+  botSpecialty(c) {
+    if (!c.behavior) return "";
+    let best = null, bw = -1;
+    this.cfg.resourceOrder.forEach((r) => { const w = c.behavior[r] || 0; if (w > bw) { bw = w; best = r; } });
+    return best && bw > 0 ? "Spécialité : " + this.res(best).displayName : "";
+  },
+  renderCompetitorPanel() {
+    const c = this._infoC; if (!c) return;
+    const body = $("#competitor-body");
+    const tag = (c.def && c.def.tag) || c.id;
+    const income = c.isPlayer ? null : (c.def.increaseByRound + c.def.upgradeEffect * c.upgradesBought);
+    const spec = c.isPlayer ? "" : this.botSpecialty(c);
+    body.innerHTML =
+      `<div class="cp-head">
+        <img class="cp-skin" src="${sprite(c.spriteId)}">
+        <div class="cp-id">
+          <div class="cp-name">${c.name}${c.eliminated ? ' <span class="cp-elim">éliminé</span>' : ""}</div>
+          <div class="cp-tags"><span class="cp-tag">@${tag}</span>${spec ? `<span class="cp-spec">${spec}</span>` : ""}</div>
+        </div>
+      </div>
+      <div class="cp-stats">
+        <div class="cp-stat"><span>Argent</span><b>${c.money}</b></div>
+        <div class="cp-stat"><span>Marketing</span><b>${c.marketing.toFixed(1)}</b></div>
+        <div class="cp-stat"><span>Stockage</span><b>${this.stockTotal(c)}/${c.storageCap}</b></div>
+        ${income != null ? `<div class="cp-stat"><span>Revenu/tour</span><b>+${income}</b></div>` : ""}
+      </div>
+      <div class="cp-section">Améliorations</div>
+      <div class="cp-upg">
+        <span>👷 Ouvriers : <b>${c.buys.increaseWorker}</b></span>
+        <span>📣 Marketing : <b>${c.buys.increaseMarketting}</b></span>
+        <span>📦 Stockage : <b>${c.buys.increaseStorage}</b></span>
+        ${c.isPlayer ? "" : `<span>⭐ Total : <b>${c.upgradesBought}</b></span>`}
+      </div>
+      <div class="cp-section">Inventaire</div>
+      <div class="cp-inv"></div>`;
+    const inv = body.querySelector(".cp-inv");
+    const maxT = this.cfg.maxTier; let any = false;
+    this.cfg.resourceOrder.forEach((rid) => {
+      if (this.stockOf(c, rid) <= 0) return; any = true;
+      const row = el("div", "cp-inv-row");
+      const ic = this.tierImg(rid, this.bestTier(c, rid) || 1); ic.className = "cp-inv-icon"; ic.title = this.res(rid).displayName;
+      const tiers = el("div", "cp-inv-tiers");
+      for (let t = 1; t <= maxT; t++) { const n = this.tierCount(c, rid, t); if (n > 0) tiers.appendChild(el("span", "cp-tier-chip", `T${t}·${n}`)); }
+      row.append(ic, tiers); inv.appendChild(row);
+    });
+    if (!any) inv.appendChild(el("div", "cp-empty", "Inventaire vide"));
   },
   // Seller inventory on a counter. The player gets a compact per-resource total
   // (the full per-tier detail lives in the bottom inventory grid); bots show each
@@ -769,11 +828,23 @@ const Game = {
       if (c._moneyRef) c._moneyRef.textContent = c.money;
       this.renderCounterInv(c);
     });
+    if (this._infoC && !$("#competitor-overlay").classList.contains("hidden")) this.renderCompetitorPanel();
   },
   flashStall(c, gain) {
     const s = c._counter; if (!s) return;
     s.classList.remove("hit"); void s.offsetWidth; s.classList.add("hit");
-    if (gain) { const pop = el("div", "money-pop", "+" + gain); s.appendChild(pop); setTimeout(() => pop.remove(), 800); }
+    if (gain) { const pop = el("div", "money-pop", "+" + gain); s.appendChild(pop); setTimeout(() => pop.remove(), 800); this.coinBurst(s, 6); }
+  },
+  // little coins springing out of a counter when it earns money
+  coinBurst(s, n) {
+    for (let i = 0; i < n; i++) {
+      const coin = el("img", "coin-particle"); coin.src = sprite("Coins");
+      coin.style.setProperty("--dx", Math.round(Math.random() * 80 - 40) + "px");
+      coin.style.setProperty("--dy", Math.round(-32 - Math.random() * 40) + "px");
+      coin.style.animationDelay = (Math.random() * 0.1).toFixed(2) + "s";
+      s.appendChild(coin);
+      setTimeout(() => coin.remove(), 850);
+    }
   },
 
   renderResults(ranked, elimNow) {
@@ -791,5 +862,7 @@ const Game = {
 $("#replay-btn").addEventListener("click", () => { $("#gameover-overlay").classList.add("hidden"); Game.transitionTo(S.Setup); });
 $("#convert-close").addEventListener("click", () => Game.closeConvert());
 $("#convert-overlay").addEventListener("click", (e) => { if (e.target.id === "convert-overlay") Game.closeConvert(); });
+$("#competitor-close").addEventListener("click", () => Game.closeCompetitor());
+$("#competitor-overlay").addEventListener("click", (e) => { if (e.target.id === "competitor-overlay") Game.closeCompetitor(); });
 
 Game.start();
