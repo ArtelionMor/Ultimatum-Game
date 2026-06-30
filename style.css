@@ -76,7 +76,7 @@ img { image-rendering: pixelated; }
   background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
   padding: 2px 7px 2px 4px; font-size: 13px; font-weight: bold;
 }
-.wp-chip img { width: 22px; height: 22px; }
+.wp-chip img { width: 44px; height: 44px; }
 
 /* ---------- Phase banner ---------- */
 #phase-banner {
@@ -124,7 +124,7 @@ img { image-rendering: pixelated; }
 }
 .machine-name { font-weight: bold; font-size: 16px; }
 .machine-recipe { display: flex; align-items: center; gap: 4px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
-.machine-recipe img { width: 18px; height: 18px; vertical-align: middle; }
+.machine-recipe img { width: 36px; height: 36px; vertical-align: middle; }
 .machine-recipe .arrow { color: var(--accent); font-weight: bold; }
 
 .machine-footer { grid-column: 2; display: flex; align-items: center; gap: 10px; }
@@ -260,7 +260,7 @@ button.sell { background: var(--ok); color: #03210a; }
 .inv-hcell { font-size: 10px; font-weight: bold; color: var(--text-dim); text-align: center; }
 .inv-row-head { position: relative; display: flex; align-items: center; justify-content: center; }
 .inv-row-head.clickable { cursor: pointer; }
-.inv-row-icon { width: 26px; height: 26px; }
+.inv-row-icon { width: 52px; height: 52px; }
 .inv-cell {
   text-align: center; font-size: 13px; font-weight: bold; color: var(--text-dim);
   background: rgba(0,0,0,.18); border-radius: 5px; min-height: 24px;
@@ -326,7 +326,7 @@ button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
   content: ""; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
   border: 5px solid transparent; border-top-color: #fff; border-bottom: 0;
 }
-.customer .bubble img { width: 22px; height: 22px; }
+.customer .bubble img { width: 44px; height: 44px; }
 .customer.unserved .bubble { background: var(--danger); color: #fff; }
 
 /* ---------- Market: bottom counters ---------- */
@@ -355,7 +355,7 @@ button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
   background: rgba(0,0,0,.28); border-radius: 4px; padding: 1px 3px;
   font-size: 10px; font-weight: bold; color: var(--text);
 }
-.cinv-stack img { width: 16px; height: 16px; }
+.cinv-stack img { width: 32px; height: 32px; }
 .cinv-empty { font-size: 10px; color: var(--text-dim); opacity: .6; font-style: italic; }
 
 /* floating luck/rarity popup over a producing machine */
@@ -408,7 +408,7 @@ button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
 }
 .convert-row.locked { opacity: .5; }
 .cv-side { display: flex; align-items: center; gap: 4px; font-weight: bold; font-size: 13px; }
-.cv-side img { width: 28px; height: 28px; }
+.cv-side img { width: 56px; height: 56px; }
 .cv-q { white-space: nowrap; }
 .cv-arrow { color: var(--accent); font-weight: bold; text-align: center; }
 .cv-have { font-size: 11px; color: var(--text-dim); text-align: right; }
@@ -453,7 +453,7 @@ button.cv-btn:disabled { background: #3a4a52; color: #7a8197; }
 .cp-upg b { color: var(--text); }
 .cp-inv { display: flex; flex-direction: column; gap: 6px; }
 .cp-inv-row { display: flex; align-items: center; gap: 8px; }
-.cp-inv-icon { width: 30px; height: 30px; }
+.cp-inv-icon { width: 60px; height: 60px; }
 .cp-inv-tiers { display: flex; flex-wrap: wrap; gap: 4px; }
 .cp-tier-chip { font-size: 12px; font-weight: bold; color: var(--text); background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 2px 6px; }
 .cp-empty { color: var(--text-dim); font-style: italic; font-size: 13px; }
