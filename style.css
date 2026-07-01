@@ -270,6 +270,8 @@ button.sell { background: var(--ok); color: #03210a; }
 .inv-cell.bump { animation: invBump .3s ease; }
 @keyframes invBump { 0%{ transform: scale(1);} 40%{ transform: scale(1.3); color: var(--accent-2);} 100%{ transform: scale(1);} }
 
+.inv-row.inv-row-vacant { visibility: hidden; }
+
 .inv-refine { display: none; position: absolute; top: -7px; right: -5px; font-size: 11px; line-height: 1; filter: drop-shadow(0 1px 1px rgba(0,0,0,.6)); }
 .inv-row.can-refine .inv-refine { display: block; animation: refinePulse 1.4s ease-in-out infinite; }
 @keyframes refinePulse { 0%,100%{ transform: scale(1); opacity: .85; } 50%{ transform: scale(1.25); opacity: 1; } }
@@ -457,3 +459,17 @@ button.cv-btn:disabled { background: #3a4a52; color: #7a8197; }
 .cp-inv-tiers { display: flex; flex-wrap: wrap; gap: 4px; }
 .cp-tier-chip { font-size: 12px; font-weight: bold; color: var(--text); background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 2px 6px; }
 .cp-empty { color: var(--text-dim); font-style: italic; font-size: 13px; }
+
+/* ---------- Resource info widget ---------- */
+#resource-body { text-align: left; }
+.res-desc { font-size: 14px; color: var(--text); background: var(--bg-card); border: 2px solid var(--border); border-radius: 10px; padding: 10px 12px; margin: 4px 0 6px; line-height: 1.4; }
+.res-desc.muted { color: var(--text-dim); font-style: italic; }
+.res-tiers { display: flex; flex-direction: column; gap: 5px; }
+.res-tier-row { display: grid; grid-template-columns: 44px 1fr auto auto auto; align-items: center; gap: 10px; background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 5px 10px; font-size: 13px; opacity: .55; }
+.res-tier-row.owned { opacity: 1; border-color: var(--accent-2); }
+.res-tier-img { width: 40px; height: 40px; }
+.res-tier-name { font-weight: bold; }
+.res-tier-price { color: var(--accent); }
+.res-tier-inf { color: var(--accent-2); }
+.res-tier-have { color: var(--text); font-weight: bold; min-width: 34px; text-align: right; }
+#res-actions { margin-top: 14px; text-align: center; }

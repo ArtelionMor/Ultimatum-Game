@@ -180,9 +180,11 @@ const Game = {
 
   updatePlay(dt) {
     this.tickProduction(dt);
-    this.refreshInventory();
+    // Inventory is NOT refreshed every frame — it updates only when the player
+    // scrolls or touches the screen (see the interaction listeners at the bottom),
+    // so producing/selling never shifts the layout under the player's finger.
     this._supTimer = (this._supTimer || 0) - dt;
-    if (this._supTimer <= 0) { this.refreshSuppliers(); this._supTimer = 0.2; }
+    if (this._supTimer <= 0) { this.refreshSuppliers(); this.refreshAffordability(); this._supTimer = 0.2; }
 
     if (this.waveActive) {
       const m = this.market;
@@ -501,6 +503,21 @@ const Game = {
     }
   },
 
+  // Resources the player's current machines can produce (output resource IDs).
+  producibleResources() {
+    const set = new Set();
+    this.player.machines.forEach((m) => { const def = this.machineDef(m.id); if (def) set.add(def.outputs); });
+    return set;
+  },
+
+  // True if a machine staffed with enough workers to run outputs this resource.
+  isStaffedFor(rid) {
+    return this.player.machines.some((m) => {
+      const def = this.machineDef(m.id);
+      return def && def.outputs === rid && m.workers >= this.lvl(m).workersRequired;
+    });
+  },
+
   // --- inventory grid: resources (rows) × tiers (columns) ---
   renderInventory() {
     const bar = $("#inventory-bar"); bar.innerHTML = "";
@@ -518,12 +535,15 @@ const Game = {
     for (let t = 1; t <= maxT; t++) head.appendChild(el("div", "inv-hcell", "T" + t));
     bar.appendChild(head);
 
+    const producible = this.producibleResources();
     this.cfg.resourceOrder.forEach((rid) => {
+      if (!producible.has(rid)) return;
       const row = el("div", "inv-row");
       const rowHead = el("div", "inv-row-head");
       const icon = this.tierImg(rid, this.bestTier(this.player, rid) || 1); icon.className = "inv-row-icon"; icon.title = this.res(rid).displayName;
       rowHead.append(icon, el("span", "inv-refine", "🔁"));
-      if (this.cfg.convert[rid]) { rowHead.classList.add("clickable"); rowHead.title = `${this.res(rid).displayName} — raffiner`; rowHead.onclick = () => this.openConvert(rid); }
+      rowHead.classList.add("clickable"); rowHead.title = this.res(rid).displayName;
+      rowHead.onclick = () => this.openResourceInfo(rid); // resource widget (refine lives inside it)
       row.appendChild(rowHead);
       this._invCells[rid] = {};
       for (let t = 1; t <= maxT; t++) {
@@ -540,6 +560,7 @@ const Game = {
     if (!this._invCells) return;
     const maxT = this.cfg.maxTier;
     this.cfg.resourceOrder.forEach((rid) => {
+      if (!this._invCells[rid]) return;
       for (let t = 1; t <= maxT; t++) {
         const ref = this._invCells[rid][t]; const v = this.tierCount(this.player, rid, t);
         if (v !== ref.last) {
@@ -551,7 +572,11 @@ const Game = {
       }
       if (this._invRow[rid]) {
         this._invRow[rid].classList.toggle("can-refine", this.anyConvert(rid));
-        this._invRow[rid].classList.toggle("hidden", this.stockOf(this.player, rid) <= 0); // only show rows that hold stock
+        // Show a row when the player holds stock OR a staffed machine produces it (so assigning
+        // workers reveals the row right away). visibility:hidden keeps the row's height reserved,
+        // so toggling never shifts the content below (no "bump").
+        const vacant = this.stockOf(this.player, rid) <= 0 && !this.isStaffedFor(rid);
+        this._invRow[rid].classList.toggle("inv-row-vacant", vacant);
       }
     });
     const tot = this.stockTotal(this.player), cap = this.player.storageCap;
@@ -607,13 +632,30 @@ const Game = {
   // --- shop bar (worker / marketing / storage) ---
   renderShop() {
     const bar = $("#shop-bar"); bar.innerHTML = "";
-    const mk = (icon, label, val, dis, fn) => { const b = el("button", "shop-btn"); b.innerHTML = `<span class="si">${icon}</span><span>${label}</span><b>${val}</b>`; b.disabled = dis; b.onclick = fn; bar.appendChild(b); };
+    this._shopBtns = [];
+    // disFn is stored so refreshAffordability() can re-evaluate disabled in place
+    // (never rebuild the buttons — a rebuild mid-click would swallow the tap).
+    const mk = (icon, label, val, disFn, fn) => {
+      const b = el("button", "shop-btn");
+      b.innerHTML = `<span class="si">${icon}</span><span>${label}</span><b>${val}</b>`;
+      b.disabled = disFn(); b.onclick = fn; bar.appendChild(b);
+      this._shopBtns.push({ b, disFn });
+    };
     const w = this.nextWorker();
-    mk(`<img src="${sprite("Worker")}">`, `Ouvrier ×${this.player.totalWorkers}`, w ? "$" + w.price : "MAX", !w || this.player.totalWorkers >= this.cfg.g.maxWorkersTotal || this.player.money < (w ? w.price : 1e9), () => this.buyWorker());
+    mk(`<img src="${sprite("Worker")}">`, `Ouvrier ×${this.player.totalWorkers}`, w ? "$" + w.price : "MAX", () => !w || this.player.totalWorkers >= this.cfg.g.maxWorkersTotal || this.player.money < w.price, () => this.buyWorker());
     const mkt = this.nextMkt();
-    mk("📣", `Mkt ${this.player.marketing.toFixed(1)}`, mkt ? "$" + mkt.price : "MAX", !mkt || this.player.money < (mkt ? mkt.price : 1e9), () => this.buyMkt());
+    mk("📣", `Mkt ${this.player.marketing.toFixed(1)}`, mkt ? "$" + mkt.price : "MAX", () => !mkt || this.player.money < mkt.price, () => this.buyMkt());
     const st = this.nextStorage();
-    mk("📦", `Stock ${this.player.storageCap}`, st ? "$" + st.price : "MAX", !st || this.player.money < (st ? st.price : 1e9), () => this.buyStorage());
+    mk("📦", `Stock ${this.player.storageCap}`, st ? "$" + st.price : "MAX", () => !st || this.player.money < st.price, () => this.buyStorage());
+  },
+  // Re-evaluate buy/upgrade buttons' enabled state in place whenever money changes.
+  refreshAffordability() {
+    if (this._shopBtns) this._shopBtns.forEach(({ b, disFn }) => { b.disabled = disFn(); });
+    this.player.machines.forEach((m) => {
+      if (!m._refs || !m._refs.up) return;
+      const nx = this.nextMachineLevel(m);
+      m._refs.up.disabled = !nx || this.player.money < nx.cost;
+    });
   },
 
   // --- machines ---
@@ -687,6 +729,50 @@ const Game = {
   // --- competitor info widget ---
   openCompetitor(c) { this._infoC = c; this.renderCompetitorPanel(); $("#competitor-overlay").classList.remove("hidden"); },
   closeCompetitor() { this._infoC = null; $("#competitor-overlay").classList.add("hidden"); },
+
+  // --- resource info widget (click an inventory resource) ---
+  openResourceInfo(rid) { this._infoRes = rid; this.renderResourcePanel(); $("#resource-overlay").classList.remove("hidden"); },
+  closeResourceInfo() { this._infoRes = null; $("#resource-overlay").classList.add("hidden"); },
+  renderResourcePanel() {
+    const rid = this._infoRes; if (!rid) return;
+    const r = this.res(rid), maxT = this.cfg.maxTier;
+    const body = $("#resource-body");
+    const desc = r.description
+      ? `<div class="res-desc">${r.description}</div>`
+      : `<div class="res-desc muted">Pas encore de description — ajoute "description" à cette ressource dans le config.</div>`;
+    body.innerHTML =
+      `<div class="cp-head">
+        <img class="cp-skin" src="${this.tierSrc(rid, this.bestTier(this.player, rid) || 1)}">
+        <div class="cp-id">
+          <div class="cp-name">${r.displayName}</div>
+          <div class="cp-tags"><span class="cp-tag">#${rid}</span></div>
+        </div>
+      </div>
+      ${desc}
+      <div class="cp-section">Tiers</div>
+      <div class="res-tiers"></div>
+      <div id="res-actions"></div>`;
+    const tiers = body.querySelector(".res-tiers");
+    for (let t = 1; t <= maxT; t++) {
+      const ti = this.cfg.resources[rid].tiers[t]; if (!ti) continue;
+      const have = this.tierCount(this.player, rid, t);
+      const row = el("div", "res-tier-row" + (have > 0 ? " owned" : ""));
+      const img = this.tierImg(rid, t); img.className = "res-tier-img";
+      row.append(
+        img,
+        el("span", "res-tier-name", `Tier ${t}`),
+        el("span", "res-tier-price", `💰 ${ti.price}`),
+        el("span", "res-tier-inf", `📣 ${ti.influence}`),
+        el("span", "res-tier-have", `×${have}`)
+      );
+      tiers.appendChild(row);
+    }
+    if (this.cfg.convert[rid]) {
+      const btn = el("button", "cv-btn", "🔁 Raffiner");
+      btn.onclick = () => { this.closeResourceInfo(); this.openConvert(rid); };
+      body.querySelector("#res-actions").appendChild(btn);
+    }
+  },
   botSpecialty(c) {
     if (!c.behavior) return "";
     let best = null, bw = -1;
@@ -803,6 +889,13 @@ $("#convert-close").addEventListener("click", () => Game.closeConvert());
 $("#convert-overlay").addEventListener("click", (e) => { if (e.target.id === "convert-overlay") Game.closeConvert(); });
 $("#competitor-close").addEventListener("click", () => Game.closeCompetitor());
 $("#competitor-overlay").addEventListener("click", (e) => { if (e.target.id === "competitor-overlay") Game.closeCompetitor(); });
+$("#resource-close").addEventListener("click", () => Game.closeResourceInfo());
+$("#resource-overlay").addEventListener("click", (e) => { if (e.target.id === "resource-overlay") Game.closeResourceInfo(); });
+
+// Inventory refreshes on interaction only (scroll or any touch/click), so it never
+// shifts the layout while the player is watching production/sales tick.
+$("#content").addEventListener("scroll", () => Game.refreshInventory(), { passive: true });
+document.addEventListener("pointerdown", () => Game.refreshInventory());
 
 window.Game = Game; // expose for console debugging
 Game.start();

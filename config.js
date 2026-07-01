@@ -10,8 +10,9 @@ export function normalize(raw) {
 
   const resources = {}; const resourceOrder = [];
   raw.resources.forEach((r) => {
-    if (!resources[r.id]) { resources[r.id] = { id: r.id, displayName: r.displayName.replace(/ tier.*$/i, ""), spriteId: r.spriteId, tiers: {} }; resourceOrder.push(r.id); }
-    resources[r.id].tiers[r.tier] = { price: r.baseSellPrice, influence: r.influence, spriteId: r.spriteId };
+    if (!resources[r.id]) { resources[r.id] = { id: r.id, displayName: r.displayName.replace(/ tier.*$/i, ""), spriteId: r.spriteId, description: "", tiers: {} }; resourceOrder.push(r.id); }
+    if (r.description && !resources[r.id].description) resources[r.id].description = r.description; // resource-level (first found)
+    resources[r.id].tiers[r.tier] = { price: r.baseSellPrice, influence: r.influence, spriteId: r.spriteId, description: r.description || "" };
   });
   const maxTier = Math.max(...raw.resources.map((r) => r.tier));
 
