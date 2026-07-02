@@ -270,7 +270,13 @@ button.sell { background: var(--ok); color: #03210a; }
 .inv-cell.bump { animation: invBump .3s ease; }
 @keyframes invBump { 0%{ transform: scale(1);} 40%{ transform: scale(1.3); color: var(--accent-2);} 100%{ transform: scale(1);} }
 
-.inv-row.inv-row-vacant { visibility: hidden; }
+/* Rows region scrolls internally with a capped height, so collapsing/adding rows
+   reflows inside this box only — the machine list below never bumps. */
+/* 2.5 rows tall (row 52px + gap 3px) so a half-row peeks out, hinting the list scrolls. */
+.inv-scroll { display: flex; flex-direction: column; gap: 3px; max-height: 135px; overflow-y: auto; overscroll-behavior: contain; }
+/* Empty, unstaffed resources collapse out entirely (no reserved height) — with
+   10-30 resources this is what keeps the inventory from becoming a giant blank list. */
+.inv-row.inv-row-vacant { display: none; }
 
 .inv-refine { display: none; position: absolute; top: -7px; right: -5px; font-size: 11px; line-height: 1; filter: drop-shadow(0 1px 1px rgba(0,0,0,.6)); }
 .inv-row.can-refine .inv-refine { display: block; animation: refinePulse 1.4s ease-in-out infinite; }

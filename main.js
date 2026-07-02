@@ -22,8 +22,25 @@ const Game = {
     raw.outputs.forEach((o) => { const k = o.id + "_" + o.level; (this.cfg._outputs[k] = this.cfg._outputs[k] || []).push({ group: o.group, quantity: o.quantity, weight: o.weight, tiers: [o.tier1, o.tier2, o.tier3, o.tier4, o.tier5, o.tier6] }); });
     $("#total-rounds").textContent = this.cfg.g.totalRounds;
     this.transitionTo(S.Setup);
+    this.setupInventoryObserver();
     requestAnimationFrame((t) => this.loop(t));
   },
+
+  // The inventory DOM is deliberately kept stale: stock mutations only flip
+  // _invDirty. We flush to the DOM (chiffres + collapse des lignes vides) solely
+  // when the section is on screen, so off-screen production never touches the DOM
+  // and the reflow lands while the player is actually looking at the inventory.
+  setupInventoryObserver() {
+    this._invVisible = true; this._invDirty = false;
+    const bar = $("#inventory-bar");
+    if (!bar || !("IntersectionObserver" in window)) return; // no support → always flush
+    this._invVisible = false;
+    new IntersectionObserver((entries) => {
+      this._invVisible = entries[0].isIntersecting;
+      if (this._invVisible) this.maybeRefreshInventory();
+    }, { root: $("#content"), threshold: 0 }).observe(bar);
+  },
+  maybeRefreshInventory() { if (this._invDirty && this._invVisible) this.refreshInventory(); },
 
   loop(t) {
     if (!this.lastTime) this.lastTime = t;
@@ -45,7 +62,7 @@ const Game = {
   stockTotal(c) { let n = 0; for (const r in c.stock) for (const t in c.stock[r]) n += c.stock[r][t]; return n; },
   stockOf(c, resId) { let n = 0; const m = c.stock[resId] || {}; for (const t in m) n += m[t]; return n; },
   bestTier(c, resId) { const m = c.stock[resId] || {}; let best = 0; for (const t in m) if (m[t] > 0 && +t > best) best = +t; return best; },
-  addStock(c, resId, tier, qty) { c.stock[resId][tier] = (c.stock[resId][tier] || 0) + qty; },
+  addStock(c, resId, tier, qty) { c.stock[resId][tier] = (c.stock[resId][tier] || 0) + qty; if (c === this.player) this._invDirty = true; },
   tierCount(c, resId, tier) { return (c.stock[resId] && c.stock[resId][tier]) || 0; },
 
   // ---------- Refining (convert table: N of tier n -> result of tier n+1) ----------
@@ -180,9 +197,11 @@ const Game = {
 
   updatePlay(dt) {
     this.tickProduction(dt);
-    // Inventory is NOT refreshed every frame — it updates only when the player
-    // scrolls or touches the screen (see the interaction listeners at the bottom),
-    // so producing/selling never shifts the layout under the player's finger.
+    // The inventory DOM is only written when the section is on screen (see the
+    // IntersectionObserver in setupInventoryObserver). Off-screen production just
+    // accumulates in the model + flips _invDirty, so it never shifts the layout
+    // while the player watches the machines.
+    this.maybeRefreshInventory();
     this._supTimer = (this._supTimer || 0) - dt;
     if (this._supTimer <= 0) { this.refreshSuppliers(); this.refreshAffordability(); this._supTimer = 0.2; }
 
@@ -223,7 +242,7 @@ const Game = {
   lvl(machine) { return this.machineDef(machine.id).levels[machine.level - 1]; },
   effTime(machine) { const L = this.lvl(machine); return Math.max(0.3, L.productionTime * (1 - L.workerSpeedBonus * machine.workers)); },
   hasInputs(p, def) { return def.inputs.every((i) => this.stockOf(p, i.type) >= i.quantity); },
-  consumeInputs(p, def) { def.inputs.forEach((i) => { let need = i.quantity; const m = p.stock[i.type]; for (const t of Object.keys(m).sort((a, b) => a - b)) { while (need > 0 && m[t] > 0) { m[t]--; need--; } } }); },
+  consumeInputs(p, def) { def.inputs.forEach((i) => { let need = i.quantity; const m = p.stock[i.type]; for (const t of Object.keys(m).sort((a, b) => a - b)) { while (need > 0 && m[t] > 0) { m[t]--; need--; } } }); if (p === this.player) this._invDirty = true; },
 
   tickProduction(dt) {
     const p = this.player;
@@ -451,6 +470,7 @@ const Game = {
     const tiers = Object.keys(m).map(Number).sort((a, b) => b - a); // highest tier first
     for (const t of tiers) { while (qty > 0 && m[t] > 0) { m[t]--; qty--; gain += this.tierInfo(resId, t).price; } }
     c.money += gain; c.salesThisRound += gain;
+    if (c === this.player) this._invDirty = true;
     return gain;
   },
 
@@ -535,6 +555,7 @@ const Game = {
     for (let t = 1; t <= maxT; t++) head.appendChild(el("div", "inv-hcell", "T" + t));
     bar.appendChild(head);
 
+    const scroll = el("div", "inv-scroll");
     const producible = this.producibleResources();
     this.cfg.resourceOrder.forEach((rid) => {
       if (!producible.has(rid)) return;
@@ -552,8 +573,9 @@ const Game = {
         this._invCells[rid][t] = { el: cell, last: -1 };
       }
       this._invRow[rid] = row;
-      bar.appendChild(row);
+      scroll.appendChild(row);
     });
+    bar.appendChild(scroll);
     this.refreshInventory();
   },
   refreshInventory() {
@@ -573,8 +595,8 @@ const Game = {
       if (this._invRow[rid]) {
         this._invRow[rid].classList.toggle("can-refine", this.anyConvert(rid));
         // Show a row when the player holds stock OR a staffed machine produces it (so assigning
-        // workers reveals the row right away). visibility:hidden keeps the row's height reserved,
-        // so toggling never shifts the content below (no "bump").
+        // workers reveals the row right away). Vacant rows collapse (display:none); the reflow is
+        // confined to the capped-height .inv-scroll box, so the machine list below never bumps.
         const vacant = this.stockOf(this.player, rid) <= 0 && !this.isStaffedFor(rid);
         this._invRow[rid].classList.toggle("inv-row-vacant", vacant);
       }
@@ -582,6 +604,7 @@ const Game = {
     const tot = this.stockTotal(this.player), cap = this.player.storageCap;
     const c = $("#inv-cap"); if (c) { c.textContent = `${tot}/${cap}`; c.classList.toggle("full", tot >= cap); }
     if (this._convertResId && !$("#convert-overlay").classList.contains("hidden")) this.updateConvertList();
+    this._invDirty = false; // DOM now matches the model
   },
 
   // --- refining overlay (convert table) ---
@@ -892,10 +915,8 @@ $("#competitor-overlay").addEventListener("click", (e) => { if (e.target.id === 
 $("#resource-close").addEventListener("click", () => Game.closeResourceInfo());
 $("#resource-overlay").addEventListener("click", (e) => { if (e.target.id === "resource-overlay") Game.closeResourceInfo(); });
 
-// Inventory refreshes on interaction only (scroll or any touch/click), so it never
-// shifts the layout while the player is watching production/sales tick.
-$("#content").addEventListener("scroll", () => Game.refreshInventory(), { passive: true });
-document.addEventListener("pointerdown", () => Game.refreshInventory());
+// Inventory updates are driven by visibility (setupInventoryObserver) + the play
+// loop's maybeRefreshInventory, so it never shifts the layout while off screen.
 
 window.Game = Game; // expose for console debugging
 Game.start();
