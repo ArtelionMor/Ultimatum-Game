@@ -17,9 +17,29 @@ const Game = {
   async start() {
     const raw = await fetch("config_export.json").then((r) => r.json());
     this.cfg = normalize(raw);
-    // outputs lookup keyed resource_level for production rolls
+    // Production lookup keyed `resourceId_level`. New config schema: `outputs`
+    // maps each resource id to a profile name (`profil`), and `outputsProfiles`
+    // holds the per-level group weights + tier distribution shared by that profile.
+    // Falls back to the old flat `outputs` shape if `outputsProfiles` is absent.
     this.cfg._outputs = {};
-    raw.outputs.forEach((o) => { const k = o.id + "_" + o.level; (this.cfg._outputs[k] = this.cfg._outputs[k] || []).push({ group: o.group, quantity: o.quantity, weight: o.weight, tiers: [o.tier1, o.tier2, o.tier3, o.tier4, o.tier5, o.tier6] }); });
+    if (raw.outputsProfiles) {
+      const profileRows = {}; // `profil_level` -> [{ group, quantity, weight, tiers }]
+      raw.outputsProfiles.forEach((o) => {
+        const k = o.id + "_" + o.level;
+        (profileRows[k] = profileRows[k] || []).push({
+          group: o.group, quantity: o.quantity, weight: o.weight,
+          tiers: [o.tier1, o.tier2, o.tier3, o.tier4, o.tier5, o.tier6].map((t) => t ?? 0),
+        });
+      });
+      raw.outputs.forEach((o) => {
+        for (let lvl = 1; lvl <= 15; lvl++) {
+          const rows = profileRows[o.profil + "_" + lvl];
+          if (rows) this.cfg._outputs[o.id + "_" + lvl] = rows;
+        }
+      });
+    } else {
+      raw.outputs.forEach((o) => { const k = o.id + "_" + o.level; (this.cfg._outputs[k] = this.cfg._outputs[k] || []).push({ group: o.group, quantity: o.quantity, weight: o.weight, tiers: [o.tier1, o.tier2, o.tier3, o.tier4, o.tier5, o.tier6] }); });
+    }
     $("#total-rounds").textContent = this.cfg.g.totalRounds;
     this.transitionTo(S.Setup);
     this.setupInventoryObserver();
@@ -209,6 +229,8 @@ const Game = {
       const m = this.market;
       m.spawnTimer -= dt;
       if (m.remaining > 0 && m.spawnTimer <= 0) { m.spawnTimer = SPAWN_INTERVAL / (this.cfg.g.customerRate || 1); m.remaining--; this.spawnCustomer(); }
+      this._stackTimer = (this._stackTimer || 0) - dt;
+      if (this._stackTimer <= 0) { this.restackCustomers(); this._stackTimer = 0.1; }
       if (m.remaining <= 0 && m.served >= m.total) this.endWave();
     } else {
       this.prepTimer -= dt;
@@ -307,8 +329,19 @@ const Game = {
   removeWorker(m) { if (m.workers <= 0) return; m.workers--; this.player.availableWorkers++; if (m.workers < this.lvl(m).workersRequired) { m.producing = false; m.elapsed = 0; this.setProgress(m, 0); } this.renderWorkers(); this.refreshMachineCard(m); },
 
   // ---------- Bots ----------
-  // cost of the next upcoming tax (this round or later) — bots keep this as a reserve
-  nextTaxCost(round) { let best = 0, near = Infinity; for (const r in this.cfg.tax) { const rn = +r; if (rn >= round && rn < near) { near = rn; best = this.cfg.tax[r]; } } return best; },
+  // Reserve for the next upcoming tax, minus the guaranteed income the bot will still
+  // collect before that tax is charged (round income + passive per-round gain, for every
+  // round from the next one up to and including the tax round — that round's income lands
+  // before its tax). Lets bots invest early instead of hoarding the full tax from round 1.
+  taxReserve(b, round) {
+    let taxRound = Infinity, cost = 0;
+    for (const r in this.cfg.tax) { const rn = +r; if (rn >= round && rn < taxRound) { taxRound = rn; cost = this.cfg.tax[r]; } }
+    if (!cost) return 0;
+    const passive = b.def.increaseByRound + b.def.upgradeEffect * b.upgradesBought;
+    let future = 0;
+    for (let k = round + 1; k <= taxRound; k++) { const ri = this.cfg.roundIncome[k]; future += (ri ? ri.coins : 0) + passive; }
+    return Math.max(0, cost - future);
+  },
 
   simulateBot(b) {
     const inc = this.cfg.roundIncome[this.round];
@@ -317,8 +350,8 @@ const Game = {
     b.stock = this.emptyStock();
     const tier = inc ? inc.tier : 1;
 
-    // Keep enough to survive the upcoming tax.
-    const reserve = this.nextTaxCost(this.round);
+    // Keep enough to survive the upcoming tax, net of income still to come before it.
+    const reserve = this.taxReserve(b, this.round);
 
     // "Will I sell it?" — estimate how many units of each resource are worth making
     // this round, so the bot doesn't overproduce stock it can't move.
@@ -443,7 +476,7 @@ const Game = {
     requestAnimationFrame(() => cust.classList.add("falling"));
 
     setTimeout(() => {
-      const eligible = this.competitors.filter((c) => !c.eliminated && this.stockOf(c, need.resId) > 0);
+      const eligible = this.competitors.filter((c) => !c.eliminated && this.stockOf(c, need.resId) >= need.qty);
       if (eligible.length) {
         const winner = this.chooseShop(eligible, need.resId);
         const gain = this.sellTo(winner, need.resId, need.qty);
@@ -462,6 +495,24 @@ const Game = {
       m.served++; m.active--;
       this.refreshSuppliers();
     }, fall * 1000);
+  },
+
+  // Depth-sort customers so the closest ones (lowest on screen) paint on top.
+  // Two z bands keep every bubble above every sprite; within each band, closer = higher.
+  restackCustomers() {
+    const lane = $("#customer-lane");
+    if (!lane) return;
+    const custs = [...lane.querySelectorAll(".customer")];
+    if (custs.length < 2) return;
+    custs
+      .map((c) => ({ c, y: c.getBoundingClientRect().top }))
+      .sort((a, b) => a.y - b.y) // farthest (higher up) first, closest (lower) last
+      .forEach(({ c }, i) => {
+        const sprite = c.querySelector(".cust-sprite");
+        const bubble = c.querySelector(".bubble");
+        if (sprite) sprite.style.zIndex = 1 + i;
+        if (bubble) bubble.style.zIndex = 1000 + i;
+      });
   },
 
   sellTo(c, resId, qty) {

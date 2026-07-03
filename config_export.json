@@ -41,6 +41,1159 @@
       "value": 3
     }
   ],
+  "~Simulator": [
+    {
+      "Wave": 1,
+      "Total Market": 136,
+      "Part of competitors if equal and equal marketting": 34,
+      "Impact of marketting": 47.599999999999994
+    },
+    {
+      "Wave": 2,
+      "Total Market": 214.66666666666666,
+      "Part of competitors if equal and equal marketting": 53.666666666666664,
+      "Impact of marketting": 75.13333333333333
+    },
+    {
+      "Wave": 3,
+      "Total Market": 283.66666666666663,
+      "Part of competitors if equal and equal marketting": 70.91666666666666,
+      "Impact of marketting": 99.28333333333332
+    },
+    {
+      "Wave": 4,
+      "Total Market": 481.75,
+      "Part of competitors if equal and equal marketting": 120.4375,
+      "Impact of marketting": 168.61249999999998
+    },
+    {
+      "Wave": 5,
+      "Total Market": 574,
+      "Part of competitors if equal and equal marketting": 143.5,
+      "Tax": 250,
+      "Impact of marketting": 200.89999999999998
+    },
+    {
+      "Wave": 6,
+      "Total Market": 601.6,
+      "Part of competitors if equal and equal marketting": 150.4,
+      "Impact of marketting": 210.56
+    },
+    {
+      "Wave": 7,
+      "Total Market": 667.4,
+      "Part of competitors if equal and equal marketting": 166.85,
+      "Tax": 280,
+      "Impact of marketting": 233.58999999999997
+    },
+    {
+      "Wave": 8,
+      "Total Market": 790,
+      "Part of competitors if equal and equal marketting": 197.5,
+      "Impact of marketting": 276.5
+    },
+    {
+      "Wave": 9,
+      "Total Market": 880,
+      "Part of competitors if equal and equal marketting": 220,
+      "Tax": 500,
+      "Impact of marketting": 308
+    },
+    {
+      "Wave": 10,
+      "Total Market": 3185,
+      "Part of competitors if equal and equal marketting": 796.25,
+      "Impact of marketting": 1114.75
+    },
+    {
+      "Wave": 11,
+      "Total Market": 3477.5,
+      "Part of competitors if equal and equal marketting": 869.375,
+      "Tax": 1000,
+      "Impact of marketting": 1217.125
+    },
+    {
+      "Wave": 12,
+      "Total Market": 3496,
+      "Part of competitors if equal and equal marketting": 874,
+      "Impact of marketting": 1223.6
+    },
+    {
+      "Wave": 13,
+      "Total Market": 3708.7999999999997,
+      "Part of competitors if equal and equal marketting": 927.1999999999999,
+      "Tax": 1100,
+      "Impact of marketting": 1298.08
+    },
+    {
+      "Wave": 14,
+      "Total Market": 4225,
+      "Part of competitors if equal and equal marketting": 1056.25,
+      "Impact of marketting": 1478.75
+    },
+    {
+      "Wave": 15,
+      "Total Market": 3845.6666666666665,
+      "Part of competitors if equal and equal marketting": 961.4166666666666,
+      "Tax": 1100,
+      "Impact of marketting": 1345.9833333333331
+    },
+    {
+      "Wave": 16,
+      "Total Market": 2384,
+      "Part of competitors if equal and equal marketting": 596,
+      "Impact of marketting": 834.4
+    },
+    {
+      "Wave": 17,
+      "Total Market": 2528,
+      "Part of competitors if equal and equal marketting": 632,
+      "Impact of marketting": 884.8
+    },
+    {
+      "Wave": 18,
+      "Total Market": 5395,
+      "Part of competitors if equal and equal marketting": 1348.75,
+      "Impact of marketting": 1888.2499999999998
+    },
+    {
+      "Wave": 19,
+      "Total Market": 5622.5,
+      "Part of competitors if equal and equal marketting": 1405.625,
+      "Impact of marketting": 1967.8749999999998
+    },
+    {
+      "Wave": 20,
+      "Total Market": 21312.75,
+      "Part of competitors if equal and equal marketting": 5328.1875,
+      "Tax": 4500,
+      "Impact of marketting": 7459.4625
+    },
+    {
+      "Wave": 21,
+      "Total Market": 22372.5,
+      "Part of competitors if equal and equal marketting": 5593.125,
+      "Impact of marketting": 7830.374999999999
+    },
+    {
+      "Wave": 22,
+      "Total Market": 20700,
+      "Part of competitors if equal and equal marketting": 5175,
+      "Impact of marketting": 7244.999999999999
+    },
+    {
+      "Wave": 23,
+      "Total Market": 19771.399999999998,
+      "Part of competitors if equal and equal marketting": 4942.849999999999,
+      "Impact of marketting": 6919.989999999999
+    },
+    {
+      "Wave": 24,
+      "Total Market": 11338.25,
+      "Part of competitors if equal and equal marketting": 2834.5625,
+      "Impact of marketting": 3968.3875
+    },
+    {
+      "Wave": 25,
+      "Total Market": 23184,
+      "Part of competitors if equal and equal marketting": 5796,
+      "Tax": 5000,
+      "Impact of marketting": 8114.4
+    },
+    {
+      "Wave": 26,
+      "Total Market": 35264,
+      "Part of competitors if equal and equal marketting": 8816,
+      "Impact of marketting": 12342.4
+    },
+    {
+      "Wave": 27,
+      "Total Market": 36632,
+      "Part of competitors if equal and equal marketting": 9158,
+      "Impact of marketting": 12821.199999999999
+    },
+    {
+      "Wave": 28,
+      "Total Market": 25978.5,
+      "Part of competitors if equal and equal marketting": 6494.625,
+      "Impact of marketting": 9092.474999999999
+    },
+    {
+      "Wave": 29,
+      "Total Market": 26910,
+      "Part of competitors if equal and equal marketting": 6727.5,
+      "Impact of marketting": 9418.5
+    },
+    {
+      "Wave": 30,
+      "Total Market": 59429,
+      "Part of competitors if equal and equal marketting": 14857.25,
+      "Tax": 10000,
+      "Impact of marketting": 20800.149999999998
+    },
+    {
+      "Wave": 31,
+      "Total Market": 16280,
+      "Part of competitors if equal and equal marketting": 4070,
+      "Impact of marketting": 5698
+    },
+    {
+      "Wave": 32,
+      "Total Market": 16753.600000000002,
+      "Part of competitors if equal and equal marketting": 4188.400000000001,
+      "Impact of marketting": 5863.76
+    },
+    {
+      "Wave": 33,
+      "Total Market": 64751,
+      "Part of competitors if equal and equal marketting": 16187.75,
+      "Impact of marketting": 22662.85
+    },
+    {
+      "Wave": 34,
+      "Total Market": 28025.6,
+      "Part of competitors if equal and equal marketting": 7006.4,
+      "Impact of marketting": 9808.96
+    },
+    {
+      "Wave": 35,
+      "Total Market": 28860.8,
+      "Part of competitors if equal and equal marketting": 7215.2,
+      "Tax": 7000,
+      "Impact of marketting": 10101.279999999999
+    },
+    {
+      "Wave": 36,
+      "Total Market": 178879.25,
+      "Part of competitors if equal and equal marketting": 44719.8125,
+      "Impact of marketting": 62607.737499999996
+    },
+    {
+      "Wave": 37,
+      "Total Market": 165553.6666666667,
+      "Part of competitors if equal and equal marketting": 41388.41666666667,
+      "Impact of marketting": 57943.78333333333
+    },
+    {
+      "Wave": 38,
+      "Total Market": 169616.33333333334,
+      "Part of competitors if equal and equal marketting": 42404.083333333336,
+      "Impact of marketting": 59365.71666666667
+    },
+    {
+      "Wave": 39,
+      "Total Market": 192337.25,
+      "Part of competitors if equal and equal marketting": 48084.3125,
+      "Impact of marketting": 67318.03749999999
+    },
+    {
+      "Wave": 40,
+      "Total Market": 363791.7142857143,
+      "Part of competitors if equal and equal marketting": 90947.92857142858,
+      "Tax": 40000,
+      "Impact of marketting": 127327.1
+    },
+    {
+      "Wave": 41,
+      "Total Market": 1174328,
+      "Part of competitors if equal and equal marketting": 293582,
+      "Impact of marketting": 411014.8
+    },
+    {
+      "Wave": 42,
+      "Total Market": 620305,
+      "Part of competitors if equal and equal marketting": 155076.25,
+      "Impact of marketting": 217106.75
+    },
+    {
+      "Wave": 43,
+      "Total Market": 121205.5,
+      "Part of competitors if equal and equal marketting": 30301.375,
+      "Impact of marketting": 42421.924999999996
+    },
+    {
+      "Wave": 44,
+      "Total Market": 1167127.5,
+      "Part of competitors if equal and equal marketting": 291781.875,
+      "Impact of marketting": 408494.625
+    },
+    {
+      "Wave": 45,
+      "Total Market": 660541,
+      "Part of competitors if equal and equal marketting": 165135.25,
+      "Impact of marketting": 231189.34999999998
+    },
+    {
+      "Wave": 46,
+      "Total Market": 85042,
+      "Part of competitors if equal and equal marketting": 21260.5,
+      "Impact of marketting": 29764.699999999997
+    },
+    {
+      "Wave": 47,
+      "Total Market": 86936.5,
+      "Part of competitors if equal and equal marketting": 21734.125,
+      "Impact of marketting": 30427.774999999998
+    },
+    {
+      "Wave": 48,
+      "Total Market": 705806.5,
+      "Part of competitors if equal and equal marketting": 176451.625,
+      "Impact of marketting": 247032.275
+    },
+    {
+      "Wave": 49,
+      "Total Market": 185110,
+      "Part of competitors if equal and equal marketting": 46277.5,
+      "Impact of marketting": 64788.49999999999
+    },
+    {
+      "Wave": 50,
+      "Total Market": 188570,
+      "Part of competitors if equal and equal marketting": 47142.5,
+      "Tax": 40000,
+      "Impact of marketting": 65999.5
+    },
+    {
+      "Wave": 51,
+      "Total Market": 1107827.5,
+      "Part of competitors if equal and equal marketting": 276956.875,
+      "Impact of marketting": 387739.625
+    },
+    {
+      "Wave": 52,
+      "Total Market": 762807.5,
+      "Part of competitors if equal and equal marketting": 190701.875,
+      "Impact of marketting": 266982.625
+    },
+    {
+      "Wave": 53,
+      "Total Market": 319618.6666666667,
+      "Part of competitors if equal and equal marketting": 79904.66666666667,
+      "Impact of marketting": 111866.53333333334
+    },
+    {
+      "Wave": 54,
+      "Total Market": 325129.3333333334,
+      "Part of competitors if equal and equal marketting": 81282.33333333334,
+      "Impact of marketting": 113795.26666666668
+    },
+    {
+      "Wave": 55,
+      "Total Market": 803043.5,
+      "Part of competitors if equal and equal marketting": 200760.875,
+      "Impact of marketting": 281065.225
+    },
+    {
+      "Wave": 56,
+      "Total Market": 2223885.5,
+      "Part of competitors if equal and equal marketting": 555971.375,
+      "Impact of marketting": 778359.9249999999
+    },
+    {
+      "Wave": 57,
+      "Total Market": 2264984,
+      "Part of competitors if equal and equal marketting": 566246,
+      "Impact of marketting": 792744.3999999999
+    },
+    {
+      "Wave": 58,
+      "Total Market": 436931,
+      "Part of competitors if equal and equal marketting": 109232.75,
+      "Impact of marketting": 152925.84999999998
+    },
+    {
+      "Wave": 59,
+      "Total Market": 1282092.5,
+      "Part of competitors if equal and equal marketting": 320523.125,
+      "Impact of marketting": 448732.375
+    },
+    {
+      "Wave": 60,
+      "Total Market": 876809.5,
+      "Part of competitors if equal and equal marketting": 219202.375,
+      "Tax": 1000000,
+      "Impact of marketting": 306883.32499999995
+    }
+  ],
+  "~Upgrades": [
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    }
+  ],
+  "tax": [
+    {
+      "round": 5,
+      "cost": 250
+    },
+    {
+      "round": 7,
+      "cost": 280
+    },
+    {
+      "round": 9,
+      "cost": 500
+    },
+    {
+      "round": 11,
+      "cost": 1000
+    },
+    {
+      "round": 13,
+      "cost": 1100
+    },
+    {
+      "round": 15,
+      "cost": 1100
+    },
+    {
+      "round": 20,
+      "cost": 4500
+    },
+    {
+      "round": 25,
+      "cost": 5000
+    },
+    {
+      "round": 30,
+      "cost": 10000
+    },
+    {
+      "round": 35,
+      "cost": 7000
+    },
+    {
+      "round": 40,
+      "cost": 40000
+    },
+    {
+      "round": 50,
+      "cost": 40000
+    },
+    {
+      "round": 60,
+      "cost": 1000000
+    }
+  ],
+  "market": [
+    {
+      "id": "round_1",
+      "customers": 20,
+      "average amount": 2,
+      "wood": 3,
+      "iron": 2,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_2",
+      "customers": 28,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 0
+    },
+    {
+      "id": "round_3",
+      "customers": 37,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 0
+    },
+    {
+      "id": "round_4",
+      "customers": 47,
+      "average amount": 5,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_5",
+      "customers": 56,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_6",
+      "customers": 64,
+      "average amount": 3,
+      "wood": 2,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_7",
+      "customers": 71,
+      "average amount": 2,
+      "wood": 2,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_8",
+      "customers": 79,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 1,
+      "plank": 2,
+      "sword": 1
+    },
+    {
+      "id": "round_9",
+      "customers": 88,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 2,
+      "sword": 1
+    },
+    {
+      "id": "round_10",
+      "customers": 98,
+      "average amount": 5,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_11",
+      "customers": 107,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_12",
+      "customers": 115,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 2,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_13",
+      "customers": 122,
+      "average amount": 2,
+      "wood": 1,
+      "iron": 2,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_14",
+      "customers": 130,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_15",
+      "customers": 139,
+      "average amount": 4,
+      "wood": 2,
+      "iron": 2,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_16",
+      "customers": 149,
+      "average amount": 5,
+      "wood": 3,
+      "iron": 1,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_17",
+      "customers": 158,
+      "average amount": 4,
+      "wood": 3,
+      "iron": 1,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_18",
+      "customers": 166,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_19",
+      "customers": 173,
+      "average amount": 2,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_20",
+      "customers": 181,
+      "average amount": 3,
+      "wood": 0,
+      "iron": 0,
+      "plank": 3,
+      "sword": 1
+    },
+    {
+      "id": "round_21",
+      "customers": 190,
+      "average amount": 4,
+      "wood": 0,
+      "iron": 0,
+      "plank": 3,
+      "sword": 1
+    },
+    {
+      "id": "round_22",
+      "customers": 200,
+      "average amount": 5,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_23",
+      "customers": 209,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 2,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_24",
+      "customers": 217,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 3,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_25",
+      "customers": 224,
+      "average amount": 2,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_26",
+      "customers": 232,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 3
+    },
+    {
+      "id": "round_27",
+      "customers": 241,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 3
+    },
+    {
+      "id": "round_28",
+      "customers": 251,
+      "average amount": 5,
+      "wood": 2,
+      "iron": 2,
+      "plank": 2,
+      "sword": 2
+    },
+    {
+      "id": "round_29",
+      "customers": 260,
+      "average amount": 4,
+      "wood": 2,
+      "iron": 2,
+      "plank": 2,
+      "sword": 2
+    },
+    {
+      "id": "round_30",
+      "customers": 268,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_31",
+      "customers": 275,
+      "average amount": 2,
+      "wood": 4,
+      "iron": 1,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_32",
+      "customers": 283,
+      "average amount": 3,
+      "wood": 4,
+      "iron": 1,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_33",
+      "customers": 292,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_34",
+      "customers": 302,
+      "average amount": 5,
+      "wood": 1,
+      "iron": 4,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_35",
+      "customers": 311,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 4,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_36",
+      "customers": 319,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_37",
+      "customers": 326,
+      "average amount": 2,
+      "wood": 0,
+      "iron": 1,
+      "plank": 4,
+      "sword": 1
+    },
+    {
+      "id": "round_38",
+      "customers": 334,
+      "average amount": 3,
+      "wood": 0,
+      "iron": 1,
+      "plank": 4,
+      "sword": 1
+    },
+    {
+      "id": "round_39",
+      "customers": 343,
+      "average amount": 4,
+      "wood": 2,
+      "iron": 2,
+      "plank": 2,
+      "sword": 2
+    },
+    {
+      "id": "round_40",
+      "customers": 353,
+      "average amount": 5,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 4
+    },
+    {
+      "id": "round_41",
+      "customers": 362,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 4
+    },
+    {
+      "id": "round_42",
+      "customers": 370,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_43",
+      "customers": 377,
+      "average amount": 2,
+      "wood": 3,
+      "iron": 3,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_44",
+      "customers": 385,
+      "average amount": 3,
+      "wood": 0,
+      "iron": 0,
+      "plank": 3,
+      "sword": 3
+    },
+    {
+      "id": "round_45",
+      "customers": 394,
+      "average amount": 4,
+      "wood": 2,
+      "iron": 2,
+      "plank": 2,
+      "sword": 2
+    },
+    {
+      "id": "round_46",
+      "customers": 404,
+      "average amount": 5,
+      "wood": 5,
+      "iron": 1,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_47",
+      "customers": 413,
+      "average amount": 4,
+      "wood": 5,
+      "iron": 1,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_48",
+      "customers": 421,
+      "average amount": 3,
+      "wood": 2,
+      "iron": 2,
+      "plank": 2,
+      "sword": 2
+    },
+    {
+      "id": "round_49",
+      "customers": 428,
+      "average amount": 2,
+      "wood": 1,
+      "iron": 5,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_50",
+      "customers": 436,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 5,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_51",
+      "customers": 445,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 4,
+      "sword": 4
+    },
+    {
+      "id": "round_52",
+      "customers": 455,
+      "average amount": 5,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_53",
+      "customers": 464,
+      "average amount": 4,
+      "wood": 0,
+      "iron": 1,
+      "plank": 5,
+      "sword": 0
+    },
+    {
+      "id": "round_54",
+      "customers": 472,
+      "average amount": 3,
+      "wood": 0,
+      "iron": 1,
+      "plank": 5,
+      "sword": 0
+    },
+    {
+      "id": "round_55",
+      "customers": 479,
+      "average amount": 2,
+      "wood": 2,
+      "iron": 2,
+      "plank": 2,
+      "sword": 2
+    },
+    {
+      "id": "round_56",
+      "customers": 487,
+      "average amount": 3,
+      "wood": 0,
+      "iron": 0,
+      "plank": 1,
+      "sword": 5
+    },
+    {
+      "id": "round_57",
+      "customers": 496,
+      "average amount": 4,
+      "wood": 0,
+      "iron": 0,
+      "plank": 1,
+      "sword": 5
+    },
+    {
+      "id": "round_58",
+      "customers": 506,
+      "average amount": 5,
+      "wood": 4,
+      "iron": 4,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_59",
+      "customers": 515,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 4,
+      "sword": 4
+    },
+    {
+      "id": "round_60",
+      "customers": 523,
+      "average amount": 3,
+      "wood": 3,
+      "iron": 3,
+      "plank": 3,
+      "sword": 3
+    }
+  ],
   "purshases": [
     {
       "id": "more_worker_1",
@@ -607,548 +1760,6 @@
       "price": 3800
     }
   ],
-  "market": [
-    {
-      "id": "round_1",
-      "customers": 20,
-      "average amount": 2,
-      "weight_wood": 3,
-      "weight_iron": 2,
-      "weight_plank": 0,
-      "weight_sword": 0
-    },
-    {
-      "id": "round_2",
-      "customers": 28,
-      "average amount": 3,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 0
-    },
-    {
-      "id": "round_3",
-      "customers": 37,
-      "average amount": 4,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 0
-    },
-    {
-      "id": "round_4",
-      "customers": 47,
-      "average amount": 5,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_5",
-      "customers": 56,
-      "average amount": 4,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_6",
-      "customers": 64,
-      "average amount": 3,
-      "weight_wood": 2,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_7",
-      "customers": 71,
-      "average amount": 2,
-      "weight_wood": 2,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_8",
-      "customers": 79,
-      "average amount": 3,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 2,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_9",
-      "customers": 88,
-      "average amount": 4,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 2,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_10",
-      "customers": 98,
-      "average amount": 5,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_11",
-      "customers": 107,
-      "average amount": 4,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_12",
-      "customers": 115,
-      "average amount": 3,
-      "weight_wood": 1,
-      "weight_iron": 2,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_13",
-      "customers": 122,
-      "average amount": 2,
-      "weight_wood": 1,
-      "weight_iron": 2,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_14",
-      "customers": 130,
-      "average amount": 3,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_15",
-      "customers": 139,
-      "average amount": 4,
-      "weight_wood": 2,
-      "weight_iron": 2,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_16",
-      "customers": 149,
-      "average amount": 5,
-      "weight_wood": 3,
-      "weight_iron": 1,
-      "weight_plank": 0,
-      "weight_sword": 0
-    },
-    {
-      "id": "round_17",
-      "customers": 158,
-      "average amount": 4,
-      "weight_wood": 3,
-      "weight_iron": 1,
-      "weight_plank": 0,
-      "weight_sword": 0
-    },
-    {
-      "id": "round_18",
-      "customers": 166,
-      "average amount": 3,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_19",
-      "customers": 173,
-      "average amount": 2,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_20",
-      "customers": 181,
-      "average amount": 3,
-      "weight_wood": 0,
-      "weight_iron": 0,
-      "weight_plank": 3,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_21",
-      "customers": 190,
-      "average amount": 4,
-      "weight_wood": 0,
-      "weight_iron": 0,
-      "weight_plank": 3,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_22",
-      "customers": 200,
-      "average amount": 5,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_23",
-      "customers": 209,
-      "average amount": 4,
-      "weight_wood": 1,
-      "weight_iron": 2,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_24",
-      "customers": 217,
-      "average amount": 3,
-      "weight_wood": 1,
-      "weight_iron": 3,
-      "weight_plank": 0,
-      "weight_sword": 0
-    },
-    {
-      "id": "round_25",
-      "customers": 224,
-      "average amount": 2,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_26",
-      "customers": 232,
-      "average amount": 3,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 3
-    },
-    {
-      "id": "round_27",
-      "customers": 241,
-      "average amount": 4,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 3
-    },
-    {
-      "id": "round_28",
-      "customers": 251,
-      "average amount": 5,
-      "weight_wood": 2,
-      "weight_iron": 2,
-      "weight_plank": 2,
-      "weight_sword": 2
-    },
-    {
-      "id": "round_29",
-      "customers": 260,
-      "average amount": 4,
-      "weight_wood": 2,
-      "weight_iron": 2,
-      "weight_plank": 2,
-      "weight_sword": 2
-    },
-    {
-      "id": "round_30",
-      "customers": 268,
-      "average amount": 3,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_31",
-      "customers": 275,
-      "average amount": 2,
-      "weight_wood": 4,
-      "weight_iron": 1,
-      "weight_plank": 0,
-      "weight_sword": 0
-    },
-    {
-      "id": "round_32",
-      "customers": 283,
-      "average amount": 3,
-      "weight_wood": 4,
-      "weight_iron": 1,
-      "weight_plank": 0,
-      "weight_sword": 0
-    },
-    {
-      "id": "round_33",
-      "customers": 292,
-      "average amount": 4,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_34",
-      "customers": 302,
-      "average amount": 5,
-      "weight_wood": 1,
-      "weight_iron": 4,
-      "weight_plank": 0,
-      "weight_sword": 0
-    },
-    {
-      "id": "round_35",
-      "customers": 311,
-      "average amount": 4,
-      "weight_wood": 1,
-      "weight_iron": 4,
-      "weight_plank": 0,
-      "weight_sword": 0
-    },
-    {
-      "id": "round_36",
-      "customers": 319,
-      "average amount": 3,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_37",
-      "customers": 326,
-      "average amount": 2,
-      "weight_wood": 0,
-      "weight_iron": 1,
-      "weight_plank": 4,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_38",
-      "customers": 334,
-      "average amount": 3,
-      "weight_wood": 0,
-      "weight_iron": 1,
-      "weight_plank": 4,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_39",
-      "customers": 343,
-      "average amount": 4,
-      "weight_wood": 2,
-      "weight_iron": 2,
-      "weight_plank": 2,
-      "weight_sword": 2
-    },
-    {
-      "id": "round_40",
-      "customers": 353,
-      "average amount": 5,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 4
-    },
-    {
-      "id": "round_41",
-      "customers": 362,
-      "average amount": 4,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 4
-    },
-    {
-      "id": "round_42",
-      "customers": 370,
-      "average amount": 3,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_43",
-      "customers": 377,
-      "average amount": 2,
-      "weight_wood": 3,
-      "weight_iron": 3,
-      "weight_plank": 0,
-      "weight_sword": 0
-    },
-    {
-      "id": "round_44",
-      "customers": 385,
-      "average amount": 3,
-      "weight_wood": 0,
-      "weight_iron": 0,
-      "weight_plank": 3,
-      "weight_sword": 3
-    },
-    {
-      "id": "round_45",
-      "customers": 394,
-      "average amount": 4,
-      "weight_wood": 2,
-      "weight_iron": 2,
-      "weight_plank": 2,
-      "weight_sword": 2
-    },
-    {
-      "id": "round_46",
-      "customers": 404,
-      "average amount": 5,
-      "weight_wood": 5,
-      "weight_iron": 1,
-      "weight_plank": 0,
-      "weight_sword": 0
-    },
-    {
-      "id": "round_47",
-      "customers": 413,
-      "average amount": 4,
-      "weight_wood": 5,
-      "weight_iron": 1,
-      "weight_plank": 0,
-      "weight_sword": 0
-    },
-    {
-      "id": "round_48",
-      "customers": 421,
-      "average amount": 3,
-      "weight_wood": 2,
-      "weight_iron": 2,
-      "weight_plank": 2,
-      "weight_sword": 2
-    },
-    {
-      "id": "round_49",
-      "customers": 428,
-      "average amount": 2,
-      "weight_wood": 1,
-      "weight_iron": 5,
-      "weight_plank": 0,
-      "weight_sword": 0
-    },
-    {
-      "id": "round_50",
-      "customers": 436,
-      "average amount": 3,
-      "weight_wood": 1,
-      "weight_iron": 5,
-      "weight_plank": 0,
-      "weight_sword": 0
-    },
-    {
-      "id": "round_51",
-      "customers": 445,
-      "average amount": 4,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 4,
-      "weight_sword": 4
-    },
-    {
-      "id": "round_52",
-      "customers": 455,
-      "average amount": 5,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_53",
-      "customers": 464,
-      "average amount": 4,
-      "weight_wood": 0,
-      "weight_iron": 1,
-      "weight_plank": 5,
-      "weight_sword": 0
-    },
-    {
-      "id": "round_54",
-      "customers": 472,
-      "average amount": 3,
-      "weight_wood": 0,
-      "weight_iron": 1,
-      "weight_plank": 5,
-      "weight_sword": 0
-    },
-    {
-      "id": "round_55",
-      "customers": 479,
-      "average amount": 2,
-      "weight_wood": 2,
-      "weight_iron": 2,
-      "weight_plank": 2,
-      "weight_sword": 2
-    },
-    {
-      "id": "round_56",
-      "customers": 487,
-      "average amount": 3,
-      "weight_wood": 0,
-      "weight_iron": 0,
-      "weight_plank": 1,
-      "weight_sword": 5
-    },
-    {
-      "id": "round_57",
-      "customers": 496,
-      "average amount": 4,
-      "weight_wood": 0,
-      "weight_iron": 0,
-      "weight_plank": 1,
-      "weight_sword": 5
-    },
-    {
-      "id": "round_58",
-      "customers": 506,
-      "average amount": 5,
-      "weight_wood": 4,
-      "weight_iron": 4,
-      "weight_plank": 1,
-      "weight_sword": 1
-    },
-    {
-      "id": "round_59",
-      "customers": 515,
-      "average amount": 4,
-      "weight_wood": 1,
-      "weight_iron": 1,
-      "weight_plank": 4,
-      "weight_sword": 4
-    },
-    {
-      "id": "round_60",
-      "customers": 523,
-      "average amount": 3,
-      "weight_wood": 3,
-      "weight_iron": 3,
-      "weight_plank": 3,
-      "weight_sword": 3
-    }
-  ],
   "convert": [
     {
       "id": "wood",
@@ -1291,60 +1902,6 @@
       "result_tier": 6
     }
   ],
-  "tax": [
-    {
-      "round": 5,
-      "cost": 10
-    },
-    {
-      "round": 7,
-      "cost": 100
-    },
-    {
-      "round": 9,
-      "cost": 200
-    },
-    {
-      "round": 11,
-      "cost": 500
-    },
-    {
-      "round": 13,
-      "cost": 750
-    },
-    {
-      "round": 15,
-      "cost": 1000
-    },
-    {
-      "round": 20,
-      "cost": 1500
-    },
-    {
-      "round": 25,
-      "cost": 2000
-    },
-    {
-      "round": 30,
-      "cost": 2500
-    },
-    {
-      "round": 35,
-      "cost": 3000
-    },
-    {
-      "round": 40,
-      "cost": 4500
-    },
-    {
-      "round": 50,
-      "cost": 6000
-    },
-    {
-      "round": 60,
-      "cost": 10000
-    }
-  ],
   "resources": [
     {
       "id": "wood",
@@ -1361,7 +1918,7 @@
       "displayName": "Bois tier 2",
       "description": "Bois tier 2 description",
       "spriteId": "Wood Tier 2",
-      "baseSellPrice": 12,
+      "baseSellPrice": 14,
       "influence": 2
     },
     {
@@ -1370,7 +1927,7 @@
       "displayName": "Bois tier 3",
       "description": "Bois tier 3 description",
       "spriteId": "Wood Tier 3",
-      "baseSellPrice": 24,
+      "baseSellPrice": 32,
       "influence": 3
     },
     {
@@ -1388,7 +1945,7 @@
       "displayName": "Bois tier 5",
       "description": "Bois tier 5 description",
       "spriteId": "Wood Tier 5",
-      "baseSellPrice": 96,
+      "baseSellPrice": 81,
       "influence": 5
     },
     {
@@ -1397,7 +1954,7 @@
       "displayName": "Bois tier 6",
       "description": "Bois tier 6 description",
       "spriteId": "Wood Tier 6",
-      "baseSellPrice": 192,
+      "baseSellPrice": 155,
       "influence": 6
     },
     {
@@ -1406,7 +1963,7 @@
       "displayName": "Fer tier 1",
       "description": "Fer tier 1 description",
       "spriteId": "Iron Tier 1",
-      "baseSellPrice": 11,
+      "baseSellPrice": 8,
       "influence": 1
     },
     {
@@ -1424,7 +1981,7 @@
       "displayName": "Fer tier 3",
       "description": "Fer tier 3 description",
       "spriteId": "Iron Tier 3",
-      "baseSellPrice": 44,
+      "baseSellPrice": 59,
       "influence": 3
     },
     {
@@ -1433,7 +1990,7 @@
       "displayName": "Fer tier 4",
       "description": "Fer tier 4 description",
       "spriteId": "Iron Tier 4",
-      "baseSellPrice": 88,
+      "baseSellPrice": 104,
       "influence": 4
     },
     {
@@ -1442,7 +1999,7 @@
       "displayName": "Fer tier 5",
       "description": "Fer tier 5 description",
       "spriteId": "Iron Tier 5",
-      "baseSellPrice": 176,
+      "baseSellPrice": 210,
       "influence": 5
     },
     {
@@ -1451,7 +2008,7 @@
       "displayName": "Fer tier 6",
       "description": "Fer tier 6 description",
       "spriteId": "Iron Tier 6",
-      "baseSellPrice": 352,
+      "baseSellPrice": 488,
       "influence": 6
     },
     {
@@ -1460,7 +2017,7 @@
       "displayName": "Planche tier 1",
       "description": "Planche tier 1 description",
       "spriteId": "Plank Tier 1",
-      "baseSellPrice": 16,
+      "baseSellPrice": 9,
       "influence": 1
     },
     {
@@ -1469,7 +2026,7 @@
       "displayName": "Planche tier 2",
       "description": "Planche tier 2 description",
       "spriteId": "Plank Tier 2",
-      "baseSellPrice": 32,
+      "baseSellPrice": 26,
       "influence": 2
     },
     {
@@ -1478,7 +2035,7 @@
       "displayName": "Planche tier 3",
       "description": "Planche tier 3 description",
       "spriteId": "Plank Tier 3",
-      "baseSellPrice": 64,
+      "baseSellPrice": 74,
       "influence": 3
     },
     {
@@ -1487,7 +2044,7 @@
       "displayName": "Planche tier 4",
       "description": "Planche tier 4 description",
       "spriteId": "Plank Tier 4",
-      "baseSellPrice": 128,
+      "baseSellPrice": 138,
       "influence": 4
     },
     {
@@ -1496,7 +2053,7 @@
       "displayName": "Planche tier 5",
       "description": "Planche tier 5 description",
       "spriteId": "Plank Tier 5",
-      "baseSellPrice": 256,
+      "baseSellPrice": 295,
       "influence": 5
     },
     {
@@ -1505,7 +2062,7 @@
       "displayName": "Planche tier 6",
       "description": "Planche tier 6 description",
       "spriteId": "Plank Tier 6",
-      "baseSellPrice": 512,
+      "baseSellPrice": 729,
       "influence": 6
     },
     {
@@ -1514,7 +2071,7 @@
       "displayName": "Epée tier 1",
       "description": "Epée tier 1 description",
       "spriteId": "Sword Tier 1",
-      "baseSellPrice": 40,
+      "baseSellPrice": 18,
       "influence": 1
     },
     {
@@ -1523,7 +2080,7 @@
       "displayName": "Epée tier 2",
       "description": "Epée tier 2 description",
       "spriteId": "Sword Tier 2",
-      "baseSellPrice": 80,
+      "baseSellPrice": 68,
       "influence": 2
     },
     {
@@ -1532,7 +2089,7 @@
       "displayName": "Epée tier 3",
       "description": "Epée tier 3 description",
       "spriteId": "Sword Tier 3",
-      "baseSellPrice": 160,
+      "baseSellPrice": 249,
       "influence": 3
     },
     {
@@ -1541,7 +2098,7 @@
       "displayName": "Epée tier 4",
       "description": "Epée tier 4 description",
       "spriteId": "Sword Tier 4",
-      "baseSellPrice": 320,
+      "baseSellPrice": 597,
       "influence": 4
     },
     {
@@ -1550,7 +2107,7 @@
       "displayName": "Epée tier 5",
       "description": "Epée tier 5 description",
       "spriteId": "Sword Tier 5",
-      "baseSellPrice": 640,
+      "baseSellPrice": 1657,
       "influence": 5
     },
     {
@@ -1559,7 +2116,169 @@
       "displayName": "Epée tier 6",
       "description": "Epée tier 6 description",
       "spriteId": "Sword Tier 6",
-      "baseSellPrice": 1280,
+      "baseSellPrice": 5334,
+      "influence": 6
+    },
+    {
+      "id": "magic",
+      "tier": 1,
+      "displayName": "Magie tier 1",
+      "description": "Magie tier 1 description",
+      "spriteId": "Magic Orb Tier 1",
+      "baseSellPrice": 7,
+      "influence": 1
+    },
+    {
+      "id": "magic",
+      "tier": 2,
+      "displayName": "Magie tier 2",
+      "description": "Magie tier 2 description",
+      "spriteId": "Magic Orb Tier 2",
+      "baseSellPrice": 18,
+      "influence": 2
+    },
+    {
+      "id": "magic",
+      "tier": 3,
+      "displayName": "Magie tier 3",
+      "description": "Magie tier 3 description",
+      "spriteId": "Magic Orb Tier 3",
+      "baseSellPrice": 45,
+      "influence": 3
+    },
+    {
+      "id": "magic",
+      "tier": 4,
+      "displayName": "Magie tier 4",
+      "description": "Magie tier 4 description",
+      "spriteId": "Magic Orb Tier 4",
+      "baseSellPrice": 74,
+      "influence": 4
+    },
+    {
+      "id": "magic",
+      "tier": 5,
+      "displayName": "Magie tier 5",
+      "description": "Magie tier 5 description",
+      "spriteId": "Magic Orb Tier 5",
+      "baseSellPrice": 138,
+      "influence": 5
+    },
+    {
+      "id": "magic",
+      "tier": 6,
+      "displayName": "Magie tier 6",
+      "description": "Magie tier 6 description",
+      "spriteId": "Magic Orb Tier 6",
+      "baseSellPrice": 295,
+      "influence": 6
+    },
+    {
+      "id": "electricy",
+      "tier": 1,
+      "displayName": "Electricité tier 1",
+      "description": "Electricité tier 1 description",
+      "spriteId": "Magic Orb Tier 1",
+      "baseSellPrice": 0,
+      "influence": 1
+    },
+    {
+      "id": "electricy",
+      "tier": 2,
+      "displayName": "Electricité tier 2",
+      "description": "Electricité tier 2 description",
+      "spriteId": "Magic Orb Tier 2",
+      "baseSellPrice": 0,
+      "influence": 2
+    },
+    {
+      "id": "electricy",
+      "tier": 3,
+      "displayName": "Electricité tier 3",
+      "description": "Electricité tier 3 description",
+      "spriteId": "Magic Orb Tier 3",
+      "baseSellPrice": 0,
+      "influence": 3
+    },
+    {
+      "id": "electricy",
+      "tier": 4,
+      "displayName": "Electricité tier 4",
+      "description": "Electricité tier 4 description",
+      "spriteId": "Magic Orb Tier 4",
+      "baseSellPrice": 0,
+      "influence": 4
+    },
+    {
+      "id": "electricy",
+      "tier": 5,
+      "displayName": "Electricité tier 5",
+      "description": "Electricité tier 5 description",
+      "spriteId": "Magic Orb Tier 5",
+      "baseSellPrice": 0,
+      "influence": 5
+    },
+    {
+      "id": "electricy",
+      "tier": 6,
+      "displayName": "Electricité tier 6",
+      "description": "Electricité tier 6 description",
+      "spriteId": "Magic Orb Tier 6",
+      "baseSellPrice": 0,
+      "influence": 6
+    },
+    {
+      "id": "shield",
+      "tier": 1,
+      "displayName": "Bouclier tier 1",
+      "description": "Bouclier tier 1 description",
+      "spriteId": "Shield Tier 1",
+      "baseSellPrice": 30,
+      "influence": 1
+    },
+    {
+      "id": "shield",
+      "tier": 2,
+      "displayName": "Bouclier tier 2",
+      "description": "Bouclier tier 2 description",
+      "spriteId": "Shield Tier 2",
+      "baseSellPrice": 133,
+      "influence": 2
+    },
+    {
+      "id": "shield",
+      "tier": 3,
+      "displayName": "Bouclier tier 3",
+      "description": "Bouclier tier 3 description",
+      "spriteId": "Shield Tier 3",
+      "baseSellPrice": 565,
+      "influence": 3
+    },
+    {
+      "id": "shield",
+      "tier": 4,
+      "displayName": "Bouclier tier 4",
+      "description": "Bouclier tier 4 description",
+      "spriteId": "Shield Tier 4",
+      "baseSellPrice": 1555,
+      "influence": 4
+    },
+    {
+      "id": "shield",
+      "tier": 5,
+      "displayName": "Bouclier tier 5",
+      "description": "Bouclier tier 5 description",
+      "spriteId": "Shield Tier 5",
+      "baseSellPrice": 4963,
+      "influence": 5
+    },
+    {
+      "id": "shield",
+      "tier": 6,
+      "displayName": "Bouclier tier 6",
+      "description": "Bouclier tier 6 description",
+      "spriteId": "Shield Tier 6",
+      "baseSellPrice": 18342,
       "influence": 6
     }
   ],
@@ -1597,6 +2316,21 @@
       "outputs": "sword",
       "unlockAtRound": 2,
       "upgrades": "forge"
+    },
+    {
+      "id": "military_camp",
+      "displayName": "Camp Militaire",
+      "spriteId": "Shield Tier 1",
+      "inputs": "military_camp",
+      "outputs": "shield",
+      "unlockAtRound": 5
+    },
+    {
+      "id": "magic_tower",
+      "displayName": "Tour du Magicien",
+      "spriteId": "Magic Orb Tier 1",
+      "outputs": "magic_orb",
+      "unlockAtRound": 7
     }
   ],
   "upgrades": [
@@ -2379,11 +3113,101 @@
       "~DO NOT EXPORT : total 2 workers": 1.8720000000000052,
       "~DO NOT EXPORT : total 3 workers": 1.0080000000000031,
       "~DO NOT EXPORT : total 4 workers": 0.14400000000000057
+    },
+    {
+      "id": "military_camp",
+      "level": 1
+    },
+    {
+      "id": "military_camp",
+      "level": 2
+    },
+    {
+      "id": "military_camp",
+      "level": 3
+    },
+    {
+      "id": "military_camp",
+      "level": 4
+    },
+    {
+      "id": "military_camp",
+      "level": 5
+    },
+    {
+      "id": "military_camp",
+      "level": 6
+    },
+    {
+      "id": "military_camp",
+      "level": 7
+    },
+    {
+      "id": "military_camp",
+      "level": 8
+    },
+    {
+      "id": "military_camp",
+      "level": 9
+    },
+    {
+      "id": "military_camp",
+      "level": 10
+    },
+    {
+      "id": "military_camp",
+      "level": 11
+    },
+    {
+      "id": "military_camp",
+      "level": 12
+    },
+    {
+      "id": "military_camp",
+      "level": 13
+    },
+    {
+      "id": "military_camp",
+      "level": 14
+    },
+    {
+      "id": "military_camp",
+      "level": 15
     }
   ],
   "outputs": [
     {
       "id": "wood",
+      "profil": "profil_complexity 0"
+    },
+    {
+      "id": "iron",
+      "profil": "profil_complexity 0"
+    },
+    {
+      "id": "plank",
+      "profil": "profil_complexity 0"
+    },
+    {
+      "id": "sword",
+      "profil": "profil_complexity 0"
+    },
+    {
+      "id": "shield",
+      "profil": "profil_complexity 0"
+    },
+    {
+      "id": "magic_orb",
+      "profil": "profil_complexity 0"
+    },
+    {
+      "id": "rock",
+      "profil": "profil_complexity 0"
+    }
+  ],
+  "outputsProfiles": [
+    {
+      "id": "profil_complexity 0",
       "level": 1,
       "quantity": 1,
       "weight": 8500,
@@ -2393,11 +3217,10 @@
       "tier3": 0,
       "tier4": 0,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 7.799999999999999
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 1,
       "quantity": 2,
       "weight": 1000,
@@ -2407,11 +3230,10 @@
       "tier3": 0,
       "tier4": 0,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 16.2
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 1,
       "quantity": 5,
       "weight": 350,
@@ -2421,11 +3243,10 @@
       "tier3": 5,
       "tier4": 0,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 45
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 1,
       "quantity": 10,
       "weight": 120,
@@ -2435,11 +3256,10 @@
       "tier3": 10,
       "tier4": 0,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 99
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 1,
       "quantity": 15,
       "weight": 25,
@@ -2449,11 +3269,10 @@
       "tier3": 15,
       "tier4": 0,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 166.5
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 1,
       "quantity": 30,
       "weight": 5,
@@ -2463,11 +3282,10 @@
       "tier3": 15,
       "tier4": 5,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 396
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 2,
       "quantity": 1,
       "weight": 8500,
@@ -2477,11 +3295,10 @@
       "tier3": 5,
       "tier4": 0,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 9
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 2,
       "quantity": 2,
       "weight": 1000,
@@ -2491,11 +3308,10 @@
       "tier3": 5,
       "tier4": 0,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 18
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 2,
       "quantity": 5,
       "weight": 350,
@@ -2505,11 +3321,10 @@
       "tier3": 10,
       "tier4": 0,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 49.5
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 2,
       "quantity": 10,
       "weight": 120,
@@ -2519,11 +3334,10 @@
       "tier3": 15,
       "tier4": 0,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 111
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 2,
       "quantity": 15,
       "weight": 25,
@@ -2533,11 +3347,10 @@
       "tier3": 15,
       "tier4": 5,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 198
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 2,
       "quantity": 30,
       "weight": 5,
@@ -2547,11 +3360,10 @@
       "tier3": 20,
       "tier4": 5,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 414
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 3,
       "quantity": 1,
       "weight": 8500,
@@ -2561,11 +3373,10 @@
       "tier3": 10,
       "tier4": 0,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 9.9
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 3,
       "quantity": 2,
       "weight": 1000,
@@ -2575,11 +3386,10 @@
       "tier3": 10,
       "tier4": 5,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 24
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 3,
       "quantity": 5,
       "weight": 350,
@@ -2589,11 +3399,10 @@
       "tier3": 15,
       "tier4": 0,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 55.5
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 3,
       "quantity": 10,
       "weight": 120,
@@ -2603,11 +3412,10 @@
       "tier3": 15,
       "tier4": 5,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 132
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 3,
       "quantity": 15,
       "weight": 25,
@@ -2617,11 +3425,10 @@
       "tier3": 20,
       "tier4": 5,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 211.5
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 3,
       "quantity": 30,
       "weight": 5,
@@ -2631,11 +3438,10 @@
       "tier3": 20,
       "tier4": 10,
       "tier5": 5,
-      "tier6": 0,
-      "~Helper": 612
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 4,
       "quantity": 1,
       "weight": 8500,
@@ -2645,11 +3451,10 @@
       "tier3": 10,
       "tier4": 5,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 12
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 4,
       "quantity": 2,
       "weight": 1000,
@@ -2659,11 +3464,10 @@
       "tier3": 15,
       "tier4": 0,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 22.200000000000003
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 4,
       "quantity": 5,
       "weight": 350,
@@ -2673,11 +3477,10 @@
       "tier3": 15,
       "tier4": 5,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 66
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 4,
       "quantity": 10,
       "weight": 120,
@@ -2687,11 +3490,10 @@
       "tier3": 20,
       "tier4": 5,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 138
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 4,
       "quantity": 15,
       "weight": 25,
@@ -2701,11 +3503,10 @@
       "tier3": 20,
       "tier4": 10,
       "tier5": 5,
-      "tier6": 0,
-      "~Helper": 306
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 4,
       "quantity": 30,
       "weight": 5,
@@ -2715,11 +3516,10 @@
       "tier3": 20,
       "tier4": 10,
       "tier5": 5,
-      "tier6": 0,
-      "~Helper": 621
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 5,
       "quantity": 1,
       "weight": 8500,
@@ -2729,11 +3529,10 @@
       "tier3": 15,
       "tier4": 5,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 13.200000000000001
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 5,
       "quantity": 2,
       "weight": 1000,
@@ -2743,11 +3542,10 @@
       "tier3": 15,
       "tier4": 5,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 27
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 5,
       "quantity": 5,
       "weight": 350,
@@ -2757,11 +3555,10 @@
       "tier3": 20,
       "tier4": 5,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 70.5
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 5,
       "quantity": 10,
       "weight": 120,
@@ -2771,11 +3568,10 @@
       "tier3": 20,
       "tier4": 10,
       "tier5": 5,
-      "tier6": 0,
-      "~Helper": 204
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 5,
       "quantity": 15,
       "weight": 25,
@@ -2785,11 +3581,10 @@
       "tier3": 25,
       "tier4": 10,
       "tier5": 5,
-      "tier6": 0,
-      "~Helper": 319.5
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 5,
       "quantity": 30,
       "weight": 5,
@@ -2799,11 +3594,10 @@
       "tier3": 25,
       "tier4": 10,
       "tier5": 5,
-      "tier6": 0,
-      "~Helper": 639
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 6,
       "quantity": 1,
       "weight": 8500,
@@ -2813,11 +3607,10 @@
       "tier3": 20,
       "tier4": 5,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 13.8
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 6,
       "quantity": 2,
       "weight": 1000,
@@ -2827,11 +3620,10 @@
       "tier3": 20,
       "tier4": 5,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 27.6
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 6,
       "quantity": 5,
       "weight": 350,
@@ -2841,11 +3633,10 @@
       "tier3": 20,
       "tier4": 10,
       "tier5": 5,
-      "tier6": 0,
-      "~Helper": 102
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 6,
       "quantity": 10,
       "weight": 120,
@@ -2855,11 +3646,10 @@
       "tier3": 25,
       "tier4": 10,
       "tier5": 5,
-      "tier6": 0,
-      "~Helper": 213
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 6,
       "quantity": 15,
       "weight": 25,
@@ -2869,11 +3659,10 @@
       "tier3": 25,
       "tier4": 10,
       "tier5": 5,
-      "tier6": 0,
-      "~Helper": 319.5
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 6,
       "quantity": 30,
       "weight": 5,
@@ -2883,11 +3672,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 5,
-      "tier6": 5,
-      "~Helper": 972
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 7,
       "quantity": 1,
       "weight": 8500,
@@ -2897,11 +3685,10 @@
       "tier3": 20,
       "tier4": 10,
       "tier5": 0,
-      "tier6": 0,
-      "~Helper": 16.200000000000003
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 7,
       "quantity": 2,
       "weight": 1000,
@@ -2911,11 +3698,10 @@
       "tier3": 20,
       "tier4": 10,
       "tier5": 5,
-      "tier6": 0,
-      "~Helper": 40.800000000000004
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 7,
       "quantity": 5,
       "weight": 350,
@@ -2925,11 +3711,10 @@
       "tier3": 25,
       "tier4": 10,
       "tier5": 5,
-      "tier6": 0,
-      "~Helper": 106.5
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 7,
       "quantity": 10,
       "weight": 120,
@@ -2939,11 +3724,10 @@
       "tier3": 25,
       "tier4": 10,
       "tier5": 5,
-      "tier6": 0,
-      "~Helper": 213
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 7,
       "quantity": 15,
       "weight": 25,
@@ -2953,11 +3737,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 5,
-      "tier6": 5,
-      "~Helper": 486
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 7,
       "quantity": 30,
       "weight": 5,
@@ -2967,11 +3750,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 5,
-      "tier6": 5,
-      "~Helper": 972
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 8,
       "quantity": 1,
       "weight": 8500,
@@ -2981,11 +3763,10 @@
       "tier3": 20,
       "tier4": 10,
       "tier5": 5,
-      "tier6": 0,
-      "~Helper": 20.400000000000002
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 8,
       "quantity": 2,
       "weight": 1000,
@@ -2995,11 +3776,10 @@
       "tier3": 25,
       "tier4": 10,
       "tier5": 5,
-      "tier6": 0,
-      "~Helper": 42.6
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 8,
       "quantity": 5,
       "weight": 350,
@@ -3009,11 +3789,10 @@
       "tier3": 25,
       "tier4": 10,
       "tier5": 5,
-      "tier6": 5,
-      "~Helper": 153
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 8,
       "quantity": 10,
       "weight": 120,
@@ -3023,11 +3802,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 5,
-      "tier6": 5,
-      "~Helper": 324
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 8,
       "quantity": 15,
       "weight": 25,
@@ -3037,11 +3815,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 5,
-      "tier6": 5,
-      "~Helper": 486
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 8,
       "quantity": 30,
       "weight": 5,
@@ -3051,11 +3828,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 10,
-      "tier6": 5,
-      "~Helper": 1107
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 9,
       "quantity": 1,
       "weight": 8500,
@@ -3065,11 +3841,10 @@
       "tier3": 25,
       "tier4": 10,
       "tier5": 5,
-      "tier6": 0,
-      "~Helper": 21.3
+      "tier6": 0
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 9,
       "quantity": 2,
       "weight": 1000,
@@ -3079,11 +3854,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 0,
-      "tier6": 5,
-      "~Helper": 56.4
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 9,
       "quantity": 5,
       "weight": 350,
@@ -3093,11 +3867,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 5,
-      "tier6": 5,
-      "~Helper": 162
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 9,
       "quantity": 10,
       "weight": 120,
@@ -3107,11 +3880,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 5,
-      "tier6": 5,
-      "~Helper": 324
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 9,
       "quantity": 15,
       "weight": 25,
@@ -3121,11 +3893,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 10,
-      "tier6": 5,
-      "~Helper": 553.5
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 9,
       "quantity": 30,
       "weight": 5,
@@ -3135,11 +3906,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 10,
-      "tier6": 5,
-      "~Helper": 1107
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 10,
       "quantity": 1,
       "weight": 8500,
@@ -3149,11 +3919,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 0,
-      "tier6": 5,
-      "~Helper": 28.2
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 10,
       "quantity": 2,
       "weight": 1000,
@@ -3163,11 +3932,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 5,
-      "tier6": 5,
-      "~Helper": 64.80000000000001
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 10,
       "quantity": 5,
       "weight": 350,
@@ -3177,11 +3945,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 5,
-      "tier6": 5,
-      "~Helper": 163.5
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 10,
       "quantity": 10,
       "weight": 120,
@@ -3191,11 +3958,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 10,
-      "tier6": 5,
-      "~Helper": 369
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 10,
       "quantity": 15,
       "weight": 25,
@@ -3205,11 +3971,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 10,
-      "tier6": 5,
-      "~Helper": 580.5
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 10,
       "quantity": 30,
       "weight": 5,
@@ -3219,11 +3984,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 10,
-      "tier6": 10,
-      "~Helper": 1440
+      "tier6": 10
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 11,
       "quantity": 1,
       "weight": 8500,
@@ -3233,11 +3997,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 5,
-      "tier6": 5,
-      "~Helper": 32.400000000000006
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 11,
       "quantity": 2,
       "weight": 1000,
@@ -3247,11 +4010,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 5,
-      "tier6": 5,
-      "~Helper": 65.4
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 11,
       "quantity": 5,
       "weight": 350,
@@ -3261,11 +4023,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 10,
-      "tier6": 5,
-      "~Helper": 184.5
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 11,
       "quantity": 10,
       "weight": 120,
@@ -3275,11 +4036,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 10,
-      "tier6": 5,
-      "~Helper": 387
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 11,
       "quantity": 15,
       "weight": 25,
@@ -3289,11 +4049,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 10,
-      "tier6": 10,
-      "~Helper": 720
+      "tier6": 10
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 11,
       "quantity": 30,
       "weight": 5,
@@ -3303,11 +4062,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 10,
-      "tier6": 10,
-      "~Helper": 1440
+      "tier6": 10
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 12,
       "quantity": 1,
       "weight": 8500,
@@ -3317,11 +4075,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 10,
-      "tier6": 5,
-      "~Helper": 36.900000000000006
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 12,
       "quantity": 2,
       "weight": 1000,
@@ -3331,11 +4088,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 10,
-      "tier6": 5,
-      "~Helper": 73.80000000000001
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 12,
       "quantity": 5,
       "weight": 350,
@@ -3345,11 +4101,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 10,
-      "tier6": 5,
-      "~Helper": 193.5
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 12,
       "quantity": 10,
       "weight": 120,
@@ -3359,11 +4114,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 10,
-      "tier6": 5,
-      "~Helper": 390
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 12,
       "quantity": 15,
       "weight": 25,
@@ -3373,11 +4127,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 10,
-      "tier6": 10,
-      "~Helper": 720
+      "tier6": 10
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 12,
       "quantity": 30,
       "weight": 5,
@@ -3387,11 +4140,10 @@
       "tier3": 30,
       "tier4": 20,
       "tier5": 10,
-      "tier6": 10,
-      "~Helper": 1458
+      "tier6": 10
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 13,
       "quantity": 1,
       "weight": 8500,
@@ -3401,11 +4153,10 @@
       "tier3": 25,
       "tier4": 15,
       "tier5": 10,
-      "tier6": 5,
-      "~Helper": 36.900000000000006
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 13,
       "quantity": 2,
       "weight": 1000,
@@ -3415,11 +4166,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 10,
-      "tier6": 5,
-      "~Helper": 77.4
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 13,
       "quantity": 5,
       "weight": 350,
@@ -3429,11 +4179,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 10,
-      "tier6": 10,
-      "~Helper": 240
+      "tier6": 10
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 13,
       "quantity": 10,
       "weight": 120,
@@ -3443,11 +4192,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 10,
-      "tier6": 10,
-      "~Helper": 480
+      "tier6": 10
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 13,
       "quantity": 15,
       "weight": 25,
@@ -3457,11 +4205,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 15,
-      "tier6": 10,
-      "~Helper": 783
+      "tier6": 10
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 13,
       "quantity": 30,
       "weight": 5,
@@ -3471,11 +4218,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 15,
-      "tier6": 15,
-      "~Helper": 1845
+      "tier6": 15
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 14,
       "quantity": 1,
       "weight": 8500,
@@ -3485,11 +4231,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 10,
-      "tier6": 5,
-      "~Helper": 38.7
+      "tier6": 5
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 14,
       "quantity": 2,
       "weight": 1000,
@@ -3499,11 +4244,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 10,
-      "tier6": 10,
-      "~Helper": 96.00000000000001
+      "tier6": 10
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 14,
       "quantity": 5,
       "weight": 350,
@@ -3513,11 +4257,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 10,
-      "tier6": 10,
-      "~Helper": 240
+      "tier6": 10
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 14,
       "quantity": 10,
       "weight": 120,
@@ -3527,11 +4270,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 15,
-      "tier6": 10,
-      "~Helper": 522
+      "tier6": 10
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 14,
       "quantity": 15,
       "weight": 25,
@@ -3541,11 +4283,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 15,
-      "tier6": 15,
-      "~Helper": 922.5
+      "tier6": 15
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 14,
       "quantity": 30,
       "weight": 5,
@@ -3555,11 +4296,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 15,
-      "tier6": 15,
-      "~Helper": 1845
+      "tier6": 15
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 15,
       "quantity": 1,
       "weight": 8500,
@@ -3569,11 +4309,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 10,
-      "tier6": 10,
-      "~Helper": 48.00000000000001
+      "tier6": 10
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 15,
       "quantity": 2,
       "weight": 1000,
@@ -3583,11 +4322,10 @@
       "tier3": 30,
       "tier4": 20,
       "tier5": 10,
-      "tier6": 10,
-      "~Helper": 97.20000000000002
+      "tier6": 10
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 15,
       "quantity": 5,
       "weight": 350,
@@ -3597,11 +4335,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 15,
-      "tier6": 10,
-      "~Helper": 261
+      "tier6": 10
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 15,
       "quantity": 10,
       "weight": 120,
@@ -3611,11 +4348,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 15,
-      "tier6": 15,
-      "~Helper": 615
+      "tier6": 15
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 15,
       "quantity": 15,
       "weight": 25,
@@ -3625,11 +4361,10 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 15,
-      "tier6": 15,
-      "~Helper": 922.5
+      "tier6": 15
     },
     {
-      "id": "wood",
+      "id": "profil_complexity 0",
       "level": 15,
       "quantity": 30,
       "weight": 5,
@@ -3639,3788 +4374,7 @@
       "tier3": 25,
       "tier4": 20,
       "tier5": 15,
-      "tier6": 20,
-      "~Helper": 2115
-    },
-    {
-      "id": "iron",
-      "level": 1,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 70,
-      "tier2": 30,
-      "tier3": 0,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 14.299999999999999
-    },
-    {
-      "id": "iron",
-      "level": 1,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 65,
-      "tier2": 35,
-      "tier3": 0,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 29.7
-    },
-    {
-      "id": "iron",
-      "level": 1,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 60,
-      "tier2": 35,
-      "tier3": 5,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 82.5
-    },
-    {
-      "id": "iron",
-      "level": 1,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 55,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 181.5
-    },
-    {
-      "id": "iron",
-      "level": 1,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 45,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 305.25
-    },
-    {
-      "id": "iron",
-      "level": 1,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 726
-    },
-    {
-      "id": "iron",
-      "level": 2,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 60,
-      "tier2": 35,
-      "tier3": 5,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 16.5
-    },
-    {
-      "id": "iron",
-      "level": 2,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 60,
-      "tier2": 35,
-      "tier3": 5,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 33
-    },
-    {
-      "id": "iron",
-      "level": 2,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 55,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 90.75
-    },
-    {
-      "id": "iron",
-      "level": 2,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 45,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 203.5
-    },
-    {
-      "id": "iron",
-      "level": 2,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 363
-    },
-    {
-      "id": "iron",
-      "level": 2,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 40,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 759
-    },
-    {
-      "id": "iron",
-      "level": 3,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 55,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 18.15
-    },
-    {
-      "id": "iron",
-      "level": 3,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 50,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 44
-    },
-    {
-      "id": "iron",
-      "level": 3,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 45,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 101.75
-    },
-    {
-      "id": "iron",
-      "level": 3,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 242
-    },
-    {
-      "id": "iron",
-      "level": 3,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 35,
-      "tier2": 40,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 387.75
-    },
-    {
-      "id": "iron",
-      "level": 3,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 1122
-    },
-    {
-      "id": "iron",
-      "level": 4,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 50,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 22
-    },
-    {
-      "id": "iron",
-      "level": 4,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 45,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 40.7
-    },
-    {
-      "id": "iron",
-      "level": 4,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 121
-    },
-    {
-      "id": "iron",
-      "level": 4,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 40,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 253
-    },
-    {
-      "id": "iron",
-      "level": 4,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 561
-    },
-    {
-      "id": "iron",
-      "level": 4,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 25,
-      "tier2": 40,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 1138.5
-    },
-    {
-      "id": "iron",
-      "level": 5,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 24.200000000000003
-    },
-    {
-      "id": "iron",
-      "level": 5,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 35,
-      "tier2": 45,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 49.5
-    },
-    {
-      "id": "iron",
-      "level": 5,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 35,
-      "tier2": 40,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 129.25
-    },
-    {
-      "id": "iron",
-      "level": 5,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 374
-    },
-    {
-      "id": "iron",
-      "level": 5,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 585.75
-    },
-    {
-      "id": "iron",
-      "level": 5,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 1171.5
-    },
-    {
-      "id": "iron",
-      "level": 6,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 40,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 25.299999999999997
-    },
-    {
-      "id": "iron",
-      "level": 6,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 40,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 50.599999999999994
-    },
-    {
-      "id": "iron",
-      "level": 6,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 187
-    },
-    {
-      "id": "iron",
-      "level": 6,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 390.5
-    },
-    {
-      "id": "iron",
-      "level": 6,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 585.75
-    },
-    {
-      "id": "iron",
-      "level": 6,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 1782
-    },
-    {
-      "id": "iron",
-      "level": 7,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 30,
-      "tier2": 40,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 29.700000000000003
-    },
-    {
-      "id": "iron",
-      "level": 7,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 74.80000000000001
-    },
-    {
-      "id": "iron",
-      "level": 7,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 195.25
-    },
-    {
-      "id": "iron",
-      "level": 7,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 390.5
-    },
-    {
-      "id": "iron",
-      "level": 7,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 891
-    },
-    {
-      "id": "iron",
-      "level": 7,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 1782
-    },
-    {
-      "id": "iron",
-      "level": 8,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 37.400000000000006
-    },
-    {
-      "id": "iron",
-      "level": 8,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 78.1
-    },
-    {
-      "id": "iron",
-      "level": 8,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 20,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 280.5
-    },
-    {
-      "id": "iron",
-      "level": 8,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 594
-    },
-    {
-      "id": "iron",
-      "level": 8,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 891
-    },
-    {
-      "id": "iron",
-      "level": 8,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 2029.5
-    },
-    {
-      "id": "iron",
-      "level": 9,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 39.05
-    },
-    {
-      "id": "iron",
-      "level": 9,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 20,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 0,
-      "tier6": 5,
-      "~Helper": 103.39999999999999
-    },
-    {
-      "id": "iron",
-      "level": 9,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 297
-    },
-    {
-      "id": "iron",
-      "level": 9,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 594
-    },
-    {
-      "id": "iron",
-      "level": 9,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 1014.75
-    },
-    {
-      "id": "iron",
-      "level": 9,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 2029.5
-    },
-    {
-      "id": "iron",
-      "level": 10,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 20,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 0,
-      "tier6": 5,
-      "~Helper": 51.699999999999996
-    },
-    {
-      "id": "iron",
-      "level": 10,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 118.8
-    },
-    {
-      "id": "iron",
-      "level": 10,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 15,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 299.75
-    },
-    {
-      "id": "iron",
-      "level": 10,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 676.5
-    },
-    {
-      "id": "iron",
-      "level": 10,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 15,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 1064.25
-    },
-    {
-      "id": "iron",
-      "level": 10,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 2640
-    },
-    {
-      "id": "iron",
-      "level": 11,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 59.4
-    },
-    {
-      "id": "iron",
-      "level": 11,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 15,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 119.89999999999999
-    },
-    {
-      "id": "iron",
-      "level": 11,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 338.25
-    },
-    {
-      "id": "iron",
-      "level": 11,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 15,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 709.5
-    },
-    {
-      "id": "iron",
-      "level": 11,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 1320
-    },
-    {
-      "id": "iron",
-      "level": 11,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 2640
-    },
-    {
-      "id": "iron",
-      "level": 12,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 67.65
-    },
-    {
-      "id": "iron",
-      "level": 12,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 135.3
-    },
-    {
-      "id": "iron",
-      "level": 12,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 15,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 354.75
-    },
-    {
-      "id": "iron",
-      "level": 12,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 10,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 715
-    },
-    {
-      "id": "iron",
-      "level": 12,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 1320
-    },
-    {
-      "id": "iron",
-      "level": 12,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 10,
-      "tier2": 20,
-      "tier3": 30,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 2673
-    },
-    {
-      "id": "iron",
-      "level": 13,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 67.65
-    },
-    {
-      "id": "iron",
-      "level": 13,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 15,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 141.9
-    },
-    {
-      "id": "iron",
-      "level": 13,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 440
-    },
-    {
-      "id": "iron",
-      "level": 13,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 880
-    },
-    {
-      "id": "iron",
-      "level": 13,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 10,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 10,
-      "~Helper": 1435.5
-    },
-    {
-      "id": "iron",
-      "level": 13,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 5,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 15,
-      "~Helper": 3382.5
-    },
-    {
-      "id": "iron",
-      "level": 14,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 15,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 70.95
-    },
-    {
-      "id": "iron",
-      "level": 14,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 176
-    },
-    {
-      "id": "iron",
-      "level": 14,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 440
-    },
-    {
-      "id": "iron",
-      "level": 14,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 10,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 10,
-      "~Helper": 957
-    },
-    {
-      "id": "iron",
-      "level": 14,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 5,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 15,
-      "~Helper": 1691.25
-    },
-    {
-      "id": "iron",
-      "level": 14,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 5,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 15,
-      "~Helper": 3382.5
-    },
-    {
-      "id": "iron",
-      "level": 15,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 88
-    },
-    {
-      "id": "iron",
-      "level": 15,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 10,
-      "tier2": 20,
-      "tier3": 30,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 178.2
-    },
-    {
-      "id": "iron",
-      "level": 15,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 10,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 10,
-      "~Helper": 478.5
-    },
-    {
-      "id": "iron",
-      "level": 15,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 5,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 15,
-      "~Helper": 1127.5
-    },
-    {
-      "id": "iron",
-      "level": 15,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 5,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 15,
-      "~Helper": 1691.25
-    },
-    {
-      "id": "iron",
-      "level": 15,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 5,
-      "tier2": 15,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 20,
-      "~Helper": 3877.5
-    },
-    {
-      "id": "plank",
-      "level": 1,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 70,
-      "tier2": 30,
-      "tier3": 0,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 20.799999999999997
-    },
-    {
-      "id": "plank",
-      "level": 1,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 65,
-      "tier2": 35,
-      "tier3": 0,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 43.2
-    },
-    {
-      "id": "plank",
-      "level": 1,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 60,
-      "tier2": 35,
-      "tier3": 5,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 120
-    },
-    {
-      "id": "plank",
-      "level": 1,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 55,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 264
-    },
-    {
-      "id": "plank",
-      "level": 1,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 45,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 444
-    },
-    {
-      "id": "plank",
-      "level": 1,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 1056
-    },
-    {
-      "id": "plank",
-      "level": 2,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 60,
-      "tier2": 35,
-      "tier3": 5,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 23.999999999999996
-    },
-    {
-      "id": "plank",
-      "level": 2,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 60,
-      "tier2": 35,
-      "tier3": 5,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 47.99999999999999
-    },
-    {
-      "id": "plank",
-      "level": 2,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 55,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 132
-    },
-    {
-      "id": "plank",
-      "level": 2,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 45,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 296
-    },
-    {
-      "id": "plank",
-      "level": 2,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 528
-    },
-    {
-      "id": "plank",
-      "level": 2,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 40,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 1104
-    },
-    {
-      "id": "plank",
-      "level": 3,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 55,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 26.4
-    },
-    {
-      "id": "plank",
-      "level": 3,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 50,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 64
-    },
-    {
-      "id": "plank",
-      "level": 3,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 45,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 148
-    },
-    {
-      "id": "plank",
-      "level": 3,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 352
-    },
-    {
-      "id": "plank",
-      "level": 3,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 35,
-      "tier2": 40,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 564
-    },
-    {
-      "id": "plank",
-      "level": 3,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 1632
-    },
-    {
-      "id": "plank",
-      "level": 4,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 50,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 32
-    },
-    {
-      "id": "plank",
-      "level": 4,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 45,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 59.2
-    },
-    {
-      "id": "plank",
-      "level": 4,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 176
-    },
-    {
-      "id": "plank",
-      "level": 4,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 40,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 368
-    },
-    {
-      "id": "plank",
-      "level": 4,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 816
-    },
-    {
-      "id": "plank",
-      "level": 4,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 25,
-      "tier2": 40,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 1656
-    },
-    {
-      "id": "plank",
-      "level": 5,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 35.2
-    },
-    {
-      "id": "plank",
-      "level": 5,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 35,
-      "tier2": 45,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 72
-    },
-    {
-      "id": "plank",
-      "level": 5,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 35,
-      "tier2": 40,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 188
-    },
-    {
-      "id": "plank",
-      "level": 5,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 544
-    },
-    {
-      "id": "plank",
-      "level": 5,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 852
-    },
-    {
-      "id": "plank",
-      "level": 5,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 1704
-    },
-    {
-      "id": "plank",
-      "level": 6,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 40,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 36.800000000000004
-    },
-    {
-      "id": "plank",
-      "level": 6,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 40,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 73.60000000000001
-    },
-    {
-      "id": "plank",
-      "level": 6,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 272
-    },
-    {
-      "id": "plank",
-      "level": 6,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 568
-    },
-    {
-      "id": "plank",
-      "level": 6,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 852
-    },
-    {
-      "id": "plank",
-      "level": 6,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 2592
-    },
-    {
-      "id": "plank",
-      "level": 7,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 30,
-      "tier2": 40,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 43.2
-    },
-    {
-      "id": "plank",
-      "level": 7,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 108.80000000000001
-    },
-    {
-      "id": "plank",
-      "level": 7,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 284
-    },
-    {
-      "id": "plank",
-      "level": 7,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 568
-    },
-    {
-      "id": "plank",
-      "level": 7,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 1296
-    },
-    {
-      "id": "plank",
-      "level": 7,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 2592
-    },
-    {
-      "id": "plank",
-      "level": 8,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 54.400000000000006
-    },
-    {
-      "id": "plank",
-      "level": 8,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 113.6
-    },
-    {
-      "id": "plank",
-      "level": 8,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 20,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 408
-    },
-    {
-      "id": "plank",
-      "level": 8,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 864
-    },
-    {
-      "id": "plank",
-      "level": 8,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 1296
-    },
-    {
-      "id": "plank",
-      "level": 8,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 2952
-    },
-    {
-      "id": "plank",
-      "level": 9,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 56.8
-    },
-    {
-      "id": "plank",
-      "level": 9,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 20,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 0,
-      "tier6": 5,
-      "~Helper": 150.39999999999998
-    },
-    {
-      "id": "plank",
-      "level": 9,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 432
-    },
-    {
-      "id": "plank",
-      "level": 9,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 864
-    },
-    {
-      "id": "plank",
-      "level": 9,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 1476
-    },
-    {
-      "id": "plank",
-      "level": 9,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 2952
-    },
-    {
-      "id": "plank",
-      "level": 10,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 20,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 0,
-      "tier6": 5,
-      "~Helper": 75.19999999999999
-    },
-    {
-      "id": "plank",
-      "level": 10,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 172.8
-    },
-    {
-      "id": "plank",
-      "level": 10,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 15,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 436
-    },
-    {
-      "id": "plank",
-      "level": 10,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 984
-    },
-    {
-      "id": "plank",
-      "level": 10,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 15,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 1548
-    },
-    {
-      "id": "plank",
-      "level": 10,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 3840
-    },
-    {
-      "id": "plank",
-      "level": 11,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 86.4
-    },
-    {
-      "id": "plank",
-      "level": 11,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 15,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 174.39999999999998
-    },
-    {
-      "id": "plank",
-      "level": 11,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 492
-    },
-    {
-      "id": "plank",
-      "level": 11,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 15,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 1032
-    },
-    {
-      "id": "plank",
-      "level": 11,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 1920
-    },
-    {
-      "id": "plank",
-      "level": 11,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 3840
-    },
-    {
-      "id": "plank",
-      "level": 12,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 98.4
-    },
-    {
-      "id": "plank",
-      "level": 12,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 196.8
-    },
-    {
-      "id": "plank",
-      "level": 12,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 15,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 516
-    },
-    {
-      "id": "plank",
-      "level": 12,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 10,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 1040
-    },
-    {
-      "id": "plank",
-      "level": 12,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 1920
-    },
-    {
-      "id": "plank",
-      "level": 12,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 10,
-      "tier2": 20,
-      "tier3": 30,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 3888
-    },
-    {
-      "id": "plank",
-      "level": 13,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 98.4
-    },
-    {
-      "id": "plank",
-      "level": 13,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 15,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 206.39999999999998
-    },
-    {
-      "id": "plank",
-      "level": 13,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 640
-    },
-    {
-      "id": "plank",
-      "level": 13,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 1280
-    },
-    {
-      "id": "plank",
-      "level": 13,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 10,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 10,
-      "~Helper": 2088
-    },
-    {
-      "id": "plank",
-      "level": 13,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 5,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 15,
-      "~Helper": 4920
-    },
-    {
-      "id": "plank",
-      "level": 14,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 15,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 103.19999999999999
-    },
-    {
-      "id": "plank",
-      "level": 14,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 256
-    },
-    {
-      "id": "plank",
-      "level": 14,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 640
-    },
-    {
-      "id": "plank",
-      "level": 14,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 10,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 10,
-      "~Helper": 1392
-    },
-    {
-      "id": "plank",
-      "level": 14,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 5,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 15,
-      "~Helper": 2460
-    },
-    {
-      "id": "plank",
-      "level": 14,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 5,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 15,
-      "~Helper": 4920
-    },
-    {
-      "id": "plank",
-      "level": 15,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 128
-    },
-    {
-      "id": "plank",
-      "level": 15,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 10,
-      "tier2": 20,
-      "tier3": 30,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 259.20000000000005
-    },
-    {
-      "id": "plank",
-      "level": 15,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 10,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 10,
-      "~Helper": 696
-    },
-    {
-      "id": "plank",
-      "level": 15,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 5,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 15,
-      "~Helper": 1640
-    },
-    {
-      "id": "plank",
-      "level": 15,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 5,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 15,
-      "~Helper": 2460
-    },
-    {
-      "id": "plank",
-      "level": 15,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 5,
-      "tier2": 15,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 20,
-      "~Helper": 5640
-    },
-    {
-      "id": "sword",
-      "level": 1,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 70,
-      "tier2": 30,
-      "tier3": 0,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 52
-    },
-    {
-      "id": "sword",
-      "level": 1,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 65,
-      "tier2": 35,
-      "tier3": 0,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 108
-    },
-    {
-      "id": "sword",
-      "level": 1,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 60,
-      "tier2": 35,
-      "tier3": 5,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 300
-    },
-    {
-      "id": "sword",
-      "level": 1,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 55,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 660
-    },
-    {
-      "id": "sword",
-      "level": 1,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 45,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 1110
-    },
-    {
-      "id": "sword",
-      "level": 1,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 2640
-    },
-    {
-      "id": "sword",
-      "level": 2,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 60,
-      "tier2": 35,
-      "tier3": 5,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 60
-    },
-    {
-      "id": "sword",
-      "level": 2,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 60,
-      "tier2": 35,
-      "tier3": 5,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 120
-    },
-    {
-      "id": "sword",
-      "level": 2,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 55,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 330
-    },
-    {
-      "id": "sword",
-      "level": 2,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 45,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 740
-    },
-    {
-      "id": "sword",
-      "level": 2,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 1320
-    },
-    {
-      "id": "sword",
-      "level": 2,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 40,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 2760
-    },
-    {
-      "id": "sword",
-      "level": 3,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 55,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 66
-    },
-    {
-      "id": "sword",
-      "level": 3,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 50,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 160
-    },
-    {
-      "id": "sword",
-      "level": 3,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 45,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 370
-    },
-    {
-      "id": "sword",
-      "level": 3,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 880
-    },
-    {
-      "id": "sword",
-      "level": 3,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 35,
-      "tier2": 40,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 1410
-    },
-    {
-      "id": "sword",
-      "level": 3,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 4080
-    },
-    {
-      "id": "sword",
-      "level": 4,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 50,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 80
-    },
-    {
-      "id": "sword",
-      "level": 4,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 45,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 148
-    },
-    {
-      "id": "sword",
-      "level": 4,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 440
-    },
-    {
-      "id": "sword",
-      "level": 4,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 40,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 920
-    },
-    {
-      "id": "sword",
-      "level": 4,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 2040
-    },
-    {
-      "id": "sword",
-      "level": 4,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 25,
-      "tier2": 40,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 4140
-    },
-    {
-      "id": "sword",
-      "level": 5,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 88
-    },
-    {
-      "id": "sword",
-      "level": 5,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 35,
-      "tier2": 45,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 180
-    },
-    {
-      "id": "sword",
-      "level": 5,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 35,
-      "tier2": 40,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 470
-    },
-    {
-      "id": "sword",
-      "level": 5,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 1360
-    },
-    {
-      "id": "sword",
-      "level": 5,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 2130
-    },
-    {
-      "id": "sword",
-      "level": 5,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 4260
-    },
-    {
-      "id": "sword",
-      "level": 6,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 40,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 92
-    },
-    {
-      "id": "sword",
-      "level": 6,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 40,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 184
-    },
-    {
-      "id": "sword",
-      "level": 6,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 680
-    },
-    {
-      "id": "sword",
-      "level": 6,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 1420
-    },
-    {
-      "id": "sword",
-      "level": 6,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 2130
-    },
-    {
-      "id": "sword",
-      "level": 6,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 6480
-    },
-    {
-      "id": "sword",
-      "level": 7,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 30,
-      "tier2": 40,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 0,
-      "tier6": 0,
-      "~Helper": 108
-    },
-    {
-      "id": "sword",
-      "level": 7,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 272
-    },
-    {
-      "id": "sword",
-      "level": 7,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 710
-    },
-    {
-      "id": "sword",
-      "level": 7,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 1420
-    },
-    {
-      "id": "sword",
-      "level": 7,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 3240
-    },
-    {
-      "id": "sword",
-      "level": 7,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 6480
-    },
-    {
-      "id": "sword",
-      "level": 8,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 136
-    },
-    {
-      "id": "sword",
-      "level": 8,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 284
-    },
-    {
-      "id": "sword",
-      "level": 8,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 20,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 1020
-    },
-    {
-      "id": "sword",
-      "level": 8,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 2160
-    },
-    {
-      "id": "sword",
-      "level": 8,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 3240
-    },
-    {
-      "id": "sword",
-      "level": 8,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 7380
-    },
-    {
-      "id": "sword",
-      "level": 9,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0,
-      "~Helper": 142
-    },
-    {
-      "id": "sword",
-      "level": 9,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 20,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 0,
-      "tier6": 5,
-      "~Helper": 376
-    },
-    {
-      "id": "sword",
-      "level": 9,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 1080
-    },
-    {
-      "id": "sword",
-      "level": 9,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 2160
-    },
-    {
-      "id": "sword",
-      "level": 9,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 3690
-    },
-    {
-      "id": "sword",
-      "level": 9,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 7380
-    },
-    {
-      "id": "sword",
-      "level": 10,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 20,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 0,
-      "tier6": 5,
-      "~Helper": 188
-    },
-    {
-      "id": "sword",
-      "level": 10,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 432
-    },
-    {
-      "id": "sword",
-      "level": 10,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 15,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 1090
-    },
-    {
-      "id": "sword",
-      "level": 10,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 2460
-    },
-    {
-      "id": "sword",
-      "level": 10,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 15,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 3870
-    },
-    {
-      "id": "sword",
-      "level": 10,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 9600
-    },
-    {
-      "id": "sword",
-      "level": 11,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 216
-    },
-    {
-      "id": "sword",
-      "level": 11,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 15,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5,
-      "~Helper": 436
-    },
-    {
-      "id": "sword",
-      "level": 11,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 1230
-    },
-    {
-      "id": "sword",
-      "level": 11,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 15,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 2580
-    },
-    {
-      "id": "sword",
-      "level": 11,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 4800
-    },
-    {
-      "id": "sword",
-      "level": 11,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 9600
-    },
-    {
-      "id": "sword",
-      "level": 12,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 246
-    },
-    {
-      "id": "sword",
-      "level": 12,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 492
-    },
-    {
-      "id": "sword",
-      "level": 12,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 15,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 1290
-    },
-    {
-      "id": "sword",
-      "level": 12,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 10,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 2600
-    },
-    {
-      "id": "sword",
-      "level": 12,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 4800
-    },
-    {
-      "id": "sword",
-      "level": 12,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 10,
-      "tier2": 20,
-      "tier3": 30,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 9720
-    },
-    {
-      "id": "sword",
-      "level": 13,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 246
-    },
-    {
-      "id": "sword",
-      "level": 13,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 15,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 516
-    },
-    {
-      "id": "sword",
-      "level": 13,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 1600
-    },
-    {
-      "id": "sword",
-      "level": 13,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 3200
-    },
-    {
-      "id": "sword",
-      "level": 13,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 10,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 10,
-      "~Helper": 5220
-    },
-    {
-      "id": "sword",
-      "level": 13,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 5,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 15,
-      "~Helper": 12300
-    },
-    {
-      "id": "sword",
-      "level": 14,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 15,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5,
-      "~Helper": 258
-    },
-    {
-      "id": "sword",
-      "level": 14,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 640
-    },
-    {
-      "id": "sword",
-      "level": 14,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 1600
-    },
-    {
-      "id": "sword",
-      "level": 14,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 10,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 10,
-      "~Helper": 3480
-    },
-    {
-      "id": "sword",
-      "level": 14,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 5,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 15,
-      "~Helper": 6150
-    },
-    {
-      "id": "sword",
-      "level": 14,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 5,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 15,
-      "~Helper": 12300
-    },
-    {
-      "id": "sword",
-      "level": 15,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 320
-    },
-    {
-      "id": "sword",
-      "level": 15,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 10,
-      "tier2": 20,
-      "tier3": 30,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10,
-      "~Helper": 648
-    },
-    {
-      "id": "sword",
-      "level": 15,
-      "quantity": 5,
-      "weight": 350,
-      "group": "C",
-      "tier1": 10,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 10,
-      "~Helper": 1740
-    },
-    {
-      "id": "sword",
-      "level": 15,
-      "quantity": 10,
-      "weight": 120,
-      "group": "D",
-      "tier1": 5,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 15,
-      "~Helper": 4100
-    },
-    {
-      "id": "sword",
-      "level": 15,
-      "quantity": 15,
-      "weight": 25,
-      "group": "E",
-      "tier1": 5,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 15,
-      "~Helper": 6150
-    },
-    {
-      "id": "sword",
-      "level": 15,
-      "quantity": 30,
-      "weight": 5,
-      "group": "F",
-      "tier1": 5,
-      "tier2": 15,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
-      "tier6": 20,
-      "~Helper": 14100
+      "tier6": 20
     }
   ],
   "inputs": [
@@ -7437,7 +4391,17 @@
     {
       "id": "forge",
       "quantity": 1,
+      "type": "wood"
+    },
+    {
+      "id": "military_camp",
+      "quantity": 1,
       "type": "plank"
+    },
+    {
+      "id": "military_camp",
+      "quantity": 1,
+      "type": "iron"
     }
   ],
   "competitors_behavior": [
@@ -7588,7 +4552,7 @@
       "id": "bot_timber",
       "displayName": "Timber & Co",
       "spriteId": "Tree",
-      "startingMoney": 120,
+      "startingMoney": 50,
       "increaseByRound": 50,
       "upgradeEffect": 50
     },
@@ -7596,7 +4560,7 @@
       "id": "bot_ferro",
       "displayName": "Ferromax",
       "spriteId": "Vault",
-      "startingMoney": 120,
+      "startingMoney": 50,
       "increaseByRound": 50,
       "upgradeEffect": 50
     },
@@ -7604,7 +4568,7 @@
       "id": "bot_forge",
       "displayName": "ForgeKing",
       "spriteId": "Sword",
-      "startingMoney": 120,
+      "startingMoney": 50,
       "increaseByRound": 50,
       "upgradeEffect": 50
     }
