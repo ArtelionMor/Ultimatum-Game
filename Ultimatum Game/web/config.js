@@ -40,7 +40,7 @@ export function normalize(raw) {
   raw.purshases.forEach((p) => { if (purchases[p.type]) purchases[p.type].push({ effect: p.effect, price: p.price }); });
 
   const market = {}; raw.market.forEach((m, i) => {
-    market[i + 1] = { customers: m.customers, avg: m["average amount"], weights: { wood: m.weight_wood, iron: m.weight_iron, plank: m.weight_plank, sword: m.weight_sword } };
+    market[i + 1] = { customers: m.customers, avg: m["average amount"], weights: { wood: m.wood, iron: m.iron, plank: m.plank, sword: m.sword } };
   });
 
   // convert: N units of (id, tier) -> result_quantity (default 1) of (result_ressource, result_tier)

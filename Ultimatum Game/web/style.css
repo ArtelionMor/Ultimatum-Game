@@ -312,9 +312,9 @@ button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
   border-radius: 12px 12px 0 0;
 }
 .customer {
-  position: absolute; top: -16%; transform: translateX(-50%);
+  position: absolute; top: -16%; width: 0;
   display: flex; flex-direction: column; align-items: center; gap: 2px;
-  will-change: top, left, transform;
+  will-change: top, left;
   transition: top var(--fall, 2.6s) linear, left .55s ease-in, opacity .5s ease;
 }
 .customer.falling { top: calc(100% - 96px); }
@@ -323,12 +323,12 @@ button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
 .customer.nobody .bubble::after { border-top-color: var(--danger); }
 .customer.nobody .cust-sprite { filter: drop-shadow(0 3px 3px rgba(0,0,0,.4)) sepia(1) saturate(5) hue-rotate(-30deg) brightness(.95); }
 .customer.done { opacity: 0; }
-.cust-sprite { width: 46px; height: 46px; filter: drop-shadow(0 3px 3px rgba(0,0,0,.4)); }
+.cust-sprite { width: 46px; height: 46px; filter: drop-shadow(0 3px 3px rgba(0,0,0,.4)); position: relative; z-index: 1; }
 .customer .bubble {
   display: flex; align-items: center; gap: 3px;
   background: #fff; color: #1a1f2c; font-weight: bold; font-size: 14px;
   padding: 3px 8px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,.3);
-  position: relative;
+  position: relative; z-index: 2;
 }
 .customer .bubble::after {
   content: ""; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
