@@ -39,6 +39,10 @@
     {
       "id": "numberOfCompetitors",
       "value": 3
+    },
+    {
+      "id": "earlyTaxDiscount",
+      "value": 5
     }
   ],
   "~Simulator": [
