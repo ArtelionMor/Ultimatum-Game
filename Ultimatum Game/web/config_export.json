@@ -43,6 +43,10 @@
     {
       "id": "earlyTaxDiscount",
       "value": 5
+    },
+    {
+      "id": "enableCheats",
+      "value": true
     }
   ],
   "~Simulator": [
@@ -1904,6 +1908,76 @@
       "quantity": 3,
       "result_ressource": "sword",
       "result_tier": 6
+    },
+    {
+      "id": "shield",
+      "tier": 1,
+      "quantity": 10,
+      "result_ressource": "shield",
+      "result_tier": 2
+    },
+    {
+      "id": "shield",
+      "tier": 2,
+      "quantity": 7,
+      "result_ressource": "shield",
+      "result_tier": 3
+    },
+    {
+      "id": "shield",
+      "tier": 3,
+      "quantity": 5,
+      "result_ressource": "shield",
+      "result_tier": 4
+    },
+    {
+      "id": "shield",
+      "tier": 4,
+      "quantity": 3,
+      "result_ressource": "shield",
+      "result_tier": 5
+    },
+    {
+      "id": "shield",
+      "tier": 5,
+      "quantity": 3,
+      "result_ressource": "shield",
+      "result_tier": 6
+    },
+    {
+      "id": "magic",
+      "tier": 1,
+      "quantity": 10,
+      "result_ressource": "magic",
+      "result_tier": 2
+    },
+    {
+      "id": "magic",
+      "tier": 2,
+      "quantity": 7,
+      "result_ressource": "magic",
+      "result_tier": 3
+    },
+    {
+      "id": "magic",
+      "tier": 3,
+      "quantity": 5,
+      "result_ressource": "magic",
+      "result_tier": 4
+    },
+    {
+      "id": "magic",
+      "tier": 4,
+      "quantity": 3,
+      "result_ressource": "magic",
+      "result_tier": 5
+    },
+    {
+      "id": "magic",
+      "tier": 5,
+      "quantity": 3,
+      "result_ressource": "magic",
+      "result_tier": 6
     }
   ],
   "resources": [
@@ -2315,7 +2389,7 @@
     {
       "id": "forge",
       "displayName": "Forge",
-      "spriteId": "Burning Wood",
+      "spriteId": "Sword Tier 1",
       "inputs": "forge",
       "outputs": "sword",
       "unlockAtRound": 2,
@@ -2327,14 +2401,16 @@
       "spriteId": "Shield Tier 1",
       "inputs": "military_camp",
       "outputs": "shield",
-      "unlockAtRound": 5
+      "unlockAtRound": 5,
+      "upgrades": "military_camp"
     },
     {
       "id": "magic_tower",
       "displayName": "Tour du Magicien",
       "spriteId": "Magic Orb Tier 1",
-      "outputs": "magic_orb",
-      "unlockAtRound": 7
+      "outputs": "magic",
+      "unlockAtRound": 7,
+      "upgrades": "magic_tower"
     }
   ],
   "upgrades": [
@@ -3120,63 +3196,393 @@
     },
     {
       "id": "military_camp",
-      "level": 1
+      "level": 1,
+      "cost": 75,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.1,
+      "productionTime": 5,
+      "~DO NOT EXPORT : total 1 worker": 4.5,
+      "~DO NOT EXPORT : total 2 workers": 4,
+      "~DO NOT EXPORT : total 3 workers": 3.5,
+      "~DO NOT EXPORT : total 4 workers": 3
     },
     {
       "id": "military_camp",
-      "level": 2
+      "level": 2,
+      "cost": 150,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.11,
+      "productionTime": 4.9,
+      "~DO NOT EXPORT : total 1 worker": 4.361000000000001,
+      "~DO NOT EXPORT : total 2 workers": 3.822,
+      "~DO NOT EXPORT : total 3 workers": 3.2830000000000004,
+      "~DO NOT EXPORT : total 4 workers": 2.744
     },
     {
       "id": "military_camp",
-      "level": 3
+      "level": 3,
+      "cost": 300,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.12,
+      "productionTime": 4.8,
+      "~DO NOT EXPORT : total 1 worker": 4.224,
+      "~DO NOT EXPORT : total 2 workers": 3.6479999999999997,
+      "~DO NOT EXPORT : total 3 workers": 3.072,
+      "~DO NOT EXPORT : total 4 workers": 2.496
     },
     {
       "id": "military_camp",
-      "level": 4
+      "level": 4,
+      "cost": 600,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.13,
+      "productionTime": 4.7,
+      "~DO NOT EXPORT : total 1 worker": 4.089,
+      "~DO NOT EXPORT : total 2 workers": 3.4779999999999998,
+      "~DO NOT EXPORT : total 3 workers": 2.867,
+      "~DO NOT EXPORT : total 4 workers": 2.256
     },
     {
       "id": "military_camp",
-      "level": 5
+      "level": 5,
+      "cost": 1200,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.14,
+      "productionTime": 4.6,
+      "~DO NOT EXPORT : total 1 worker": 3.9559999999999995,
+      "~DO NOT EXPORT : total 2 workers": 3.3119999999999994,
+      "~DO NOT EXPORT : total 3 workers": 2.6679999999999997,
+      "~DO NOT EXPORT : total 4 workers": 2.0239999999999996
     },
     {
       "id": "military_camp",
-      "level": 6
+      "level": 6,
+      "cost": 1800,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.15,
+      "productionTime": 4.50000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.825000000000008,
+      "~DO NOT EXPORT : total 2 workers": 3.1500000000000066,
+      "~DO NOT EXPORT : total 3 workers": 2.4750000000000054,
+      "~DO NOT EXPORT : total 4 workers": 1.8000000000000038
     },
     {
       "id": "military_camp",
-      "level": 7
+      "level": 7,
+      "cost": 2200,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.16,
+      "productionTime": 4.40000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.6960000000000086,
+      "~DO NOT EXPORT : total 2 workers": 2.992000000000007,
+      "~DO NOT EXPORT : total 3 workers": 2.288000000000005,
+      "~DO NOT EXPORT : total 4 workers": 1.5840000000000036
     },
     {
       "id": "military_camp",
-      "level": 8
+      "level": 8,
+      "cost": 2600,
+      "workersRequired": 2,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.17,
+      "productionTime": 4.30000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.569000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.8380000000000063,
+      "~DO NOT EXPORT : total 3 workers": 2.1070000000000046,
+      "~DO NOT EXPORT : total 4 workers": 1.376000000000003
     },
     {
       "id": "military_camp",
-      "level": 9
+      "level": 9,
+      "cost": 3200,
+      "workersRequired": 2,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.18,
+      "productionTime": 4.20000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.444000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.6880000000000064,
+      "~DO NOT EXPORT : total 3 workers": 1.9320000000000048,
+      "~DO NOT EXPORT : total 4 workers": 1.1760000000000028
     },
     {
       "id": "military_camp",
-      "level": 10
+      "level": 10,
+      "cost": 4000,
+      "workersRequired": 2,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.19,
+      "productionTime": 4.10000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.3210000000000086,
+      "~DO NOT EXPORT : total 2 workers": 2.5420000000000065,
+      "~DO NOT EXPORT : total 3 workers": 1.7630000000000043,
+      "~DO NOT EXPORT : total 4 workers": 0.9840000000000027
     },
     {
       "id": "military_camp",
-      "level": 11
+      "level": 11,
+      "cost": 5000,
+      "workersRequired": 2,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.2,
+      "productionTime": 4.00000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.2000000000000077,
+      "~DO NOT EXPORT : total 2 workers": 2.4000000000000057,
+      "~DO NOT EXPORT : total 3 workers": 1.6000000000000036,
+      "~DO NOT EXPORT : total 4 workers": 0.8000000000000016
     },
     {
       "id": "military_camp",
-      "level": 12
+      "level": 12,
+      "cost": 6000,
+      "workersRequired": 2,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.21,
+      "productionTime": 3.90000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.081000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.262000000000006,
+      "~DO NOT EXPORT : total 3 workers": 1.443000000000004,
+      "~DO NOT EXPORT : total 4 workers": 0.6240000000000019
     },
     {
       "id": "military_camp",
-      "level": 13
+      "level": 13,
+      "cost": 7000,
+      "workersRequired": 3,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.22,
+      "productionTime": 3.80000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.964000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.1280000000000054,
+      "~DO NOT EXPORT : total 3 workers": 1.2920000000000034,
+      "~DO NOT EXPORT : total 4 workers": 0.4560000000000013
     },
     {
       "id": "military_camp",
-      "level": 14
+      "level": 14,
+      "cost": 8000,
+      "workersRequired": 3,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.23,
+      "productionTime": 3.70000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.8490000000000077,
+      "~DO NOT EXPORT : total 2 workers": 1.9980000000000053,
+      "~DO NOT EXPORT : total 3 workers": 1.147000000000003,
+      "~DO NOT EXPORT : total 4 workers": 0.2960000000000007
     },
     {
       "id": "military_camp",
-      "level": 15
+      "level": 15,
+      "cost": 9000,
+      "workersRequired": 3,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.24,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.7360000000000078,
+      "~DO NOT EXPORT : total 2 workers": 1.8720000000000052,
+      "~DO NOT EXPORT : total 3 workers": 1.0080000000000031,
+      "~DO NOT EXPORT : total 4 workers": 0.14400000000000057
+    },
+    {
+      "id": "magic_tower",
+      "level": 1,
+      "cost": 75,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.1,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.240000000000009,
+      "~DO NOT EXPORT : total 2 workers": 2.880000000000008,
+      "~DO NOT EXPORT : total 3 workers": 2.5200000000000067,
+      "~DO NOT EXPORT : total 4 workers": 2.160000000000006
+    },
+    {
+      "id": "magic_tower",
+      "level": 2,
+      "cost": 150,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.11,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.2040000000000086,
+      "~DO NOT EXPORT : total 2 workers": 2.808000000000008,
+      "~DO NOT EXPORT : total 3 workers": 2.4120000000000066,
+      "~DO NOT EXPORT : total 4 workers": 2.0160000000000053
+    },
+    {
+      "id": "magic_tower",
+      "level": 3,
+      "cost": 300,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.12,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.1680000000000086,
+      "~DO NOT EXPORT : total 2 workers": 2.7360000000000078,
+      "~DO NOT EXPORT : total 3 workers": 2.3040000000000065,
+      "~DO NOT EXPORT : total 4 workers": 1.8720000000000052
+    },
+    {
+      "id": "magic_tower",
+      "level": 4,
+      "cost": 600,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.13,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.1320000000000086,
+      "~DO NOT EXPORT : total 2 workers": 2.6640000000000073,
+      "~DO NOT EXPORT : total 3 workers": 2.196000000000006,
+      "~DO NOT EXPORT : total 4 workers": 1.7280000000000046
+    },
+    {
+      "id": "magic_tower",
+      "level": 5,
+      "cost": 1200,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.14,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.0960000000000085,
+      "~DO NOT EXPORT : total 2 workers": 2.5920000000000067,
+      "~DO NOT EXPORT : total 3 workers": 2.0880000000000054,
+      "~DO NOT EXPORT : total 4 workers": 1.584000000000004
+    },
+    {
+      "id": "magic_tower",
+      "level": 6,
+      "cost": 1800,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.15,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.0600000000000085,
+      "~DO NOT EXPORT : total 2 workers": 2.5200000000000067,
+      "~DO NOT EXPORT : total 3 workers": 1.9800000000000053,
+      "~DO NOT EXPORT : total 4 workers": 1.440000000000004
+    },
+    {
+      "id": "magic_tower",
+      "level": 7,
+      "cost": 2200,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.16,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.024000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.4480000000000066,
+      "~DO NOT EXPORT : total 3 workers": 1.872000000000005,
+      "~DO NOT EXPORT : total 4 workers": 1.2960000000000034
+    },
+    {
+      "id": "magic_tower",
+      "level": 8,
+      "cost": 2600,
+      "workersRequired": 2,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.17,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.988000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.3760000000000066,
+      "~DO NOT EXPORT : total 3 workers": 1.7640000000000047,
+      "~DO NOT EXPORT : total 4 workers": 1.1520000000000028
+    },
+    {
+      "id": "magic_tower",
+      "level": 9,
+      "cost": 3200,
+      "workersRequired": 2,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.18,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.952000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.3040000000000065,
+      "~DO NOT EXPORT : total 3 workers": 1.6560000000000046,
+      "~DO NOT EXPORT : total 4 workers": 1.0080000000000027
+    },
+    {
+      "id": "magic_tower",
+      "level": 10,
+      "cost": 4000,
+      "workersRequired": 2,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.19,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.916000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.2320000000000064,
+      "~DO NOT EXPORT : total 3 workers": 1.5480000000000045,
+      "~DO NOT EXPORT : total 4 workers": 0.8640000000000025
+    },
+    {
+      "id": "magic_tower",
+      "level": 11,
+      "cost": 5000,
+      "workersRequired": 2,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.2,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.880000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.160000000000006,
+      "~DO NOT EXPORT : total 3 workers": 1.440000000000004,
+      "~DO NOT EXPORT : total 4 workers": 0.720000000000002
+    },
+    {
+      "id": "magic_tower",
+      "level": 12,
+      "cost": 6000,
+      "workersRequired": 2,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.21,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.844000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.088000000000006,
+      "~DO NOT EXPORT : total 3 workers": 1.3320000000000038,
+      "~DO NOT EXPORT : total 4 workers": 0.5760000000000018
+    },
+    {
+      "id": "magic_tower",
+      "level": 13,
+      "cost": 7000,
+      "workersRequired": 3,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.22,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.808000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.0160000000000053,
+      "~DO NOT EXPORT : total 3 workers": 1.2240000000000033,
+      "~DO NOT EXPORT : total 4 workers": 0.43200000000000127
+    },
+    {
+      "id": "magic_tower",
+      "level": 14,
+      "cost": 8000,
+      "workersRequired": 3,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.23,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.7720000000000073,
+      "~DO NOT EXPORT : total 2 workers": 1.9440000000000053,
+      "~DO NOT EXPORT : total 3 workers": 1.1160000000000028,
+      "~DO NOT EXPORT : total 4 workers": 0.2880000000000007
+    },
+    {
+      "id": "magic_tower",
+      "level": 15,
+      "cost": 9000,
+      "workersRequired": 3,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.24,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.7360000000000078,
+      "~DO NOT EXPORT : total 2 workers": 1.8720000000000052,
+      "~DO NOT EXPORT : total 3 workers": 1.0080000000000031,
+      "~DO NOT EXPORT : total 4 workers": 0.14400000000000057
     }
   ],
   "outputs": [
@@ -3201,7 +3607,7 @@
       "profil": "profil_complexity 0"
     },
     {
-      "id": "magic_orb",
+      "id": "magic",
       "profil": "profil_complexity 0"
     },
     {

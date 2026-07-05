@@ -280,6 +280,36 @@ button.sell { background: var(--ok); color: #03210a; }
 .final-score { font-size: 36px; font-weight: bold; color: var(--accent); }
 #gameover-rank { color: var(--text-dim); margin: 10px 0 20px; }
 
+/* ---------- Cheat console ---------- */
+#cheat-toggle {
+  position: absolute; bottom: 100px; right: 12px;
+  z-index: 1400;
+  width: 46px; height: 46px; padding: 0;
+  border-radius: 50%;
+  background: var(--bg-card); border: 2px solid var(--accent);
+  font-size: 20px; line-height: 1;
+  box-shadow: 0 3px 8px rgba(0,0,0,.4);
+  opacity: .85;
+}
+#cheat-toggle:active { transform: scale(.9); }
+#cheat-overlay .panel { text-align: left; }
+.cheat-section { margin-bottom: 18px; }
+.cheat-label {
+  font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: .5px;
+  color: var(--text-dim); margin-bottom: 8px;
+}
+.cheat-label span { color: var(--accent); }
+.cheat-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.cheat-row input {
+  flex: 1; min-width: 90px;
+  font-family: inherit; font-size: 15px; font-weight: bold;
+  padding: 8px 10px; border-radius: 8px;
+  background: var(--bg-card); border: 2px solid var(--border); color: var(--text);
+}
+#cheat-speeds button { flex: 1; background: var(--bg-card); color: var(--text); border: 2px solid var(--border); }
+#cheat-speeds button.active { background: var(--accent); color: #221a00; border-color: var(--accent); }
+#cheat-close { width: 100%; margin-top: 4px; }
+
 /* small helper */
 .flash { animation: flash .4s ease; }
 @keyframes flash { 0%{ background: var(--accent);} 100%{ background: var(--bg-card);} }

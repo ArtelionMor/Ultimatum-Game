@@ -103,6 +103,38 @@
     </div>
   </div>
 
+  <!-- Cheat console -->
+  <button id="cheat-toggle" title="Console de triche">🛠️</button>
+  <div id="cheat-overlay" class="overlay hidden">
+    <div class="panel wide">
+      <h2>🛠️ Console de triche</h2>
+      <div class="cheat-section">
+        <div class="cheat-label">Vitesse du temps <span id="cheat-speed-val">×1</span></div>
+        <div class="cheat-row" id="cheat-speeds">
+          <button data-speed="1">Normal ×1</button>
+          <button data-speed="2">×2</button>
+          <button data-speed="4">×4</button>
+          <button data-speed="8">×8</button>
+        </div>
+      </div>
+      <div class="cheat-section">
+        <div class="cheat-label">Argent</div>
+        <div class="cheat-row">
+          <input id="cheat-money" type="number" value="1000" />
+          <button id="cheat-money-add">Ajouter</button>
+        </div>
+      </div>
+      <div class="cheat-section">
+        <div class="cheat-label">Aller à la vague</div>
+        <div class="cheat-row">
+          <input id="cheat-wave" type="number" min="1" value="1" />
+          <button id="cheat-wave-go">Go to</button>
+        </div>
+      </div>
+      <button id="cheat-close" class="ghost">Fermer</button>
+    </div>
+  </div>
+
   <!-- Game over overlay -->
   <div id="gameover-overlay" class="overlay hidden">
     <div class="panel">
