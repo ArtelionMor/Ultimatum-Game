@@ -12,7 +12,7 @@ import { normalize } from "./config.js";
 // ============================================================
 const Game = {
   cfg: null, state: S.Setup, round: 0, prepTimer: 0, waveActive: false,
-  competitors: [], player: null, lastTime: 0, market: null,
+  competitors: [], player: null, lastTime: 0, market: null, timeScale: 1,
 
   async start() {
     const raw = await fetch("config_export.json").then((r) => r.json());
@@ -41,6 +41,7 @@ const Game = {
       raw.outputs.forEach((o) => { const k = o.id + "_" + o.level; (this.cfg._outputs[k] = this.cfg._outputs[k] || []).push({ group: o.group, quantity: o.quantity, weight: o.weight, tiers: [o.tier1, o.tier2, o.tier3, o.tier4, o.tier5, o.tier6] }); });
     }
     $("#total-rounds").textContent = this.cfg.g.totalRounds;
+    this.applyCheatMode();
     this.transitionTo(S.Setup);
     this.setupInventoryObserver();
     requestAnimationFrame((t) => this.loop(t));
@@ -66,6 +67,7 @@ const Game = {
     if (!this.lastTime) this.lastTime = t;
     let dt = (t - this.lastTime) / 1000; this.lastTime = t;
     if (dt > 0.2) dt = 0.2;
+    dt *= (this.timeScale || 1); // cheat console time acceleration
     if (this.state === S.Play) this.updatePlay(dt);
     requestAnimationFrame((t2) => this.loop(t2));
   },
@@ -1104,6 +1106,53 @@ const Game = {
     $("#results-title").textContent = elimNow.length ? (elimNow.includes(this.player) ? "Tu es éliminé…" : `${elimNow.map((c) => c.name).join(", ")} éliminé`) : `Round ${this.round} — classement`;
     $("#results-overlay").classList.remove("hidden");
   },
+
+  // ============================================================
+  // Cheat console
+  // ============================================================
+  // Killswitch: the whole cheat console is gated by the general `enableCheats`
+  // flag so it can be shipped disabled for release without ripping the code out.
+  // Accepts true / "TRUE" / 1 / "yes" / "on" (Sheets exports booleans loosely).
+  cheatsEnabled() {
+    const v = this.cfg && this.cfg.g && this.cfg.g.enableCheats;
+    return v === true || v === 1 || (typeof v === "string" && /^(true|1|yes|on)$/i.test(v.trim()));
+  },
+  // Show/hide the toggle button and force the overlay closed based on the flag.
+  applyCheatMode() {
+    const on = this.cheatsEnabled();
+    const toggle = $("#cheat-toggle"), overlay = $("#cheat-overlay");
+    if (toggle) toggle.style.display = on ? "" : "none";
+    if (!on) { this.timeScale = 1; if (overlay) overlay.classList.add("hidden"); }
+  },
+  // Multiply the play-loop dt (production, prep countdown, wave spawning). 1 = normal.
+  setTimeScale(s) {
+    if (!this.cheatsEnabled()) return;
+    this.timeScale = s > 0 ? s : 1;
+    const val = $("#cheat-speed-val"); if (val) val.textContent = "×" + this.timeScale;
+    const wrap = $("#cheat-speeds");
+    if (wrap) wrap.querySelectorAll("button[data-speed]").forEach((b) => b.classList.toggle("active", +b.dataset.speed === this.timeScale));
+  },
+  // Give (or take) money to the player and refresh anything money-dependent.
+  cheatAddMoney(v) {
+    if (!this.cheatsEnabled() || !this.player || !Number.isFinite(v)) return;
+    this.player.money = Math.max(0, this.player.money + v);
+    this.refreshHud(); this.renderShop(); this.refreshAffordability(); this.refreshSuppliers();
+  },
+  // Jump straight to the prep phase of wave `n`: unlock every machine due by then,
+  // reset the wave/market, and rebuild the round from startPrep (income, bots, HUD).
+  cheatGoToWave(n) {
+    if (!this.cheatsEnabled() || !this.cfg || !this.player) return;
+    n = Math.max(1, Math.floor(n || 1));
+    ["#tax-overlay", "#results-overlay", "#gameover-overlay", "#cheat-overlay"].forEach((id) => $(id)?.classList.add("hidden"));
+    if (!this._screenReady) this.setupScreen();
+    this.waveActive = false;
+    this.market = null;
+    const lane = $("#customer-lane"); if (lane) lane.innerHTML = "";
+    this.cfg.machines.forEach((m) => { if (m.unlockAtRound <= n) this.giveMachine(this.player, m.id); });
+    this.round = n - 1;      // startPrep() increments to n
+    this.state = S.Play;
+    this.startPrep();
+  },
 };
 
 $("#replay-btn").addEventListener("click", () => { $("#gameover-overlay").classList.add("hidden"); Game.transitionTo(S.Setup); });
@@ -1118,6 +1167,14 @@ $("#resource-overlay").addEventListener("click", (e) => { if (e.target.id === "r
 $("#hud-tax")?.addEventListener("click", () => Game.openTaxInfo());
 $("#taxinfo-close")?.addEventListener("click", () => Game.closeTaxInfo());
 $("#taxinfo-overlay")?.addEventListener("click", (e) => { if (e.target.id === "taxinfo-overlay") Game.closeTaxInfo(); });
+
+// ---------- Cheat console ----------
+$("#cheat-toggle")?.addEventListener("click", () => { if (Game.cheatsEnabled()) $("#cheat-overlay").classList.toggle("hidden"); });
+$("#cheat-close")?.addEventListener("click", () => $("#cheat-overlay").classList.add("hidden"));
+$("#cheat-overlay")?.addEventListener("click", (e) => { if (e.target.id === "cheat-overlay") $("#cheat-overlay").classList.add("hidden"); });
+$("#cheat-speeds")?.addEventListener("click", (e) => { const b = e.target.closest("button[data-speed]"); if (b) Game.setTimeScale(+b.dataset.speed); });
+$("#cheat-money-add")?.addEventListener("click", () => Game.cheatAddMoney(parseInt($("#cheat-money").value, 10)));
+$("#cheat-wave-go")?.addEventListener("click", () => Game.cheatGoToWave(parseInt($("#cheat-wave").value, 10)));
 
 // Inventory updates are driven by visibility (setupInventoryObserver) + the play
 // loop's maybeRefreshInventory, so it never shifts the layout while off screen.
