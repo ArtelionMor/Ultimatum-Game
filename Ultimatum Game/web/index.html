@@ -19,6 +19,7 @@
     <header id="hud">
       <div class="hud-item" id="hud-money"><img class="hud-icon" src="sprites/Coins.png" alt="$" /><span id="money">0</span></div>
       <div class="hud-item" id="hud-round">R <span id="round">0</span>/<span id="total-rounds">0</span></div>
+      <div class="hud-item clickable" id="hud-tax" title="Impôts & vagues"><span id="tax-chip">🏛️ —</span></div>
       <div class="hud-item" id="hud-phase"><span id="phase-label">—</span></div>
       <div class="hud-item" id="hud-timer"><span id="timer">0</span></div>
     </header>
@@ -47,6 +48,15 @@
       <div id="worker-hint">Touche un ouvrier puis une machine</div>
       <div id="worker-icons"></div>
     </footer>
+  </div>
+
+  <!-- Tax & waves info screen -->
+  <div id="taxinfo-overlay" class="overlay hidden">
+    <div class="panel wide">
+      <h2>🏛️ Impôts &amp; Vagues</h2>
+      <div id="taxinfo-body"></div>
+      <button id="taxinfo-close" class="ghost">Fermer</button>
+    </div>
   </div>
 
   <!-- Tax overlay -->

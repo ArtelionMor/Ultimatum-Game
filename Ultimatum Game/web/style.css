@@ -56,6 +56,51 @@ img { image-rendering: pixelated; }
 #hud-phase { color: var(--accent-2); font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
 #hud-timer { color: var(--text); min-width: 38px; justify-content: flex-end; }
 #hud-timer.urgent { color: var(--danger); }
+.clickable { cursor: pointer; }
+#hud-tax {
+  color: var(--text); font-size: 13px; font-weight: bold;
+  background: var(--bg-card); border: 1px solid var(--accent);
+  border-radius: 8px; padding: 4px 9px; cursor: pointer;
+  box-shadow: 0 1px 0 rgba(0,0,0,.25);
+  transition: background .15s ease, transform .08s ease;
+}
+#hud-tax::after { content: "›"; margin-left: 5px; color: var(--accent); font-weight: bold; }
+#hud-tax:hover { background: var(--bg-card-active); }
+#hud-tax:active { transform: scale(.93); }
+#hud-tax.urgent { color: var(--danger); border-color: var(--danger); animation: wpPulse .8s ease-in-out infinite; }
+#hud-tax.urgent::after { color: var(--danger); }
+
+/* ---------- Tax & waves info screen ---------- */
+.tx-topline { color: var(--text-dim); font-size: 14px; margin-bottom: 10px; }
+.tx-topline b { color: var(--text); }
+.tx-progress { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-bottom: 18px; }
+.tx-dot {
+  width: 20px; height: 20px; border-radius: 6px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; line-height: 1;
+}
+.tx-dot.past { opacity: .4; }
+.tx-dot.tax { border-color: var(--accent); }
+.tx-dot.now { outline: 2px solid var(--accent-2); outline-offset: 1px; }
+.tx-dot.next { background: var(--accent); border-color: var(--accent); }
+.tx-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; text-align: left; }
+.tx-card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+.tx-card-title { color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: .5px; font-size: 13px; }
+.tx-when { color: var(--text-dim); font-size: 13px; }
+.tx-rows { display: flex; flex-direction: column; gap: 4px; }
+.tx-row { display: flex; justify-content: space-between; gap: 20px; font-size: 15px; }
+.tx-row .ok { color: var(--ok); }
+.tx-row .danger { color: var(--danger); }
+.tx-proj { border-top: 1px solid var(--border); margin-top: 6px; padding-top: 8px; }
+.tx-prepay { margin-top: 14px; text-align: center; }
+.tx-prepay-line { font-size: 14px; margin-bottom: 10px; }
+.tx-save { color: var(--ok); font-size: 12px; display: block; margin-top: 2px; }
+.tx-prepay button { background: var(--accent); color: #2a1e00; width: 100%; }
+.tx-warn { color: var(--danger); font-size: 12px; margin-top: 6px; }
+.tx-paid { color: var(--ok); font-weight: bold; padding: 8px; text-align: center; }
+.tx-none { color: var(--ok); font-weight: bold; padding: 8px; text-align: center; }
+#taxinfo-close { margin-top: 16px; }
 
 /* ---------- Next-wave preview menu ---------- */
 #wave-preview {
@@ -214,7 +259,7 @@ button.sell { background: var(--ok); color: #03210a; }
   position: absolute; inset: 0;
   background: rgba(8,10,16,.8);
   display: flex; align-items: center; justify-content: center;
-  z-index: 20;
+  z-index: 1500; /* above falling customers (restack sets their z-index up to ~1000+) */
   backdrop-filter: blur(3px);
 }
 .panel {
