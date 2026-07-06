@@ -348,7 +348,7 @@ button.sell { background: var(--ok); color: #03210a; }
 /* Rows region scrolls internally with a capped height, so collapsing/adding rows
    reflows inside this box only — the machine list below never bumps. */
 /* 2.5 rows tall (row 52px + gap 3px) so a half-row peeks out, hinting the list scrolls. */
-.inv-scroll { display: flex; flex-direction: column; gap: 3px; max-height: 135px; overflow-y: auto; overscroll-behavior: contain; }
+.inv-scroll { display: flex; flex-direction: column; gap: 3px; max-height: 135px; overflow-y: auto; overscroll-behavior: auto; }
 /* Empty, unstaffed resources collapse out entirely (no reserved height) — with
    10-30 resources this is what keeps the inventory from becoming a giant blank list. */
 .inv-row.inv-row-vacant { display: none; }
@@ -429,9 +429,14 @@ button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
 .counter-money { font-size: 14px; color: var(--accent); display: flex; align-items: center; justify-content: center; gap: 3px; font-weight: bold; }
 .counter-money img { width: 14px; height: 14px; }
 .counter-mkt { font-size: 10px; color: var(--text-dim); }
+/* Same problem as the inventory list: with 10-30 resources a tall stack column
+   makes the whole market layout jump. Cap the height to ~1.5 resources so a
+   half-row peeks out (hints it scrolls), scroll internally, and let the page
+   take over at the top/bottom borders (overscroll-behavior: auto). */
 .counter-inv {
-  display: flex; flex-wrap: wrap; gap: 3px; justify-content: center;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
   margin-top: 6px; padding-top: 5px; border-top: 1px solid var(--border);
+  max-height: 51px; overflow-y: auto; overscroll-behavior: auto;
 }
 .cinv-stack {
   display: flex; align-items: center; gap: 1px;
