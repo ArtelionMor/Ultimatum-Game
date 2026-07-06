@@ -679,7 +679,7 @@ const Game = {
 
   // ---------- Results (standings) ----------
   enterResults() {
-    const ranked = this.competitors.sort((a, b) => b.money - a.money);
+    const ranked = [...this.competitors].sort((a, b) => b.money - a.money); // copie: ne pas réordonner this.competitors
     this.renderResults(ranked, []);
 
     const end = this.round >= this.cfg.g.totalRounds;
@@ -938,7 +938,7 @@ const Game = {
   // --- suppliers / counters (market) ---
   renderSuppliers() {
     const wrap = $("#suppliers"); wrap.innerHTML = "";
-    const alive = this.competitors.filter((c) => !c.eliminated).sort((a, b) => b.money - a.money);
+    const alive = this.competitors.filter((c) => !c.eliminated); // fixed order (joueur puis bots), indépendant de l'argent
     alive.forEach((c) => {
       const s = el("div", "counter" + (c.isPlayer ? " me" : "")); c._counter = s;
       s.innerHTML = `<img class="counter-avatar" src="${sprite(c.spriteId)}"><div class="counter-name">${c.name}</div><div class="counter-money"><img src="${sprite("Coins")}"><span class="cmoney">${c.money}</span></div><div class="counter-mkt">📣${c.marketing.toFixed(1)}</div><div class="counter-inv"></div>`;
