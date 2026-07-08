@@ -15,6 +15,20 @@
   <link rel="apple-touch-icon" href="icon-192.png" />
 </head>
 <body>
+  <!-- Main menu -->
+  <div id="menu-screen" class="hidden">
+    <header id="menu-head">
+      <h1>Market Ultimatum</h1>
+      <div id="menu-currencies"></div>
+    </header>
+    <nav id="menu-tabs">
+      <button data-tab="levels" class="active">🗺️ Niveaux</button>
+      <button data-tab="characters">🧑‍🤝‍🧑 Personnages</button>
+      <button data-tab="chests">🎁 Coffres</button>
+    </nav>
+    <div id="menu-body"></div>
+  </div>
+
   <div id="app">
     <header id="hud">
       <div class="hud-item" id="hud-money"><img class="hud-icon" src="sprites/Coins.png" alt="$" /><span id="money">0</span></div>
@@ -22,6 +36,7 @@
       <div class="hud-item clickable" id="hud-tax" title="Impôts & vagues"><span id="tax-chip">🏛️ —</span></div>
       <div class="hud-item" id="hud-phase"><span id="phase-label">—</span></div>
       <div class="hud-item" id="hud-timer"><span id="timer">0</span></div>
+      <div class="hud-item clickable" id="hud-home" title="Retour au menu">🏠</div>
     </header>
 
     <!-- Next-wave demand menu -->
@@ -142,7 +157,37 @@
       <img class="big-icon" src="sprites/Coins.png" alt="" />
       <div class="final-score"><span id="final-score">0</span></div>
       <p id="gameover-rank"></p>
+      <div id="gameover-rewards"></div>
       <button id="replay-btn">Rejouer</button>
+      <button id="gameover-menu-btn" class="ghost">Menu principal</button>
+    </div>
+  </div>
+
+  <!-- Character detail overlay (menu collection + in-game worker tap) -->
+  <div id="character-overlay" class="overlay hidden">
+    <div class="panel wide">
+      <div id="character-body"></div>
+      <button id="character-close" class="ghost">Fermer</button>
+    </div>
+  </div>
+
+  <!-- Chest opening overlay -->
+  <div id="chest-overlay" class="overlay hidden">
+    <div class="panel">
+      <h2 id="chest-title">Coffre</h2>
+      <div id="chest-anim"></div>
+      <div id="chest-drops"></div>
+      <button id="chest-close" class="hidden">Récupérer</button>
+    </div>
+  </div>
+
+  <!-- Quit-level confirm overlay -->
+  <div id="quit-overlay" class="overlay hidden">
+    <div class="panel">
+      <h2>Abandonner ?</h2>
+      <p>La progression de ce niveau sera perdue.</p>
+      <button id="quit-confirm">Retour au menu</button>
+      <button id="quit-cancel" class="ghost">Continuer la partie</button>
     </div>
   </div>
 
