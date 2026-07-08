@@ -38,6 +38,8 @@ export const Meta = {
   },
 
   save() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(this.state)); } catch (e) { /* storage full/blocked */ } },
+  // Wipe the save and rebuild a fresh state (debug console).
+  reset() { try { localStorage.removeItem(SAVE_KEY); } catch (e) { /* ignore */ } this.state = null; this.init(this.cfg); },
 
   // ---------- Levels ----------
   // The last entry of world_level is the endless mode: always replayable, its

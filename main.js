@@ -7,7 +7,7 @@ import { BASE_MARKETING, SPAWN_INTERVAL, FALL_TIME, S } from "./constants.js";
 import { sprite, $, el, randInt } from "./helpers.js";
 import { normalize, resolveLevel } from "./config.js";
 import { Meta } from "./meta.js";
-import { initMenu, showMenu, hideMenu, openCharacterPanel, gearBadges, renderDropList } from "./menu.js";
+import { initMenu, showMenu, hideMenu, renderMenu, openCharacterPanel, gearBadges, renderDropList } from "./menu.js";
 
 // ============================================================
 // Game
@@ -1323,6 +1323,79 @@ const Game = {
     this.player.money = Math.max(0, this.player.money + v);
     this.refreshHud(); this.renderShop(); this.refreshAffordability(); this.refreshSuppliers();
   },
+  // Instantly end the current run as a win (richest) or a loss (eliminated).
+  cheatWinLevel() {
+    if (!this.cheatsEnabled() || !this.levelCfg || !this.player || this.state === S.Menu) return;
+    ["#tax-overlay", "#results-overlay", "#cheat-overlay", "#taxinfo-overlay"].forEach((id) => $(id)?.classList.add("hidden"));
+    this.waveActive = false;
+    this.round = this.levelCfg.totalRounds;
+    this.player.eliminated = false;
+    this.player.money = Math.max(this.player.money, ...this.competitors.map((c) => c.money)) + 1000;
+    this.transitionTo(S.GameOver);
+  },
+  cheatLoseLevel() {
+    if (!this.cheatsEnabled() || !this.levelCfg || !this.player || this.state === S.Menu) return;
+    ["#tax-overlay", "#results-overlay", "#cheat-overlay", "#taxinfo-overlay"].forEach((id) => $(id)?.classList.add("hidden"));
+    this.waveActive = false;
+    this.player.eliminated = true;
+    this.transitionTo(S.GameOver);
+  },
+
+  // ---------- Meta cheats (work from the menu or mid-run) ----------
+  // Every mutation goes through Meta.save() + a menu re-render (no-op when the
+  // menu is hidden) + onMetaChanged so an ongoing run refreshes its workers.
+  _cheatMetaDone() { Meta.save(); renderMenu(); this.onMetaChanged(); },
+  cheatAddCurrency(kind, v) {
+    if (!this.cheatsEnabled() || !Number.isFinite(v)) return;
+    Meta.state[kind] = Math.max(0, (Meta.state[kind] || 0) + v);
+    this._cheatMetaDone();
+  },
+  cheatAddShards(id, v) {
+    if (!this.cheatsEnabled()) return;
+    Meta.state.shards[id] = Math.max(0, (Meta.state.shards[id] || 0) + v);
+    this._cheatMetaDone();
+  },
+  cheatAddChest(id, v) {
+    if (!this.cheatsEnabled()) return;
+    Meta.state.chests[id] = Math.max(0, (Meta.state.chests[id] || 0) + v);
+    this._cheatMetaDone();
+  },
+  // Unlock every character (level 1, existing levels kept).
+  cheatUnlockChars() {
+    if (!this.cheatsEnabled()) return;
+    this.cfg.characterOrder.forEach((id) => { const c = Meta.state.characters[id]; c.level = Math.max(1, c.level); });
+    this._cheatMetaDone();
+  },
+  // +1 level to every owned character (free, capped at each max).
+  cheatLevelUpChars() {
+    if (!this.cheatsEnabled()) return;
+    this.cfg.characterOrder.forEach((id) => {
+      const c = Meta.state.characters[id];
+      if (c.level >= 1) c.level = Math.min(this.cfg.characters[id].maxLevel, c.level + 1);
+    });
+    this._cheatMetaDone();
+  },
+  // Complete the next one-shot level (grants its reward, like a real win).
+  cheatCompleteNextLevel() {
+    if (!this.cheatsEnabled()) return;
+    const next = Meta.nextLevel();
+    if (next && !Meta.isEndless(next.id)) Meta.completeLevel(next.id);
+    this._cheatMetaDone();
+  },
+  // Mark every one-shot level completed (pure unlock, no rewards granted).
+  cheatUnlockAllLevels() {
+    if (!this.cheatsEnabled()) return;
+    Meta.state.completedLevels = this.cfg.worldLevels.filter((l) => !Meta.isEndless(l.id)).map((l) => l.id);
+    this._cheatMetaDone();
+  },
+  // Wipe the meta save and go back to a fresh menu.
+  cheatResetSave() {
+    if (!this.cheatsEnabled()) return;
+    Meta.reset();
+    $("#cheat-overlay")?.classList.add("hidden");
+    this.toMenu();
+  },
+
   // Jump straight to the prep phase of wave `n`: unlock every machine due by then,
   // reset the wave/market, and rebuild the round from startPrep (income, bots, HUD).
   cheatGoToWave(n) {
@@ -1368,9 +1441,24 @@ $("#cheat-overlay")?.addEventListener("click", (e) => { if (e.target.id === "che
 $("#cheat-speeds")?.addEventListener("click", (e) => { const b = e.target.closest("button[data-speed]"); if (b) Game.setTimeScale(+b.dataset.speed); });
 $("#cheat-money-add")?.addEventListener("click", () => Game.cheatAddMoney(parseInt($("#cheat-money").value, 10)));
 $("#cheat-wave-go")?.addEventListener("click", () => Game.cheatGoToWave(parseInt($("#cheat-wave").value, 10)));
+// Debug: current run
+$("#cheat-win")?.addEventListener("click", () => Game.cheatWinLevel());
+$("#cheat-lose")?.addEventListener("click", () => Game.cheatLoseLevel());
+// Debug: meta currencies / shards / chests
+const cheatAmount = () => parseInt($("#cheat-meta-amount")?.value, 10) || 0;
+document.querySelectorAll("#cheat-overlay button[data-cur]").forEach((b) => b.addEventListener("click", () => Game.cheatAddCurrency(b.dataset.cur, cheatAmount())));
+$("#cheat-shards")?.addEventListener("click", (e) => { const b = e.target.closest("button[data-shard]"); if (b) Game.cheatAddShards(b.dataset.shard, cheatAmount()); });
+$("#cheat-chests")?.addEventListener("click", (e) => { const b = e.target.closest("button[data-chest]"); if (b) Game.cheatAddChest(b.dataset.chest, 1); });
+// Debug: meta progression
+$("#cheat-unlock-chars")?.addEventListener("click", () => Game.cheatUnlockChars());
+$("#cheat-levelup-chars")?.addEventListener("click", () => Game.cheatLevelUpChars());
+$("#cheat-complete-level")?.addEventListener("click", () => Game.cheatCompleteNextLevel());
+$("#cheat-unlock-levels")?.addEventListener("click", () => Game.cheatUnlockAllLevels());
+$("#cheat-reset")?.addEventListener("click", () => { if (confirm("Effacer toute la progression méta ?")) Game.cheatResetSave(); });
 
 // Inventory updates are driven by visibility (setupInventoryObserver) + the play
 // loop's maybeRefreshInventory, so it never shifts the layout while off screen.
 
 window.Game = Game; // expose for console debugging
+window.Meta = Meta; // idem: Meta.state, Meta.openChest("common_chest"), Meta.reset()…
 Game.start();
