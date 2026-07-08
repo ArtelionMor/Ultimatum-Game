@@ -49,620 +49,246 @@
       "value": true
     }
   ],
-  "~Simulator": [
-    {
-      "Wave": 1,
-      "Total Market": 136,
-      "Part of competitors if equal and equal marketting": 34,
-      "Impact of marketting": 47.599999999999994
-    },
-    {
-      "Wave": 2,
-      "Total Market": 214.66666666666666,
-      "Part of competitors if equal and equal marketting": 53.666666666666664,
-      "Impact of marketting": 75.13333333333333
-    },
-    {
-      "Wave": 3,
-      "Total Market": 283.66666666666663,
-      "Part of competitors if equal and equal marketting": 70.91666666666666,
-      "Impact of marketting": 99.28333333333332
-    },
-    {
-      "Wave": 4,
-      "Total Market": 481.75,
-      "Part of competitors if equal and equal marketting": 120.4375,
-      "Impact of marketting": 168.61249999999998
-    },
-    {
-      "Wave": 5,
-      "Total Market": 574,
-      "Part of competitors if equal and equal marketting": 143.5,
-      "Tax": 250,
-      "Impact of marketting": 200.89999999999998
-    },
-    {
-      "Wave": 6,
-      "Total Market": 601.6,
-      "Part of competitors if equal and equal marketting": 150.4,
-      "Impact of marketting": 210.56
-    },
-    {
-      "Wave": 7,
-      "Total Market": 667.4,
-      "Part of competitors if equal and equal marketting": 166.85,
-      "Tax": 280,
-      "Impact of marketting": 233.58999999999997
-    },
-    {
-      "Wave": 8,
-      "Total Market": 790,
-      "Part of competitors if equal and equal marketting": 197.5,
-      "Impact of marketting": 276.5
-    },
-    {
-      "Wave": 9,
-      "Total Market": 880,
-      "Part of competitors if equal and equal marketting": 220,
-      "Tax": 500,
-      "Impact of marketting": 308
-    },
-    {
-      "Wave": 10,
-      "Total Market": 3185,
-      "Part of competitors if equal and equal marketting": 796.25,
-      "Impact of marketting": 1114.75
-    },
-    {
-      "Wave": 11,
-      "Total Market": 3477.5,
-      "Part of competitors if equal and equal marketting": 869.375,
-      "Tax": 1000,
-      "Impact of marketting": 1217.125
-    },
-    {
-      "Wave": 12,
-      "Total Market": 3496,
-      "Part of competitors if equal and equal marketting": 874,
-      "Impact of marketting": 1223.6
-    },
-    {
-      "Wave": 13,
-      "Total Market": 3708.7999999999997,
-      "Part of competitors if equal and equal marketting": 927.1999999999999,
-      "Tax": 1100,
-      "Impact of marketting": 1298.08
-    },
-    {
-      "Wave": 14,
-      "Total Market": 4225,
-      "Part of competitors if equal and equal marketting": 1056.25,
-      "Impact of marketting": 1478.75
-    },
-    {
-      "Wave": 15,
-      "Total Market": 3845.6666666666665,
-      "Part of competitors if equal and equal marketting": 961.4166666666666,
-      "Tax": 1100,
-      "Impact of marketting": 1345.9833333333331
-    },
-    {
-      "Wave": 16,
-      "Total Market": 2384,
-      "Part of competitors if equal and equal marketting": 596,
-      "Impact of marketting": 834.4
-    },
-    {
-      "Wave": 17,
-      "Total Market": 2528,
-      "Part of competitors if equal and equal marketting": 632,
-      "Impact of marketting": 884.8
-    },
-    {
-      "Wave": 18,
-      "Total Market": 5395,
-      "Part of competitors if equal and equal marketting": 1348.75,
-      "Impact of marketting": 1888.2499999999998
-    },
-    {
-      "Wave": 19,
-      "Total Market": 5622.5,
-      "Part of competitors if equal and equal marketting": 1405.625,
-      "Impact of marketting": 1967.8749999999998
-    },
-    {
-      "Wave": 20,
-      "Total Market": 21312.75,
-      "Part of competitors if equal and equal marketting": 5328.1875,
-      "Tax": 4500,
-      "Impact of marketting": 7459.4625
-    },
-    {
-      "Wave": 21,
-      "Total Market": 22372.5,
-      "Part of competitors if equal and equal marketting": 5593.125,
-      "Impact of marketting": 7830.374999999999
-    },
-    {
-      "Wave": 22,
-      "Total Market": 20700,
-      "Part of competitors if equal and equal marketting": 5175,
-      "Impact of marketting": 7244.999999999999
-    },
-    {
-      "Wave": 23,
-      "Total Market": 19771.399999999998,
-      "Part of competitors if equal and equal marketting": 4942.849999999999,
-      "Impact of marketting": 6919.989999999999
-    },
-    {
-      "Wave": 24,
-      "Total Market": 11338.25,
-      "Part of competitors if equal and equal marketting": 2834.5625,
-      "Impact of marketting": 3968.3875
-    },
-    {
-      "Wave": 25,
-      "Total Market": 23184,
-      "Part of competitors if equal and equal marketting": 5796,
-      "Tax": 5000,
-      "Impact of marketting": 8114.4
-    },
-    {
-      "Wave": 26,
-      "Total Market": 35264,
-      "Part of competitors if equal and equal marketting": 8816,
-      "Impact of marketting": 12342.4
-    },
-    {
-      "Wave": 27,
-      "Total Market": 36632,
-      "Part of competitors if equal and equal marketting": 9158,
-      "Impact of marketting": 12821.199999999999
-    },
-    {
-      "Wave": 28,
-      "Total Market": 25978.5,
-      "Part of competitors if equal and equal marketting": 6494.625,
-      "Impact of marketting": 9092.474999999999
-    },
-    {
-      "Wave": 29,
-      "Total Market": 26910,
-      "Part of competitors if equal and equal marketting": 6727.5,
-      "Impact of marketting": 9418.5
-    },
-    {
-      "Wave": 30,
-      "Total Market": 59429,
-      "Part of competitors if equal and equal marketting": 14857.25,
-      "Tax": 10000,
-      "Impact of marketting": 20800.149999999998
-    },
-    {
-      "Wave": 31,
-      "Total Market": 16280,
-      "Part of competitors if equal and equal marketting": 4070,
-      "Impact of marketting": 5698
-    },
-    {
-      "Wave": 32,
-      "Total Market": 16753.600000000002,
-      "Part of competitors if equal and equal marketting": 4188.400000000001,
-      "Impact of marketting": 5863.76
-    },
-    {
-      "Wave": 33,
-      "Total Market": 64751,
-      "Part of competitors if equal and equal marketting": 16187.75,
-      "Impact of marketting": 22662.85
-    },
-    {
-      "Wave": 34,
-      "Total Market": 28025.6,
-      "Part of competitors if equal and equal marketting": 7006.4,
-      "Impact of marketting": 9808.96
-    },
-    {
-      "Wave": 35,
-      "Total Market": 28860.8,
-      "Part of competitors if equal and equal marketting": 7215.2,
-      "Tax": 7000,
-      "Impact of marketting": 10101.279999999999
-    },
-    {
-      "Wave": 36,
-      "Total Market": 178879.25,
-      "Part of competitors if equal and equal marketting": 44719.8125,
-      "Impact of marketting": 62607.737499999996
-    },
-    {
-      "Wave": 37,
-      "Total Market": 165553.6666666667,
-      "Part of competitors if equal and equal marketting": 41388.41666666667,
-      "Impact of marketting": 57943.78333333333
-    },
-    {
-      "Wave": 38,
-      "Total Market": 169616.33333333334,
-      "Part of competitors if equal and equal marketting": 42404.083333333336,
-      "Impact of marketting": 59365.71666666667
-    },
-    {
-      "Wave": 39,
-      "Total Market": 192337.25,
-      "Part of competitors if equal and equal marketting": 48084.3125,
-      "Impact of marketting": 67318.03749999999
-    },
-    {
-      "Wave": 40,
-      "Total Market": 363791.7142857143,
-      "Part of competitors if equal and equal marketting": 90947.92857142858,
-      "Tax": 40000,
-      "Impact of marketting": 127327.1
-    },
-    {
-      "Wave": 41,
-      "Total Market": 1174328,
-      "Part of competitors if equal and equal marketting": 293582,
-      "Impact of marketting": 411014.8
-    },
-    {
-      "Wave": 42,
-      "Total Market": 620305,
-      "Part of competitors if equal and equal marketting": 155076.25,
-      "Impact of marketting": 217106.75
-    },
-    {
-      "Wave": 43,
-      "Total Market": 121205.5,
-      "Part of competitors if equal and equal marketting": 30301.375,
-      "Impact of marketting": 42421.924999999996
-    },
-    {
-      "Wave": 44,
-      "Total Market": 1167127.5,
-      "Part of competitors if equal and equal marketting": 291781.875,
-      "Impact of marketting": 408494.625
-    },
-    {
-      "Wave": 45,
-      "Total Market": 660541,
-      "Part of competitors if equal and equal marketting": 165135.25,
-      "Impact of marketting": 231189.34999999998
-    },
-    {
-      "Wave": 46,
-      "Total Market": 85042,
-      "Part of competitors if equal and equal marketting": 21260.5,
-      "Impact of marketting": 29764.699999999997
-    },
-    {
-      "Wave": 47,
-      "Total Market": 86936.5,
-      "Part of competitors if equal and equal marketting": 21734.125,
-      "Impact of marketting": 30427.774999999998
-    },
-    {
-      "Wave": 48,
-      "Total Market": 705806.5,
-      "Part of competitors if equal and equal marketting": 176451.625,
-      "Impact of marketting": 247032.275
-    },
-    {
-      "Wave": 49,
-      "Total Market": 185110,
-      "Part of competitors if equal and equal marketting": 46277.5,
-      "Impact of marketting": 64788.49999999999
-    },
-    {
-      "Wave": 50,
-      "Total Market": 188570,
-      "Part of competitors if equal and equal marketting": 47142.5,
-      "Tax": 40000,
-      "Impact of marketting": 65999.5
-    },
-    {
-      "Wave": 51,
-      "Total Market": 1107827.5,
-      "Part of competitors if equal and equal marketting": 276956.875,
-      "Impact of marketting": 387739.625
-    },
-    {
-      "Wave": 52,
-      "Total Market": 762807.5,
-      "Part of competitors if equal and equal marketting": 190701.875,
-      "Impact of marketting": 266982.625
-    },
-    {
-      "Wave": 53,
-      "Total Market": 319618.6666666667,
-      "Part of competitors if equal and equal marketting": 79904.66666666667,
-      "Impact of marketting": 111866.53333333334
-    },
-    {
-      "Wave": 54,
-      "Total Market": 325129.3333333334,
-      "Part of competitors if equal and equal marketting": 81282.33333333334,
-      "Impact of marketting": 113795.26666666668
-    },
-    {
-      "Wave": 55,
-      "Total Market": 803043.5,
-      "Part of competitors if equal and equal marketting": 200760.875,
-      "Impact of marketting": 281065.225
-    },
-    {
-      "Wave": 56,
-      "Total Market": 2223885.5,
-      "Part of competitors if equal and equal marketting": 555971.375,
-      "Impact of marketting": 778359.9249999999
-    },
-    {
-      "Wave": 57,
-      "Total Market": 2264984,
-      "Part of competitors if equal and equal marketting": 566246,
-      "Impact of marketting": 792744.3999999999
-    },
-    {
-      "Wave": 58,
-      "Total Market": 436931,
-      "Part of competitors if equal and equal marketting": 109232.75,
-      "Impact of marketting": 152925.84999999998
-    },
-    {
-      "Wave": 59,
-      "Total Market": 1282092.5,
-      "Part of competitors if equal and equal marketting": 320523.125,
-      "Impact of marketting": 448732.375
-    },
-    {
-      "Wave": 60,
-      "Total Market": 876809.5,
-      "Part of competitors if equal and equal marketting": 219202.375,
-      "Tax": 1000000,
-      "Impact of marketting": 306883.32499999995
-    }
-  ],
-  "~Upgrades": [
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    },
-    {
-      "": "#REF!"
-    }
-  ],
   "tax": [
     {
-      "round": 5,
-      "cost": 250
+      "id": "tax_config_0",
+      "round 1": 0,
+      "round 2": 0,
+      "round 3": 0,
+      "round 4": 0,
+      "round 5": 500,
+      "round 6": 0,
+      "round 7": 0,
+      "round 8": 0,
+      "round 9": 0,
+      "round 10": 0,
+      "round 11": 0,
+      "round 12": 0,
+      "round 13": 0,
+      "round 14": 0,
+      "round 15": 0,
+      "round 16": 0,
+      "round 17": 0,
+      "round 18": 0,
+      "round 19": 0,
+      "round 20": 0,
+      "round 21": 0,
+      "round 22": 0,
+      "round 23": 0,
+      "round 24": 0,
+      "round 25": 0,
+      "round 26": 0,
+      "round 27": 0,
+      "round 28": 0,
+      "round 29": 0,
+      "round 30": 0,
+      "round 31": 0,
+      "round 32": 0,
+      "round 33": 0,
+      "round 34": 0,
+      "round 35": 0,
+      "round 36": 0,
+      "round 37": 0,
+      "round 38": 0,
+      "round 39": 0,
+      "round 40": 0,
+      "round 41": 0,
+      "round 42": 0,
+      "round 43": 0,
+      "round 44": 0,
+      "round 45": 0,
+      "round 46": 0,
+      "round 47": 0,
+      "round 48": 0,
+      "round 49": 0,
+      "round 50": 0,
+      "round 51": 0,
+      "round 52": 0,
+      "round 53": 0,
+      "round 54": 0,
+      "round 55": 0,
+      "round 56": 0,
+      "round 57": 0,
+      "round 58": 0,
+      "round 59": 0,
+      "round 60": 0,
+      "round 61": 0,
+      "round 62": 0,
+      "round 63": 0,
+      "round 64": 0,
+      "round 65": 0,
+      "round 66": 0,
+      "round 67": 0,
+      "round 68": 0,
+      "round 69": 0,
+      "round 70": 0,
+      "round 71": 0,
+      "round 72": 0,
+      "round 73": 0,
+      "round 74": 0,
+      "round 75": 0
     },
     {
-      "round": 7,
-      "cost": 280
+      "id": "tax_config_1",
+      "round 1": 0,
+      "round 2": 0,
+      "round 3": 0,
+      "round 4": 0,
+      "round 5": 500,
+      "round 6": 0,
+      "round 7": 1000,
+      "round 8": 0,
+      "round 9": 0,
+      "round 10": 0,
+      "round 11": 0,
+      "round 12": 0,
+      "round 13": 0,
+      "round 14": 0,
+      "round 15": 0,
+      "round 16": 0,
+      "round 17": 0,
+      "round 18": 0,
+      "round 19": 0,
+      "round 20": 0,
+      "round 21": 0,
+      "round 22": 0,
+      "round 23": 0,
+      "round 24": 0,
+      "round 25": 0,
+      "round 26": 0,
+      "round 27": 0,
+      "round 28": 0,
+      "round 29": 0,
+      "round 30": 0,
+      "round 31": 0,
+      "round 32": 0,
+      "round 33": 0,
+      "round 34": 0,
+      "round 35": 0,
+      "round 36": 0,
+      "round 37": 0,
+      "round 38": 0,
+      "round 39": 0,
+      "round 40": 0,
+      "round 41": 0,
+      "round 42": 0,
+      "round 43": 0,
+      "round 44": 0,
+      "round 45": 0,
+      "round 46": 0,
+      "round 47": 0,
+      "round 48": 0,
+      "round 49": 0,
+      "round 50": 0,
+      "round 51": 0,
+      "round 52": 0,
+      "round 53": 0,
+      "round 54": 0,
+      "round 55": 0,
+      "round 56": 0,
+      "round 57": 0,
+      "round 58": 0,
+      "round 59": 0,
+      "round 60": 0,
+      "round 61": 0,
+      "round 62": 0,
+      "round 63": 0,
+      "round 64": 0,
+      "round 65": 0,
+      "round 66": 0,
+      "round 67": 0,
+      "round 68": 0,
+      "round 69": 0,
+      "round 70": 0,
+      "round 71": 0,
+      "round 72": 0,
+      "round 73": 0,
+      "round 74": 0,
+      "round 75": 0
     },
     {
-      "round": 9,
-      "cost": 500
-    },
-    {
-      "round": 11,
-      "cost": 1000
-    },
-    {
-      "round": 13,
-      "cost": 1100
-    },
-    {
-      "round": 15,
-      "cost": 1100
-    },
-    {
-      "round": 20,
-      "cost": 4500
-    },
-    {
-      "round": 25,
-      "cost": 5000
-    },
-    {
-      "round": 30,
-      "cost": 10000
-    },
-    {
-      "round": 35,
-      "cost": 7000
-    },
-    {
-      "round": 40,
-      "cost": 40000
-    },
-    {
-      "round": 50,
-      "cost": 40000
-    },
-    {
-      "round": 60,
-      "cost": 1000000
+      "id": "tax_config_2",
+      "round 1": 0,
+      "round 2": 0,
+      "round 3": 0,
+      "round 4": 0,
+      "round 5": 500,
+      "round 6": 0,
+      "round 7": 1000,
+      "round 8": 0,
+      "round 9": 1000,
+      "round 10": 0,
+      "round 11": 1000,
+      "round 12": 0,
+      "round 13": 1100,
+      "round 14": 0,
+      "round 15": 1100,
+      "round 16": 0,
+      "round 17": 0,
+      "round 18": 0,
+      "round 19": 0,
+      "round 20": 4500,
+      "round 21": 0,
+      "round 22": 0,
+      "round 23": 0,
+      "round 24": 0,
+      "round 25": 5000,
+      "round 26": 0,
+      "round 27": 0,
+      "round 28": 0,
+      "round 29": 0,
+      "round 30": 10000,
+      "round 31": 0,
+      "round 32": 0,
+      "round 33": 0,
+      "round 34": 0,
+      "round 35": 7000,
+      "round 36": 0,
+      "round 37": 0,
+      "round 38": 0,
+      "round 39": 0,
+      "round 40": 40000,
+      "round 41": 0,
+      "round 42": 0,
+      "round 43": 0,
+      "round 44": 0,
+      "round 45": 0,
+      "round 46": 0,
+      "round 47": 0,
+      "round 48": 0,
+      "round 49": 0,
+      "round 50": 40000,
+      "round 51": 0,
+      "round 52": 0,
+      "round 53": 0,
+      "round 54": 0,
+      "round 55": 0,
+      "round 56": 0,
+      "round 57": 0,
+      "round 58": 0,
+      "round 59": 0,
+      "round 60": 1000000,
+      "round 61": 0,
+      "round 62": 0,
+      "round 63": 0,
+      "round 64": 0,
+      "round 65": 0,
+      "round 66": 0,
+      "round 67": 0,
+      "round 68": 0,
+      "round 69": 0,
+      "round 70": 0,
+      "round 71": 0,
+      "round 72": 0,
+      "round 73": 0,
+      "round 74": 0,
+      "round 75": 0
     }
   ],
-  "market": [
+  "market_config": [
     {
-      "id": "round_1",
+      "id": "round_config_base",
+      "round": "round_1",
       "customers": 20,
       "average amount": 2,
       "wood": 3,
@@ -671,8 +297,9 @@
       "sword": 0
     },
     {
-      "id": "round_2",
-      "customers": 28,
+      "id": "round_config_base",
+      "round": "round_2",
+      "customers": 20,
       "average amount": 3,
       "wood": 1,
       "iron": 1,
@@ -680,8 +307,9 @@
       "sword": 0
     },
     {
-      "id": "round_3",
-      "customers": 37,
+      "id": "round_config_base",
+      "round": "round_3",
+      "customers": 20,
       "average amount": 4,
       "wood": 1,
       "iron": 1,
@@ -689,8 +317,9 @@
       "sword": 0
     },
     {
-      "id": "round_4",
-      "customers": 47,
+      "id": "round_config_base",
+      "round": "round_4",
+      "customers": 20,
       "average amount": 5,
       "wood": 1,
       "iron": 1,
@@ -698,8 +327,9 @@
       "sword": 1
     },
     {
-      "id": "round_5",
-      "customers": 56,
+      "id": "round_config_base",
+      "round": "round_5",
+      "customers": 20,
       "average amount": 4,
       "wood": 1,
       "iron": 1,
@@ -707,8 +337,9 @@
       "sword": 1
     },
     {
-      "id": "round_6",
-      "customers": 64,
+      "id": "round_config_base",
+      "round": "round_6",
+      "customers": 20,
       "average amount": 3,
       "wood": 2,
       "iron": 1,
@@ -716,8 +347,9 @@
       "sword": 1
     },
     {
-      "id": "round_7",
-      "customers": 71,
+      "id": "round_config_base",
+      "round": "round_7",
+      "customers": 20,
       "average amount": 2,
       "wood": 2,
       "iron": 1,
@@ -725,8 +357,9 @@
       "sword": 1
     },
     {
-      "id": "round_8",
-      "customers": 79,
+      "id": "round_config_base",
+      "round": "round_8",
+      "customers": 20,
       "average amount": 3,
       "wood": 1,
       "iron": 1,
@@ -734,8 +367,9 @@
       "sword": 1
     },
     {
-      "id": "round_9",
-      "customers": 88,
+      "id": "round_config_base",
+      "round": "round_9",
+      "customers": 20,
       "average amount": 4,
       "wood": 1,
       "iron": 1,
@@ -743,8 +377,9 @@
       "sword": 1
     },
     {
-      "id": "round_10",
-      "customers": 98,
+      "id": "round_config_base",
+      "round": "round_10",
+      "customers": 20,
       "average amount": 5,
       "wood": 1,
       "iron": 1,
@@ -752,8 +387,9 @@
       "sword": 1
     },
     {
-      "id": "round_11",
-      "customers": 107,
+      "id": "round_config_base",
+      "round": "round_11",
+      "customers": 40,
       "average amount": 4,
       "wood": 1,
       "iron": 1,
@@ -761,8 +397,9 @@
       "sword": 1
     },
     {
-      "id": "round_12",
-      "customers": 115,
+      "id": "round_config_base",
+      "round": "round_12",
+      "customers": 40,
       "average amount": 3,
       "wood": 1,
       "iron": 2,
@@ -770,8 +407,9 @@
       "sword": 1
     },
     {
-      "id": "round_13",
-      "customers": 122,
+      "id": "round_config_base",
+      "round": "round_13",
+      "customers": 40,
       "average amount": 2,
       "wood": 1,
       "iron": 2,
@@ -779,8 +417,9 @@
       "sword": 1
     },
     {
-      "id": "round_14",
-      "customers": 130,
+      "id": "round_config_base",
+      "round": "round_14",
+      "customers": 40,
       "average amount": 3,
       "wood": 1,
       "iron": 1,
@@ -788,8 +427,9 @@
       "sword": 1
     },
     {
-      "id": "round_15",
-      "customers": 139,
+      "id": "round_config_base",
+      "round": "round_15",
+      "customers": 40,
       "average amount": 4,
       "wood": 2,
       "iron": 2,
@@ -797,8 +437,9 @@
       "sword": 1
     },
     {
-      "id": "round_16",
-      "customers": 149,
+      "id": "round_config_base",
+      "round": "round_16",
+      "customers": 60,
       "average amount": 5,
       "wood": 3,
       "iron": 1,
@@ -806,8 +447,9 @@
       "sword": 0
     },
     {
-      "id": "round_17",
-      "customers": 158,
+      "id": "round_config_base",
+      "round": "round_17",
+      "customers": 60,
       "average amount": 4,
       "wood": 3,
       "iron": 1,
@@ -815,8 +457,9 @@
       "sword": 0
     },
     {
-      "id": "round_18",
-      "customers": 166,
+      "id": "round_config_base",
+      "round": "round_18",
+      "customers": 60,
       "average amount": 3,
       "wood": 1,
       "iron": 1,
@@ -824,8 +467,9 @@
       "sword": 1
     },
     {
-      "id": "round_19",
-      "customers": 173,
+      "id": "round_config_base",
+      "round": "round_19",
+      "customers": 60,
       "average amount": 2,
       "wood": 1,
       "iron": 1,
@@ -833,8 +477,9 @@
       "sword": 1
     },
     {
-      "id": "round_20",
-      "customers": 181,
+      "id": "round_config_base",
+      "round": "round_20",
+      "customers": 60,
       "average amount": 3,
       "wood": 0,
       "iron": 0,
@@ -842,8 +487,9 @@
       "sword": 1
     },
     {
-      "id": "round_21",
-      "customers": 190,
+      "id": "round_config_base",
+      "round": "round_21",
+      "customers": 60,
       "average amount": 4,
       "wood": 0,
       "iron": 0,
@@ -851,8 +497,9 @@
       "sword": 1
     },
     {
-      "id": "round_22",
-      "customers": 200,
+      "id": "round_config_base",
+      "round": "round_22",
+      "customers": 60,
       "average amount": 5,
       "wood": 1,
       "iron": 1,
@@ -860,8 +507,9 @@
       "sword": 1
     },
     {
-      "id": "round_23",
-      "customers": 209,
+      "id": "round_config_base",
+      "round": "round_23",
+      "customers": 60,
       "average amount": 4,
       "wood": 1,
       "iron": 2,
@@ -869,8 +517,9 @@
       "sword": 1
     },
     {
-      "id": "round_24",
-      "customers": 217,
+      "id": "round_config_base",
+      "round": "round_24",
+      "customers": 60,
       "average amount": 3,
       "wood": 1,
       "iron": 3,
@@ -878,8 +527,9 @@
       "sword": 0
     },
     {
-      "id": "round_25",
-      "customers": 224,
+      "id": "round_config_base",
+      "round": "round_25",
+      "customers": 60,
       "average amount": 2,
       "wood": 1,
       "iron": 1,
@@ -887,8 +537,9 @@
       "sword": 1
     },
     {
-      "id": "round_26",
-      "customers": 232,
+      "id": "round_config_base",
+      "round": "round_26",
+      "customers": 80,
       "average amount": 3,
       "wood": 1,
       "iron": 1,
@@ -896,8 +547,9 @@
       "sword": 3
     },
     {
-      "id": "round_27",
-      "customers": 241,
+      "id": "round_config_base",
+      "round": "round_27",
+      "customers": 80,
       "average amount": 4,
       "wood": 1,
       "iron": 1,
@@ -905,8 +557,9 @@
       "sword": 3
     },
     {
-      "id": "round_28",
-      "customers": 251,
+      "id": "round_config_base",
+      "round": "round_28",
+      "customers": 80,
       "average amount": 5,
       "wood": 2,
       "iron": 2,
@@ -914,8 +567,9 @@
       "sword": 2
     },
     {
-      "id": "round_29",
-      "customers": 260,
+      "id": "round_config_base",
+      "round": "round_29",
+      "customers": 80,
       "average amount": 4,
       "wood": 2,
       "iron": 2,
@@ -923,8 +577,9 @@
       "sword": 2
     },
     {
-      "id": "round_30",
-      "customers": 268,
+      "id": "round_config_base",
+      "round": "round_30",
+      "customers": 80,
       "average amount": 3,
       "wood": 1,
       "iron": 1,
@@ -932,8 +587,9 @@
       "sword": 1
     },
     {
-      "id": "round_31",
-      "customers": 275,
+      "id": "round_config_base",
+      "round": "round_31",
+      "customers": 80,
       "average amount": 2,
       "wood": 4,
       "iron": 1,
@@ -941,8 +597,9 @@
       "sword": 0
     },
     {
-      "id": "round_32",
-      "customers": 283,
+      "id": "round_config_base",
+      "round": "round_32",
+      "customers": 80,
       "average amount": 3,
       "wood": 4,
       "iron": 1,
@@ -950,8 +607,9 @@
       "sword": 0
     },
     {
-      "id": "round_33",
-      "customers": 292,
+      "id": "round_config_base",
+      "round": "round_33",
+      "customers": 80,
       "average amount": 4,
       "wood": 1,
       "iron": 1,
@@ -959,8 +617,9 @@
       "sword": 1
     },
     {
-      "id": "round_34",
-      "customers": 302,
+      "id": "round_config_base",
+      "round": "round_34",
+      "customers": 80,
       "average amount": 5,
       "wood": 1,
       "iron": 4,
@@ -968,8 +627,9 @@
       "sword": 0
     },
     {
-      "id": "round_35",
-      "customers": 311,
+      "id": "round_config_base",
+      "round": "round_35",
+      "customers": 80,
       "average amount": 4,
       "wood": 1,
       "iron": 4,
@@ -977,8 +637,9 @@
       "sword": 0
     },
     {
-      "id": "round_36",
-      "customers": 319,
+      "id": "round_config_base",
+      "round": "round_36",
+      "customers": 80,
       "average amount": 3,
       "wood": 1,
       "iron": 1,
@@ -986,8 +647,9 @@
       "sword": 1
     },
     {
-      "id": "round_37",
-      "customers": 326,
+      "id": "round_config_base",
+      "round": "round_37",
+      "customers": 80,
       "average amount": 2,
       "wood": 0,
       "iron": 1,
@@ -995,8 +657,9 @@
       "sword": 1
     },
     {
-      "id": "round_38",
-      "customers": 334,
+      "id": "round_config_base",
+      "round": "round_38",
+      "customers": 80,
       "average amount": 3,
       "wood": 0,
       "iron": 1,
@@ -1004,8 +667,9 @@
       "sword": 1
     },
     {
-      "id": "round_39",
-      "customers": 343,
+      "id": "round_config_base",
+      "round": "round_39",
+      "customers": 80,
       "average amount": 4,
       "wood": 2,
       "iron": 2,
@@ -1013,8 +677,9 @@
       "sword": 2
     },
     {
-      "id": "round_40",
-      "customers": 353,
+      "id": "round_config_base",
+      "round": "round_40",
+      "customers": 80,
       "average amount": 5,
       "wood": 1,
       "iron": 1,
@@ -1022,8 +687,9 @@
       "sword": 4
     },
     {
-      "id": "round_41",
-      "customers": 362,
+      "id": "round_config_base",
+      "round": "round_41",
+      "customers": 100,
       "average amount": 4,
       "wood": 1,
       "iron": 1,
@@ -1031,8 +697,9 @@
       "sword": 4
     },
     {
-      "id": "round_42",
-      "customers": 370,
+      "id": "round_config_base",
+      "round": "round_42",
+      "customers": 100,
       "average amount": 3,
       "wood": 1,
       "iron": 1,
@@ -1040,8 +707,9 @@
       "sword": 1
     },
     {
-      "id": "round_43",
-      "customers": 377,
+      "id": "round_config_base",
+      "round": "round_43",
+      "customers": 100,
       "average amount": 2,
       "wood": 3,
       "iron": 3,
@@ -1049,8 +717,9 @@
       "sword": 0
     },
     {
-      "id": "round_44",
-      "customers": 385,
+      "id": "round_config_base",
+      "round": "round_44",
+      "customers": 100,
       "average amount": 3,
       "wood": 0,
       "iron": 0,
@@ -1058,8 +727,9 @@
       "sword": 3
     },
     {
-      "id": "round_45",
-      "customers": 394,
+      "id": "round_config_base",
+      "round": "round_45",
+      "customers": 100,
       "average amount": 4,
       "wood": 2,
       "iron": 2,
@@ -1067,8 +737,9 @@
       "sword": 2
     },
     {
-      "id": "round_46",
-      "customers": 404,
+      "id": "round_config_base",
+      "round": "round_46",
+      "customers": 100,
       "average amount": 5,
       "wood": 5,
       "iron": 1,
@@ -1076,8 +747,9 @@
       "sword": 0
     },
     {
-      "id": "round_47",
-      "customers": 413,
+      "id": "round_config_base",
+      "round": "round_47",
+      "customers": 100,
       "average amount": 4,
       "wood": 5,
       "iron": 1,
@@ -1085,8 +757,9 @@
       "sword": 0
     },
     {
-      "id": "round_48",
-      "customers": 421,
+      "id": "round_config_base",
+      "round": "round_48",
+      "customers": 100,
       "average amount": 3,
       "wood": 2,
       "iron": 2,
@@ -1094,8 +767,9 @@
       "sword": 2
     },
     {
-      "id": "round_49",
-      "customers": 428,
+      "id": "round_config_base",
+      "round": "round_49",
+      "customers": 100,
       "average amount": 2,
       "wood": 1,
       "iron": 5,
@@ -1103,8 +777,9 @@
       "sword": 0
     },
     {
-      "id": "round_50",
-      "customers": 436,
+      "id": "round_config_base",
+      "round": "round_50",
+      "customers": 100,
       "average amount": 3,
       "wood": 1,
       "iron": 5,
@@ -1112,8 +787,9 @@
       "sword": 0
     },
     {
-      "id": "round_51",
-      "customers": 445,
+      "id": "round_config_base",
+      "round": "round_51",
+      "customers": 100,
       "average amount": 4,
       "wood": 1,
       "iron": 1,
@@ -1121,8 +797,9 @@
       "sword": 4
     },
     {
-      "id": "round_52",
-      "customers": 455,
+      "id": "round_config_base",
+      "round": "round_52",
+      "customers": 100,
       "average amount": 5,
       "wood": 1,
       "iron": 1,
@@ -1130,8 +807,9 @@
       "sword": 1
     },
     {
-      "id": "round_53",
-      "customers": 464,
+      "id": "round_config_base",
+      "round": "round_53",
+      "customers": 100,
       "average amount": 4,
       "wood": 0,
       "iron": 1,
@@ -1139,8 +817,9 @@
       "sword": 0
     },
     {
-      "id": "round_54",
-      "customers": 472,
+      "id": "round_config_base",
+      "round": "round_54",
+      "customers": 100,
       "average amount": 3,
       "wood": 0,
       "iron": 1,
@@ -1148,8 +827,9 @@
       "sword": 0
     },
     {
-      "id": "round_55",
-      "customers": 479,
+      "id": "round_config_base",
+      "round": "round_55",
+      "customers": 100,
       "average amount": 2,
       "wood": 2,
       "iron": 2,
@@ -1157,8 +837,9 @@
       "sword": 2
     },
     {
-      "id": "round_56",
-      "customers": 487,
+      "id": "round_config_base",
+      "round": "round_56",
+      "customers": 100,
       "average amount": 3,
       "wood": 0,
       "iron": 0,
@@ -1166,8 +847,9 @@
       "sword": 5
     },
     {
-      "id": "round_57",
-      "customers": 496,
+      "id": "round_config_base",
+      "round": "round_57",
+      "customers": 100,
       "average amount": 4,
       "wood": 0,
       "iron": 0,
@@ -1175,8 +857,9 @@
       "sword": 5
     },
     {
-      "id": "round_58",
-      "customers": 506,
+      "id": "round_config_base",
+      "round": "round_58",
+      "customers": 100,
       "average amount": 5,
       "wood": 4,
       "iron": 4,
@@ -1184,8 +867,9 @@
       "sword": 1
     },
     {
-      "id": "round_59",
-      "customers": 515,
+      "id": "round_config_base",
+      "round": "round_59",
+      "customers": 100,
       "average amount": 4,
       "wood": 1,
       "iron": 1,
@@ -1193,13 +877,284 @@
       "sword": 4
     },
     {
-      "id": "round_60",
-      "customers": 523,
+      "id": "round_config_base",
+      "round": "round_60",
+      "customers": 100,
       "average amount": 3,
       "wood": 3,
       "iron": 3,
       "plank": 3,
       "sword": 3
+    },
+    {
+      "id": "round_config_base",
+      "round": "round_61",
+      "customers": 100,
+      "average amount": 2,
+      "wood": 2,
+      "iron": 2,
+      "plank": 2,
+      "sword": 2
+    },
+    {
+      "id": "round_config_base",
+      "round": "round_62",
+      "customers": 100,
+      "average amount": 3,
+      "wood": 5,
+      "iron": 1,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_config_base",
+      "round": "round_63",
+      "customers": 100,
+      "average amount": 4,
+      "wood": 5,
+      "iron": 1,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_config_base",
+      "round": "round_64",
+      "customers": 100,
+      "average amount": 5,
+      "wood": 2,
+      "iron": 2,
+      "plank": 2,
+      "sword": 2
+    },
+    {
+      "id": "round_config_base",
+      "round": "round_65",
+      "customers": 100,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 5,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_config_base",
+      "round": "round_66",
+      "customers": 100,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 5,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_config_base",
+      "round": "round_67",
+      "customers": 100,
+      "average amount": 2,
+      "wood": 1,
+      "iron": 1,
+      "plank": 4,
+      "sword": 4
+    },
+    {
+      "id": "round_config_base",
+      "round": "round_68",
+      "customers": 100,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_config_base",
+      "round": "round_69",
+      "customers": 100,
+      "average amount": 4,
+      "wood": 0,
+      "iron": 1,
+      "plank": 5,
+      "sword": 0
+    },
+    {
+      "id": "round_config_base",
+      "round": "round_70",
+      "customers": 100,
+      "average amount": 5,
+      "wood": 0,
+      "iron": 1,
+      "plank": 5,
+      "sword": 0
+    },
+    {
+      "id": "round_config_base",
+      "round": "round_71",
+      "customers": 100,
+      "average amount": 4,
+      "wood": 2,
+      "iron": 2,
+      "plank": 2,
+      "sword": 2
+    },
+    {
+      "id": "round_config_base",
+      "round": "round_72",
+      "customers": 100,
+      "average amount": 3,
+      "wood": 0,
+      "iron": 0,
+      "plank": 1,
+      "sword": 5
+    },
+    {
+      "id": "round_config_base",
+      "round": "round_73",
+      "customers": 100,
+      "average amount": 2,
+      "wood": 0,
+      "iron": 0,
+      "plank": 1,
+      "sword": 5
+    },
+    {
+      "id": "round_config_base",
+      "round": "round_74",
+      "customers": 100,
+      "average amount": 3,
+      "wood": 4,
+      "iron": 4,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_config_base",
+      "round": "round_75",
+      "customers": 100,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 4,
+      "sword": 4
+    },
+    {
+      "id": "tuto_round_config_0",
+      "round": "round_1",
+      "customers": 20,
+      "average amount": 2,
+      "wood": 3,
+      "iron": 2,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "tuto_round_config_0",
+      "round": "round_2",
+      "customers": 20,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 0
+    },
+    {
+      "id": "tuto_round_config_0",
+      "round": "round_3",
+      "customers": 20,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 0
+    },
+    {
+      "id": "tuto_round_config_0",
+      "round": "round_4",
+      "customers": 20,
+      "average amount": 5,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "tuto_round_config_0",
+      "round": "round_5",
+      "customers": 20,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "tuto_round_config_1",
+      "round": "round_1",
+      "customers": 20,
+      "average amount": 2,
+      "wood": 3,
+      "iron": 2,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "tuto_round_config_1",
+      "round": "round_2",
+      "customers": 20,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 0
+    },
+    {
+      "id": "tuto_round_config_1",
+      "round": "round_3",
+      "customers": 20,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 0
+    },
+    {
+      "id": "tuto_round_config_1",
+      "round": "round_4",
+      "customers": 20,
+      "average amount": 5,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "tuto_round_config_1",
+      "round": "round_5",
+      "customers": 20,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "tuto_round_config_1",
+      "round": "round_6",
+      "customers": 20,
+      "average amount": 3,
+      "wood": 2,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "tuto_round_config_1",
+      "round": "round_7",
+      "customers": 20,
+      "average amount": 2,
+      "wood": 2,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
     }
   ],
   "purshases": [
@@ -2421,11 +2376,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.1,
-      "productionTime": 5,
-      "~DO NOT EXPORT : total 1 worker": 4.5,
-      "~DO NOT EXPORT : total 2 workers": 4,
-      "~DO NOT EXPORT : total 3 workers": 3.5,
-      "~DO NOT EXPORT : total 4 workers": 3
+      "productionTime": 5
     },
     {
       "id": "lumberyard",
@@ -2434,11 +2385,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.11,
-      "productionTime": 4.9,
-      "~DO NOT EXPORT : total 1 worker": 4.361000000000001,
-      "~DO NOT EXPORT : total 2 workers": 3.822,
-      "~DO NOT EXPORT : total 3 workers": 3.2830000000000004,
-      "~DO NOT EXPORT : total 4 workers": 2.744
+      "productionTime": 4.9
     },
     {
       "id": "lumberyard",
@@ -2447,11 +2394,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.12,
-      "productionTime": 4.8,
-      "~DO NOT EXPORT : total 1 worker": 4.224,
-      "~DO NOT EXPORT : total 2 workers": 3.6479999999999997,
-      "~DO NOT EXPORT : total 3 workers": 3.072,
-      "~DO NOT EXPORT : total 4 workers": 2.496
+      "productionTime": 4.8
     },
     {
       "id": "lumberyard",
@@ -2460,11 +2403,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.13,
-      "productionTime": 4.7,
-      "~DO NOT EXPORT : total 1 worker": 4.089,
-      "~DO NOT EXPORT : total 2 workers": 3.4779999999999998,
-      "~DO NOT EXPORT : total 3 workers": 2.867,
-      "~DO NOT EXPORT : total 4 workers": 2.256
+      "productionTime": 4.7
     },
     {
       "id": "lumberyard",
@@ -2473,11 +2412,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.14,
-      "productionTime": 4.6,
-      "~DO NOT EXPORT : total 1 worker": 3.9559999999999995,
-      "~DO NOT EXPORT : total 2 workers": 3.3119999999999994,
-      "~DO NOT EXPORT : total 3 workers": 2.6679999999999997,
-      "~DO NOT EXPORT : total 4 workers": 2.0239999999999996
+      "productionTime": 4.6
     },
     {
       "id": "lumberyard",
@@ -2486,11 +2421,7 @@
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.15,
-      "productionTime": 4.50000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.825000000000008,
-      "~DO NOT EXPORT : total 2 workers": 3.1500000000000066,
-      "~DO NOT EXPORT : total 3 workers": 2.4750000000000054,
-      "~DO NOT EXPORT : total 4 workers": 1.8000000000000038
+      "productionTime": 4.50000000000001
     },
     {
       "id": "lumberyard",
@@ -2499,11 +2430,7 @@
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.16,
-      "productionTime": 4.40000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.6960000000000086,
-      "~DO NOT EXPORT : total 2 workers": 2.992000000000007,
-      "~DO NOT EXPORT : total 3 workers": 2.288000000000005,
-      "~DO NOT EXPORT : total 4 workers": 1.5840000000000036
+      "productionTime": 4.40000000000001
     },
     {
       "id": "lumberyard",
@@ -2512,11 +2439,7 @@
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.17,
-      "productionTime": 4.30000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.569000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.8380000000000063,
-      "~DO NOT EXPORT : total 3 workers": 2.1070000000000046,
-      "~DO NOT EXPORT : total 4 workers": 1.376000000000003
+      "productionTime": 4.30000000000001
     },
     {
       "id": "lumberyard",
@@ -2525,11 +2448,7 @@
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.18,
-      "productionTime": 4.20000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.444000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.6880000000000064,
-      "~DO NOT EXPORT : total 3 workers": 1.9320000000000048,
-      "~DO NOT EXPORT : total 4 workers": 1.1760000000000028
+      "productionTime": 4.20000000000001
     },
     {
       "id": "lumberyard",
@@ -2538,11 +2457,7 @@
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.19,
-      "productionTime": 4.10000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.3210000000000086,
-      "~DO NOT EXPORT : total 2 workers": 2.5420000000000065,
-      "~DO NOT EXPORT : total 3 workers": 1.7630000000000043,
-      "~DO NOT EXPORT : total 4 workers": 0.9840000000000027
+      "productionTime": 4.10000000000001
     },
     {
       "id": "lumberyard",
@@ -2551,11 +2466,7 @@
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.2,
-      "productionTime": 4.00000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.2000000000000077,
-      "~DO NOT EXPORT : total 2 workers": 2.4000000000000057,
-      "~DO NOT EXPORT : total 3 workers": 1.6000000000000036,
-      "~DO NOT EXPORT : total 4 workers": 0.8000000000000016
+      "productionTime": 4.00000000000001
     },
     {
       "id": "lumberyard",
@@ -2564,11 +2475,7 @@
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.21,
-      "productionTime": 3.90000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.081000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.262000000000006,
-      "~DO NOT EXPORT : total 3 workers": 1.443000000000004,
-      "~DO NOT EXPORT : total 4 workers": 0.6240000000000019
+      "productionTime": 3.90000000000001
     },
     {
       "id": "lumberyard",
@@ -2577,11 +2484,7 @@
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.22,
-      "productionTime": 3.80000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.964000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.1280000000000054,
-      "~DO NOT EXPORT : total 3 workers": 1.2920000000000034,
-      "~DO NOT EXPORT : total 4 workers": 0.4560000000000013
+      "productionTime": 3.80000000000001
     },
     {
       "id": "lumberyard",
@@ -2590,11 +2493,7 @@
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.23,
-      "productionTime": 3.70000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.8490000000000077,
-      "~DO NOT EXPORT : total 2 workers": 1.9980000000000053,
-      "~DO NOT EXPORT : total 3 workers": 1.147000000000003,
-      "~DO NOT EXPORT : total 4 workers": 0.2960000000000007
+      "productionTime": 3.70000000000001
     },
     {
       "id": "lumberyard",
@@ -2603,11 +2502,7 @@
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.24,
-      "productionTime": 3.60000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.7360000000000078,
-      "~DO NOT EXPORT : total 2 workers": 1.8720000000000052,
-      "~DO NOT EXPORT : total 3 workers": 1.0080000000000031,
-      "~DO NOT EXPORT : total 4 workers": 0.14400000000000057
+      "productionTime": 3.60000000000001
     },
     {
       "id": "mine",
@@ -2616,11 +2511,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.1,
-      "productionTime": 5,
-      "~DO NOT EXPORT : total 1 worker": 4.5,
-      "~DO NOT EXPORT : total 2 workers": 4,
-      "~DO NOT EXPORT : total 3 workers": 3.5,
-      "~DO NOT EXPORT : total 4 workers": 3
+      "productionTime": 5
     },
     {
       "id": "mine",
@@ -2629,11 +2520,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.11,
-      "productionTime": 4.9,
-      "~DO NOT EXPORT : total 1 worker": 4.361000000000001,
-      "~DO NOT EXPORT : total 2 workers": 3.822,
-      "~DO NOT EXPORT : total 3 workers": 3.2830000000000004,
-      "~DO NOT EXPORT : total 4 workers": 2.744
+      "productionTime": 4.9
     },
     {
       "id": "mine",
@@ -2642,11 +2529,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.12,
-      "productionTime": 4.8,
-      "~DO NOT EXPORT : total 1 worker": 4.224,
-      "~DO NOT EXPORT : total 2 workers": 3.6479999999999997,
-      "~DO NOT EXPORT : total 3 workers": 3.072,
-      "~DO NOT EXPORT : total 4 workers": 2.496
+      "productionTime": 4.8
     },
     {
       "id": "mine",
@@ -2655,11 +2538,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.13,
-      "productionTime": 4.7,
-      "~DO NOT EXPORT : total 1 worker": 4.089,
-      "~DO NOT EXPORT : total 2 workers": 3.4779999999999998,
-      "~DO NOT EXPORT : total 3 workers": 2.867,
-      "~DO NOT EXPORT : total 4 workers": 2.256
+      "productionTime": 4.7
     },
     {
       "id": "mine",
@@ -2668,11 +2547,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.14,
-      "productionTime": 4.6,
-      "~DO NOT EXPORT : total 1 worker": 3.9559999999999995,
-      "~DO NOT EXPORT : total 2 workers": 3.3119999999999994,
-      "~DO NOT EXPORT : total 3 workers": 2.6679999999999997,
-      "~DO NOT EXPORT : total 4 workers": 2.0239999999999996
+      "productionTime": 4.6
     },
     {
       "id": "mine",
@@ -2681,11 +2556,7 @@
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.15,
-      "productionTime": 4.50000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.825000000000008,
-      "~DO NOT EXPORT : total 2 workers": 3.1500000000000066,
-      "~DO NOT EXPORT : total 3 workers": 2.4750000000000054,
-      "~DO NOT EXPORT : total 4 workers": 1.8000000000000038
+      "productionTime": 4.50000000000001
     },
     {
       "id": "mine",
@@ -2694,11 +2565,7 @@
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.16,
-      "productionTime": 4.40000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.6960000000000086,
-      "~DO NOT EXPORT : total 2 workers": 2.992000000000007,
-      "~DO NOT EXPORT : total 3 workers": 2.288000000000005,
-      "~DO NOT EXPORT : total 4 workers": 1.5840000000000036
+      "productionTime": 4.40000000000001
     },
     {
       "id": "mine",
@@ -2707,11 +2574,7 @@
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.17,
-      "productionTime": 4.30000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.569000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.8380000000000063,
-      "~DO NOT EXPORT : total 3 workers": 2.1070000000000046,
-      "~DO NOT EXPORT : total 4 workers": 1.376000000000003
+      "productionTime": 4.30000000000001
     },
     {
       "id": "mine",
@@ -2720,11 +2583,7 @@
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.18,
-      "productionTime": 4.20000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.444000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.6880000000000064,
-      "~DO NOT EXPORT : total 3 workers": 1.9320000000000048,
-      "~DO NOT EXPORT : total 4 workers": 1.1760000000000028
+      "productionTime": 4.20000000000001
     },
     {
       "id": "mine",
@@ -2733,11 +2592,7 @@
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.19,
-      "productionTime": 4.10000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.3210000000000086,
-      "~DO NOT EXPORT : total 2 workers": 2.5420000000000065,
-      "~DO NOT EXPORT : total 3 workers": 1.7630000000000043,
-      "~DO NOT EXPORT : total 4 workers": 0.9840000000000027
+      "productionTime": 4.10000000000001
     },
     {
       "id": "mine",
@@ -2746,11 +2601,7 @@
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.2,
-      "productionTime": 4.00000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.2000000000000077,
-      "~DO NOT EXPORT : total 2 workers": 2.4000000000000057,
-      "~DO NOT EXPORT : total 3 workers": 1.6000000000000036,
-      "~DO NOT EXPORT : total 4 workers": 0.8000000000000016
+      "productionTime": 4.00000000000001
     },
     {
       "id": "mine",
@@ -2759,11 +2610,7 @@
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.21,
-      "productionTime": 3.90000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.081000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.262000000000006,
-      "~DO NOT EXPORT : total 3 workers": 1.443000000000004,
-      "~DO NOT EXPORT : total 4 workers": 0.6240000000000019
+      "productionTime": 3.90000000000001
     },
     {
       "id": "mine",
@@ -2772,11 +2619,7 @@
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.22,
-      "productionTime": 3.80000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.964000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.1280000000000054,
-      "~DO NOT EXPORT : total 3 workers": 1.2920000000000034,
-      "~DO NOT EXPORT : total 4 workers": 0.4560000000000013
+      "productionTime": 3.80000000000001
     },
     {
       "id": "mine",
@@ -2785,11 +2628,7 @@
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.23,
-      "productionTime": 3.70000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.8490000000000077,
-      "~DO NOT EXPORT : total 2 workers": 1.9980000000000053,
-      "~DO NOT EXPORT : total 3 workers": 1.147000000000003,
-      "~DO NOT EXPORT : total 4 workers": 0.2960000000000007
+      "productionTime": 3.70000000000001
     },
     {
       "id": "mine",
@@ -2798,11 +2637,7 @@
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.24,
-      "productionTime": 3.60000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.7360000000000078,
-      "~DO NOT EXPORT : total 2 workers": 1.8720000000000052,
-      "~DO NOT EXPORT : total 3 workers": 1.0080000000000031,
-      "~DO NOT EXPORT : total 4 workers": 0.14400000000000057
+      "productionTime": 3.60000000000001
     },
     {
       "id": "sawmill",
@@ -2811,11 +2646,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.1,
-      "productionTime": 5,
-      "~DO NOT EXPORT : total 1 worker": 4.5,
-      "~DO NOT EXPORT : total 2 workers": 4,
-      "~DO NOT EXPORT : total 3 workers": 3.5,
-      "~DO NOT EXPORT : total 4 workers": 3
+      "productionTime": 5
     },
     {
       "id": "sawmill",
@@ -2824,11 +2655,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.11,
-      "productionTime": 4.9,
-      "~DO NOT EXPORT : total 1 worker": 4.361000000000001,
-      "~DO NOT EXPORT : total 2 workers": 3.822,
-      "~DO NOT EXPORT : total 3 workers": 3.2830000000000004,
-      "~DO NOT EXPORT : total 4 workers": 2.744
+      "productionTime": 4.9
     },
     {
       "id": "sawmill",
@@ -2837,11 +2664,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.12,
-      "productionTime": 4.8,
-      "~DO NOT EXPORT : total 1 worker": 4.224,
-      "~DO NOT EXPORT : total 2 workers": 3.6479999999999997,
-      "~DO NOT EXPORT : total 3 workers": 3.072,
-      "~DO NOT EXPORT : total 4 workers": 2.496
+      "productionTime": 4.8
     },
     {
       "id": "sawmill",
@@ -2850,11 +2673,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.13,
-      "productionTime": 4.7,
-      "~DO NOT EXPORT : total 1 worker": 4.089,
-      "~DO NOT EXPORT : total 2 workers": 3.4779999999999998,
-      "~DO NOT EXPORT : total 3 workers": 2.867,
-      "~DO NOT EXPORT : total 4 workers": 2.256
+      "productionTime": 4.7
     },
     {
       "id": "sawmill",
@@ -2863,11 +2682,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.14,
-      "productionTime": 4.6,
-      "~DO NOT EXPORT : total 1 worker": 3.9559999999999995,
-      "~DO NOT EXPORT : total 2 workers": 3.3119999999999994,
-      "~DO NOT EXPORT : total 3 workers": 2.6679999999999997,
-      "~DO NOT EXPORT : total 4 workers": 2.0239999999999996
+      "productionTime": 4.6
     },
     {
       "id": "sawmill",
@@ -2876,11 +2691,7 @@
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.15,
-      "productionTime": 4.50000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.825000000000008,
-      "~DO NOT EXPORT : total 2 workers": 3.1500000000000066,
-      "~DO NOT EXPORT : total 3 workers": 2.4750000000000054,
-      "~DO NOT EXPORT : total 4 workers": 1.8000000000000038
+      "productionTime": 4.50000000000001
     },
     {
       "id": "sawmill",
@@ -2889,11 +2700,7 @@
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.16,
-      "productionTime": 4.40000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.6960000000000086,
-      "~DO NOT EXPORT : total 2 workers": 2.992000000000007,
-      "~DO NOT EXPORT : total 3 workers": 2.288000000000005,
-      "~DO NOT EXPORT : total 4 workers": 1.5840000000000036
+      "productionTime": 4.40000000000001
     },
     {
       "id": "sawmill",
@@ -2902,11 +2709,7 @@
       "workersRequired": 2,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.17,
-      "productionTime": 4.30000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.569000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.8380000000000063,
-      "~DO NOT EXPORT : total 3 workers": 2.1070000000000046,
-      "~DO NOT EXPORT : total 4 workers": 1.376000000000003
+      "productionTime": 4.30000000000001
     },
     {
       "id": "sawmill",
@@ -2915,11 +2718,7 @@
       "workersRequired": 2,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.18,
-      "productionTime": 4.20000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.444000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.6880000000000064,
-      "~DO NOT EXPORT : total 3 workers": 1.9320000000000048,
-      "~DO NOT EXPORT : total 4 workers": 1.1760000000000028
+      "productionTime": 4.20000000000001
     },
     {
       "id": "sawmill",
@@ -2928,11 +2727,7 @@
       "workersRequired": 2,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.19,
-      "productionTime": 4.10000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.3210000000000086,
-      "~DO NOT EXPORT : total 2 workers": 2.5420000000000065,
-      "~DO NOT EXPORT : total 3 workers": 1.7630000000000043,
-      "~DO NOT EXPORT : total 4 workers": 0.9840000000000027
+      "productionTime": 4.10000000000001
     },
     {
       "id": "sawmill",
@@ -2941,11 +2736,7 @@
       "workersRequired": 2,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.2,
-      "productionTime": 4.00000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.2000000000000077,
-      "~DO NOT EXPORT : total 2 workers": 2.4000000000000057,
-      "~DO NOT EXPORT : total 3 workers": 1.6000000000000036,
-      "~DO NOT EXPORT : total 4 workers": 0.8000000000000016
+      "productionTime": 4.00000000000001
     },
     {
       "id": "sawmill",
@@ -2954,11 +2745,7 @@
       "workersRequired": 2,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.21,
-      "productionTime": 3.90000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.081000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.262000000000006,
-      "~DO NOT EXPORT : total 3 workers": 1.443000000000004,
-      "~DO NOT EXPORT : total 4 workers": 0.6240000000000019
+      "productionTime": 3.90000000000001
     },
     {
       "id": "sawmill",
@@ -2967,11 +2754,7 @@
       "workersRequired": 3,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.22,
-      "productionTime": 3.80000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.964000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.1280000000000054,
-      "~DO NOT EXPORT : total 3 workers": 1.2920000000000034,
-      "~DO NOT EXPORT : total 4 workers": 0.4560000000000013
+      "productionTime": 3.80000000000001
     },
     {
       "id": "sawmill",
@@ -2980,11 +2763,7 @@
       "workersRequired": 3,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.23,
-      "productionTime": 3.70000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.8490000000000077,
-      "~DO NOT EXPORT : total 2 workers": 1.9980000000000053,
-      "~DO NOT EXPORT : total 3 workers": 1.147000000000003,
-      "~DO NOT EXPORT : total 4 workers": 0.2960000000000007
+      "productionTime": 3.70000000000001
     },
     {
       "id": "sawmill",
@@ -2993,11 +2772,7 @@
       "workersRequired": 3,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.24,
-      "productionTime": 3.60000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.7360000000000078,
-      "~DO NOT EXPORT : total 2 workers": 1.8720000000000052,
-      "~DO NOT EXPORT : total 3 workers": 1.0080000000000031,
-      "~DO NOT EXPORT : total 4 workers": 0.14400000000000057
+      "productionTime": 3.60000000000001
     },
     {
       "id": "forge",
@@ -3006,11 +2781,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.1,
-      "productionTime": 5,
-      "~DO NOT EXPORT : total 1 worker": 4.5,
-      "~DO NOT EXPORT : total 2 workers": 4,
-      "~DO NOT EXPORT : total 3 workers": 3.5,
-      "~DO NOT EXPORT : total 4 workers": 3
+      "productionTime": 5
     },
     {
       "id": "forge",
@@ -3019,11 +2790,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.11,
-      "productionTime": 4.9,
-      "~DO NOT EXPORT : total 1 worker": 4.361000000000001,
-      "~DO NOT EXPORT : total 2 workers": 3.822,
-      "~DO NOT EXPORT : total 3 workers": 3.2830000000000004,
-      "~DO NOT EXPORT : total 4 workers": 2.744
+      "productionTime": 4.9
     },
     {
       "id": "forge",
@@ -3032,11 +2799,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.12,
-      "productionTime": 4.8,
-      "~DO NOT EXPORT : total 1 worker": 4.224,
-      "~DO NOT EXPORT : total 2 workers": 3.6479999999999997,
-      "~DO NOT EXPORT : total 3 workers": 3.072,
-      "~DO NOT EXPORT : total 4 workers": 2.496
+      "productionTime": 4.8
     },
     {
       "id": "forge",
@@ -3045,11 +2808,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.13,
-      "productionTime": 4.7,
-      "~DO NOT EXPORT : total 1 worker": 4.089,
-      "~DO NOT EXPORT : total 2 workers": 3.4779999999999998,
-      "~DO NOT EXPORT : total 3 workers": 2.867,
-      "~DO NOT EXPORT : total 4 workers": 2.256
+      "productionTime": 4.7
     },
     {
       "id": "forge",
@@ -3058,11 +2817,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.14,
-      "productionTime": 4.6,
-      "~DO NOT EXPORT : total 1 worker": 3.9559999999999995,
-      "~DO NOT EXPORT : total 2 workers": 3.3119999999999994,
-      "~DO NOT EXPORT : total 3 workers": 2.6679999999999997,
-      "~DO NOT EXPORT : total 4 workers": 2.0239999999999996
+      "productionTime": 4.6
     },
     {
       "id": "forge",
@@ -3071,11 +2826,7 @@
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.15,
-      "productionTime": 4.50000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.825000000000008,
-      "~DO NOT EXPORT : total 2 workers": 3.1500000000000066,
-      "~DO NOT EXPORT : total 3 workers": 2.4750000000000054,
-      "~DO NOT EXPORT : total 4 workers": 1.8000000000000038
+      "productionTime": 4.50000000000001
     },
     {
       "id": "forge",
@@ -3084,11 +2835,7 @@
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.16,
-      "productionTime": 4.40000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.6960000000000086,
-      "~DO NOT EXPORT : total 2 workers": 2.992000000000007,
-      "~DO NOT EXPORT : total 3 workers": 2.288000000000005,
-      "~DO NOT EXPORT : total 4 workers": 1.5840000000000036
+      "productionTime": 4.40000000000001
     },
     {
       "id": "forge",
@@ -3097,11 +2844,7 @@
       "workersRequired": 2,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.17,
-      "productionTime": 4.30000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.569000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.8380000000000063,
-      "~DO NOT EXPORT : total 3 workers": 2.1070000000000046,
-      "~DO NOT EXPORT : total 4 workers": 1.376000000000003
+      "productionTime": 4.30000000000001
     },
     {
       "id": "forge",
@@ -3110,11 +2853,7 @@
       "workersRequired": 2,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.18,
-      "productionTime": 4.20000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.444000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.6880000000000064,
-      "~DO NOT EXPORT : total 3 workers": 1.9320000000000048,
-      "~DO NOT EXPORT : total 4 workers": 1.1760000000000028
+      "productionTime": 4.20000000000001
     },
     {
       "id": "forge",
@@ -3123,11 +2862,7 @@
       "workersRequired": 2,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.19,
-      "productionTime": 4.10000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.3210000000000086,
-      "~DO NOT EXPORT : total 2 workers": 2.5420000000000065,
-      "~DO NOT EXPORT : total 3 workers": 1.7630000000000043,
-      "~DO NOT EXPORT : total 4 workers": 0.9840000000000027
+      "productionTime": 4.10000000000001
     },
     {
       "id": "forge",
@@ -3136,11 +2871,7 @@
       "workersRequired": 2,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.2,
-      "productionTime": 4.00000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.2000000000000077,
-      "~DO NOT EXPORT : total 2 workers": 2.4000000000000057,
-      "~DO NOT EXPORT : total 3 workers": 1.6000000000000036,
-      "~DO NOT EXPORT : total 4 workers": 0.8000000000000016
+      "productionTime": 4.00000000000001
     },
     {
       "id": "forge",
@@ -3149,11 +2880,7 @@
       "workersRequired": 2,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.21,
-      "productionTime": 3.90000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.081000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.262000000000006,
-      "~DO NOT EXPORT : total 3 workers": 1.443000000000004,
-      "~DO NOT EXPORT : total 4 workers": 0.6240000000000019
+      "productionTime": 3.90000000000001
     },
     {
       "id": "forge",
@@ -3162,11 +2889,7 @@
       "workersRequired": 3,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.22,
-      "productionTime": 3.80000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.964000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.1280000000000054,
-      "~DO NOT EXPORT : total 3 workers": 1.2920000000000034,
-      "~DO NOT EXPORT : total 4 workers": 0.4560000000000013
+      "productionTime": 3.80000000000001
     },
     {
       "id": "forge",
@@ -3175,11 +2898,7 @@
       "workersRequired": 3,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.23,
-      "productionTime": 3.70000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.8490000000000077,
-      "~DO NOT EXPORT : total 2 workers": 1.9980000000000053,
-      "~DO NOT EXPORT : total 3 workers": 1.147000000000003,
-      "~DO NOT EXPORT : total 4 workers": 0.2960000000000007
+      "productionTime": 3.70000000000001
     },
     {
       "id": "forge",
@@ -3188,11 +2907,7 @@
       "workersRequired": 3,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.24,
-      "productionTime": 3.60000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.7360000000000078,
-      "~DO NOT EXPORT : total 2 workers": 1.8720000000000052,
-      "~DO NOT EXPORT : total 3 workers": 1.0080000000000031,
-      "~DO NOT EXPORT : total 4 workers": 0.14400000000000057
+      "productionTime": 3.60000000000001
     },
     {
       "id": "military_camp",
@@ -3201,11 +2916,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.1,
-      "productionTime": 5,
-      "~DO NOT EXPORT : total 1 worker": 4.5,
-      "~DO NOT EXPORT : total 2 workers": 4,
-      "~DO NOT EXPORT : total 3 workers": 3.5,
-      "~DO NOT EXPORT : total 4 workers": 3
+      "productionTime": 5
     },
     {
       "id": "military_camp",
@@ -3214,11 +2925,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.11,
-      "productionTime": 4.9,
-      "~DO NOT EXPORT : total 1 worker": 4.361000000000001,
-      "~DO NOT EXPORT : total 2 workers": 3.822,
-      "~DO NOT EXPORT : total 3 workers": 3.2830000000000004,
-      "~DO NOT EXPORT : total 4 workers": 2.744
+      "productionTime": 4.9
     },
     {
       "id": "military_camp",
@@ -3227,11 +2934,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.12,
-      "productionTime": 4.8,
-      "~DO NOT EXPORT : total 1 worker": 4.224,
-      "~DO NOT EXPORT : total 2 workers": 3.6479999999999997,
-      "~DO NOT EXPORT : total 3 workers": 3.072,
-      "~DO NOT EXPORT : total 4 workers": 2.496
+      "productionTime": 4.8
     },
     {
       "id": "military_camp",
@@ -3240,11 +2943,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.13,
-      "productionTime": 4.7,
-      "~DO NOT EXPORT : total 1 worker": 4.089,
-      "~DO NOT EXPORT : total 2 workers": 3.4779999999999998,
-      "~DO NOT EXPORT : total 3 workers": 2.867,
-      "~DO NOT EXPORT : total 4 workers": 2.256
+      "productionTime": 4.7
     },
     {
       "id": "military_camp",
@@ -3253,11 +2952,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.14,
-      "productionTime": 4.6,
-      "~DO NOT EXPORT : total 1 worker": 3.9559999999999995,
-      "~DO NOT EXPORT : total 2 workers": 3.3119999999999994,
-      "~DO NOT EXPORT : total 3 workers": 2.6679999999999997,
-      "~DO NOT EXPORT : total 4 workers": 2.0239999999999996
+      "productionTime": 4.6
     },
     {
       "id": "military_camp",
@@ -3266,11 +2961,7 @@
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.15,
-      "productionTime": 4.50000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.825000000000008,
-      "~DO NOT EXPORT : total 2 workers": 3.1500000000000066,
-      "~DO NOT EXPORT : total 3 workers": 2.4750000000000054,
-      "~DO NOT EXPORT : total 4 workers": 1.8000000000000038
+      "productionTime": 4.50000000000001
     },
     {
       "id": "military_camp",
@@ -3279,11 +2970,7 @@
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.16,
-      "productionTime": 4.40000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.6960000000000086,
-      "~DO NOT EXPORT : total 2 workers": 2.992000000000007,
-      "~DO NOT EXPORT : total 3 workers": 2.288000000000005,
-      "~DO NOT EXPORT : total 4 workers": 1.5840000000000036
+      "productionTime": 4.40000000000001
     },
     {
       "id": "military_camp",
@@ -3292,11 +2979,7 @@
       "workersRequired": 2,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.17,
-      "productionTime": 4.30000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.569000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.8380000000000063,
-      "~DO NOT EXPORT : total 3 workers": 2.1070000000000046,
-      "~DO NOT EXPORT : total 4 workers": 1.376000000000003
+      "productionTime": 4.30000000000001
     },
     {
       "id": "military_camp",
@@ -3305,11 +2988,7 @@
       "workersRequired": 2,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.18,
-      "productionTime": 4.20000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.444000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.6880000000000064,
-      "~DO NOT EXPORT : total 3 workers": 1.9320000000000048,
-      "~DO NOT EXPORT : total 4 workers": 1.1760000000000028
+      "productionTime": 4.20000000000001
     },
     {
       "id": "military_camp",
@@ -3318,11 +2997,7 @@
       "workersRequired": 2,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.19,
-      "productionTime": 4.10000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.3210000000000086,
-      "~DO NOT EXPORT : total 2 workers": 2.5420000000000065,
-      "~DO NOT EXPORT : total 3 workers": 1.7630000000000043,
-      "~DO NOT EXPORT : total 4 workers": 0.9840000000000027
+      "productionTime": 4.10000000000001
     },
     {
       "id": "military_camp",
@@ -3331,11 +3006,7 @@
       "workersRequired": 2,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.2,
-      "productionTime": 4.00000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.2000000000000077,
-      "~DO NOT EXPORT : total 2 workers": 2.4000000000000057,
-      "~DO NOT EXPORT : total 3 workers": 1.6000000000000036,
-      "~DO NOT EXPORT : total 4 workers": 0.8000000000000016
+      "productionTime": 4.00000000000001
     },
     {
       "id": "military_camp",
@@ -3344,11 +3015,7 @@
       "workersRequired": 2,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.21,
-      "productionTime": 3.90000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.081000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.262000000000006,
-      "~DO NOT EXPORT : total 3 workers": 1.443000000000004,
-      "~DO NOT EXPORT : total 4 workers": 0.6240000000000019
+      "productionTime": 3.90000000000001
     },
     {
       "id": "military_camp",
@@ -3357,11 +3024,7 @@
       "workersRequired": 3,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.22,
-      "productionTime": 3.80000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.964000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.1280000000000054,
-      "~DO NOT EXPORT : total 3 workers": 1.2920000000000034,
-      "~DO NOT EXPORT : total 4 workers": 0.4560000000000013
+      "productionTime": 3.80000000000001
     },
     {
       "id": "military_camp",
@@ -3370,11 +3033,7 @@
       "workersRequired": 3,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.23,
-      "productionTime": 3.70000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.8490000000000077,
-      "~DO NOT EXPORT : total 2 workers": 1.9980000000000053,
-      "~DO NOT EXPORT : total 3 workers": 1.147000000000003,
-      "~DO NOT EXPORT : total 4 workers": 0.2960000000000007
+      "productionTime": 3.70000000000001
     },
     {
       "id": "military_camp",
@@ -3383,11 +3042,7 @@
       "workersRequired": 3,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.24,
-      "productionTime": 3.60000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.7360000000000078,
-      "~DO NOT EXPORT : total 2 workers": 1.8720000000000052,
-      "~DO NOT EXPORT : total 3 workers": 1.0080000000000031,
-      "~DO NOT EXPORT : total 4 workers": 0.14400000000000057
+      "productionTime": 3.60000000000001
     },
     {
       "id": "magic_tower",
@@ -3396,11 +3051,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.1,
-      "productionTime": 3.60000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.240000000000009,
-      "~DO NOT EXPORT : total 2 workers": 2.880000000000008,
-      "~DO NOT EXPORT : total 3 workers": 2.5200000000000067,
-      "~DO NOT EXPORT : total 4 workers": 2.160000000000006
+      "productionTime": 3.60000000000001
     },
     {
       "id": "magic_tower",
@@ -3409,11 +3060,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.11,
-      "productionTime": 3.60000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.2040000000000086,
-      "~DO NOT EXPORT : total 2 workers": 2.808000000000008,
-      "~DO NOT EXPORT : total 3 workers": 2.4120000000000066,
-      "~DO NOT EXPORT : total 4 workers": 2.0160000000000053
+      "productionTime": 3.60000000000001
     },
     {
       "id": "magic_tower",
@@ -3422,11 +3069,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.12,
-      "productionTime": 3.60000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.1680000000000086,
-      "~DO NOT EXPORT : total 2 workers": 2.7360000000000078,
-      "~DO NOT EXPORT : total 3 workers": 2.3040000000000065,
-      "~DO NOT EXPORT : total 4 workers": 1.8720000000000052
+      "productionTime": 3.60000000000001
     },
     {
       "id": "magic_tower",
@@ -3435,11 +3078,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.13,
-      "productionTime": 3.60000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.1320000000000086,
-      "~DO NOT EXPORT : total 2 workers": 2.6640000000000073,
-      "~DO NOT EXPORT : total 3 workers": 2.196000000000006,
-      "~DO NOT EXPORT : total 4 workers": 1.7280000000000046
+      "productionTime": 3.60000000000001
     },
     {
       "id": "magic_tower",
@@ -3448,11 +3087,7 @@
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.14,
-      "productionTime": 3.60000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.0960000000000085,
-      "~DO NOT EXPORT : total 2 workers": 2.5920000000000067,
-      "~DO NOT EXPORT : total 3 workers": 2.0880000000000054,
-      "~DO NOT EXPORT : total 4 workers": 1.584000000000004
+      "productionTime": 3.60000000000001
     },
     {
       "id": "magic_tower",
@@ -3461,11 +3096,7 @@
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.15,
-      "productionTime": 3.60000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.0600000000000085,
-      "~DO NOT EXPORT : total 2 workers": 2.5200000000000067,
-      "~DO NOT EXPORT : total 3 workers": 1.9800000000000053,
-      "~DO NOT EXPORT : total 4 workers": 1.440000000000004
+      "productionTime": 3.60000000000001
     },
     {
       "id": "magic_tower",
@@ -3474,11 +3105,7 @@
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.16,
-      "productionTime": 3.60000000000001,
-      "~DO NOT EXPORT : total 1 worker": 3.024000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.4480000000000066,
-      "~DO NOT EXPORT : total 3 workers": 1.872000000000005,
-      "~DO NOT EXPORT : total 4 workers": 1.2960000000000034
+      "productionTime": 3.60000000000001
     },
     {
       "id": "magic_tower",
@@ -3487,11 +3114,7 @@
       "workersRequired": 2,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.17,
-      "productionTime": 3.60000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.988000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.3760000000000066,
-      "~DO NOT EXPORT : total 3 workers": 1.7640000000000047,
-      "~DO NOT EXPORT : total 4 workers": 1.1520000000000028
+      "productionTime": 3.60000000000001
     },
     {
       "id": "magic_tower",
@@ -3500,11 +3123,7 @@
       "workersRequired": 2,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.18,
-      "productionTime": 3.60000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.952000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.3040000000000065,
-      "~DO NOT EXPORT : total 3 workers": 1.6560000000000046,
-      "~DO NOT EXPORT : total 4 workers": 1.0080000000000027
+      "productionTime": 3.60000000000001
     },
     {
       "id": "magic_tower",
@@ -3513,11 +3132,7 @@
       "workersRequired": 2,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.19,
-      "productionTime": 3.60000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.916000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.2320000000000064,
-      "~DO NOT EXPORT : total 3 workers": 1.5480000000000045,
-      "~DO NOT EXPORT : total 4 workers": 0.8640000000000025
+      "productionTime": 3.60000000000001
     },
     {
       "id": "magic_tower",
@@ -3526,11 +3141,7 @@
       "workersRequired": 2,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.2,
-      "productionTime": 3.60000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.880000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.160000000000006,
-      "~DO NOT EXPORT : total 3 workers": 1.440000000000004,
-      "~DO NOT EXPORT : total 4 workers": 0.720000000000002
+      "productionTime": 3.60000000000001
     },
     {
       "id": "magic_tower",
@@ -3539,11 +3150,7 @@
       "workersRequired": 2,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.21,
-      "productionTime": 3.60000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.844000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.088000000000006,
-      "~DO NOT EXPORT : total 3 workers": 1.3320000000000038,
-      "~DO NOT EXPORT : total 4 workers": 0.5760000000000018
+      "productionTime": 3.60000000000001
     },
     {
       "id": "magic_tower",
@@ -3552,11 +3159,7 @@
       "workersRequired": 3,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.22,
-      "productionTime": 3.60000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.808000000000008,
-      "~DO NOT EXPORT : total 2 workers": 2.0160000000000053,
-      "~DO NOT EXPORT : total 3 workers": 1.2240000000000033,
-      "~DO NOT EXPORT : total 4 workers": 0.43200000000000127
+      "productionTime": 3.60000000000001
     },
     {
       "id": "magic_tower",
@@ -3565,11 +3168,7 @@
       "workersRequired": 3,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.23,
-      "productionTime": 3.60000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.7720000000000073,
-      "~DO NOT EXPORT : total 2 workers": 1.9440000000000053,
-      "~DO NOT EXPORT : total 3 workers": 1.1160000000000028,
-      "~DO NOT EXPORT : total 4 workers": 0.2880000000000007
+      "productionTime": 3.60000000000001
     },
     {
       "id": "magic_tower",
@@ -3578,11 +3177,7 @@
       "workersRequired": 3,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.24,
-      "productionTime": 3.60000000000001,
-      "~DO NOT EXPORT : total 1 worker": 2.7360000000000078,
-      "~DO NOT EXPORT : total 2 workers": 1.8720000000000052,
-      "~DO NOT EXPORT : total 3 workers": 1.0080000000000031,
-      "~DO NOT EXPORT : total 4 workers": 0.14400000000000057
+      "productionTime": 3.60000000000001
     }
   ],
   "outputs": [
@@ -5002,32 +4597,32 @@
     {
       "round": 4,
       "coins": 50,
-      "ressource_tier": 1
+      "ressource_tier": 2
     },
     {
       "round": 5,
       "coins": 50,
-      "ressource_tier": 1
+      "ressource_tier": 2
     },
     {
       "round": 6,
       "coins": 50,
-      "ressource_tier": 1
+      "ressource_tier": 2
     },
     {
       "round": 7,
       "coins": 50,
-      "ressource_tier": 1
+      "ressource_tier": 2
     },
     {
       "round": 8,
       "coins": 50,
-      "ressource_tier": 1
+      "ressource_tier": 2
     },
     {
       "round": 9,
       "coins": 50,
-      "ressource_tier": 1
+      "ressource_tier": 2
     },
     {
       "round": 10,
@@ -5042,42 +4637,42 @@
     {
       "round": 12,
       "coins": 100,
-      "ressource_tier": 2
+      "ressource_tier": 3
     },
     {
       "round": 13,
       "coins": 100,
-      "ressource_tier": 2
+      "ressource_tier": 3
     },
     {
       "round": 14,
       "coins": 100,
-      "ressource_tier": 2
+      "ressource_tier": 3
     },
     {
       "round": 15,
       "coins": 100,
-      "ressource_tier": 2
+      "ressource_tier": 3
     },
     {
       "round": 16,
       "coins": 300,
-      "ressource_tier": 2
+      "ressource_tier": 3
     },
     {
       "round": 17,
       "coins": 300,
-      "ressource_tier": 2
+      "ressource_tier": 3
     },
     {
       "round": 18,
       "coins": 300,
-      "ressource_tier": 2
+      "ressource_tier": 3
     },
     {
       "round": 19,
       "coins": 300,
-      "ressource_tier": 2
+      "ressource_tier": 3
     },
     {
       "round": 20,
@@ -5092,42 +4687,42 @@
     {
       "round": 22,
       "coins": 300,
-      "ressource_tier": 3
+      "ressource_tier": 4
     },
     {
       "round": 23,
       "coins": 300,
-      "ressource_tier": 3
+      "ressource_tier": 4
     },
     {
       "round": 24,
       "coins": 300,
-      "ressource_tier": 3
+      "ressource_tier": 4
     },
     {
       "round": 25,
       "coins": 300,
-      "ressource_tier": 3
+      "ressource_tier": 4
     },
     {
       "round": 26,
       "coins": 500,
-      "ressource_tier": 3
+      "ressource_tier": 4
     },
     {
       "round": 27,
       "coins": 500,
-      "ressource_tier": 3
+      "ressource_tier": 4
     },
     {
       "round": 28,
       "coins": 500,
-      "ressource_tier": 3
+      "ressource_tier": 4
     },
     {
       "round": 29,
       "coins": 500,
-      "ressource_tier": 3
+      "ressource_tier": 4
     },
     {
       "round": 30,
@@ -5142,22 +4737,22 @@
     {
       "round": 32,
       "coins": 750,
-      "ressource_tier": 4
+      "ressource_tier": 5
     },
     {
       "round": 33,
       "coins": 750,
-      "ressource_tier": 4
+      "ressource_tier": 5
     },
     {
       "round": 34,
       "coins": 750,
-      "ressource_tier": 4
+      "ressource_tier": 5
     },
     {
       "round": 35,
       "coins": 750,
-      "ressource_tier": 4
+      "ressource_tier": 5
     },
     {
       "round": 36,
@@ -5172,17 +4767,17 @@
     {
       "round": 38,
       "coins": 750,
-      "ressource_tier": 5
+      "ressource_tier": 6
     },
     {
       "round": 39,
       "coins": 750,
-      "ressource_tier": 5
+      "ressource_tier": 6
     },
     {
       "round": 40,
       "coins": 1000,
-      "ressource_tier": 5
+      "ressource_tier": 6
     },
     {
       "round": 41,
@@ -5283,6 +4878,3044 @@
       "round": 60,
       "coins": 1250,
       "ressource_tier": 6
+    },
+    {
+      "round": 61,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 62,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 63,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 64,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 65,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 66,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 67,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 68,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 69,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 70,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 71,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 72,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 73,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 74,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 75,
+      "coins": 1250,
+      "ressource_tier": 6
+    }
+  ],
+  "world_config": [
+    {
+      "id": "level1_world_config",
+      "competitors": "bot_timber",
+      "nbOfRounds": 5,
+      "taxConfig": "tax_config_0",
+      "marketConfig": "tuto_round_config_0",
+      "unlockConfig": "tuto_level_0_unlock_config"
+    },
+    {
+      "id": "level2_world_config",
+      "competitors": "bot_timber",
+      "nbOfRounds": 5,
+      "taxConfig": "tax_config_0",
+      "marketConfig": "tuto_round_config_0",
+      "unlockConfig": "tuto_level_0_unlock_config"
+    },
+    {
+      "id": "level3_world_config",
+      "competitors": "bot_timber",
+      "nbOfRounds": 7,
+      "taxConfig": "tax_config_1",
+      "marketConfig": "tuto_round_config_1",
+      "unlockConfig": "tuto_level_1_unlock_config"
+    },
+    {
+      "id": "level3_world_config",
+      "competitors": "bot_ferro",
+      "nbOfRounds": 7,
+      "taxConfig": "tax_config_1",
+      "marketConfig": "tuto_round_config_1",
+      "unlockConfig": "tuto_level_1_unlock_config"
+    },
+    {
+      "id": "level4_world_config",
+      "competitors": "bot_timber",
+      "nbOfRounds": 10,
+      "taxConfig": "tax_config_2",
+      "marketConfig": "round_config_base",
+      "unlockConfig": "tuto_level_2_unlock_config"
+    },
+    {
+      "id": "level4_world_config",
+      "competitors": "bot_ferro",
+      "nbOfRounds": 10,
+      "taxConfig": "tax_config_2",
+      "marketConfig": "round_config_base",
+      "unlockConfig": "tuto_level_2_unlock_config"
+    },
+    {
+      "id": "level4_world_config",
+      "competitors": "bot_forge",
+      "nbOfRounds": 10,
+      "taxConfig": "tax_config_2",
+      "marketConfig": "round_config_base",
+      "unlockConfig": "tuto_level_2_unlock_config"
+    },
+    {
+      "id": "level5_world_config",
+      "competitors": "bot_timber",
+      "nbOfRounds": 10,
+      "taxConfig": "tax_config_2",
+      "marketConfig": "round_config_base",
+      "unlockConfig": "tuto_level_2_unlock_config"
+    },
+    {
+      "id": "level5_world_config",
+      "competitors": "bot_ferro",
+      "nbOfRounds": 10,
+      "taxConfig": "tax_config_2",
+      "marketConfig": "round_config_base",
+      "unlockConfig": "tuto_level_2_unlock_config"
+    },
+    {
+      "id": "level5_world_config",
+      "competitors": "bot_forge",
+      "nbOfRounds": 10,
+      "taxConfig": "tax_config_2",
+      "marketConfig": "round_config_base",
+      "unlockConfig": "tuto_level_2_unlock_config"
+    },
+    {
+      "id": "levelbase_world_config",
+      "competitors": "bot_timber",
+      "nbOfRounds": 75,
+      "taxConfig": "tax_config_2",
+      "marketConfig": "round_config_base",
+      "unlockConfig": "base"
+    },
+    {
+      "id": "levelbase_world_config",
+      "competitors": "bot_ferro",
+      "nbOfRounds": 75,
+      "taxConfig": "tax_config_2",
+      "marketConfig": "round_config_base",
+      "unlockConfig": "base"
+    },
+    {
+      "id": "levelbase_world_config",
+      "competitors": "bot_forge",
+      "nbOfRounds": 75,
+      "taxConfig": "tax_config_2",
+      "marketConfig": "round_config_base",
+      "unlockConfig": "base"
+    }
+  ],
+  "world_level": [
+    {
+      "id": "level1",
+      "config": "level1_world_config",
+      "reward": "1_common_chest"
+    },
+    {
+      "id": "level2",
+      "config": "level2_world_config",
+      "reward": "2_common_chest"
+    },
+    {
+      "id": "level3",
+      "config": "level3_world_config",
+      "reward": "3_rare_chest"
+    },
+    {
+      "id": "level4",
+      "config": "level4_world_config",
+      "reward": "4_epic_chest"
+    },
+    {
+      "id": "level5",
+      "config": "level5_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "levelbase",
+      "config": "levelbase_world_config",
+      "reward": "5_legendary_chest"
+    }
+  ],
+  "rewards": [
+    {
+      "id": "50_coins",
+      "group": "A",
+      "weights": 1,
+      "amount": 50,
+      "content": "coins"
+    },
+    {
+      "id": "100_coins",
+      "group": "A",
+      "weights": 1,
+      "amount": 100,
+      "content": "coins"
+    },
+    {
+      "id": "200_coins",
+      "group": "A",
+      "weights": 1,
+      "amount": 200,
+      "content": "coins"
+    },
+    {
+      "id": "500_coins",
+      "group": "A",
+      "weights": 1,
+      "amount": 500,
+      "content": "coins"
+    },
+    {
+      "id": "5_gems",
+      "group": "A",
+      "weights": 1,
+      "amount": 5,
+      "content": "gems"
+    },
+    {
+      "id": "10_gems",
+      "group": "A",
+      "weights": 1,
+      "amount": 10,
+      "content": "gems"
+    },
+    {
+      "id": "15_gems",
+      "group": "A",
+      "weights": 1,
+      "amount": 15,
+      "content": "gems"
+    },
+    {
+      "id": "20_gems",
+      "group": "A",
+      "weights": 1,
+      "amount": 20,
+      "content": "gems"
+    },
+    {
+      "id": "30_gems",
+      "group": "A",
+      "weights": 1,
+      "amount": 30,
+      "content": "gems"
+    },
+    {
+      "id": "1_common_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 1,
+      "content": "common_chest"
+    },
+    {
+      "id": "2_common_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 2,
+      "content": "common_chest"
+    },
+    {
+      "id": "3_common_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 3,
+      "content": "common_chest"
+    },
+    {
+      "id": "4_common_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 4,
+      "content": "common_chest"
+    },
+    {
+      "id": "5_common_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 5,
+      "content": "common_chest"
+    },
+    {
+      "id": "1_rare_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 1,
+      "content": "rare_chest"
+    },
+    {
+      "id": "2_rare_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 2,
+      "content": "rare_chest"
+    },
+    {
+      "id": "3_rare_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 3,
+      "content": "rare_chest"
+    },
+    {
+      "id": "4_rare_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 4,
+      "content": "rare_chest"
+    },
+    {
+      "id": "5_rare_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 5,
+      "content": "rare_chest"
+    },
+    {
+      "id": "1_epic_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 1,
+      "content": "epic_chest"
+    },
+    {
+      "id": "2_epic_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 2,
+      "content": "epic_chest"
+    },
+    {
+      "id": "3_epic_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 3,
+      "content": "epic_chest"
+    },
+    {
+      "id": "4_epic_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 4,
+      "content": "epic_chest"
+    },
+    {
+      "id": "5_epic_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 5,
+      "content": "epic_chest"
+    },
+    {
+      "id": "1_legendary_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 1,
+      "content": "legendary_chest"
+    },
+    {
+      "id": "2_legendary_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 2,
+      "content": "legendary_chest"
+    },
+    {
+      "id": "3_legendary_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 3,
+      "content": "legendary_chest"
+    },
+    {
+      "id": "4_legendary_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 4,
+      "content": "legendary_chest"
+    },
+    {
+      "id": "5_legendary_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 5,
+      "content": "legendary_chest"
+    },
+    {
+      "id": "reward_common_chest",
+      "group": "A",
+      "weights": 100,
+      "amount": 6,
+      "content": "common_gear"
+    },
+    {
+      "id": "reward_common_chest",
+      "group": "A",
+      "weights": 10,
+      "amount": 2,
+      "content": "rare_gear"
+    },
+    {
+      "id": "reward_common_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 1,
+      "content": "epic_gear"
+    },
+    {
+      "id": "reward_common_chest",
+      "group": "B",
+      "weights": 1,
+      "amount": 50,
+      "content": "coins"
+    },
+    {
+      "id": "reward_common_chest",
+      "group": "B",
+      "weights": 1,
+      "amount": 100,
+      "content": "coins"
+    },
+    {
+      "id": "reward_common_chest",
+      "group": "B",
+      "weights": 1
+    },
+    {
+      "id": "reward_common_chest",
+      "group": "C",
+      "weights": 5,
+      "amount": 3,
+      "content": "common_shard"
+    },
+    {
+      "id": "reward_common_chest",
+      "group": "C",
+      "weights": 3,
+      "amount": 1,
+      "content": "rare_shard"
+    },
+    {
+      "id": "reward_common_chest",
+      "group": "C",
+      "weights": 1,
+      "amount": 1,
+      "content": "epic_shard"
+    },
+    {
+      "id": "reward_common_chest",
+      "group": "C",
+      "weights": 3
+    },
+    {
+      "id": "reward_common_chest",
+      "group": "D",
+      "weights": 5,
+      "amount": 3,
+      "content": "common_shard"
+    },
+    {
+      "id": "reward_common_chest",
+      "group": "D",
+      "weights": 3,
+      "amount": 1,
+      "content": "rare_shard"
+    },
+    {
+      "id": "reward_common_chest",
+      "group": "D",
+      "weights": 1,
+      "amount": 1,
+      "content": "epic_shard"
+    },
+    {
+      "id": "reward_common_chest",
+      "group": "D",
+      "weights": 3
+    },
+    {
+      "id": "reward_common_chest",
+      "group": "E",
+      "weights": 5,
+      "amount": 30,
+      "content": "coins"
+    },
+    {
+      "id": "reward_common_chest",
+      "group": "E",
+      "weights": 3,
+      "amount": 15,
+      "content": "coins"
+    },
+    {
+      "id": "reward_common_chest",
+      "group": "E",
+      "weights": 1,
+      "amount": 10,
+      "content": "gems"
+    },
+    {
+      "id": "reward_common_chest",
+      "group": "E",
+      "weights": 12
+    },
+    {
+      "id": "reward_rare_chest",
+      "group": "A",
+      "weights": 10,
+      "amount": 24,
+      "content": "common_gear"
+    },
+    {
+      "id": "reward_rare_chest",
+      "group": "A",
+      "weights": 100,
+      "amount": 8,
+      "content": "rare_gear"
+    },
+    {
+      "id": "reward_rare_chest",
+      "group": "A",
+      "weights": 10,
+      "amount": 2,
+      "content": "epic_gear"
+    },
+    {
+      "id": "reward_rare_chest",
+      "group": "B",
+      "weights": 1,
+      "amount": 50,
+      "content": "coins"
+    },
+    {
+      "id": "reward_rare_chest",
+      "group": "B",
+      "weights": 1,
+      "amount": 100,
+      "content": "coins"
+    },
+    {
+      "id": "reward_rare_chest",
+      "group": "B",
+      "weights": 1
+    },
+    {
+      "id": "reward_rare_chest",
+      "group": "C",
+      "weights": 5,
+      "amount": 3,
+      "content": "common_shard"
+    },
+    {
+      "id": "reward_rare_chest",
+      "group": "C",
+      "weights": 3,
+      "amount": 1,
+      "content": "rare_shard"
+    },
+    {
+      "id": "reward_rare_chest",
+      "group": "C",
+      "weights": 1,
+      "amount": 1,
+      "content": "epic_shard"
+    },
+    {
+      "id": "reward_rare_chest",
+      "group": "C",
+      "weights": 3
+    },
+    {
+      "id": "reward_rare_chest",
+      "group": "D",
+      "weights": 5,
+      "amount": 3,
+      "content": "common_shard"
+    },
+    {
+      "id": "reward_rare_chest",
+      "group": "D",
+      "weights": 3,
+      "amount": 1,
+      "content": "rare_shard"
+    },
+    {
+      "id": "reward_rare_chest",
+      "group": "D",
+      "weights": 1,
+      "amount": 1,
+      "content": "epic_shard"
+    },
+    {
+      "id": "reward_rare_chest",
+      "group": "D",
+      "weights": 3
+    },
+    {
+      "id": "reward_rare_chest",
+      "group": "E",
+      "weights": 5,
+      "amount": 30,
+      "content": "coins"
+    },
+    {
+      "id": "reward_rare_chest",
+      "group": "E",
+      "weights": 3,
+      "amount": 15,
+      "content": "coins"
+    },
+    {
+      "id": "reward_rare_chest",
+      "group": "E",
+      "weights": 1,
+      "amount": 10,
+      "content": "gems"
+    },
+    {
+      "id": "reward_rare_chest",
+      "group": "E",
+      "weights": 12
+    },
+    {
+      "id": "reward_epic_chest",
+      "group": "A",
+      "weights": 10,
+      "amount": 32,
+      "content": "rare_gear"
+    },
+    {
+      "id": "reward_epic_chest",
+      "group": "A",
+      "weights": 100,
+      "amount": 10,
+      "content": "epic_gear"
+    },
+    {
+      "id": "reward_epic_chest",
+      "group": "A",
+      "weights": 10,
+      "amount": 1,
+      "content": "legendary_gear"
+    },
+    {
+      "id": "reward_epic_chest",
+      "group": "B",
+      "weights": 1,
+      "amount": 50,
+      "content": "coins"
+    },
+    {
+      "id": "reward_epic_chest",
+      "group": "B",
+      "weights": 1,
+      "amount": 100,
+      "content": "coins"
+    },
+    {
+      "id": "reward_epic_chest",
+      "group": "B",
+      "weights": 1
+    },
+    {
+      "id": "reward_epic_chest",
+      "group": "C",
+      "weights": 5,
+      "amount": 3,
+      "content": "common_shard"
+    },
+    {
+      "id": "reward_epic_chest",
+      "group": "C",
+      "weights": 3,
+      "amount": 1,
+      "content": "rare_shard"
+    },
+    {
+      "id": "reward_epic_chest",
+      "group": "C",
+      "weights": 1,
+      "amount": 1,
+      "content": "epic_shard"
+    },
+    {
+      "id": "reward_epic_chest",
+      "group": "C",
+      "weights": 3
+    },
+    {
+      "id": "reward_epic_chest",
+      "group": "D",
+      "weights": 5,
+      "amount": 3,
+      "content": "common_shard"
+    },
+    {
+      "id": "reward_epic_chest",
+      "group": "D",
+      "weights": 3,
+      "amount": 1,
+      "content": "rare_shard"
+    },
+    {
+      "id": "reward_epic_chest",
+      "group": "D",
+      "weights": 1,
+      "amount": 1,
+      "content": "epic_shard"
+    },
+    {
+      "id": "reward_epic_chest",
+      "group": "D",
+      "weights": 3
+    },
+    {
+      "id": "reward_epic_chest",
+      "group": "E",
+      "weights": 5,
+      "amount": 30,
+      "content": "coins"
+    },
+    {
+      "id": "reward_epic_chest",
+      "group": "E",
+      "weights": 3,
+      "amount": 15,
+      "content": "coins"
+    },
+    {
+      "id": "reward_epic_chest",
+      "group": "E",
+      "weights": 1,
+      "amount": 10,
+      "content": "gems"
+    },
+    {
+      "id": "reward_epic_chest",
+      "group": "E",
+      "weights": 12
+    },
+    {
+      "id": "reward_legendary_chest",
+      "group": "A",
+      "weights": 10,
+      "amount": 38,
+      "content": "epic_gear"
+    },
+    {
+      "id": "reward_legendary_chest",
+      "group": "A",
+      "weights": 100,
+      "amount": 4,
+      "content": "legendary_gear"
+    },
+    {
+      "id": "reward_legendary_chest",
+      "group": "B",
+      "weights": 1,
+      "amount": 50,
+      "content": "coins"
+    },
+    {
+      "id": "reward_legendary_chest",
+      "group": "B",
+      "weights": 1,
+      "amount": 100,
+      "content": "coins"
+    },
+    {
+      "id": "reward_legendary_chest",
+      "group": "B",
+      "weights": 1
+    },
+    {
+      "id": "reward_legendary_chest",
+      "group": "C",
+      "weights": 5,
+      "amount": 3,
+      "content": "common_shard"
+    },
+    {
+      "id": "reward_legendary_chest",
+      "group": "C",
+      "weights": 3,
+      "amount": 1,
+      "content": "rare_shard"
+    },
+    {
+      "id": "reward_legendary_chest",
+      "group": "C",
+      "weights": 1,
+      "amount": 1,
+      "content": "epic_shard"
+    },
+    {
+      "id": "reward_legendary_chest",
+      "group": "C",
+      "weights": 3
+    },
+    {
+      "id": "reward_legendary_chest",
+      "group": "D",
+      "weights": 5,
+      "amount": 3,
+      "content": "common_shard"
+    },
+    {
+      "id": "reward_legendary_chest",
+      "group": "D",
+      "weights": 3,
+      "amount": 1,
+      "content": "rare_shard"
+    },
+    {
+      "id": "reward_legendary_chest",
+      "group": "D",
+      "weights": 1,
+      "amount": 1,
+      "content": "epic_shard"
+    },
+    {
+      "id": "reward_legendary_chest",
+      "group": "D",
+      "weights": 3
+    },
+    {
+      "id": "reward_legendary_chest",
+      "group": "E",
+      "weights": 5,
+      "amount": 30,
+      "content": "coins"
+    },
+    {
+      "id": "reward_legendary_chest",
+      "group": "E",
+      "weights": 3,
+      "amount": 15,
+      "content": "coins"
+    },
+    {
+      "id": "reward_legendary_chest",
+      "group": "E",
+      "weights": 1,
+      "amount": 10,
+      "content": "gems"
+    },
+    {
+      "id": "reward_legendary_chest",
+      "group": "E",
+      "weights": 12
+    }
+  ],
+  "gears": [
+    {
+      "id": "hat_common",
+      "rarity": "common",
+      "value": 0.02,
+      "condition": "speed",
+      "HC Value": 10
+    },
+    {
+      "id": "hat_common",
+      "rarity": "common",
+      "value": 0.05,
+      "condition": "2x proba",
+      "HC Value": 10
+    },
+    {
+      "id": "hat_rare",
+      "rarity": "rare",
+      "value": 0.05,
+      "condition": "speed",
+      "HC Value": 30
+    },
+    {
+      "id": "hat_rare",
+      "rarity": "rare",
+      "value": 0.1,
+      "condition": "2x proba",
+      "HC Value": 30
+    },
+    {
+      "id": "hat_epic",
+      "rarity": "epic",
+      "value": 0.1,
+      "condition": "speed",
+      "HC Value": 100
+    },
+    {
+      "id": "hat_epic",
+      "rarity": "epic",
+      "value": 0.15,
+      "condition": "2x proba",
+      "HC Value": 100
+    },
+    {
+      "id": "hat_legendary",
+      "rarity": "legendary",
+      "value": 0.15,
+      "condition": "speed",
+      "HC Value": 1000
+    },
+    {
+      "id": "hat_legendary",
+      "rarity": "legendary",
+      "value": 0.2,
+      "condition": "2x proba",
+      "HC Value": 1000
+    },
+    {
+      "id": "suit_common",
+      "rarity": "common",
+      "value": 0.1,
+      "condition": "speed",
+      "HC Value": 10
+    },
+    {
+      "id": "suit_common",
+      "rarity": "common",
+      "value": 0.05,
+      "condition": "2x proba",
+      "HC Value": 10
+    },
+    {
+      "id": "suit_rare",
+      "rarity": "rare",
+      "value": 0.15,
+      "condition": "speed",
+      "HC Value": 30
+    },
+    {
+      "id": "suit_rare",
+      "rarity": "rare",
+      "value": 0.1,
+      "condition": "2x proba",
+      "HC Value": 30
+    },
+    {
+      "id": "suit_epic",
+      "rarity": "epic",
+      "value": 0.2,
+      "condition": "speed",
+      "HC Value": 100
+    },
+    {
+      "id": "suit_epic",
+      "rarity": "epic",
+      "value": 0.15,
+      "condition": "2x proba",
+      "HC Value": 100
+    },
+    {
+      "id": "suit_legendary",
+      "rarity": "legendary",
+      "value": 0.25,
+      "condition": "speed",
+      "HC Value": 1000
+    },
+    {
+      "id": "suit_legendary",
+      "rarity": "legendary",
+      "value": 0.2,
+      "condition": "2x proba",
+      "HC Value": 1000
+    },
+    {
+      "id": "shoes_common",
+      "rarity": "common",
+      "value": 0.05,
+      "condition": "speed",
+      "HC Value": 10
+    },
+    {
+      "id": "shoes_common",
+      "rarity": "common",
+      "value": 0,
+      "condition": "2x proba",
+      "HC Value": 10
+    },
+    {
+      "id": "shoes_rare",
+      "rarity": "rare",
+      "value": 0.1,
+      "condition": "speed",
+      "HC Value": 30
+    },
+    {
+      "id": "shoes_rare",
+      "rarity": "rare",
+      "value": 0.03,
+      "condition": "2x proba",
+      "HC Value": 30
+    },
+    {
+      "id": "shoes_epic",
+      "rarity": "epic",
+      "value": 0.15,
+      "condition": "speed",
+      "HC Value": 100
+    },
+    {
+      "id": "shoes_epic",
+      "rarity": "epic",
+      "value": 0.05,
+      "condition": "2x proba",
+      "HC Value": 100
+    },
+    {
+      "id": "shoes_legendary",
+      "rarity": "legendary",
+      "value": 0.2,
+      "condition": "speed",
+      "HC Value": 1000
+    },
+    {
+      "id": "shoes_legendary",
+      "rarity": "legendary",
+      "value": 0.1,
+      "condition": "2x proba",
+      "HC Value": 1000
+    }
+  ],
+  "characters": [
+    {
+      "id": "Annie",
+      "upgrade_profile": "common_character",
+      "level": 1,
+      "speed_1": 0.05,
+      "condition_1": "lumberyard",
+      "speed_2": 0.05,
+      "condition_2": "sawmill",
+      "speed_3": 0.05,
+      "condition_3": "military_camp",
+      "2x proba": 0,
+      "condition": "lumberyard"
+    },
+    {
+      "id": "Annie",
+      "upgrade_profile": "common_character",
+      "level": 2,
+      "speed_1": 0.075,
+      "condition_1": "lumberyard",
+      "speed_2": 0.075,
+      "condition_2": "sawmill",
+      "speed_3": 0.075,
+      "condition_3": "military_camp",
+      "2x proba": 0,
+      "condition": "lumberyard"
+    },
+    {
+      "id": "Annie",
+      "upgrade_profile": "common_character",
+      "level": 3,
+      "speed_1": 0.1,
+      "condition_1": "lumberyard",
+      "speed_2": 0.1,
+      "condition_2": "sawmill",
+      "speed_3": 0.1,
+      "condition_3": "military_camp",
+      "2x proba": 0,
+      "condition": "lumberyard"
+    },
+    {
+      "id": "Annie",
+      "upgrade_profile": "common_character",
+      "level": 4,
+      "speed_1": 0.125,
+      "condition_1": "lumberyard",
+      "speed_2": 0.125,
+      "condition_2": "sawmill",
+      "speed_3": 0.125,
+      "condition_3": "military_camp",
+      "2x proba": 0,
+      "condition": "lumberyard"
+    },
+    {
+      "id": "Annie",
+      "upgrade_profile": "common_character",
+      "level": 5,
+      "speed_1": 0.15,
+      "condition_1": "lumberyard",
+      "speed_2": 0.15,
+      "condition_2": "sawmill",
+      "speed_3": 0.15,
+      "condition_3": "military_camp",
+      "2x proba": 0,
+      "condition": "lumberyard"
+    },
+    {
+      "id": "Annie",
+      "upgrade_profile": "common_character",
+      "level": 6,
+      "speed_1": 0.15,
+      "condition_1": "lumberyard",
+      "speed_2": 0.15,
+      "condition_2": "sawmill",
+      "speed_3": 0.15,
+      "condition_3": "military_camp",
+      "2x proba": 0.03,
+      "condition": "lumberyard"
+    },
+    {
+      "id": "Annie",
+      "upgrade_profile": "common_character",
+      "level": 7,
+      "speed_1": 0.15,
+      "condition_1": "lumberyard",
+      "speed_2": 0.15,
+      "condition_2": "sawmill",
+      "speed_3": 0.15,
+      "condition_3": "military_camp",
+      "2x proba": 0.05,
+      "condition": "lumberyard"
+    },
+    {
+      "id": "Annie",
+      "upgrade_profile": "common_character",
+      "level": 8,
+      "speed_1": 0.15,
+      "condition_1": "lumberyard",
+      "speed_2": 0.15,
+      "condition_2": "sawmill",
+      "speed_3": 0.15,
+      "condition_3": "military_camp",
+      "2x proba": 0.07,
+      "condition": "lumberyard"
+    },
+    {
+      "id": "Annie",
+      "upgrade_profile": "common_character",
+      "level": 9,
+      "speed_1": 0.15,
+      "condition_1": "lumberyard",
+      "speed_2": 0.15,
+      "condition_2": "sawmill",
+      "speed_3": 0.15,
+      "condition_3": "military_camp",
+      "2x proba": 0.09,
+      "condition": "lumberyard"
+    },
+    {
+      "id": "Annie",
+      "upgrade_profile": "common_character",
+      "level": 10,
+      "speed_1": 0.15,
+      "condition_1": "lumberyard",
+      "speed_2": 0.15,
+      "condition_2": "sawmill",
+      "speed_3": 0.15,
+      "condition_3": "military_camp",
+      "2x proba": 0.11,
+      "condition": "lumberyard"
+    },
+    {
+      "id": "Annie",
+      "upgrade_profile": "common_character",
+      "level": 11,
+      "speed_1": 0.175,
+      "condition_1": "lumberyard",
+      "speed_2": 0.175,
+      "condition_2": "sawmill",
+      "speed_3": 0.175,
+      "condition_3": "military_camp",
+      "2x proba": 0.11,
+      "condition": "lumberyard"
+    },
+    {
+      "id": "Annie",
+      "upgrade_profile": "common_character",
+      "level": 12,
+      "speed_1": 0.2,
+      "condition_1": "lumberyard",
+      "speed_2": 0.2,
+      "condition_2": "sawmill",
+      "speed_3": 0.2,
+      "condition_3": "military_camp",
+      "2x proba": 0.11,
+      "condition": "lumberyard"
+    },
+    {
+      "id": "Annie",
+      "upgrade_profile": "common_character",
+      "level": 13,
+      "speed_1": 0.225,
+      "condition_1": "lumberyard",
+      "speed_2": 0.225,
+      "condition_2": "sawmill",
+      "speed_3": 0.225,
+      "condition_3": "military_camp",
+      "2x proba": 0.11,
+      "condition": "lumberyard"
+    },
+    {
+      "id": "Annie",
+      "upgrade_profile": "common_character",
+      "level": 14,
+      "speed_1": 0.25,
+      "condition_1": "lumberyard",
+      "speed_2": 0.25,
+      "condition_2": "sawmill",
+      "speed_3": 0.25,
+      "condition_3": "military_camp",
+      "2x proba": 0.11,
+      "condition": "lumberyard"
+    },
+    {
+      "id": "Annie",
+      "upgrade_profile": "common_character",
+      "level": 15,
+      "speed_1": 0.275,
+      "condition_1": "lumberyard",
+      "speed_2": 0.275,
+      "condition_2": "sawmill",
+      "speed_3": 0.275,
+      "condition_3": "military_camp",
+      "2x proba": 0.11,
+      "condition": "lumberyard"
+    },
+    {
+      "id": "Annie",
+      "upgrade_profile": "common_character",
+      "level": 16,
+      "speed_1": 0.275,
+      "condition_1": "lumberyard",
+      "speed_2": 0.275,
+      "condition_2": "sawmill",
+      "speed_3": 0.275,
+      "condition_3": "military_camp",
+      "2x proba": 0.13,
+      "condition": "lumberyard"
+    },
+    {
+      "id": "Annie",
+      "upgrade_profile": "common_character",
+      "level": 17,
+      "speed_1": 0.275,
+      "condition_1": "lumberyard",
+      "speed_2": 0.275,
+      "condition_2": "sawmill",
+      "speed_3": 0.275,
+      "condition_3": "military_camp",
+      "2x proba": 0.15,
+      "condition": "lumberyard"
+    },
+    {
+      "id": "Annie",
+      "upgrade_profile": "common_character",
+      "level": 18,
+      "speed_1": 0.275,
+      "condition_1": "lumberyard",
+      "speed_2": 0.275,
+      "condition_2": "sawmill",
+      "speed_3": 0.275,
+      "condition_3": "military_camp",
+      "2x proba": 0.17,
+      "condition": "lumberyard"
+    },
+    {
+      "id": "Annie",
+      "upgrade_profile": "common_character",
+      "level": 19,
+      "speed_1": 0.275,
+      "condition_1": "lumberyard",
+      "speed_2": 0.275,
+      "condition_2": "sawmill",
+      "speed_3": 0.275,
+      "condition_3": "military_camp",
+      "2x proba": 0.19,
+      "condition": "lumberyard"
+    },
+    {
+      "id": "Annie",
+      "upgrade_profile": "common_character",
+      "level": 20,
+      "speed_1": 0.275,
+      "condition_1": "lumberyard",
+      "speed_2": 0.275,
+      "condition_2": "sawmill",
+      "speed_3": 0.275,
+      "condition_3": "military_camp",
+      "2x proba": 0.21,
+      "condition": "lumberyard"
+    },
+    {
+      "id": "Bertrant",
+      "upgrade_profile": "common_character",
+      "level": 1,
+      "speed_1": 0.05,
+      "condition_1": "mine",
+      "speed_2": 0.05,
+      "condition_2": "forge",
+      "speed_3": 0.05,
+      "condition_3": "magic_tower",
+      "2x proba": 0,
+      "condition": "mine"
+    },
+    {
+      "id": "Bertrant",
+      "upgrade_profile": "common_character",
+      "level": 2,
+      "speed_1": 0.075,
+      "condition_1": "mine",
+      "speed_2": 0.075,
+      "condition_2": "forge",
+      "speed_3": 0.075,
+      "condition_3": "magic_tower",
+      "2x proba": 0,
+      "condition": "mine"
+    },
+    {
+      "id": "Bertrant",
+      "upgrade_profile": "common_character",
+      "level": 3,
+      "speed_1": 0.1,
+      "condition_1": "mine",
+      "speed_2": 0.1,
+      "condition_2": "forge",
+      "speed_3": 0.1,
+      "condition_3": "magic_tower",
+      "2x proba": 0,
+      "condition": "mine"
+    },
+    {
+      "id": "Bertrant",
+      "upgrade_profile": "common_character",
+      "level": 4,
+      "speed_1": 0.125,
+      "condition_1": "mine",
+      "speed_2": 0.125,
+      "condition_2": "forge",
+      "speed_3": 0.125,
+      "condition_3": "magic_tower",
+      "2x proba": 0,
+      "condition": "mine"
+    },
+    {
+      "id": "Bertrant",
+      "upgrade_profile": "common_character",
+      "level": 5,
+      "speed_1": 0.15,
+      "condition_1": "mine",
+      "speed_2": 0.15,
+      "condition_2": "forge",
+      "speed_3": 0.15,
+      "condition_3": "magic_tower",
+      "2x proba": 0,
+      "condition": "mine"
+    },
+    {
+      "id": "Bertrant",
+      "upgrade_profile": "common_character",
+      "level": 6,
+      "speed_1": 0.15,
+      "condition_1": "mine",
+      "speed_2": 0.15,
+      "condition_2": "forge",
+      "speed_3": 0.15,
+      "condition_3": "magic_tower",
+      "2x proba": 0.03,
+      "condition": "mine"
+    },
+    {
+      "id": "Bertrant",
+      "upgrade_profile": "common_character",
+      "level": 7,
+      "speed_1": 0.15,
+      "condition_1": "mine",
+      "speed_2": 0.15,
+      "condition_2": "forge",
+      "speed_3": 0.15,
+      "condition_3": "magic_tower",
+      "2x proba": 0.05,
+      "condition": "mine"
+    },
+    {
+      "id": "Bertrant",
+      "upgrade_profile": "common_character",
+      "level": 8,
+      "speed_1": 0.15,
+      "condition_1": "mine",
+      "speed_2": 0.15,
+      "condition_2": "forge",
+      "speed_3": 0.15,
+      "condition_3": "magic_tower",
+      "2x proba": 0.07,
+      "condition": "mine"
+    },
+    {
+      "id": "Bertrant",
+      "upgrade_profile": "common_character",
+      "level": 9,
+      "speed_1": 0.15,
+      "condition_1": "mine",
+      "speed_2": 0.15,
+      "condition_2": "forge",
+      "speed_3": 0.15,
+      "condition_3": "magic_tower",
+      "2x proba": 0.09,
+      "condition": "mine"
+    },
+    {
+      "id": "Bertrant",
+      "upgrade_profile": "common_character",
+      "level": 10,
+      "speed_1": 0.15,
+      "condition_1": "mine",
+      "speed_2": 0.15,
+      "condition_2": "forge",
+      "speed_3": 0.15,
+      "condition_3": "magic_tower",
+      "2x proba": 0.11,
+      "condition": "mine"
+    },
+    {
+      "id": "Bertrant",
+      "upgrade_profile": "common_character",
+      "level": 11,
+      "speed_1": 0.175,
+      "condition_1": "mine",
+      "speed_2": 0.175,
+      "condition_2": "forge",
+      "speed_3": 0.175,
+      "condition_3": "magic_tower",
+      "2x proba": 0.11,
+      "condition": "mine"
+    },
+    {
+      "id": "Bertrant",
+      "upgrade_profile": "common_character",
+      "level": 12,
+      "speed_1": 0.2,
+      "condition_1": "mine",
+      "speed_2": 0.2,
+      "condition_2": "forge",
+      "speed_3": 0.2,
+      "condition_3": "magic_tower",
+      "2x proba": 0.11,
+      "condition": "mine"
+    },
+    {
+      "id": "Bertrant",
+      "upgrade_profile": "common_character",
+      "level": 13,
+      "speed_1": 0.225,
+      "condition_1": "mine",
+      "speed_2": 0.225,
+      "condition_2": "forge",
+      "speed_3": 0.225,
+      "condition_3": "magic_tower",
+      "2x proba": 0.11,
+      "condition": "mine"
+    },
+    {
+      "id": "Bertrant",
+      "upgrade_profile": "common_character",
+      "level": 14,
+      "speed_1": 0.25,
+      "condition_1": "mine",
+      "speed_2": 0.25,
+      "condition_2": "forge",
+      "speed_3": 0.25,
+      "condition_3": "magic_tower",
+      "2x proba": 0.11,
+      "condition": "mine"
+    },
+    {
+      "id": "Bertrant",
+      "upgrade_profile": "common_character",
+      "level": 15,
+      "speed_1": 0.275,
+      "condition_1": "mine",
+      "speed_2": 0.275,
+      "condition_2": "forge",
+      "speed_3": 0.275,
+      "condition_3": "magic_tower",
+      "2x proba": 0.11,
+      "condition": "mine"
+    },
+    {
+      "id": "Bertrant",
+      "upgrade_profile": "common_character",
+      "level": 16,
+      "speed_1": 0.275,
+      "condition_1": "mine",
+      "speed_2": 0.275,
+      "condition_2": "forge",
+      "speed_3": 0.275,
+      "condition_3": "magic_tower",
+      "2x proba": 0.13,
+      "condition": "mine"
+    },
+    {
+      "id": "Bertrant",
+      "upgrade_profile": "common_character",
+      "level": 17,
+      "speed_1": 0.275,
+      "condition_1": "mine",
+      "speed_2": 0.275,
+      "condition_2": "forge",
+      "speed_3": 0.275,
+      "condition_3": "magic_tower",
+      "2x proba": 0.15,
+      "condition": "mine"
+    },
+    {
+      "id": "Bertrant",
+      "upgrade_profile": "common_character",
+      "level": 18,
+      "speed_1": 0.275,
+      "condition_1": "mine",
+      "speed_2": 0.275,
+      "condition_2": "forge",
+      "speed_3": 0.275,
+      "condition_3": "magic_tower",
+      "2x proba": 0.17,
+      "condition": "mine"
+    },
+    {
+      "id": "Bertrant",
+      "upgrade_profile": "common_character",
+      "level": 19,
+      "speed_1": 0.275,
+      "condition_1": "mine",
+      "speed_2": 0.275,
+      "condition_2": "forge",
+      "speed_3": 0.275,
+      "condition_3": "magic_tower",
+      "2x proba": 0.19,
+      "condition": "mine"
+    },
+    {
+      "id": "Bertrant",
+      "upgrade_profile": "common_character",
+      "level": 20,
+      "speed_1": 0.275,
+      "condition_1": "mine",
+      "speed_2": 0.275,
+      "condition_2": "forge",
+      "speed_3": 0.275,
+      "condition_3": "magic_tower",
+      "2x proba": 0.21,
+      "condition": "mine"
+    },
+    {
+      "id": "Charline",
+      "upgrade_profile": "common_character",
+      "level": 1,
+      "speed_1": 0.05,
+      "condition_1": "sawmill",
+      "speed_2": 0.05,
+      "speed_3": 0.05,
+      "2x proba": 0,
+      "condition": "sawmill"
+    },
+    {
+      "id": "Charline",
+      "upgrade_profile": "common_character",
+      "level": 2,
+      "speed_1": 0.075,
+      "condition_1": "sawmill",
+      "speed_2": 0.075,
+      "speed_3": 0.075,
+      "2x proba": 0,
+      "condition": "sawmill"
+    },
+    {
+      "id": "Charline",
+      "upgrade_profile": "common_character",
+      "level": 3,
+      "speed_1": 0.1,
+      "condition_1": "sawmill",
+      "speed_2": 0.1,
+      "speed_3": 0.1,
+      "2x proba": 0,
+      "condition": "sawmill"
+    },
+    {
+      "id": "Charline",
+      "upgrade_profile": "common_character",
+      "level": 4,
+      "speed_1": 0.125,
+      "condition_1": "sawmill",
+      "speed_2": 0.125,
+      "speed_3": 0.125,
+      "2x proba": 0,
+      "condition": "sawmill"
+    },
+    {
+      "id": "Charline",
+      "upgrade_profile": "common_character",
+      "level": 5,
+      "speed_1": 0.15,
+      "condition_1": "sawmill",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0,
+      "condition": "sawmill"
+    },
+    {
+      "id": "Charline",
+      "upgrade_profile": "common_character",
+      "level": 6,
+      "speed_1": 0.15,
+      "condition_1": "sawmill",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0.03,
+      "condition": "sawmill"
+    },
+    {
+      "id": "Charline",
+      "upgrade_profile": "common_character",
+      "level": 7,
+      "speed_1": 0.15,
+      "condition_1": "sawmill",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0.05,
+      "condition": "sawmill"
+    },
+    {
+      "id": "Charline",
+      "upgrade_profile": "common_character",
+      "level": 8,
+      "speed_1": 0.15,
+      "condition_1": "sawmill",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0.07,
+      "condition": "sawmill"
+    },
+    {
+      "id": "Charline",
+      "upgrade_profile": "common_character",
+      "level": 9,
+      "speed_1": 0.15,
+      "condition_1": "sawmill",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0.09,
+      "condition": "sawmill"
+    },
+    {
+      "id": "Charline",
+      "upgrade_profile": "common_character",
+      "level": 10,
+      "speed_1": 0.15,
+      "condition_1": "sawmill",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0.11,
+      "condition": "sawmill"
+    },
+    {
+      "id": "Charline",
+      "upgrade_profile": "common_character",
+      "level": 11,
+      "speed_1": 0.175,
+      "condition_1": "sawmill",
+      "speed_2": 0.175,
+      "speed_3": 0.175,
+      "2x proba": 0.11,
+      "condition": "sawmill"
+    },
+    {
+      "id": "Charline",
+      "upgrade_profile": "common_character",
+      "level": 12,
+      "speed_1": 0.2,
+      "condition_1": "sawmill",
+      "speed_2": 0.2,
+      "speed_3": 0.2,
+      "2x proba": 0.11,
+      "condition": "sawmill"
+    },
+    {
+      "id": "Charline",
+      "upgrade_profile": "common_character",
+      "level": 13,
+      "speed_1": 0.225,
+      "condition_1": "sawmill",
+      "speed_2": 0.225,
+      "speed_3": 0.225,
+      "2x proba": 0.11,
+      "condition": "sawmill"
+    },
+    {
+      "id": "Charline",
+      "upgrade_profile": "common_character",
+      "level": 14,
+      "speed_1": 0.25,
+      "condition_1": "sawmill",
+      "speed_2": 0.25,
+      "speed_3": 0.25,
+      "2x proba": 0.11,
+      "condition": "sawmill"
+    },
+    {
+      "id": "Charline",
+      "upgrade_profile": "common_character",
+      "level": 15,
+      "speed_1": 0.275,
+      "condition_1": "sawmill",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.11,
+      "condition": "sawmill"
+    },
+    {
+      "id": "Charline",
+      "upgrade_profile": "common_character",
+      "level": 16,
+      "speed_1": 0.275,
+      "condition_1": "sawmill",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.13,
+      "condition": "sawmill"
+    },
+    {
+      "id": "Charline",
+      "upgrade_profile": "common_character",
+      "level": 17,
+      "speed_1": 0.275,
+      "condition_1": "sawmill",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.15,
+      "condition": "sawmill"
+    },
+    {
+      "id": "Charline",
+      "upgrade_profile": "common_character",
+      "level": 18,
+      "speed_1": 0.275,
+      "condition_1": "sawmill",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.17,
+      "condition": "sawmill"
+    },
+    {
+      "id": "Charline",
+      "upgrade_profile": "common_character",
+      "level": 19,
+      "speed_1": 0.275,
+      "condition_1": "sawmill",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.19,
+      "condition": "sawmill"
+    },
+    {
+      "id": "Charline",
+      "upgrade_profile": "common_character",
+      "level": 20,
+      "speed_1": 0.275,
+      "condition_1": "sawmill",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.21,
+      "condition": "sawmill"
+    },
+    {
+      "id": "Dominique",
+      "upgrade_profile": "common_character",
+      "level": 1,
+      "speed_1": 0.05,
+      "condition_1": "forge",
+      "speed_2": 0.05,
+      "speed_3": 0.05,
+      "2x proba": 0,
+      "condition": "forge"
+    },
+    {
+      "id": "Dominique",
+      "upgrade_profile": "common_character",
+      "level": 2,
+      "speed_1": 0.075,
+      "condition_1": "forge",
+      "speed_2": 0.075,
+      "speed_3": 0.075,
+      "2x proba": 0,
+      "condition": "forge"
+    },
+    {
+      "id": "Dominique",
+      "upgrade_profile": "common_character",
+      "level": 3,
+      "speed_1": 0.1,
+      "condition_1": "forge",
+      "speed_2": 0.1,
+      "speed_3": 0.1,
+      "2x proba": 0,
+      "condition": "forge"
+    },
+    {
+      "id": "Dominique",
+      "upgrade_profile": "common_character",
+      "level": 4,
+      "speed_1": 0.125,
+      "condition_1": "forge",
+      "speed_2": 0.125,
+      "speed_3": 0.125,
+      "2x proba": 0,
+      "condition": "forge"
+    },
+    {
+      "id": "Dominique",
+      "upgrade_profile": "common_character",
+      "level": 5,
+      "speed_1": 0.15,
+      "condition_1": "forge",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0,
+      "condition": "forge"
+    },
+    {
+      "id": "Dominique",
+      "upgrade_profile": "common_character",
+      "level": 6,
+      "speed_1": 0.15,
+      "condition_1": "forge",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0.03,
+      "condition": "forge"
+    },
+    {
+      "id": "Dominique",
+      "upgrade_profile": "common_character",
+      "level": 7,
+      "speed_1": 0.15,
+      "condition_1": "forge",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0.05,
+      "condition": "forge"
+    },
+    {
+      "id": "Dominique",
+      "upgrade_profile": "common_character",
+      "level": 8,
+      "speed_1": 0.15,
+      "condition_1": "forge",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0.07,
+      "condition": "forge"
+    },
+    {
+      "id": "Dominique",
+      "upgrade_profile": "common_character",
+      "level": 9,
+      "speed_1": 0.15,
+      "condition_1": "forge",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0.09,
+      "condition": "forge"
+    },
+    {
+      "id": "Dominique",
+      "upgrade_profile": "common_character",
+      "level": 10,
+      "speed_1": 0.15,
+      "condition_1": "forge",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0.11,
+      "condition": "forge"
+    },
+    {
+      "id": "Dominique",
+      "upgrade_profile": "common_character",
+      "level": 11,
+      "speed_1": 0.175,
+      "condition_1": "forge",
+      "speed_2": 0.175,
+      "speed_3": 0.175,
+      "2x proba": 0.11,
+      "condition": "forge"
+    },
+    {
+      "id": "Dominique",
+      "upgrade_profile": "common_character",
+      "level": 12,
+      "speed_1": 0.2,
+      "condition_1": "forge",
+      "speed_2": 0.2,
+      "speed_3": 0.2,
+      "2x proba": 0.11,
+      "condition": "forge"
+    },
+    {
+      "id": "Dominique",
+      "upgrade_profile": "common_character",
+      "level": 13,
+      "speed_1": 0.225,
+      "condition_1": "forge",
+      "speed_2": 0.225,
+      "speed_3": 0.225,
+      "2x proba": 0.11,
+      "condition": "forge"
+    },
+    {
+      "id": "Dominique",
+      "upgrade_profile": "common_character",
+      "level": 14,
+      "speed_1": 0.25,
+      "condition_1": "forge",
+      "speed_2": 0.25,
+      "speed_3": 0.25,
+      "2x proba": 0.11,
+      "condition": "forge"
+    },
+    {
+      "id": "Dominique",
+      "upgrade_profile": "common_character",
+      "level": 15,
+      "speed_1": 0.275,
+      "condition_1": "forge",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.11,
+      "condition": "forge"
+    },
+    {
+      "id": "Dominique",
+      "upgrade_profile": "common_character",
+      "level": 16,
+      "speed_1": 0.275,
+      "condition_1": "forge",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.13,
+      "condition": "forge"
+    },
+    {
+      "id": "Dominique",
+      "upgrade_profile": "common_character",
+      "level": 17,
+      "speed_1": 0.275,
+      "condition_1": "forge",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.15,
+      "condition": "forge"
+    },
+    {
+      "id": "Dominique",
+      "upgrade_profile": "common_character",
+      "level": 18,
+      "speed_1": 0.275,
+      "condition_1": "forge",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.17,
+      "condition": "forge"
+    },
+    {
+      "id": "Dominique",
+      "upgrade_profile": "common_character",
+      "level": 19,
+      "speed_1": 0.275,
+      "condition_1": "forge",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.19,
+      "condition": "forge"
+    },
+    {
+      "id": "Dominique",
+      "upgrade_profile": "common_character",
+      "level": 20,
+      "speed_1": 0.275,
+      "condition_1": "forge",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.21,
+      "condition": "forge"
+    },
+    {
+      "id": "Erix",
+      "upgrade_profile": "common_character",
+      "level": 1,
+      "speed_1": 0.05,
+      "condition_1": "military_camp",
+      "speed_2": 0.05,
+      "speed_3": 0.05,
+      "2x proba": 0,
+      "condition": "military_camp"
+    },
+    {
+      "id": "Erix",
+      "upgrade_profile": "common_character",
+      "level": 2,
+      "speed_1": 0.075,
+      "condition_1": "military_camp",
+      "speed_2": 0.075,
+      "speed_3": 0.075,
+      "2x proba": 0,
+      "condition": "military_camp"
+    },
+    {
+      "id": "Erix",
+      "upgrade_profile": "common_character",
+      "level": 3,
+      "speed_1": 0.1,
+      "condition_1": "military_camp",
+      "speed_2": 0.1,
+      "speed_3": 0.1,
+      "2x proba": 0,
+      "condition": "military_camp"
+    },
+    {
+      "id": "Erix",
+      "upgrade_profile": "common_character",
+      "level": 4,
+      "speed_1": 0.125,
+      "condition_1": "military_camp",
+      "speed_2": 0.125,
+      "speed_3": 0.125,
+      "2x proba": 0,
+      "condition": "military_camp"
+    },
+    {
+      "id": "Erix",
+      "upgrade_profile": "common_character",
+      "level": 5,
+      "speed_1": 0.15,
+      "condition_1": "military_camp",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0,
+      "condition": "military_camp"
+    },
+    {
+      "id": "Erix",
+      "upgrade_profile": "common_character",
+      "level": 6,
+      "speed_1": 0.15,
+      "condition_1": "military_camp",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0.03,
+      "condition": "military_camp"
+    },
+    {
+      "id": "Erix",
+      "upgrade_profile": "common_character",
+      "level": 7,
+      "speed_1": 0.15,
+      "condition_1": "military_camp",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0.05,
+      "condition": "military_camp"
+    },
+    {
+      "id": "Erix",
+      "upgrade_profile": "common_character",
+      "level": 8,
+      "speed_1": 0.15,
+      "condition_1": "military_camp",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0.07,
+      "condition": "military_camp"
+    },
+    {
+      "id": "Erix",
+      "upgrade_profile": "common_character",
+      "level": 9,
+      "speed_1": 0.15,
+      "condition_1": "military_camp",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0.09,
+      "condition": "military_camp"
+    },
+    {
+      "id": "Erix",
+      "upgrade_profile": "common_character",
+      "level": 10,
+      "speed_1": 0.15,
+      "condition_1": "military_camp",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0.11,
+      "condition": "military_camp"
+    },
+    {
+      "id": "Erix",
+      "upgrade_profile": "common_character",
+      "level": 11,
+      "speed_1": 0.175,
+      "condition_1": "military_camp",
+      "speed_2": 0.175,
+      "speed_3": 0.175,
+      "2x proba": 0.11,
+      "condition": "military_camp"
+    },
+    {
+      "id": "Erix",
+      "upgrade_profile": "common_character",
+      "level": 12,
+      "speed_1": 0.2,
+      "condition_1": "military_camp",
+      "speed_2": 0.2,
+      "speed_3": 0.2,
+      "2x proba": 0.11,
+      "condition": "military_camp"
+    },
+    {
+      "id": "Erix",
+      "upgrade_profile": "common_character",
+      "level": 13,
+      "speed_1": 0.225,
+      "condition_1": "military_camp",
+      "speed_2": 0.225,
+      "speed_3": 0.225,
+      "2x proba": 0.11,
+      "condition": "military_camp"
+    },
+    {
+      "id": "Erix",
+      "upgrade_profile": "common_character",
+      "level": 14,
+      "speed_1": 0.25,
+      "condition_1": "military_camp",
+      "speed_2": 0.25,
+      "speed_3": 0.25,
+      "2x proba": 0.11,
+      "condition": "military_camp"
+    },
+    {
+      "id": "Erix",
+      "upgrade_profile": "common_character",
+      "level": 15,
+      "speed_1": 0.275,
+      "condition_1": "military_camp",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.11,
+      "condition": "military_camp"
+    },
+    {
+      "id": "Erix",
+      "upgrade_profile": "common_character",
+      "level": 16,
+      "speed_1": 0.275,
+      "condition_1": "military_camp",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.13,
+      "condition": "military_camp"
+    },
+    {
+      "id": "Erix",
+      "upgrade_profile": "common_character",
+      "level": 17,
+      "speed_1": 0.275,
+      "condition_1": "military_camp",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.15,
+      "condition": "military_camp"
+    },
+    {
+      "id": "Erix",
+      "upgrade_profile": "common_character",
+      "level": 18,
+      "speed_1": 0.275,
+      "condition_1": "military_camp",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.17,
+      "condition": "military_camp"
+    },
+    {
+      "id": "Erix",
+      "upgrade_profile": "common_character",
+      "level": 19,
+      "speed_1": 0.275,
+      "condition_1": "military_camp",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.19,
+      "condition": "military_camp"
+    },
+    {
+      "id": "Erix",
+      "upgrade_profile": "common_character",
+      "level": 20,
+      "speed_1": 0.275,
+      "condition_1": "military_camp",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.21,
+      "condition": "military_camp"
+    },
+    {
+      "id": "Fred",
+      "upgrade_profile": "common_character",
+      "level": 1,
+      "speed_1": 0.05,
+      "condition_1": "magic_tower",
+      "speed_2": 0.05,
+      "speed_3": 0.05,
+      "2x proba": 0,
+      "condition": "magic_tower"
+    },
+    {
+      "id": "Fred",
+      "upgrade_profile": "common_character",
+      "level": 2,
+      "speed_1": 0.075,
+      "condition_1": "magic_tower",
+      "speed_2": 0.075,
+      "speed_3": 0.075,
+      "2x proba": 0,
+      "condition": "magic_tower"
+    },
+    {
+      "id": "Fred",
+      "upgrade_profile": "common_character",
+      "level": 3,
+      "speed_1": 0.1,
+      "condition_1": "magic_tower",
+      "speed_2": 0.1,
+      "speed_3": 0.1,
+      "2x proba": 0,
+      "condition": "magic_tower"
+    },
+    {
+      "id": "Fred",
+      "upgrade_profile": "common_character",
+      "level": 4,
+      "speed_1": 0.125,
+      "condition_1": "magic_tower",
+      "speed_2": 0.125,
+      "speed_3": 0.125,
+      "2x proba": 0,
+      "condition": "magic_tower"
+    },
+    {
+      "id": "Fred",
+      "upgrade_profile": "common_character",
+      "level": 5,
+      "speed_1": 0.15,
+      "condition_1": "magic_tower",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0,
+      "condition": "magic_tower"
+    },
+    {
+      "id": "Fred",
+      "upgrade_profile": "common_character",
+      "level": 6,
+      "speed_1": 0.15,
+      "condition_1": "magic_tower",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0.03,
+      "condition": "magic_tower"
+    },
+    {
+      "id": "Fred",
+      "upgrade_profile": "common_character",
+      "level": 7,
+      "speed_1": 0.15,
+      "condition_1": "magic_tower",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0.05,
+      "condition": "magic_tower"
+    },
+    {
+      "id": "Fred",
+      "upgrade_profile": "common_character",
+      "level": 8,
+      "speed_1": 0.15,
+      "condition_1": "magic_tower",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0.07,
+      "condition": "magic_tower"
+    },
+    {
+      "id": "Fred",
+      "upgrade_profile": "common_character",
+      "level": 9,
+      "speed_1": 0.15,
+      "condition_1": "magic_tower",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0.09,
+      "condition": "magic_tower"
+    },
+    {
+      "id": "Fred",
+      "upgrade_profile": "common_character",
+      "level": 10,
+      "speed_1": 0.15,
+      "condition_1": "magic_tower",
+      "speed_2": 0.15,
+      "speed_3": 0.15,
+      "2x proba": 0.11,
+      "condition": "magic_tower"
+    },
+    {
+      "id": "Fred",
+      "upgrade_profile": "common_character",
+      "level": 11,
+      "speed_1": 0.175,
+      "condition_1": "magic_tower",
+      "speed_2": 0.175,
+      "speed_3": 0.175,
+      "2x proba": 0.11,
+      "condition": "magic_tower"
+    },
+    {
+      "id": "Fred",
+      "upgrade_profile": "common_character",
+      "level": 12,
+      "speed_1": 0.2,
+      "condition_1": "magic_tower",
+      "speed_2": 0.2,
+      "speed_3": 0.2,
+      "2x proba": 0.11,
+      "condition": "magic_tower"
+    },
+    {
+      "id": "Fred",
+      "upgrade_profile": "common_character",
+      "level": 13,
+      "speed_1": 0.225,
+      "condition_1": "magic_tower",
+      "speed_2": 0.225,
+      "speed_3": 0.225,
+      "2x proba": 0.11,
+      "condition": "magic_tower"
+    },
+    {
+      "id": "Fred",
+      "upgrade_profile": "common_character",
+      "level": 14,
+      "speed_1": 0.25,
+      "condition_1": "magic_tower",
+      "speed_2": 0.25,
+      "speed_3": 0.25,
+      "2x proba": 0.11,
+      "condition": "magic_tower"
+    },
+    {
+      "id": "Fred",
+      "upgrade_profile": "common_character",
+      "level": 15,
+      "speed_1": 0.275,
+      "condition_1": "magic_tower",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.11,
+      "condition": "magic_tower"
+    },
+    {
+      "id": "Fred",
+      "upgrade_profile": "common_character",
+      "level": 16,
+      "speed_1": 0.275,
+      "condition_1": "magic_tower",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.13,
+      "condition": "magic_tower"
+    },
+    {
+      "id": "Fred",
+      "upgrade_profile": "common_character",
+      "level": 17,
+      "speed_1": 0.275,
+      "condition_1": "magic_tower",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.15,
+      "condition": "magic_tower"
+    },
+    {
+      "id": "Fred",
+      "upgrade_profile": "common_character",
+      "level": 18,
+      "speed_1": 0.275,
+      "condition_1": "magic_tower",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.17,
+      "condition": "magic_tower"
+    },
+    {
+      "id": "Fred",
+      "upgrade_profile": "common_character",
+      "level": 19,
+      "speed_1": 0.275,
+      "condition_1": "magic_tower",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.19,
+      "condition": "magic_tower"
+    },
+    {
+      "id": "Fred",
+      "upgrade_profile": "common_character",
+      "level": 20,
+      "speed_1": 0.275,
+      "condition_1": "magic_tower",
+      "speed_2": 0.275,
+      "speed_3": 0.275,
+      "2x proba": 0.21,
+      "condition": "magic_tower"
+    }
+  ],
+  "characters_upgrade": [
+    {
+      "id": "common_character"
+    },
+    {
+      "id": "rare_character"
+    },
+    {
+      "id": "epic_character"
+    },
+    {
+      "id": "legendary_character"
+    }
+  ],
+  "upgrade_profile": [
+    {
+      "id": "common_character",
+      "level": 1,
+      "amount": 2,
+      "content": "common_shard"
+    },
+    {
+      "id": "common_character",
+      "level": 2,
+      "amount": 3,
+      "content": "common_shard"
+    },
+    {
+      "id": "common_character",
+      "level": 3,
+      "amount": 4,
+      "content": "common_shard"
+    },
+    {
+      "id": "common_character",
+      "level": 4,
+      "amount": 5,
+      "content": "common_shard"
+    },
+    {
+      "id": "common_character",
+      "level": 5,
+      "amount": 6,
+      "content": "common_shard"
+    },
+    {
+      "id": "common_character",
+      "level": 6,
+      "amount": 10,
+      "content": "common_shard"
+    },
+    {
+      "id": "common_character",
+      "level": 7,
+      "amount": 15,
+      "content": "common_shard"
+    },
+    {
+      "id": "common_character",
+      "level": 8,
+      "amount": 20,
+      "content": "common_shard"
+    },
+    {
+      "id": "common_character",
+      "level": 9,
+      "amount": 25,
+      "content": "common_shard"
+    },
+    {
+      "id": "common_character",
+      "level": 10,
+      "amount": 30,
+      "content": "common_shard"
+    },
+    {
+      "id": "common_character",
+      "level": 11,
+      "amount": 50,
+      "content": "common_shard"
+    },
+    {
+      "id": "common_character",
+      "level": 12,
+      "amount": 100,
+      "content": "common_shard"
+    },
+    {
+      "id": "common_character",
+      "level": 13,
+      "amount": 150,
+      "content": "common_shard"
+    },
+    {
+      "id": "common_character",
+      "level": 14,
+      "amount": 200,
+      "content": "common_shard"
+    },
+    {
+      "id": "common_character",
+      "level": 15,
+      "amount": 250,
+      "content": "common_shard"
+    },
+    {
+      "id": "common_character",
+      "level": 16,
+      "amount": 500,
+      "content": "common_shard"
+    },
+    {
+      "id": "common_character",
+      "level": 17,
+      "amount": 1000,
+      "content": "common_shard"
+    },
+    {
+      "id": "common_character",
+      "level": 18,
+      "amount": 1500,
+      "content": "common_shard"
+    },
+    {
+      "id": "common_character",
+      "level": 19,
+      "amount": 2000,
+      "content": "common_shard"
+    },
+    {
+      "id": "common_character",
+      "level": 20,
+      "amount": 2500,
+      "content": "common_shard"
+    },
+    {
+      "id": "rare_character",
+      "level": 1,
+      "amount": 2,
+      "content": "rare_shard"
+    },
+    {
+      "id": "rare_character",
+      "level": 2,
+      "amount": 3,
+      "content": "rare_shard"
+    },
+    {
+      "id": "rare_character",
+      "level": 3,
+      "amount": 4,
+      "content": "rare_shard"
+    },
+    {
+      "id": "rare_character",
+      "level": 4,
+      "amount": 5,
+      "content": "rare_shard"
+    },
+    {
+      "id": "rare_character",
+      "level": 5,
+      "amount": 6,
+      "content": "rare_shard"
+    },
+    {
+      "id": "rare_character",
+      "level": 6,
+      "amount": 10,
+      "content": "rare_shard"
+    },
+    {
+      "id": "rare_character",
+      "level": 7,
+      "amount": 15,
+      "content": "rare_shard"
+    },
+    {
+      "id": "rare_character",
+      "level": 8,
+      "amount": 20,
+      "content": "rare_shard"
+    },
+    {
+      "id": "rare_character",
+      "level": 9,
+      "amount": 25,
+      "content": "rare_shard"
+    },
+    {
+      "id": "rare_character",
+      "level": 10,
+      "amount": 30,
+      "content": "rare_shard"
+    },
+    {
+      "id": "rare_character",
+      "level": 11,
+      "amount": 50,
+      "content": "rare_shard"
+    },
+    {
+      "id": "rare_character",
+      "level": 12,
+      "amount": 100,
+      "content": "rare_shard"
+    },
+    {
+      "id": "rare_character",
+      "level": 13,
+      "amount": 150,
+      "content": "rare_shard"
+    },
+    {
+      "id": "rare_character",
+      "level": 14,
+      "amount": 200,
+      "content": "rare_shard"
+    },
+    {
+      "id": "rare_character",
+      "level": 15,
+      "amount": 250,
+      "content": "rare_shard"
+    },
+    {
+      "id": "rare_character",
+      "level": 16,
+      "amount": 500,
+      "content": "rare_shard"
+    },
+    {
+      "id": "rare_character",
+      "level": 17,
+      "amount": 1000,
+      "content": "rare_shard"
+    },
+    {
+      "id": "rare_character",
+      "level": 18,
+      "amount": 1500,
+      "content": "rare_shard"
+    },
+    {
+      "id": "rare_character",
+      "level": 19,
+      "amount": 2000,
+      "content": "rare_shard"
+    },
+    {
+      "id": "rare_character",
+      "level": 20,
+      "amount": 2500,
+      "content": "rare_shard"
+    },
+    {
+      "id": "epic_character",
+      "level": 1,
+      "amount": 2,
+      "content": "epic_shard"
+    },
+    {
+      "id": "epic_character",
+      "level": 2,
+      "amount": 3,
+      "content": "epic_shard"
+    },
+    {
+      "id": "epic_character",
+      "level": 3,
+      "amount": 4,
+      "content": "epic_shard"
+    },
+    {
+      "id": "epic_character",
+      "level": 4,
+      "amount": 5,
+      "content": "epic_shard"
+    },
+    {
+      "id": "epic_character",
+      "level": 5,
+      "amount": 6,
+      "content": "epic_shard"
+    },
+    {
+      "id": "epic_character",
+      "level": 6,
+      "amount": 10,
+      "content": "epic_shard"
+    },
+    {
+      "id": "epic_character",
+      "level": 7,
+      "amount": 15,
+      "content": "epic_shard"
+    },
+    {
+      "id": "epic_character",
+      "level": 8,
+      "amount": 20,
+      "content": "epic_shard"
+    },
+    {
+      "id": "epic_character",
+      "level": 9,
+      "amount": 25,
+      "content": "epic_shard"
+    },
+    {
+      "id": "epic_character",
+      "level": 10,
+      "amount": 30,
+      "content": "epic_shard"
+    },
+    {
+      "id": "epic_character",
+      "level": 11,
+      "amount": 50,
+      "content": "epic_shard"
+    },
+    {
+      "id": "epic_character",
+      "level": 12,
+      "amount": 100,
+      "content": "epic_shard"
+    },
+    {
+      "id": "epic_character",
+      "level": 13,
+      "amount": 150,
+      "content": "epic_shard"
+    },
+    {
+      "id": "epic_character",
+      "level": 14,
+      "amount": 200,
+      "content": "epic_shard"
+    },
+    {
+      "id": "epic_character",
+      "level": 15,
+      "amount": 250,
+      "content": "epic_shard"
+    },
+    {
+      "id": "epic_character",
+      "level": 16,
+      "amount": 500,
+      "content": "epic_shard"
+    },
+    {
+      "id": "epic_character",
+      "level": 17,
+      "amount": 1000,
+      "content": "epic_shard"
+    },
+    {
+      "id": "epic_character",
+      "level": 18,
+      "amount": 1500,
+      "content": "epic_shard"
+    },
+    {
+      "id": "epic_character",
+      "level": 19,
+      "amount": 2000,
+      "content": "epic_shard"
+    },
+    {
+      "id": "epic_character",
+      "level": 20,
+      "amount": 2500,
+      "content": "epic_shard"
+    },
+    {
+      "id": "legendary_character",
+      "level": 1,
+      "amount": 2,
+      "content": "legendary_shard"
+    },
+    {
+      "id": "legendary_character",
+      "level": 2,
+      "amount": 3,
+      "content": "legendary_shard"
+    },
+    {
+      "id": "legendary_character",
+      "level": 3,
+      "amount": 4,
+      "content": "legendary_shard"
+    },
+    {
+      "id": "legendary_character",
+      "level": 4,
+      "amount": 5,
+      "content": "legendary_shard"
+    },
+    {
+      "id": "legendary_character",
+      "level": 5,
+      "amount": 6,
+      "content": "legendary_shard"
+    },
+    {
+      "id": "legendary_character",
+      "level": 6,
+      "amount": 10,
+      "content": "legendary_shard"
+    },
+    {
+      "id": "legendary_character",
+      "level": 7,
+      "amount": 15,
+      "content": "legendary_shard"
+    },
+    {
+      "id": "legendary_character",
+      "level": 8,
+      "amount": 20,
+      "content": "legendary_shard"
+    },
+    {
+      "id": "legendary_character",
+      "level": 9,
+      "amount": 25,
+      "content": "legendary_shard"
+    },
+    {
+      "id": "legendary_character",
+      "level": 10,
+      "amount": 30,
+      "content": "legendary_shard"
+    },
+    {
+      "id": "legendary_character",
+      "level": 11,
+      "amount": 50,
+      "content": "legendary_shard"
+    },
+    {
+      "id": "legendary_character",
+      "level": 12,
+      "amount": 100,
+      "content": "legendary_shard"
+    },
+    {
+      "id": "legendary_character",
+      "level": 13,
+      "amount": 150,
+      "content": "legendary_shard"
+    },
+    {
+      "id": "legendary_character",
+      "level": 14,
+      "amount": 200,
+      "content": "legendary_shard"
+    },
+    {
+      "id": "legendary_character",
+      "level": 15,
+      "amount": 250,
+      "content": "legendary_shard"
+    },
+    {
+      "id": "legendary_character",
+      "level": 16,
+      "amount": 500,
+      "content": "legendary_shard"
+    },
+    {
+      "id": "legendary_character",
+      "level": 17,
+      "amount": 1000,
+      "content": "legendary_shard"
+    },
+    {
+      "id": "legendary_character",
+      "level": 18,
+      "amount": 1500,
+      "content": "legendary_shard"
+    },
+    {
+      "id": "legendary_character",
+      "level": 19,
+      "amount": 2000,
+      "content": "legendary_shard"
+    },
+    {
+      "id": "legendary_character",
+      "level": 20,
+      "amount": 2500,
+      "content": "legendary_shard"
+    }
+  ],
+  "unlock_config": [
+    {
+      "id": "tuto_level_0_unlock_config",
+      "machine": "lumberyard",
+      "unlock": 1
+    },
+    {
+      "id": "tuto_level_0_unlock_config",
+      "machine": "mine",
+      "unlock": 2
+    },
+    {
+      "id": "tuto_level_1_unlock_config",
+      "machine": "lumberyard",
+      "unlock": 1
+    },
+    {
+      "id": "tuto_level_1_unlock_config",
+      "machine": "mine",
+      "unlock": 2
+    },
+    {
+      "id": "tuto_level_1_unlock_config",
+      "machine": "sawmill",
+      "unlock": 3
+    },
+    {
+      "id": "tuto_level_1_unlock_config",
+      "machine": "forge",
+      "unlock": 4
+    },
+    {
+      "id": "tuto_level_2_unlock_config",
+      "machine": "lumberyard",
+      "unlock": 1
+    },
+    {
+      "id": "tuto_level_2_unlock_config",
+      "machine": "mine",
+      "unlock": 2
+    },
+    {
+      "id": "tuto_level_2_unlock_config",
+      "machine": "sawmill",
+      "unlock": 3
+    },
+    {
+      "id": "tuto_level_2_unlock_config",
+      "machine": "forge",
+      "unlock": 4
+    },
+    {
+      "id": "tuto_level_2_unlock_config",
+      "machine": "military_camp",
+      "unlock": 4
+    },
+    {
+      "id": "base",
+      "machine": "lumberyard",
+      "unlock": 1
+    },
+    {
+      "id": "base",
+      "machine": "mine",
+      "unlock": 2
+    },
+    {
+      "id": "base",
+      "machine": "sawmill",
+      "unlock": 3
+    },
+    {
+      "id": "base",
+      "machine": "forge",
+      "unlock": 4
+    },
+    {
+      "id": "base",
+      "machine": "military_camp",
+      "unlock": 4
+    },
+    {
+      "id": "base",
+      "machine": "magic_tower",
+      "unlock": 8
     }
   ]
 }

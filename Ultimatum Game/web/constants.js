@@ -13,4 +13,9 @@ export const SPRITES = {
   Worker: "sprites/Worker.png", Coins: "sprites/Coins.png", Customer: "sprites/Customer.png",
 };
 
-export const S = { Setup: "Setup", Play: "Play", Tax: "Tax", Results: "Results", GameOver: "GameOver" };
+export const S = { Menu: "Menu", Setup: "Setup", Play: "Play", Tax: "Tax", Results: "Results", GameOver: "GameOver" };
+
+// Gear slots (ids are prefixed hat_/suit_/shoes_ in the config) and rarity order.
+export const SLOT_EMOJI = { hat: "🎩", suit: "🥋", shoes: "👟" };
+export const RARITIES = ["common", "rare", "epic", "legendary"];
+export const RARITY_LABEL = { common: "Commun", rare: "Rare", epic: "Épique", legendary: "Légendaire" };

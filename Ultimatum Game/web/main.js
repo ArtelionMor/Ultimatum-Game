@@ -5,14 +5,17 @@
 
 import { BASE_MARKETING, SPAWN_INTERVAL, FALL_TIME, S } from "./constants.js";
 import { sprite, $, el, randInt } from "./helpers.js";
-import { normalize } from "./config.js";
+import { normalize, resolveLevel } from "./config.js";
+import { Meta } from "./meta.js";
+import { initMenu, showMenu, hideMenu, openCharacterPanel, gearBadges, renderDropList } from "./menu.js";
 
 // ============================================================
 // Game
 // ============================================================
 const Game = {
-  cfg: null, state: S.Setup, round: 0, prepTimer: 0, waveActive: false,
+  cfg: null, state: S.Menu, round: 0, prepTimer: 0, waveActive: false,
   competitors: [], player: null, lastTime: 0, market: null, timeScale: 1,
+  levelCfg: null, // effective config of the level being played (resolveLevel)
 
   async start() {
     const raw = await fetch("config_export.json").then((r) => r.json());
@@ -40,12 +43,34 @@ const Game = {
     } else {
       raw.outputs.forEach((o) => { const k = o.id + "_" + o.level; (this.cfg._outputs[k] = this.cfg._outputs[k] || []).push({ group: o.group, quantity: o.quantity, weight: o.weight, tiers: [o.tier1, o.tier2, o.tier3, o.tier4, o.tier5, o.tier6] }); });
     }
-    $("#total-rounds").textContent = this.cfg.g.totalRounds;
+    Meta.init(this.cfg);
+    initMenu(this);
     this.applyCheatMode();
-    this.transitionTo(S.Setup);
+    this.transitionTo(S.Menu);
     this.setupInventoryObserver();
     requestAnimationFrame((t) => this.loop(t));
   },
+
+  // ---------- Menu / level flow ----------
+  resolveLevel(levelId) { return resolveLevel(this.cfg, levelId); },
+  enterMenu() { $("#app").classList.add("hidden"); showMenu(); },
+  launchLevel(levelId) {
+    this.levelCfg = this.resolveLevel(levelId);
+    hideMenu();
+    $("#app").classList.remove("hidden");
+    $("#total-rounds").textContent = this.levelCfg.totalRounds;
+    this.transitionTo(S.Setup);
+  },
+  // Abandon or finish -> back to the menu (game loop idles in S.Menu).
+  toMenu() {
+    ["#tax-overlay", "#results-overlay", "#gameover-overlay", "#quit-overlay", "#taxinfo-overlay"].forEach((id) => $(id)?.classList.add("hidden"));
+    this.waveActive = false; this.market = null;
+    const lane = $("#customer-lane"); if (lane) lane.innerHTML = "";
+    this.transitionTo(S.Menu);
+  },
+  // Called by the menu when meta state changes (gear equipped, character upgraded)
+  // so an ongoing run picks the new bonuses up immediately.
+  onMetaChanged() { if (this.state === S.Play) { this.renderWorkers(); } },
 
   // The inventory DOM is deliberately kept stale: stock mutations only flip
   // _invDirty. We flush to the DOM (chiffres + collapse des lignes vides) solely
@@ -73,10 +98,20 @@ const Game = {
   },
 
   transitionTo(n) { this.exitState(this.state); this.state = n; this.enterState(n); },
-  enterState(s) { ({ [S.Setup]: () => this.enterSetup(), [S.Play]: () => this.enterPlay(), [S.Tax]: () => this.enterTax(), [S.Results]: () => this.enterResults(), [S.GameOver]: () => this.enterGameOver() }[s] || (() => {}))(); },
+  enterState(s) { ({ [S.Menu]: () => this.enterMenu(), [S.Setup]: () => this.enterSetup(), [S.Play]: () => this.enterPlay(), [S.Tax]: () => this.enterTax(), [S.Results]: () => this.enterResults(), [S.GameOver]: () => this.enterGameOver() }[s] || (() => {}))(); },
   exitState(s) { void s; },
 
   // ---------- helpers ----------
+  // Per-level lookups: market row (falls back to the last defined round), tax
+  // cost of a round, and the round a machine unlocks (null = not in this level).
+  marketFor(round) {
+    const m = this.levelCfg.market;
+    if (m[round]) return m[round];
+    const keys = Object.keys(m).map(Number);
+    return m[Math.max(...keys)];
+  },
+  taxFor(round) { return this.levelCfg.tax[round] || 0; },
+  machineUnlockRound(id) { const u = this.levelCfg.unlocks; return u[id] != null ? u[id] : null; },
   res(id) { return this.cfg.resources[id]; },
   tierInfo(id, tier) { return this.cfg.resources[id].tiers[tier]; },
   machineDef(id) { return this.cfg.machines.find((m) => m.id === id); },
@@ -147,21 +182,19 @@ const Game = {
   enterSetup() {
     const g = this.cfg.g;
     this.round = 0;
+    this.selectedWorker = null;
     this.player = {
       id: "player", name: "Toi", spriteId: "Worker", isPlayer: true, eliminated: false,
       money: g.startingMoney, stock: this.emptyStock(), storageCap: g.startingStorage,
-      marketing: BASE_MARKETING, totalWorkers: g.startingWorkers, availableWorkers: g.startingWorkers,
+      marketing: BASE_MARKETING, workers: [],
       machines: [], buys: { increaseWorker: 0, increaseMarketting: 0, increaseStorage: 0 },
-      salesThisRound: 0, selectedWorker: false, prepaidTaxRound: null,
+      salesThisRound: 0, prepaidTaxRound: null,
     };
-    this.cfg.machines.forEach((m) => { if (m.unlockAtRound <= 1) this.giveMachine(this.player, m.id); });
+    for (let i = 0; i < g.startingWorkers; i++) this.addWorker();
+    this.cfg.machines.forEach((m) => { const r = this.machineUnlockRound(m.id); if (r != null && r <= 1) this.giveMachine(this.player, m.id); });
 
-    // Pick numberOfCompetitors opponents at random from the pool (clamped to what's available).
-    const pool = this.cfg.competitors.slice();
-    for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
-    const want = g.numberOfCompetitors;
-    const count = (want == null) ? pool.length : Math.max(0, Math.min(want, pool.length));
-    const bots = pool.slice(0, count).map((b) => ({
+    // The level defines the exact bot lineup.
+    const bots = this.levelCfg.bots.map((b) => ({
       id: b.id, name: b.displayName, spriteId: b.spriteId, isPlayer: false, eliminated: false,
       money: b.startingMoney, stock: this.emptyStock(), storageCap: g.startingStorage,
       marketing: BASE_MARKETING, def: b, behavior: b.behavior, upgradesBought: 0,
@@ -172,7 +205,32 @@ const Game = {
     this.transitionTo(S.Play);
   },
 
-  giveMachine(p, id) { if (!p.machines.some((m) => m.id === id)) p.machines.push({ id, level: 1, workers: 0, elapsed: 0, producing: false }); },
+  giveMachine(p, id) { if (!p.machines.some((m) => m.id === id)) p.machines.push({ id, level: 1, crew: [], elapsed: 0, producing: false }); },
+
+  // ---------- Worker entities ----------
+  // Workers are individuals: the player's unlocked characters staff the pool first
+  // (they carry affinity + gear bonuses), then anonymous hires fill the rest.
+  addWorker() {
+    const w = this.player.workers;
+    const usedChars = new Set(w.map((x) => x.charId).filter(Boolean));
+    const nextChar = Meta.ownedCharacters().find((id) => !usedChars.has(id)) || null;
+    w.push({ uid: (this._wuid = (this._wuid || 0) + 1), charId: nextChar, machineId: null });
+  },
+  workerName(w) { return w.charId || "Ouvrier"; },
+  freeWorkers() { return this.player.workers.filter((w) => !w.machineId); },
+  crewOf(m) { return m.crew; },
+  // Total speed bonus of a machine's crew: base per-worker bonus from the machine
+  // level + each character's affinity/gear speed on this machine.
+  crewSpeedBonus(m) {
+    const L = this.lvl(m);
+    return m.crew.reduce((s, w) => s + L.workerSpeedBonus + (w.charId ? Meta.speedBonus(w.charId, m.id) : 0), 0);
+  },
+  // Chance the whole spawn doubles: characters roll together (1 - prod of misses).
+  crewProba2x(m) {
+    let miss = 1;
+    m.crew.forEach((w) => { if (w.charId) miss *= 1 - Math.min(1, Meta.proba2x(w.charId)); });
+    return 1 - miss;
+  },
 
   // ---------- Play (single screen: continuous production + customer waves) ----------
   enterPlay() {
@@ -197,7 +255,7 @@ const Game = {
     this.prepTimer = g.tycoonPhaseDuration;
     this._prepDuration = g.tycoonPhaseDuration;
     this.market = null;
-    this.player.selectedWorker = false;
+    this.selectedWorker = null;
 
     // round income (scheduled) to every alive competitor
     const inc = this.cfg.roundIncome[this.round];
@@ -206,11 +264,9 @@ const Game = {
     // bots plan their whole round now; their stock is revealed gradually during prep
     this.competitors.forEach((c) => { if (!c.isPlayer && !c.eliminated) this.planBot(c); });
 
-    // unlock machines, keep worker assignments, recompute the available pool
-    this.cfg.machines.forEach((m) => { if (m.unlockAtRound === this.round) this.giveMachine(this.player, m.id); });
-    let assigned = 0;
-    this.player.machines.forEach((m) => { m.elapsed = 0; assigned += m.workers; });
-    this.player.availableWorkers = Math.max(0, this.player.totalWorkers - assigned);
+    // unlock machines (per-level schedule), keep worker assignments
+    this.cfg.machines.forEach((m) => { if (this.machineUnlockRound(m.id) === this.round) this.giveMachine(this.player, m.id); });
+    this.player.machines.forEach((m) => { m.elapsed = 0; });
 
     $("#phase-banner").textContent = `Round ${this.round} — Revenu +${inc ? inc.coins : 0}$ · prépare-toi`;
     this.renderInventory(); this.renderShop(); this.renderMachines(); this.renderWorkers();
@@ -251,7 +307,7 @@ const Game = {
     this.waveActive = true;
     // flush any not-yet-revealed bot stock so they reach exactly the planned target
     this.competitors.forEach((c) => { if (!c.isPlayer && !c.eliminated) this.releaseBotStock(c, 1); c.salesThisRound = 0; });
-    const m = this.cfg.market[this.round] || this.cfg.market[Object.keys(this.cfg.market).length];
+    const m = this.marketFor(this.round);
     this.market = { def: m, remaining: m.customers, total: m.customers, served: 0, spawnTimer: 0, active: 0 };
     $("#customer-lane").innerHTML = "";
     $("#phase-banner").textContent = `Vague ${this.round} — les clients arrivent !`;
@@ -266,7 +322,7 @@ const Game = {
   },
 
   lvl(machine) { return this.machineDef(machine.id).levels[machine.level - 1]; },
-  effTime(machine) { const L = this.lvl(machine); return Math.max(0.3, L.productionTime * (1 - L.workerSpeedBonus * machine.workers)); },
+  effTime(machine) { const L = this.lvl(machine); return Math.max(0.3, L.productionTime * (1 - this.crewSpeedBonus(machine))); },
   hasInputs(p, def) { return def.inputs.every((i) => this.stockOf(p, i.type) >= i.quantity); },
   consumeInputs(p, def) { def.inputs.forEach((i) => { let need = i.quantity; const m = p.stock[i.type]; for (const t of Object.keys(m).sort((a, b) => a - b)) { while (need > 0 && m[t] > 0) { m[t]--; need--; } } }); if (p === this.player) this._invDirty = true; },
 
@@ -274,7 +330,7 @@ const Game = {
     const p = this.player;
     p.machines.forEach((m) => {
       const def = this.machineDef(m.id), L = this.lvl(m);
-      const staffed = m.workers >= L.workersRequired;
+      const staffed = m.crew.length >= L.workersRequired;
       if (!staffed) { m.producing = false; m.elapsed = 0; this.setProgress(m, 0); return; }
       const converts = def.inputs.length > 0;
       // A converter needs its inputs to even run.
@@ -291,8 +347,11 @@ const Game = {
         if (converts) { if (!this.hasInputs(p, def)) return; this.consumeInputs(p, def); }
         const out = this.pickOutput(def.outputs, m.level);
         const tier = this.rollTier(out.tiers);   // one tier for the whole spawn (matches the "+N Tier T" popup)
+        // characters' "2x proba" (affinity + gear): chance to double the spawn
+        const doubled = Math.random() < this.crewProba2x(m);
+        const qty = out.quantity * (doubled ? 2 : 1);
         let added = 0;
-        for (let i = 0; i < out.quantity; i++) {
+        for (let i = 0; i < qty; i++) {
           if (this.stockTotal(p) >= p.storageCap) break;
           this.addStock(p, def.outputs, tier, 1);
           this.flyToInventory(m, def.outputs, tier);
@@ -318,7 +377,7 @@ const Game = {
 
   // ---------- Tycoon purchases ----------
   nextWorker() { return this.cfg.purchases.increaseWorker[this.player.buys.increaseWorker]; },
-  buyWorker() { const n = this.nextWorker(); if (!n || this.player.totalWorkers >= this.cfg.g.maxWorkersTotal || this.player.money < n.price) return; this.player.money -= n.price; this.player.buys.increaseWorker++; this.player.totalWorkers += n.effect; this.player.availableWorkers += n.effect; this.renderShop(); this.renderWorkers(); this.refreshHud(); },
+  buyWorker() { const n = this.nextWorker(); if (!n || this.player.workers.length >= this.cfg.g.maxWorkersTotal || this.player.money < n.price) return; this.player.money -= n.price; this.player.buys.increaseWorker++; for (let i = 0; i < n.effect; i++) this.addWorker(); this.renderShop(); this.renderWorkers(); this.refreshHud(); },
   nextMkt() { return this.cfg.purchases.increaseMarketting[this.player.buys.increaseMarketting]; },
   buyMkt() { const n = this.nextMkt(); if (!n || this.player.money < n.price) return; this.player.money -= n.price; this.player.buys.increaseMarketting++; this.player.marketing = n.effect; this.renderShop(); this.refreshHud(); },
   nextStorage() { return this.cfg.purchases.increaseStorage[this.player.buys.increaseStorage]; },
@@ -327,10 +386,36 @@ const Game = {
   nextMachineLevel(m) { const lv = this.machineDef(m.id).levels[m.level]; return lv || null; }, // levels[m.level] is the (m.level+1)th
   upgradeMachine(m) { const nx = this.nextMachineLevel(m); if (!nx || this.player.money < nx.cost) return; this.player.money -= nx.cost; m.level++; this.refreshMachineCard(m); this.renderShop(); this.refreshHud(); },
 
-  // ---------- Workers ----------
-  selectWorker() { if (this.player.availableWorkers <= 0) return; this.player.selectedWorker = !this.player.selectedWorker; this.renderWorkers(); },
-  assignWorker(m) { const L = this.lvl(m); if (m.workers >= L.maxWorkers || this.player.availableWorkers <= 0) return; m.workers++; this.player.availableWorkers--; this.player.selectedWorker = false; this.renderWorkers(); this.refreshMachineCard(m); },
-  removeWorker(m) { if (m.workers <= 0) return; m.workers--; this.player.availableWorkers++; if (m.workers < this.lvl(m).workersRequired) { m.producing = false; m.elapsed = 0; this.setProgress(m, 0); } this.renderWorkers(); this.refreshMachineCard(m); },
+  // ---------- Workers (individual entities) ----------
+  // Tap a free worker to arm it, then tap a machine — or drag & drop directly.
+  selectWorker(w) { this.selectedWorker = this.selectedWorker === w ? null : w; this.renderWorkers(); },
+  // Assign a specific worker (defaults to the armed/first free one) to a machine.
+  assignWorker(m, worker) {
+    const L = this.lvl(m);
+    const w = worker || this.selectedWorker || this.freeWorkers()[0];
+    if (!w || m.crew.length >= L.maxWorkers) return;
+    if (w.machineId) this.unassignWorker(w, { silent: true }); // moving between machines
+    w.machineId = m.id; m.crew.push(w);
+    this.selectedWorker = null;
+    this.renderWorkers(); this.refreshMachineCard(m);
+  },
+  // Pull one worker off a machine (a specific one when given, else the last added).
+  removeWorker(m, worker) {
+    if (!m.crew.length) return;
+    const w = worker || m.crew[m.crew.length - 1];
+    this.unassignWorker(w, { silent: true });
+    this.renderWorkers(); this.refreshMachineCard(m);
+  },
+  unassignWorker(w, opts) {
+    if (!w.machineId) return;
+    const m = this.player.machines.find((x) => x.id === w.machineId);
+    w.machineId = null;
+    if (m) {
+      m.crew = m.crew.filter((x) => x !== w);
+      if (m.crew.length < this.lvl(m).workersRequired) { m.producing = false; m.elapsed = 0; this.setProgress(m, 0); }
+      if (!opts || !opts.silent) { this.renderWorkers(); this.refreshMachineCard(m); }
+    }
+  },
 
   // ---------- Bots ----------
   // Reserve for the next upcoming tax, minus the guaranteed income the bot will still
@@ -339,7 +424,7 @@ const Game = {
   // before its tax). Lets bots invest early instead of hoarding the full tax from round 1.
   taxReserve(b, round) {
     let taxRound = Infinity, cost = 0;
-    for (const r in this.cfg.tax) { const rn = +r; if (rn >= round && rn < taxRound) { taxRound = rn; cost = this.cfg.tax[r]; } }
+    for (const r in this.levelCfg.tax) { const rn = +r; if (rn >= round && rn < taxRound) { taxRound = rn; cost = this.levelCfg.tax[r]; } }
     if (!cost) return 0;
     const passive = b.def.increaseByRound + b.def.upgradeEffect * b.upgradesBought;
     let future = 0;
@@ -359,7 +444,7 @@ const Game = {
 
     // "Will I sell it?" — estimate how many units of each resource are worth making
     // this round, so the bot doesn't overproduce stock it can't move.
-    const mk = this.cfg.market[this.round] || this.cfg.market[Object.keys(this.cfg.market).length];
+    const mk = this.marketFor(this.round);
     const order = this.cfg.resourceOrder;
     const totalW = order.reduce((s, r) => s + (mk.weights[r] || 0), 0) || 1;
     const numAlive = this.competitors.filter((c) => !c.eliminated).length || 1;
@@ -413,16 +498,14 @@ const Game = {
   // The wave whose demand to advertise: during a wave, the next one; during prep, the
   // one about to arrive. Returns null when there is no further wave.
   previewWave() {
-    const keys = Object.keys(this.cfg.market).map(Number);
-    const last = keys.length ? Math.max(...keys) : 0;
     const pr = this.waveActive ? this.round + 1 : this.round;
-    return pr > last ? null : pr;
+    return pr > this.levelCfg.totalRounds ? null : pr;
   },
   renderWavePreview() {
     const wrap = $("#wave-preview"); if (!wrap) return;
     const pr = this.previewWave();
     if (pr == null) { wrap.innerHTML = `<div class="wp-head"><span class="wp-title">Dernière vague</span></div>`; return; }
-    const mk = this.cfg.market[pr];
+    const mk = this.marketFor(pr);
     const order = this.cfg.resourceOrder;
     const totalW = order.reduce((s, r) => s + (mk.weights[r] || 0), 0) || 1;
     const chips = order.filter((r) => (mk.weights[r] || 0) > 0)
@@ -531,7 +614,7 @@ const Game = {
 
   // ---------- Tax ----------
   enterTax() {
-    const cost = this.cfg.tax[this.round] || 0;
+    const cost = this.taxFor(this.round);
     const p = this.player;
     const prepaid = p.prepaidTaxRound === this.round; // player already settled this tax in advance
     // Charge every alive competitor; the player is skipped when they've prepaid.
@@ -557,10 +640,10 @@ const Game = {
   // current round still counts as "upcoming"). null once no tax remains this game.
   nextTaxInfo() {
     let round = Infinity, cost = 0;
-    const last = this.cfg.g.totalRounds;
-    for (const r in this.cfg.tax) {
+    const last = this.levelCfg.totalRounds;
+    for (const r in this.levelCfg.tax) {
       const rn = +r;
-      if (rn >= this.round && rn <= last && rn < round) { round = rn; cost = this.cfg.tax[r]; }
+      if (rn >= this.round && rn <= last && rn < round) { round = rn; cost = this.levelCfg.tax[r]; }
     }
     return round === Infinity ? null : { round, cost };
   },
@@ -613,19 +696,19 @@ const Game = {
 
   renderTaxInfo() {
     const body = $("#taxinfo-body"); if (!body) return;
-    const p = this.player, total = this.cfg.g.totalRounds;
+    const p = this.player, total = this.levelCfg.totalRounds;
     const info = this.nextTaxInfo();
 
     // Round timeline with tax markers (🏛️ = tax round).
     let dots = "";
     for (let r = 1; r <= total; r++) {
-      const taxHere = this.cfg.tax[r] != null && r <= total;
+      const taxHere = this.taxFor(r) > 0;
       const cls = ["tx-dot"];
       if (r < this.round) cls.push("past");
       if (r === this.round) cls.push("now");
       if (taxHere) cls.push("tax");
       if (info && r === info.round) cls.push("next");
-      dots += `<div class="${cls.join(" ")}" title="Round ${r}${taxHere ? " · impôt " + this.cfg.tax[r] + "$" : ""}">${taxHere ? "🏛️" : ""}</div>`;
+      dots += `<div class="${cls.join(" ")}" title="Round ${r}${taxHere ? " · impôt " + this.taxFor(r) + "$" : ""}">${taxHere ? "🏛️" : ""}</div>`;
     }
 
     let card;
@@ -682,7 +765,7 @@ const Game = {
     const ranked = [...this.competitors].sort((a, b) => b.money - a.money); // copie: ne pas réordonner this.competitors
     this.renderResults(ranked, []);
 
-    const end = this.round >= this.cfg.g.totalRounds;
+    const end = this.round >= this.levelCfg.totalRounds;
     $("#results-continue").textContent = end ? "Voir le résultat" : "Round suivant";
     $("#results-continue").onclick = () => { $("#results-overlay").classList.add("hidden"); this.transitionTo(end ? S.GameOver : S.Play); };
   },
@@ -690,10 +773,25 @@ const Game = {
   enterGameOver() {
     const ranked = [...this.competitors].sort((a, b) => (a.eliminated !== b.eliminated ? (a.eliminated ? 1 : -1) : b.money - a.money));
     const won = !this.player.eliminated && ranked[0] === this.player;
-    $("#gameover-title").textContent = won ? "Victoire !" : "Éliminé";
+    $("#gameover-title").textContent = won ? "Victoire !" : "Défaite";
     $("#gameover-title").style.color = won ? "var(--ok)" : "var(--danger)";
     $("#final-score").textContent = this.player.money;
     $("#gameover-rank").textContent = won ? "Tu domines le marché 👑" : `${ranked.indexOf(this.player) + 1}ᵉ sur ${this.competitors.length}`;
+
+    // Victory rewards (once per one-shot level, every time in endless).
+    const rewards = $("#gameover-rewards"); rewards.innerHTML = "";
+    if (won && this.levelCfg) {
+      const drops = Meta.completeLevel(this.levelCfg.id);
+      if (drops.length) {
+        rewards.appendChild(el("div", "cp-section", "Récompenses"));
+        const list = el("div", "go-drops");
+        renderDropList(list, drops);
+        rewards.appendChild(list);
+      }
+    }
+    // Replay only when the level is still playable (lost one-shot, or endless).
+    const replayable = this.levelCfg && (Meta.isEndless(this.levelCfg.id) || !Meta.isCompleted(this.levelCfg.id));
+    $("#replay-btn").style.display = replayable ? "" : "none";
     $("#gameover-overlay").classList.remove("hidden");
   },
 
@@ -735,7 +833,7 @@ const Game = {
   isStaffedFor(rid) {
     return this.player.machines.some((m) => {
       const def = this.machineDef(m.id);
-      return def && def.outputs === rid && m.workers >= this.lvl(m).workersRequired;
+      return def && def.outputs === rid && m.crew.length >= this.lvl(m).workersRequired;
     });
   },
 
@@ -866,7 +964,7 @@ const Game = {
       this._shopBtns.push({ b, disFn });
     };
     const w = this.nextWorker();
-    mk(`<img src="${sprite("Worker")}">`, `Ouvrier ×${this.player.totalWorkers}`, w ? "$" + w.price : "MAX", () => !w || this.player.totalWorkers >= this.cfg.g.maxWorkersTotal || this.player.money < w.price, () => this.buyWorker());
+    mk(`<img src="${sprite("Worker")}">`, `Ouvrier ×${this.player.workers.length}`, w ? "$" + w.price : "MAX", () => !w || this.player.workers.length >= this.cfg.g.maxWorkersTotal || this.player.money < w.price, () => this.buyWorker());
     const mkt = this.nextMkt();
     mk("📣", `Mkt ${this.player.marketing.toFixed(1)}`, mkt ? "$" + mkt.price : "MAX", () => !mkt || this.player.money < mkt.price, () => this.buyMkt());
     const st = this.nextStorage();
@@ -900,7 +998,7 @@ const Game = {
     rm.onclick = (e) => { e.stopPropagation(); this.removeWorker(m); };
     ad.onclick = (e) => { e.stopPropagation(); this.assignWorker(m); };
     up.onclick = (e) => { e.stopPropagation(); this.upgradeMachine(m); };
-    node.onclick = () => { if (this.player.selectedWorker) this.assignWorker(m); };
+    node.onclick = () => { if (this.selectedWorker) this.assignWorker(m); };
     m._refs = { name, slots, ad, rm, up }; this.updateMachine(m, node); return node;
   },
   recipeHtml(def) {
@@ -914,25 +1012,112 @@ const Game = {
     const def = this.machineDef(m.id), L = this.lvl(m), r = m._refs;
     r.name.innerHTML = `${def.displayName} <span class="lvl">Nv.${m.level}</span>`;
     r.slots.innerHTML = "";
-    for (let i = 0; i < L.maxWorkers; i++) r.slots.appendChild(el("div", "slot" + (i < m.workers ? " filled" : (i < L.workersRequired ? " required" : ""))));
-    r.ad.disabled = m.workers >= L.maxWorkers || this.player.availableWorkers <= 0;
-    r.rm.disabled = m.workers <= 0;
+    for (let i = 0; i < L.maxWorkers; i++) {
+      if (i < m.crew.length) r.slots.appendChild(this.workerChip(m.crew[i]));
+      else r.slots.appendChild(el("div", "slot" + (i < L.workersRequired ? " required" : "")));
+    }
+    r.ad.disabled = m.crew.length >= L.maxWorkers || this.freeWorkers().length <= 0;
+    r.rm.disabled = m.crew.length <= 0;
     const nx = this.nextMachineLevel(m);
     if (nx) { r.up.innerHTML = `⬆ $${nx.cost}`; r.up.disabled = this.player.money < nx.cost; } else { r.up.innerHTML = "⬆ MAX"; r.up.disabled = true; }
     node.classList.toggle("producing", m.producing);
-    node.classList.toggle("assignable", this.player.selectedWorker && m.workers < L.maxWorkers);
+    node.classList.toggle("assignable", !!this.selectedWorker && m.crew.length < L.maxWorkers);
   },
   setProgress(m, ratio) { if (m._node) m._node.querySelector(".progress > div").style.width = (ratio * 100) + "%"; },
 
-  // --- workers ---
+  // --- workers (bar + chips + drag & drop) ---
   renderWorkers() {
     const wrap = $("#worker-icons"); wrap.innerHTML = "";
-    for (let i = 0; i < this.player.availableWorkers; i++) { const w = el("div", "worker" + (this.player.selectedWorker && i === 0 ? " selected" : "")); w.innerHTML = `<img src="${sprite("Worker")}">`; w.onclick = () => this.selectWorker(); wrap.appendChild(w); }
+    this.freeWorkers().forEach((w) => wrap.appendChild(this.workerChip(w)));
+    const free = this.freeWorkers().length;
     const hint = $("#worker-hint");
-    hint.textContent = this.player.availableWorkers === 0 ? "Tous tes ouvriers sont assignés" : this.player.selectedWorker ? "Touche une machine (+)" : `${this.player.availableWorkers} ouvrier(s) dispo`;
-    hint.classList.toggle("active", !!this.player.selectedWorker);
+    hint.textContent = free === 0 ? "Tous tes ouvriers sont assignés"
+      : this.selectedWorker ? "Touche une machine (+)"
+      : `${free} dispo — glisse-les sur les machines`;
+    hint.classList.toggle("active", !!this.selectedWorker);
     this.player.machines.forEach((m) => { if (m._node) this.updateMachine(m, m._node); });
     this.renderShop();
+  },
+
+  // One worker chip: avatar + (for characters) name, gear badges and level ring.
+  // Tap: character -> detail panel; generic free -> arm for tap-assign; generic
+  // assigned -> back to the pool. Drag & drop works for every chip.
+  workerChip(w) {
+    const isChar = !!w.charId;
+    const chip = el("div", "wchip" + (isChar ? " char" : "") + (this.selectedWorker === w ? " selected" : "") + (w.machineId ? " onmachine" : ""));
+    chip.innerHTML =
+      `<span class="wava"><img src="${sprite("Worker")}" draggable="false">` +
+      (isChar ? `<span class="wgears">${gearBadges(w.charId)}</span>` : "") + `</span>` +
+      (isChar ? `<span class="wname">${w.charId}<span class="wlvl">${Meta.charLevel(w.charId)}</span></span>` : "");
+    this.makeDraggable(chip, w);
+    return chip;
+  },
+  workerChipClick(w) {
+    if (w.charId) { openCharacterPanel(w.charId); return; }
+    if (w.machineId) { this.unassignWorker(w); return; }
+    this.selectWorker(w);
+  },
+
+  // Pointer-based drag & drop (touch friendly): a ghost follows the finger; drop
+  // on a machine assigns/moves the worker, drop on the worker bar recalls it.
+  // A small move threshold keeps plain taps working as clicks.
+  makeDraggable(chip, w) {
+    chip.addEventListener("pointerdown", (e) => {
+      if (e.button !== 0 && e.pointerType === "mouse") return;
+      e.preventDefault();
+      const start = { x: e.clientX, y: e.clientY };
+      let ghost = null, dragging = false;
+      const move = (ev) => {
+        if (!dragging && Math.hypot(ev.clientX - start.x, ev.clientY - start.y) > 8) {
+          dragging = true;
+          ghost = chip.cloneNode(true); ghost.classList.add("drag-ghost");
+          document.body.appendChild(ghost);
+          chip.classList.add("drag-src");
+          document.body.classList.add("dragging-worker");
+        }
+        if (dragging && ghost) {
+          ghost.style.left = ev.clientX + "px"; ghost.style.top = ev.clientY + "px";
+          this.highlightDropTarget(ev);
+        }
+      };
+      const up = (ev) => {
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", up);
+        window.removeEventListener("pointercancel", up);
+        document.body.classList.remove("dragging-worker");
+        if (ghost) ghost.remove();
+        chip.classList.remove("drag-src");
+        this.clearDropHighlight();
+        if (!dragging) { this.workerChipClick(w); return; }
+        const target = this.dropTargetAt(ev);
+        if (target === "bar") this.unassignWorker(w);
+        else if (target) this.assignWorker(target, w);
+      };
+      window.addEventListener("pointermove", move);
+      window.addEventListener("pointerup", up);
+      window.addEventListener("pointercancel", up);
+    });
+  },
+  dropTargetAt(ev) {
+    const under = document.elementFromPoint(ev.clientX, ev.clientY);
+    if (!under) return null;
+    if (under.closest("#worker-bar")) return "bar";
+    const node = under.closest(".machine");
+    if (!node) return null;
+    return this.player.machines.find((x) => x._node === node) || null;
+  },
+  highlightDropTarget(ev) {
+    const t = this.dropTargetAt(ev);
+    this.player.machines.forEach((m) => {
+      if (!m._node) return;
+      const ok = t === m && m.crew.length < this.lvl(m).maxWorkers;
+      m._node.classList.toggle("drop-ok", ok);
+    });
+    $("#worker-bar").classList.toggle("drop-ok", t === "bar");
+  },
+  clearDropHighlight() {
+    this.player.machines.forEach((m) => { if (m._node) m._node.classList.remove("drop-ok"); });
+    $("#worker-bar").classList.remove("drop-ok");
   },
 
   // --- suppliers / counters (market) ---
@@ -1141,14 +1326,14 @@ const Game = {
   // Jump straight to the prep phase of wave `n`: unlock every machine due by then,
   // reset the wave/market, and rebuild the round from startPrep (income, bots, HUD).
   cheatGoToWave(n) {
-    if (!this.cheatsEnabled() || !this.cfg || !this.player) return;
+    if (!this.cheatsEnabled() || !this.cfg || !this.player || !this.levelCfg) return;
     n = Math.max(1, Math.floor(n || 1));
     ["#tax-overlay", "#results-overlay", "#gameover-overlay", "#cheat-overlay"].forEach((id) => $(id)?.classList.add("hidden"));
     if (!this._screenReady) this.setupScreen();
     this.waveActive = false;
     this.market = null;
     const lane = $("#customer-lane"); if (lane) lane.innerHTML = "";
-    this.cfg.machines.forEach((m) => { if (m.unlockAtRound <= n) this.giveMachine(this.player, m.id); });
+    this.cfg.machines.forEach((m) => { const r = this.machineUnlockRound(m.id); if (r != null && r <= n) this.giveMachine(this.player, m.id); });
     this.round = n - 1;      // startPrep() increments to n
     this.state = S.Play;
     this.startPrep();
@@ -1156,6 +1341,14 @@ const Game = {
 };
 
 $("#replay-btn").addEventListener("click", () => { $("#gameover-overlay").classList.add("hidden"); Game.transitionTo(S.Setup); });
+$("#gameover-menu-btn")?.addEventListener("click", () => Game.toMenu());
+// Home button: confirm before abandoning a running level.
+$("#hud-home")?.addEventListener("click", () => {
+  if (Game.state === S.Play || Game.state === S.Tax || Game.state === S.Results) $("#quit-overlay").classList.remove("hidden");
+  else Game.toMenu();
+});
+$("#quit-confirm")?.addEventListener("click", () => Game.toMenu());
+$("#quit-cancel")?.addEventListener("click", () => $("#quit-overlay").classList.add("hidden"));
 $("#convert-close").addEventListener("click", () => Game.closeConvert());
 $("#convert-overlay").addEventListener("click", (e) => { if (e.target.id === "convert-overlay") Game.closeConvert(); });
 $("#competitor-close").addEventListener("click", () => Game.closeCompetitor());
