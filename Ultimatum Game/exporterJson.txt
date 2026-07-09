@@ -1,0 +1,72 @@
+function exportAllSheetsToJSON() {
+  // Récupère le tableur actif
+  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  var sheets = spreadsheet.getSheets();
+  var jsonResult = {};
+
+  // Parcourt toutes les feuilles du document
+  sheets.forEach(function(sheet) {
+    var sheetName = sheet.getName();
+    var data = sheet.getDataRange().getValues();
+    
+    // Vérifie s'il y a des données (au moins la ligne d'en-tête)
+    if (data.length > 0) {
+      var headers = data[0];
+      var sheetData = [];
+      
+      // Parcourt les lignes (en ignorant la première ligne d'en-tête)
+      for (var i = 1; i < data.length; i++) {
+        var row = data[i];
+        var rowObject = {};
+        var isRowEmpty = true;
+        
+        for (var j = 0; j < headers.length; j++) {
+          // On évite d'inclure les cellules vides pour garder le JSON propre
+          if (row[j] !== "") {
+            rowObject[headers[j]] = row[j];
+            isRowEmpty = false;
+          }
+        }
+        
+        // N'ajoute l'objet que si la ligne contient au moins une valeur
+        if (!isRowEmpty) {
+          sheetData.push(rowObject);
+        }
+      }
+      // Assigne les données de la feuille à son nom
+      jsonResult[sheetName] = sheetData;
+    }
+  });
+
+  // Convertit l'objet JavaScript en chaîne JSON formatée (avec une indentation de 2 espaces)
+  var jsonString = JSON.stringify(jsonResult, null, 2);
+  
+  // Récupère la racine de votre Google Drive
+  var folder = DriveApp.getRootFolder();
+  var fileName = spreadsheet.getName() + "_export.json";
+  
+  // Cherche si le fichier existe déjà
+  var existingFiles = folder.getFilesByName(fileName);
+  var file;
+  
+  if (existingFiles.hasNext()) {
+    // Si le fichier existe, on le récupère et on remplace son contenu (écrasement)
+    file = existingFiles.next();
+    file.setContent(jsonString);
+  } else {
+    // Si le fichier n'existe pas, on le crée
+    file = folder.createFile(fileName, jsonString, MimeType.PLAIN_TEXT);
+  }
+  
+  // Affiche un message dans le tableur avec l'URL du fichier mis à jour ou créé
+  var ui = SpreadsheetApp.getUi();
+  ui.alert("Exportation réussie !", "Le fichier JSON a été mis à jour dans votre Google Drive.\nURL : " + file.getUrl(), ui.ButtonSet.OK);
+}
+
+// Ajoute un menu personnalisé dans le tableur pour lancer le script plus facilement
+function onOpen() {
+  var ui = SpreadsheetApp.getUi();
+  ui.createMenu('Export JSON')
+      .addItem('Exporter tout en JSON', 'exportAllSheetsToJSON')
+      .addToUi();
+}

@@ -1,0 +1,5288 @@
+{
+  "general": [
+    {
+      "id": "startingMoney",
+      "value": 120
+    },
+    {
+      "id": "totalRounds",
+      "value": 20
+    },
+    {
+      "id": "tycoonPhaseDuration",
+      "value": 20
+    },
+    {
+      "id": "startingWorkers",
+      "value": 1
+    },
+    {
+      "id": "maxWorkersTotal",
+      "value": 15
+    },
+    {
+      "id": "startingStorage",
+      "value": 20
+    },
+    {
+      "id": "minimalPercentage",
+      "value": 0.1
+    },
+    {
+      "id": "customerSpeed",
+      "value": 0.5
+    },
+    {
+      "id": "customerRate",
+      "value": 1
+    },
+    {
+      "id": "numberOfCompetitors",
+      "value": 3
+    },
+    {
+      "id": "earlyTaxDiscount",
+      "value": 5
+    },
+    {
+      "id": "enableCheats",
+      "value": true
+    }
+  ],
+  "~Simulator": [
+    {
+      "Wave": 1,
+      "Total Market": 136,
+      "Part of competitors if equal and equal marketting": 34,
+      "Impact of marketting": 47.599999999999994
+    },
+    {
+      "Wave": 2,
+      "Total Market": 214.66666666666666,
+      "Part of competitors if equal and equal marketting": 53.666666666666664,
+      "Impact of marketting": 75.13333333333333
+    },
+    {
+      "Wave": 3,
+      "Total Market": 283.66666666666663,
+      "Part of competitors if equal and equal marketting": 70.91666666666666,
+      "Impact of marketting": 99.28333333333332
+    },
+    {
+      "Wave": 4,
+      "Total Market": 481.75,
+      "Part of competitors if equal and equal marketting": 120.4375,
+      "Impact of marketting": 168.61249999999998
+    },
+    {
+      "Wave": 5,
+      "Total Market": 574,
+      "Part of competitors if equal and equal marketting": 143.5,
+      "Tax": 250,
+      "Impact of marketting": 200.89999999999998
+    },
+    {
+      "Wave": 6,
+      "Total Market": 601.6,
+      "Part of competitors if equal and equal marketting": 150.4,
+      "Impact of marketting": 210.56
+    },
+    {
+      "Wave": 7,
+      "Total Market": 667.4,
+      "Part of competitors if equal and equal marketting": 166.85,
+      "Tax": 280,
+      "Impact of marketting": 233.58999999999997
+    },
+    {
+      "Wave": 8,
+      "Total Market": 790,
+      "Part of competitors if equal and equal marketting": 197.5,
+      "Impact of marketting": 276.5
+    },
+    {
+      "Wave": 9,
+      "Total Market": 880,
+      "Part of competitors if equal and equal marketting": 220,
+      "Tax": 500,
+      "Impact of marketting": 308
+    },
+    {
+      "Wave": 10,
+      "Total Market": 3185,
+      "Part of competitors if equal and equal marketting": 796.25,
+      "Impact of marketting": 1114.75
+    },
+    {
+      "Wave": 11,
+      "Total Market": 3477.5,
+      "Part of competitors if equal and equal marketting": 869.375,
+      "Tax": 1000,
+      "Impact of marketting": 1217.125
+    },
+    {
+      "Wave": 12,
+      "Total Market": 3496,
+      "Part of competitors if equal and equal marketting": 874,
+      "Impact of marketting": 1223.6
+    },
+    {
+      "Wave": 13,
+      "Total Market": 3708.7999999999997,
+      "Part of competitors if equal and equal marketting": 927.1999999999999,
+      "Tax": 1100,
+      "Impact of marketting": 1298.08
+    },
+    {
+      "Wave": 14,
+      "Total Market": 4225,
+      "Part of competitors if equal and equal marketting": 1056.25,
+      "Impact of marketting": 1478.75
+    },
+    {
+      "Wave": 15,
+      "Total Market": 3845.6666666666665,
+      "Part of competitors if equal and equal marketting": 961.4166666666666,
+      "Tax": 1100,
+      "Impact of marketting": 1345.9833333333331
+    },
+    {
+      "Wave": 16,
+      "Total Market": 2384,
+      "Part of competitors if equal and equal marketting": 596,
+      "Impact of marketting": 834.4
+    },
+    {
+      "Wave": 17,
+      "Total Market": 2528,
+      "Part of competitors if equal and equal marketting": 632,
+      "Impact of marketting": 884.8
+    },
+    {
+      "Wave": 18,
+      "Total Market": 5395,
+      "Part of competitors if equal and equal marketting": 1348.75,
+      "Impact of marketting": 1888.2499999999998
+    },
+    {
+      "Wave": 19,
+      "Total Market": 5622.5,
+      "Part of competitors if equal and equal marketting": 1405.625,
+      "Impact of marketting": 1967.8749999999998
+    },
+    {
+      "Wave": 20,
+      "Total Market": 21312.75,
+      "Part of competitors if equal and equal marketting": 5328.1875,
+      "Tax": 4500,
+      "Impact of marketting": 7459.4625
+    },
+    {
+      "Wave": 21,
+      "Total Market": 22372.5,
+      "Part of competitors if equal and equal marketting": 5593.125,
+      "Impact of marketting": 7830.374999999999
+    },
+    {
+      "Wave": 22,
+      "Total Market": 20700,
+      "Part of competitors if equal and equal marketting": 5175,
+      "Impact of marketting": 7244.999999999999
+    },
+    {
+      "Wave": 23,
+      "Total Market": 19771.399999999998,
+      "Part of competitors if equal and equal marketting": 4942.849999999999,
+      "Impact of marketting": 6919.989999999999
+    },
+    {
+      "Wave": 24,
+      "Total Market": 11338.25,
+      "Part of competitors if equal and equal marketting": 2834.5625,
+      "Impact of marketting": 3968.3875
+    },
+    {
+      "Wave": 25,
+      "Total Market": 23184,
+      "Part of competitors if equal and equal marketting": 5796,
+      "Tax": 5000,
+      "Impact of marketting": 8114.4
+    },
+    {
+      "Wave": 26,
+      "Total Market": 35264,
+      "Part of competitors if equal and equal marketting": 8816,
+      "Impact of marketting": 12342.4
+    },
+    {
+      "Wave": 27,
+      "Total Market": 36632,
+      "Part of competitors if equal and equal marketting": 9158,
+      "Impact of marketting": 12821.199999999999
+    },
+    {
+      "Wave": 28,
+      "Total Market": 25978.5,
+      "Part of competitors if equal and equal marketting": 6494.625,
+      "Impact of marketting": 9092.474999999999
+    },
+    {
+      "Wave": 29,
+      "Total Market": 26910,
+      "Part of competitors if equal and equal marketting": 6727.5,
+      "Impact of marketting": 9418.5
+    },
+    {
+      "Wave": 30,
+      "Total Market": 59429,
+      "Part of competitors if equal and equal marketting": 14857.25,
+      "Tax": 10000,
+      "Impact of marketting": 20800.149999999998
+    },
+    {
+      "Wave": 31,
+      "Total Market": 16280,
+      "Part of competitors if equal and equal marketting": 4070,
+      "Impact of marketting": 5698
+    },
+    {
+      "Wave": 32,
+      "Total Market": 16753.600000000002,
+      "Part of competitors if equal and equal marketting": 4188.400000000001,
+      "Impact of marketting": 5863.76
+    },
+    {
+      "Wave": 33,
+      "Total Market": 64751,
+      "Part of competitors if equal and equal marketting": 16187.75,
+      "Impact of marketting": 22662.85
+    },
+    {
+      "Wave": 34,
+      "Total Market": 28025.6,
+      "Part of competitors if equal and equal marketting": 7006.4,
+      "Impact of marketting": 9808.96
+    },
+    {
+      "Wave": 35,
+      "Total Market": 28860.8,
+      "Part of competitors if equal and equal marketting": 7215.2,
+      "Tax": 7000,
+      "Impact of marketting": 10101.279999999999
+    },
+    {
+      "Wave": 36,
+      "Total Market": 178879.25,
+      "Part of competitors if equal and equal marketting": 44719.8125,
+      "Impact of marketting": 62607.737499999996
+    },
+    {
+      "Wave": 37,
+      "Total Market": 165553.6666666667,
+      "Part of competitors if equal and equal marketting": 41388.41666666667,
+      "Impact of marketting": 57943.78333333333
+    },
+    {
+      "Wave": 38,
+      "Total Market": 169616.33333333334,
+      "Part of competitors if equal and equal marketting": 42404.083333333336,
+      "Impact of marketting": 59365.71666666667
+    },
+    {
+      "Wave": 39,
+      "Total Market": 192337.25,
+      "Part of competitors if equal and equal marketting": 48084.3125,
+      "Impact of marketting": 67318.03749999999
+    },
+    {
+      "Wave": 40,
+      "Total Market": 363791.7142857143,
+      "Part of competitors if equal and equal marketting": 90947.92857142858,
+      "Tax": 40000,
+      "Impact of marketting": 127327.1
+    },
+    {
+      "Wave": 41,
+      "Total Market": 1174328,
+      "Part of competitors if equal and equal marketting": 293582,
+      "Impact of marketting": 411014.8
+    },
+    {
+      "Wave": 42,
+      "Total Market": 620305,
+      "Part of competitors if equal and equal marketting": 155076.25,
+      "Impact of marketting": 217106.75
+    },
+    {
+      "Wave": 43,
+      "Total Market": 121205.5,
+      "Part of competitors if equal and equal marketting": 30301.375,
+      "Impact of marketting": 42421.924999999996
+    },
+    {
+      "Wave": 44,
+      "Total Market": 1167127.5,
+      "Part of competitors if equal and equal marketting": 291781.875,
+      "Impact of marketting": 408494.625
+    },
+    {
+      "Wave": 45,
+      "Total Market": 660541,
+      "Part of competitors if equal and equal marketting": 165135.25,
+      "Impact of marketting": 231189.34999999998
+    },
+    {
+      "Wave": 46,
+      "Total Market": 85042,
+      "Part of competitors if equal and equal marketting": 21260.5,
+      "Impact of marketting": 29764.699999999997
+    },
+    {
+      "Wave": 47,
+      "Total Market": 86936.5,
+      "Part of competitors if equal and equal marketting": 21734.125,
+      "Impact of marketting": 30427.774999999998
+    },
+    {
+      "Wave": 48,
+      "Total Market": 705806.5,
+      "Part of competitors if equal and equal marketting": 176451.625,
+      "Impact of marketting": 247032.275
+    },
+    {
+      "Wave": 49,
+      "Total Market": 185110,
+      "Part of competitors if equal and equal marketting": 46277.5,
+      "Impact of marketting": 64788.49999999999
+    },
+    {
+      "Wave": 50,
+      "Total Market": 188570,
+      "Part of competitors if equal and equal marketting": 47142.5,
+      "Tax": 40000,
+      "Impact of marketting": 65999.5
+    },
+    {
+      "Wave": 51,
+      "Total Market": 1107827.5,
+      "Part of competitors if equal and equal marketting": 276956.875,
+      "Impact of marketting": 387739.625
+    },
+    {
+      "Wave": 52,
+      "Total Market": 762807.5,
+      "Part of competitors if equal and equal marketting": 190701.875,
+      "Impact of marketting": 266982.625
+    },
+    {
+      "Wave": 53,
+      "Total Market": 319618.6666666667,
+      "Part of competitors if equal and equal marketting": 79904.66666666667,
+      "Impact of marketting": 111866.53333333334
+    },
+    {
+      "Wave": 54,
+      "Total Market": 325129.3333333334,
+      "Part of competitors if equal and equal marketting": 81282.33333333334,
+      "Impact of marketting": 113795.26666666668
+    },
+    {
+      "Wave": 55,
+      "Total Market": 803043.5,
+      "Part of competitors if equal and equal marketting": 200760.875,
+      "Impact of marketting": 281065.225
+    },
+    {
+      "Wave": 56,
+      "Total Market": 2223885.5,
+      "Part of competitors if equal and equal marketting": 555971.375,
+      "Impact of marketting": 778359.9249999999
+    },
+    {
+      "Wave": 57,
+      "Total Market": 2264984,
+      "Part of competitors if equal and equal marketting": 566246,
+      "Impact of marketting": 792744.3999999999
+    },
+    {
+      "Wave": 58,
+      "Total Market": 436931,
+      "Part of competitors if equal and equal marketting": 109232.75,
+      "Impact of marketting": 152925.84999999998
+    },
+    {
+      "Wave": 59,
+      "Total Market": 1282092.5,
+      "Part of competitors if equal and equal marketting": 320523.125,
+      "Impact of marketting": 448732.375
+    },
+    {
+      "Wave": 60,
+      "Total Market": 876809.5,
+      "Part of competitors if equal and equal marketting": 219202.375,
+      "Tax": 1000000,
+      "Impact of marketting": 306883.32499999995
+    }
+  ],
+  "~Upgrades": [
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    },
+    {
+      "": "#REF!"
+    }
+  ],
+  "tax": [
+    {
+      "round": 5,
+      "cost": 250
+    },
+    {
+      "round": 7,
+      "cost": 280
+    },
+    {
+      "round": 9,
+      "cost": 500
+    },
+    {
+      "round": 11,
+      "cost": 1000
+    },
+    {
+      "round": 13,
+      "cost": 1100
+    },
+    {
+      "round": 15,
+      "cost": 1100
+    },
+    {
+      "round": 20,
+      "cost": 4500
+    },
+    {
+      "round": 25,
+      "cost": 5000
+    },
+    {
+      "round": 30,
+      "cost": 10000
+    },
+    {
+      "round": 35,
+      "cost": 7000
+    },
+    {
+      "round": 40,
+      "cost": 40000
+    },
+    {
+      "round": 50,
+      "cost": 40000
+    },
+    {
+      "round": 60,
+      "cost": 1000000
+    }
+  ],
+  "market": [
+    {
+      "id": "round_1",
+      "customers": 20,
+      "average amount": 2,
+      "wood": 3,
+      "iron": 2,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_2",
+      "customers": 28,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 0
+    },
+    {
+      "id": "round_3",
+      "customers": 37,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 0
+    },
+    {
+      "id": "round_4",
+      "customers": 47,
+      "average amount": 5,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_5",
+      "customers": 56,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_6",
+      "customers": 64,
+      "average amount": 3,
+      "wood": 2,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_7",
+      "customers": 71,
+      "average amount": 2,
+      "wood": 2,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_8",
+      "customers": 79,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 1,
+      "plank": 2,
+      "sword": 1
+    },
+    {
+      "id": "round_9",
+      "customers": 88,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 2,
+      "sword": 1
+    },
+    {
+      "id": "round_10",
+      "customers": 98,
+      "average amount": 5,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_11",
+      "customers": 107,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_12",
+      "customers": 115,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 2,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_13",
+      "customers": 122,
+      "average amount": 2,
+      "wood": 1,
+      "iron": 2,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_14",
+      "customers": 130,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_15",
+      "customers": 139,
+      "average amount": 4,
+      "wood": 2,
+      "iron": 2,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_16",
+      "customers": 149,
+      "average amount": 5,
+      "wood": 3,
+      "iron": 1,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_17",
+      "customers": 158,
+      "average amount": 4,
+      "wood": 3,
+      "iron": 1,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_18",
+      "customers": 166,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_19",
+      "customers": 173,
+      "average amount": 2,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_20",
+      "customers": 181,
+      "average amount": 3,
+      "wood": 0,
+      "iron": 0,
+      "plank": 3,
+      "sword": 1
+    },
+    {
+      "id": "round_21",
+      "customers": 190,
+      "average amount": 4,
+      "wood": 0,
+      "iron": 0,
+      "plank": 3,
+      "sword": 1
+    },
+    {
+      "id": "round_22",
+      "customers": 200,
+      "average amount": 5,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_23",
+      "customers": 209,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 2,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_24",
+      "customers": 217,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 3,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_25",
+      "customers": 224,
+      "average amount": 2,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_26",
+      "customers": 232,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 3
+    },
+    {
+      "id": "round_27",
+      "customers": 241,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 3
+    },
+    {
+      "id": "round_28",
+      "customers": 251,
+      "average amount": 5,
+      "wood": 2,
+      "iron": 2,
+      "plank": 2,
+      "sword": 2
+    },
+    {
+      "id": "round_29",
+      "customers": 260,
+      "average amount": 4,
+      "wood": 2,
+      "iron": 2,
+      "plank": 2,
+      "sword": 2
+    },
+    {
+      "id": "round_30",
+      "customers": 268,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_31",
+      "customers": 275,
+      "average amount": 2,
+      "wood": 4,
+      "iron": 1,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_32",
+      "customers": 283,
+      "average amount": 3,
+      "wood": 4,
+      "iron": 1,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_33",
+      "customers": 292,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_34",
+      "customers": 302,
+      "average amount": 5,
+      "wood": 1,
+      "iron": 4,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_35",
+      "customers": 311,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 4,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_36",
+      "customers": 319,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_37",
+      "customers": 326,
+      "average amount": 2,
+      "wood": 0,
+      "iron": 1,
+      "plank": 4,
+      "sword": 1
+    },
+    {
+      "id": "round_38",
+      "customers": 334,
+      "average amount": 3,
+      "wood": 0,
+      "iron": 1,
+      "plank": 4,
+      "sword": 1
+    },
+    {
+      "id": "round_39",
+      "customers": 343,
+      "average amount": 4,
+      "wood": 2,
+      "iron": 2,
+      "plank": 2,
+      "sword": 2
+    },
+    {
+      "id": "round_40",
+      "customers": 353,
+      "average amount": 5,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 4
+    },
+    {
+      "id": "round_41",
+      "customers": 362,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 4
+    },
+    {
+      "id": "round_42",
+      "customers": 370,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_43",
+      "customers": 377,
+      "average amount": 2,
+      "wood": 3,
+      "iron": 3,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_44",
+      "customers": 385,
+      "average amount": 3,
+      "wood": 0,
+      "iron": 0,
+      "plank": 3,
+      "sword": 3
+    },
+    {
+      "id": "round_45",
+      "customers": 394,
+      "average amount": 4,
+      "wood": 2,
+      "iron": 2,
+      "plank": 2,
+      "sword": 2
+    },
+    {
+      "id": "round_46",
+      "customers": 404,
+      "average amount": 5,
+      "wood": 5,
+      "iron": 1,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_47",
+      "customers": 413,
+      "average amount": 4,
+      "wood": 5,
+      "iron": 1,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_48",
+      "customers": 421,
+      "average amount": 3,
+      "wood": 2,
+      "iron": 2,
+      "plank": 2,
+      "sword": 2
+    },
+    {
+      "id": "round_49",
+      "customers": 428,
+      "average amount": 2,
+      "wood": 1,
+      "iron": 5,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_50",
+      "customers": 436,
+      "average amount": 3,
+      "wood": 1,
+      "iron": 5,
+      "plank": 0,
+      "sword": 0
+    },
+    {
+      "id": "round_51",
+      "customers": 445,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 4,
+      "sword": 4
+    },
+    {
+      "id": "round_52",
+      "customers": 455,
+      "average amount": 5,
+      "wood": 1,
+      "iron": 1,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_53",
+      "customers": 464,
+      "average amount": 4,
+      "wood": 0,
+      "iron": 1,
+      "plank": 5,
+      "sword": 0
+    },
+    {
+      "id": "round_54",
+      "customers": 472,
+      "average amount": 3,
+      "wood": 0,
+      "iron": 1,
+      "plank": 5,
+      "sword": 0
+    },
+    {
+      "id": "round_55",
+      "customers": 479,
+      "average amount": 2,
+      "wood": 2,
+      "iron": 2,
+      "plank": 2,
+      "sword": 2
+    },
+    {
+      "id": "round_56",
+      "customers": 487,
+      "average amount": 3,
+      "wood": 0,
+      "iron": 0,
+      "plank": 1,
+      "sword": 5
+    },
+    {
+      "id": "round_57",
+      "customers": 496,
+      "average amount": 4,
+      "wood": 0,
+      "iron": 0,
+      "plank": 1,
+      "sword": 5
+    },
+    {
+      "id": "round_58",
+      "customers": 506,
+      "average amount": 5,
+      "wood": 4,
+      "iron": 4,
+      "plank": 1,
+      "sword": 1
+    },
+    {
+      "id": "round_59",
+      "customers": 515,
+      "average amount": 4,
+      "wood": 1,
+      "iron": 1,
+      "plank": 4,
+      "sword": 4
+    },
+    {
+      "id": "round_60",
+      "customers": 523,
+      "average amount": 3,
+      "wood": 3,
+      "iron": 3,
+      "plank": 3,
+      "sword": 3
+    }
+  ],
+  "purshases": [
+    {
+      "id": "more_worker_1",
+      "type": "increaseWorker",
+      "effect": 1,
+      "price": 75
+    },
+    {
+      "id": "more_worker_2",
+      "type": "increaseWorker",
+      "effect": 1,
+      "price": 150
+    },
+    {
+      "id": "more_worker_3",
+      "type": "increaseWorker",
+      "effect": 1,
+      "price": 300
+    },
+    {
+      "id": "more_worker_4",
+      "type": "increaseWorker",
+      "effect": 1,
+      "price": 600
+    },
+    {
+      "id": "more_worker_5",
+      "type": "increaseWorker",
+      "effect": 1,
+      "price": 1200
+    },
+    {
+      "id": "more_worker_6",
+      "type": "increaseWorker",
+      "effect": 1,
+      "price": 1800
+    },
+    {
+      "id": "more_worker_7",
+      "type": "increaseWorker",
+      "effect": 1,
+      "price": 2200
+    },
+    {
+      "id": "more_worker_8",
+      "type": "increaseWorker",
+      "effect": 1,
+      "price": 2600
+    },
+    {
+      "id": "more_worker_9",
+      "type": "increaseWorker",
+      "effect": 1,
+      "price": 3200
+    },
+    {
+      "id": "more_worker_10",
+      "type": "increaseWorker",
+      "effect": 1,
+      "price": 4000
+    },
+    {
+      "id": "more_worker_11",
+      "type": "increaseWorker",
+      "effect": 1,
+      "price": 5000
+    },
+    {
+      "id": "more_worker_12",
+      "type": "increaseWorker",
+      "effect": 1,
+      "price": 6000
+    },
+    {
+      "id": "more_worker_13",
+      "type": "increaseWorker",
+      "effect": 1,
+      "price": 7000
+    },
+    {
+      "id": "more_worker_14",
+      "type": "increaseWorker",
+      "effect": 1,
+      "price": 8000
+    },
+    {
+      "id": "better_marketing_1",
+      "type": "increaseMarketting",
+      "effect": 1.1,
+      "price": 75
+    },
+    {
+      "id": "better_marketing_2",
+      "type": "increaseMarketting",
+      "effect": 1.2,
+      "price": 150
+    },
+    {
+      "id": "better_marketing_3",
+      "type": "increaseMarketting",
+      "effect": 1.3,
+      "price": 300
+    },
+    {
+      "id": "better_marketing_4",
+      "type": "increaseMarketting",
+      "effect": 1.4,
+      "price": 450
+    },
+    {
+      "id": "better_marketing_5",
+      "type": "increaseMarketting",
+      "effect": 1.5,
+      "price": 600
+    },
+    {
+      "id": "better_marketing_6",
+      "type": "increaseMarketting",
+      "effect": 1.6,
+      "price": 800
+    },
+    {
+      "id": "better_marketing_7",
+      "type": "increaseMarketting",
+      "effect": 1.7,
+      "price": 1000
+    },
+    {
+      "id": "better_marketing_8",
+      "type": "increaseMarketting",
+      "effect": 1.8,
+      "price": 1200
+    },
+    {
+      "id": "better_marketing_9",
+      "type": "increaseMarketting",
+      "effect": 1.9,
+      "price": 1400
+    },
+    {
+      "id": "better_marketing_10",
+      "type": "increaseMarketting",
+      "effect": 2,
+      "price": 1600
+    },
+    {
+      "id": "better_marketing_11",
+      "type": "increaseMarketting",
+      "effect": 2.1,
+      "price": 1800
+    },
+    {
+      "id": "better_marketing_12",
+      "type": "increaseMarketting",
+      "effect": 2.2,
+      "price": 2000
+    },
+    {
+      "id": "better_marketing_13",
+      "type": "increaseMarketting",
+      "effect": 2.3,
+      "price": 2200
+    },
+    {
+      "id": "better_marketing_14",
+      "type": "increaseMarketting",
+      "effect": 2.4,
+      "price": 2400
+    },
+    {
+      "id": "better_marketing_15",
+      "type": "increaseMarketting",
+      "effect": 2.5,
+      "price": 2600
+    },
+    {
+      "id": "better_marketing_16",
+      "type": "increaseMarketting",
+      "effect": 2.6,
+      "price": 2800
+    },
+    {
+      "id": "better_marketing_17",
+      "type": "increaseMarketting",
+      "effect": 2.7,
+      "price": 3000
+    },
+    {
+      "id": "better_marketing_18",
+      "type": "increaseMarketting",
+      "effect": 2.8,
+      "price": 3200
+    },
+    {
+      "id": "better_marketing_19",
+      "type": "increaseMarketting",
+      "effect": 2.9,
+      "price": 3400
+    },
+    {
+      "id": "better_marketing_20",
+      "type": "increaseMarketting",
+      "effect": 3,
+      "price": 3600
+    },
+    {
+      "id": "better_marketing_21",
+      "type": "increaseMarketting",
+      "effect": 3.1,
+      "price": 3800
+    },
+    {
+      "id": "better_marketing_22",
+      "type": "increaseMarketting",
+      "effect": 3.2,
+      "price": 4000
+    },
+    {
+      "id": "better_marketing_23",
+      "type": "increaseMarketting",
+      "effect": 3.3,
+      "price": 4200
+    },
+    {
+      "id": "better_marketing_24",
+      "type": "increaseMarketting",
+      "effect": 3.4,
+      "price": 4400
+    },
+    {
+      "id": "better_marketing_25",
+      "type": "increaseMarketting",
+      "effect": 3.5,
+      "price": 4600
+    },
+    {
+      "id": "better_marketing_26",
+      "type": "increaseMarketting",
+      "effect": 3.6,
+      "price": 4800
+    },
+    {
+      "id": "better_marketing_27",
+      "type": "increaseMarketting",
+      "effect": 3.7,
+      "price": 5000
+    },
+    {
+      "id": "better_marketing_28",
+      "type": "increaseMarketting",
+      "effect": 3.8,
+      "price": 5200
+    },
+    {
+      "id": "better_marketing_29",
+      "type": "increaseMarketting",
+      "effect": 3.9,
+      "price": 5400
+    },
+    {
+      "id": "better_marketing_30",
+      "type": "increaseMarketting",
+      "effect": 4,
+      "price": 5600
+    },
+    {
+      "id": "better_marketing_31",
+      "type": "increaseMarketting",
+      "effect": 4.1,
+      "price": 5800
+    },
+    {
+      "id": "better_marketing_32",
+      "type": "increaseMarketting",
+      "effect": 4.2,
+      "price": 6000
+    },
+    {
+      "id": "better_marketing_33",
+      "type": "increaseMarketting",
+      "effect": 4.3,
+      "price": 6200
+    },
+    {
+      "id": "better_marketing_34",
+      "type": "increaseMarketting",
+      "effect": 4.4,
+      "price": 6400
+    },
+    {
+      "id": "better_marketing_35",
+      "type": "increaseMarketting",
+      "effect": 4.5,
+      "price": 6600
+    },
+    {
+      "id": "better_marketing_36",
+      "type": "increaseMarketting",
+      "effect": 4.6,
+      "price": 6800
+    },
+    {
+      "id": "better_marketing_37",
+      "type": "increaseMarketting",
+      "effect": 4.7,
+      "price": 7000
+    },
+    {
+      "id": "better_marketing_38",
+      "type": "increaseMarketting",
+      "effect": 4.8,
+      "price": 7200
+    },
+    {
+      "id": "better_marketing_39",
+      "type": "increaseMarketting",
+      "effect": 4.9,
+      "price": 7400
+    },
+    {
+      "id": "better_marketing_40",
+      "type": "increaseMarketting",
+      "effect": 5,
+      "price": 7600
+    },
+    {
+      "id": "better_storage_1",
+      "type": "increaseStorage",
+      "effect": 5,
+      "price": 38
+    },
+    {
+      "id": "better_storage_2",
+      "type": "increaseStorage",
+      "effect": 5,
+      "price": 75
+    },
+    {
+      "id": "better_storage_3",
+      "type": "increaseStorage",
+      "effect": 5,
+      "price": 150
+    },
+    {
+      "id": "better_storage_4",
+      "type": "increaseStorage",
+      "effect": 5,
+      "price": 225
+    },
+    {
+      "id": "better_storage_5",
+      "type": "increaseStorage",
+      "effect": 5,
+      "price": 300
+    },
+    {
+      "id": "better_storage_6",
+      "type": "increaseStorage",
+      "effect": 5,
+      "price": 400
+    },
+    {
+      "id": "better_storage_7",
+      "type": "increaseStorage",
+      "effect": 5,
+      "price": 500
+    },
+    {
+      "id": "better_storage_8",
+      "type": "increaseStorage",
+      "effect": 5,
+      "price": 600
+    },
+    {
+      "id": "better_storage_9",
+      "type": "increaseStorage",
+      "effect": 5,
+      "price": 700
+    },
+    {
+      "id": "better_storage_10",
+      "type": "increaseStorage",
+      "effect": 20,
+      "price": 800
+    },
+    {
+      "id": "better_storage_11",
+      "type": "increaseStorage",
+      "effect": 20,
+      "price": 900
+    },
+    {
+      "id": "better_storage_12",
+      "type": "increaseStorage",
+      "effect": 20,
+      "price": 1000
+    },
+    {
+      "id": "better_storage_13",
+      "type": "increaseStorage",
+      "effect": 20,
+      "price": 1100
+    },
+    {
+      "id": "better_storage_14",
+      "type": "increaseStorage",
+      "effect": 20,
+      "price": 1200
+    },
+    {
+      "id": "better_storage_15",
+      "type": "increaseStorage",
+      "effect": 20,
+      "price": 1300
+    },
+    {
+      "id": "better_storage_16",
+      "type": "increaseStorage",
+      "effect": 20,
+      "price": 1400
+    },
+    {
+      "id": "better_storage_17",
+      "type": "increaseStorage",
+      "effect": 20,
+      "price": 1500
+    },
+    {
+      "id": "better_storage_18",
+      "type": "increaseStorage",
+      "effect": 20,
+      "price": 1600
+    },
+    {
+      "id": "better_storage_19",
+      "type": "increaseStorage",
+      "effect": 20,
+      "price": 1700
+    },
+    {
+      "id": "better_storage_20",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 1800
+    },
+    {
+      "id": "better_storage_21",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 1900
+    },
+    {
+      "id": "better_storage_22",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 2000
+    },
+    {
+      "id": "better_storage_23",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 2100
+    },
+    {
+      "id": "better_storage_24",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 2200
+    },
+    {
+      "id": "better_storage_25",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 2300
+    },
+    {
+      "id": "better_storage_26",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 2400
+    },
+    {
+      "id": "better_storage_27",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 2500
+    },
+    {
+      "id": "better_storage_28",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 2600
+    },
+    {
+      "id": "better_storage_29",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 2700
+    },
+    {
+      "id": "better_storage_30",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 2800
+    },
+    {
+      "id": "better_storage_31",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 2900
+    },
+    {
+      "id": "better_storage_32",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 3000
+    },
+    {
+      "id": "better_storage_33",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 3100
+    },
+    {
+      "id": "better_storage_34",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 3200
+    },
+    {
+      "id": "better_storage_35",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 3300
+    },
+    {
+      "id": "better_storage_36",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 3400
+    },
+    {
+      "id": "better_storage_37",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 3500
+    },
+    {
+      "id": "better_storage_38",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 3600
+    },
+    {
+      "id": "better_storage_39",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 3700
+    },
+    {
+      "id": "better_storage_40",
+      "type": "increaseStorage",
+      "effect": 50,
+      "price": 3800
+    }
+  ],
+  "convert": [
+    {
+      "id": "wood",
+      "tier": 1,
+      "quantity": 10,
+      "result_ressource": "wood",
+      "result_tier": 2
+    },
+    {
+      "id": "wood",
+      "tier": 2,
+      "quantity": 7,
+      "result_ressource": "wood",
+      "result_tier": 3
+    },
+    {
+      "id": "wood",
+      "tier": 3,
+      "quantity": 5,
+      "result_ressource": "wood",
+      "result_tier": 4
+    },
+    {
+      "id": "wood",
+      "tier": 4,
+      "quantity": 3,
+      "result_ressource": "wood",
+      "result_tier": 5
+    },
+    {
+      "id": "wood",
+      "tier": 5,
+      "quantity": 3,
+      "result_ressource": "wood",
+      "result_tier": 6
+    },
+    {
+      "id": "iron",
+      "tier": 1,
+      "quantity": 10,
+      "result_ressource": "iron",
+      "result_tier": 2
+    },
+    {
+      "id": "iron",
+      "tier": 2,
+      "quantity": 7,
+      "result_ressource": "iron",
+      "result_tier": 3
+    },
+    {
+      "id": "iron",
+      "tier": 3,
+      "quantity": 5,
+      "result_ressource": "iron",
+      "result_tier": 4
+    },
+    {
+      "id": "iron",
+      "tier": 4,
+      "quantity": 3,
+      "result_ressource": "iron",
+      "result_tier": 5
+    },
+    {
+      "id": "iron",
+      "tier": 5,
+      "quantity": 3,
+      "result_ressource": "iron",
+      "result_tier": 6
+    },
+    {
+      "id": "plank",
+      "tier": 1,
+      "quantity": 10,
+      "result_ressource": "plank",
+      "result_tier": 2
+    },
+    {
+      "id": "plank",
+      "tier": 2,
+      "quantity": 7,
+      "result_ressource": "plank",
+      "result_tier": 3
+    },
+    {
+      "id": "plank",
+      "tier": 3,
+      "quantity": 5,
+      "result_ressource": "plank",
+      "result_tier": 4
+    },
+    {
+      "id": "plank",
+      "tier": 4,
+      "quantity": 3,
+      "result_ressource": "plank",
+      "result_tier": 5
+    },
+    {
+      "id": "plank",
+      "tier": 5,
+      "quantity": 3,
+      "result_ressource": "plank",
+      "result_tier": 6
+    },
+    {
+      "id": "sword",
+      "tier": 1,
+      "quantity": 10,
+      "result_ressource": "sword",
+      "result_tier": 2
+    },
+    {
+      "id": "sword",
+      "tier": 2,
+      "quantity": 7,
+      "result_ressource": "sword",
+      "result_tier": 3
+    },
+    {
+      "id": "sword",
+      "tier": 3,
+      "quantity": 5,
+      "result_ressource": "sword",
+      "result_tier": 4
+    },
+    {
+      "id": "sword",
+      "tier": 4,
+      "quantity": 3,
+      "result_ressource": "sword",
+      "result_tier": 5
+    },
+    {
+      "id": "sword",
+      "tier": 5,
+      "quantity": 3,
+      "result_ressource": "sword",
+      "result_tier": 6
+    },
+    {
+      "id": "shield",
+      "tier": 1,
+      "quantity": 10,
+      "result_ressource": "shield",
+      "result_tier": 2
+    },
+    {
+      "id": "shield",
+      "tier": 2,
+      "quantity": 7,
+      "result_ressource": "shield",
+      "result_tier": 3
+    },
+    {
+      "id": "shield",
+      "tier": 3,
+      "quantity": 5,
+      "result_ressource": "shield",
+      "result_tier": 4
+    },
+    {
+      "id": "shield",
+      "tier": 4,
+      "quantity": 3,
+      "result_ressource": "shield",
+      "result_tier": 5
+    },
+    {
+      "id": "shield",
+      "tier": 5,
+      "quantity": 3,
+      "result_ressource": "shield",
+      "result_tier": 6
+    },
+    {
+      "id": "magic",
+      "tier": 1,
+      "quantity": 10,
+      "result_ressource": "magic",
+      "result_tier": 2
+    },
+    {
+      "id": "magic",
+      "tier": 2,
+      "quantity": 7,
+      "result_ressource": "magic",
+      "result_tier": 3
+    },
+    {
+      "id": "magic",
+      "tier": 3,
+      "quantity": 5,
+      "result_ressource": "magic",
+      "result_tier": 4
+    },
+    {
+      "id": "magic",
+      "tier": 4,
+      "quantity": 3,
+      "result_ressource": "magic",
+      "result_tier": 5
+    },
+    {
+      "id": "magic",
+      "tier": 5,
+      "quantity": 3,
+      "result_ressource": "magic",
+      "result_tier": 6
+    }
+  ],
+  "resources": [
+    {
+      "id": "wood",
+      "tier": 1,
+      "displayName": "Bois tier 1",
+      "description": "Bois tier 1 description",
+      "spriteId": "Wood Tier 1",
+      "baseSellPrice": 6,
+      "influence": 1
+    },
+    {
+      "id": "wood",
+      "tier": 2,
+      "displayName": "Bois tier 2",
+      "description": "Bois tier 2 description",
+      "spriteId": "Wood Tier 2",
+      "baseSellPrice": 14,
+      "influence": 2
+    },
+    {
+      "id": "wood",
+      "tier": 3,
+      "displayName": "Bois tier 3",
+      "description": "Bois tier 3 description",
+      "spriteId": "Wood Tier 3",
+      "baseSellPrice": 32,
+      "influence": 3
+    },
+    {
+      "id": "wood",
+      "tier": 4,
+      "displayName": "Bois tier 4",
+      "description": "Bois tier 4 description",
+      "spriteId": "Wood Tier 4",
+      "baseSellPrice": 48,
+      "influence": 4
+    },
+    {
+      "id": "wood",
+      "tier": 5,
+      "displayName": "Bois tier 5",
+      "description": "Bois tier 5 description",
+      "spriteId": "Wood Tier 5",
+      "baseSellPrice": 81,
+      "influence": 5
+    },
+    {
+      "id": "wood",
+      "tier": 6,
+      "displayName": "Bois tier 6",
+      "description": "Bois tier 6 description",
+      "spriteId": "Wood Tier 6",
+      "baseSellPrice": 155,
+      "influence": 6
+    },
+    {
+      "id": "iron",
+      "tier": 1,
+      "displayName": "Fer tier 1",
+      "description": "Fer tier 1 description",
+      "spriteId": "Iron Tier 1",
+      "baseSellPrice": 8,
+      "influence": 1
+    },
+    {
+      "id": "iron",
+      "tier": 2,
+      "displayName": "Fer tier 2",
+      "description": "Fer tier 2 description",
+      "spriteId": "Iron Tier 2",
+      "baseSellPrice": 22,
+      "influence": 2
+    },
+    {
+      "id": "iron",
+      "tier": 3,
+      "displayName": "Fer tier 3",
+      "description": "Fer tier 3 description",
+      "spriteId": "Iron Tier 3",
+      "baseSellPrice": 59,
+      "influence": 3
+    },
+    {
+      "id": "iron",
+      "tier": 4,
+      "displayName": "Fer tier 4",
+      "description": "Fer tier 4 description",
+      "spriteId": "Iron Tier 4",
+      "baseSellPrice": 104,
+      "influence": 4
+    },
+    {
+      "id": "iron",
+      "tier": 5,
+      "displayName": "Fer tier 5",
+      "description": "Fer tier 5 description",
+      "spriteId": "Iron Tier 5",
+      "baseSellPrice": 210,
+      "influence": 5
+    },
+    {
+      "id": "iron",
+      "tier": 6,
+      "displayName": "Fer tier 6",
+      "description": "Fer tier 6 description",
+      "spriteId": "Iron Tier 6",
+      "baseSellPrice": 488,
+      "influence": 6
+    },
+    {
+      "id": "plank",
+      "tier": 1,
+      "displayName": "Planche tier 1",
+      "description": "Planche tier 1 description",
+      "spriteId": "Plank Tier 1",
+      "baseSellPrice": 9,
+      "influence": 1
+    },
+    {
+      "id": "plank",
+      "tier": 2,
+      "displayName": "Planche tier 2",
+      "description": "Planche tier 2 description",
+      "spriteId": "Plank Tier 2",
+      "baseSellPrice": 26,
+      "influence": 2
+    },
+    {
+      "id": "plank",
+      "tier": 3,
+      "displayName": "Planche tier 3",
+      "description": "Planche tier 3 description",
+      "spriteId": "Plank Tier 3",
+      "baseSellPrice": 74,
+      "influence": 3
+    },
+    {
+      "id": "plank",
+      "tier": 4,
+      "displayName": "Planche tier 4",
+      "description": "Planche tier 4 description",
+      "spriteId": "Plank Tier 4",
+      "baseSellPrice": 138,
+      "influence": 4
+    },
+    {
+      "id": "plank",
+      "tier": 5,
+      "displayName": "Planche tier 5",
+      "description": "Planche tier 5 description",
+      "spriteId": "Plank Tier 5",
+      "baseSellPrice": 295,
+      "influence": 5
+    },
+    {
+      "id": "plank",
+      "tier": 6,
+      "displayName": "Planche tier 6",
+      "description": "Planche tier 6 description",
+      "spriteId": "Plank Tier 6",
+      "baseSellPrice": 729,
+      "influence": 6
+    },
+    {
+      "id": "sword",
+      "tier": 1,
+      "displayName": "Epée tier 1",
+      "description": "Epée tier 1 description",
+      "spriteId": "Sword Tier 1",
+      "baseSellPrice": 18,
+      "influence": 1
+    },
+    {
+      "id": "sword",
+      "tier": 2,
+      "displayName": "Epée tier 2",
+      "description": "Epée tier 2 description",
+      "spriteId": "Sword Tier 2",
+      "baseSellPrice": 68,
+      "influence": 2
+    },
+    {
+      "id": "sword",
+      "tier": 3,
+      "displayName": "Epée tier 3",
+      "description": "Epée tier 3 description",
+      "spriteId": "Sword Tier 3",
+      "baseSellPrice": 249,
+      "influence": 3
+    },
+    {
+      "id": "sword",
+      "tier": 4,
+      "displayName": "Epée tier 4",
+      "description": "Epée tier 4 description",
+      "spriteId": "Sword Tier 4",
+      "baseSellPrice": 597,
+      "influence": 4
+    },
+    {
+      "id": "sword",
+      "tier": 5,
+      "displayName": "Epée tier 5",
+      "description": "Epée tier 5 description",
+      "spriteId": "Sword Tier 5",
+      "baseSellPrice": 1657,
+      "influence": 5
+    },
+    {
+      "id": "sword",
+      "tier": 6,
+      "displayName": "Epée tier 6",
+      "description": "Epée tier 6 description",
+      "spriteId": "Sword Tier 6",
+      "baseSellPrice": 5334,
+      "influence": 6
+    },
+    {
+      "id": "magic",
+      "tier": 1,
+      "displayName": "Magie tier 1",
+      "description": "Magie tier 1 description",
+      "spriteId": "Magic Orb Tier 1",
+      "baseSellPrice": 7,
+      "influence": 1
+    },
+    {
+      "id": "magic",
+      "tier": 2,
+      "displayName": "Magie tier 2",
+      "description": "Magie tier 2 description",
+      "spriteId": "Magic Orb Tier 2",
+      "baseSellPrice": 18,
+      "influence": 2
+    },
+    {
+      "id": "magic",
+      "tier": 3,
+      "displayName": "Magie tier 3",
+      "description": "Magie tier 3 description",
+      "spriteId": "Magic Orb Tier 3",
+      "baseSellPrice": 45,
+      "influence": 3
+    },
+    {
+      "id": "magic",
+      "tier": 4,
+      "displayName": "Magie tier 4",
+      "description": "Magie tier 4 description",
+      "spriteId": "Magic Orb Tier 4",
+      "baseSellPrice": 74,
+      "influence": 4
+    },
+    {
+      "id": "magic",
+      "tier": 5,
+      "displayName": "Magie tier 5",
+      "description": "Magie tier 5 description",
+      "spriteId": "Magic Orb Tier 5",
+      "baseSellPrice": 138,
+      "influence": 5
+    },
+    {
+      "id": "magic",
+      "tier": 6,
+      "displayName": "Magie tier 6",
+      "description": "Magie tier 6 description",
+      "spriteId": "Magic Orb Tier 6",
+      "baseSellPrice": 295,
+      "influence": 6
+    },
+    {
+      "id": "electricy",
+      "tier": 1,
+      "displayName": "Electricité tier 1",
+      "description": "Electricité tier 1 description",
+      "spriteId": "Magic Orb Tier 1",
+      "baseSellPrice": 0,
+      "influence": 1
+    },
+    {
+      "id": "electricy",
+      "tier": 2,
+      "displayName": "Electricité tier 2",
+      "description": "Electricité tier 2 description",
+      "spriteId": "Magic Orb Tier 2",
+      "baseSellPrice": 0,
+      "influence": 2
+    },
+    {
+      "id": "electricy",
+      "tier": 3,
+      "displayName": "Electricité tier 3",
+      "description": "Electricité tier 3 description",
+      "spriteId": "Magic Orb Tier 3",
+      "baseSellPrice": 0,
+      "influence": 3
+    },
+    {
+      "id": "electricy",
+      "tier": 4,
+      "displayName": "Electricité tier 4",
+      "description": "Electricité tier 4 description",
+      "spriteId": "Magic Orb Tier 4",
+      "baseSellPrice": 0,
+      "influence": 4
+    },
+    {
+      "id": "electricy",
+      "tier": 5,
+      "displayName": "Electricité tier 5",
+      "description": "Electricité tier 5 description",
+      "spriteId": "Magic Orb Tier 5",
+      "baseSellPrice": 0,
+      "influence": 5
+    },
+    {
+      "id": "electricy",
+      "tier": 6,
+      "displayName": "Electricité tier 6",
+      "description": "Electricité tier 6 description",
+      "spriteId": "Magic Orb Tier 6",
+      "baseSellPrice": 0,
+      "influence": 6
+    },
+    {
+      "id": "shield",
+      "tier": 1,
+      "displayName": "Bouclier tier 1",
+      "description": "Bouclier tier 1 description",
+      "spriteId": "Shield Tier 1",
+      "baseSellPrice": 30,
+      "influence": 1
+    },
+    {
+      "id": "shield",
+      "tier": 2,
+      "displayName": "Bouclier tier 2",
+      "description": "Bouclier tier 2 description",
+      "spriteId": "Shield Tier 2",
+      "baseSellPrice": 133,
+      "influence": 2
+    },
+    {
+      "id": "shield",
+      "tier": 3,
+      "displayName": "Bouclier tier 3",
+      "description": "Bouclier tier 3 description",
+      "spriteId": "Shield Tier 3",
+      "baseSellPrice": 565,
+      "influence": 3
+    },
+    {
+      "id": "shield",
+      "tier": 4,
+      "displayName": "Bouclier tier 4",
+      "description": "Bouclier tier 4 description",
+      "spriteId": "Shield Tier 4",
+      "baseSellPrice": 1555,
+      "influence": 4
+    },
+    {
+      "id": "shield",
+      "tier": 5,
+      "displayName": "Bouclier tier 5",
+      "description": "Bouclier tier 5 description",
+      "spriteId": "Shield Tier 5",
+      "baseSellPrice": 4963,
+      "influence": 5
+    },
+    {
+      "id": "shield",
+      "tier": 6,
+      "displayName": "Bouclier tier 6",
+      "description": "Bouclier tier 6 description",
+      "spriteId": "Shield Tier 6",
+      "baseSellPrice": 18342,
+      "influence": 6
+    }
+  ],
+  "machines": [
+    {
+      "id": "lumberyard",
+      "displayName": "Camp de Bucheron",
+      "spriteId": "Tree",
+      "outputs": "wood",
+      "unlockAtRound": 1,
+      "upgrades": "lumberyard"
+    },
+    {
+      "id": "mine",
+      "displayName": "Mine",
+      "spriteId": "Engine",
+      "outputs": "iron",
+      "unlockAtRound": 1,
+      "upgrades": "mine"
+    },
+    {
+      "id": "sawmill",
+      "displayName": "Scierie",
+      "spriteId": "Gear",
+      "inputs": "sawmill",
+      "outputs": "plank",
+      "unlockAtRound": 2,
+      "upgrades": "sawmill"
+    },
+    {
+      "id": "forge",
+      "displayName": "Forge",
+      "spriteId": "Sword Tier 1",
+      "inputs": "forge",
+      "outputs": "sword",
+      "unlockAtRound": 2,
+      "upgrades": "forge"
+    },
+    {
+      "id": "military_camp",
+      "displayName": "Camp Militaire",
+      "spriteId": "Shield Tier 1",
+      "inputs": "military_camp",
+      "outputs": "shield",
+      "unlockAtRound": 5,
+      "upgrades": "military_camp"
+    },
+    {
+      "id": "magic_tower",
+      "displayName": "Tour du Magicien",
+      "spriteId": "Magic Orb Tier 1",
+      "outputs": "magic",
+      "unlockAtRound": 7,
+      "upgrades": "magic_tower"
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "lumberyard",
+      "level": 1,
+      "cost": 75,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.1,
+      "productionTime": 5,
+      "~DO NOT EXPORT : total 1 worker": 4.5,
+      "~DO NOT EXPORT : total 2 workers": 4,
+      "~DO NOT EXPORT : total 3 workers": 3.5,
+      "~DO NOT EXPORT : total 4 workers": 3
+    },
+    {
+      "id": "lumberyard",
+      "level": 2,
+      "cost": 150,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.11,
+      "productionTime": 4.9,
+      "~DO NOT EXPORT : total 1 worker": 4.361000000000001,
+      "~DO NOT EXPORT : total 2 workers": 3.822,
+      "~DO NOT EXPORT : total 3 workers": 3.2830000000000004,
+      "~DO NOT EXPORT : total 4 workers": 2.744
+    },
+    {
+      "id": "lumberyard",
+      "level": 3,
+      "cost": 300,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.12,
+      "productionTime": 4.8,
+      "~DO NOT EXPORT : total 1 worker": 4.224,
+      "~DO NOT EXPORT : total 2 workers": 3.6479999999999997,
+      "~DO NOT EXPORT : total 3 workers": 3.072,
+      "~DO NOT EXPORT : total 4 workers": 2.496
+    },
+    {
+      "id": "lumberyard",
+      "level": 4,
+      "cost": 600,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.13,
+      "productionTime": 4.7,
+      "~DO NOT EXPORT : total 1 worker": 4.089,
+      "~DO NOT EXPORT : total 2 workers": 3.4779999999999998,
+      "~DO NOT EXPORT : total 3 workers": 2.867,
+      "~DO NOT EXPORT : total 4 workers": 2.256
+    },
+    {
+      "id": "lumberyard",
+      "level": 5,
+      "cost": 1200,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.14,
+      "productionTime": 4.6,
+      "~DO NOT EXPORT : total 1 worker": 3.9559999999999995,
+      "~DO NOT EXPORT : total 2 workers": 3.3119999999999994,
+      "~DO NOT EXPORT : total 3 workers": 2.6679999999999997,
+      "~DO NOT EXPORT : total 4 workers": 2.0239999999999996
+    },
+    {
+      "id": "lumberyard",
+      "level": 6,
+      "cost": 1800,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.15,
+      "productionTime": 4.50000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.825000000000008,
+      "~DO NOT EXPORT : total 2 workers": 3.1500000000000066,
+      "~DO NOT EXPORT : total 3 workers": 2.4750000000000054,
+      "~DO NOT EXPORT : total 4 workers": 1.8000000000000038
+    },
+    {
+      "id": "lumberyard",
+      "level": 7,
+      "cost": 2200,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.16,
+      "productionTime": 4.40000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.6960000000000086,
+      "~DO NOT EXPORT : total 2 workers": 2.992000000000007,
+      "~DO NOT EXPORT : total 3 workers": 2.288000000000005,
+      "~DO NOT EXPORT : total 4 workers": 1.5840000000000036
+    },
+    {
+      "id": "lumberyard",
+      "level": 8,
+      "cost": 2600,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.17,
+      "productionTime": 4.30000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.569000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.8380000000000063,
+      "~DO NOT EXPORT : total 3 workers": 2.1070000000000046,
+      "~DO NOT EXPORT : total 4 workers": 1.376000000000003
+    },
+    {
+      "id": "lumberyard",
+      "level": 9,
+      "cost": 3200,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.18,
+      "productionTime": 4.20000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.444000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.6880000000000064,
+      "~DO NOT EXPORT : total 3 workers": 1.9320000000000048,
+      "~DO NOT EXPORT : total 4 workers": 1.1760000000000028
+    },
+    {
+      "id": "lumberyard",
+      "level": 10,
+      "cost": 4000,
+      "workersRequired": 1,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.19,
+      "productionTime": 4.10000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.3210000000000086,
+      "~DO NOT EXPORT : total 2 workers": 2.5420000000000065,
+      "~DO NOT EXPORT : total 3 workers": 1.7630000000000043,
+      "~DO NOT EXPORT : total 4 workers": 0.9840000000000027
+    },
+    {
+      "id": "lumberyard",
+      "level": 11,
+      "cost": 5000,
+      "workersRequired": 1,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.2,
+      "productionTime": 4.00000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.2000000000000077,
+      "~DO NOT EXPORT : total 2 workers": 2.4000000000000057,
+      "~DO NOT EXPORT : total 3 workers": 1.6000000000000036,
+      "~DO NOT EXPORT : total 4 workers": 0.8000000000000016
+    },
+    {
+      "id": "lumberyard",
+      "level": 12,
+      "cost": 6000,
+      "workersRequired": 1,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.21,
+      "productionTime": 3.90000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.081000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.262000000000006,
+      "~DO NOT EXPORT : total 3 workers": 1.443000000000004,
+      "~DO NOT EXPORT : total 4 workers": 0.6240000000000019
+    },
+    {
+      "id": "lumberyard",
+      "level": 13,
+      "cost": 7000,
+      "workersRequired": 1,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.22,
+      "productionTime": 3.80000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.964000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.1280000000000054,
+      "~DO NOT EXPORT : total 3 workers": 1.2920000000000034,
+      "~DO NOT EXPORT : total 4 workers": 0.4560000000000013
+    },
+    {
+      "id": "lumberyard",
+      "level": 14,
+      "cost": 8000,
+      "workersRequired": 1,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.23,
+      "productionTime": 3.70000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.8490000000000077,
+      "~DO NOT EXPORT : total 2 workers": 1.9980000000000053,
+      "~DO NOT EXPORT : total 3 workers": 1.147000000000003,
+      "~DO NOT EXPORT : total 4 workers": 0.2960000000000007
+    },
+    {
+      "id": "lumberyard",
+      "level": 15,
+      "cost": 9000,
+      "workersRequired": 1,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.24,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.7360000000000078,
+      "~DO NOT EXPORT : total 2 workers": 1.8720000000000052,
+      "~DO NOT EXPORT : total 3 workers": 1.0080000000000031,
+      "~DO NOT EXPORT : total 4 workers": 0.14400000000000057
+    },
+    {
+      "id": "mine",
+      "level": 1,
+      "cost": 75,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.1,
+      "productionTime": 5,
+      "~DO NOT EXPORT : total 1 worker": 4.5,
+      "~DO NOT EXPORT : total 2 workers": 4,
+      "~DO NOT EXPORT : total 3 workers": 3.5,
+      "~DO NOT EXPORT : total 4 workers": 3
+    },
+    {
+      "id": "mine",
+      "level": 2,
+      "cost": 150,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.11,
+      "productionTime": 4.9,
+      "~DO NOT EXPORT : total 1 worker": 4.361000000000001,
+      "~DO NOT EXPORT : total 2 workers": 3.822,
+      "~DO NOT EXPORT : total 3 workers": 3.2830000000000004,
+      "~DO NOT EXPORT : total 4 workers": 2.744
+    },
+    {
+      "id": "mine",
+      "level": 3,
+      "cost": 300,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.12,
+      "productionTime": 4.8,
+      "~DO NOT EXPORT : total 1 worker": 4.224,
+      "~DO NOT EXPORT : total 2 workers": 3.6479999999999997,
+      "~DO NOT EXPORT : total 3 workers": 3.072,
+      "~DO NOT EXPORT : total 4 workers": 2.496
+    },
+    {
+      "id": "mine",
+      "level": 4,
+      "cost": 600,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.13,
+      "productionTime": 4.7,
+      "~DO NOT EXPORT : total 1 worker": 4.089,
+      "~DO NOT EXPORT : total 2 workers": 3.4779999999999998,
+      "~DO NOT EXPORT : total 3 workers": 2.867,
+      "~DO NOT EXPORT : total 4 workers": 2.256
+    },
+    {
+      "id": "mine",
+      "level": 5,
+      "cost": 1200,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.14,
+      "productionTime": 4.6,
+      "~DO NOT EXPORT : total 1 worker": 3.9559999999999995,
+      "~DO NOT EXPORT : total 2 workers": 3.3119999999999994,
+      "~DO NOT EXPORT : total 3 workers": 2.6679999999999997,
+      "~DO NOT EXPORT : total 4 workers": 2.0239999999999996
+    },
+    {
+      "id": "mine",
+      "level": 6,
+      "cost": 1800,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.15,
+      "productionTime": 4.50000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.825000000000008,
+      "~DO NOT EXPORT : total 2 workers": 3.1500000000000066,
+      "~DO NOT EXPORT : total 3 workers": 2.4750000000000054,
+      "~DO NOT EXPORT : total 4 workers": 1.8000000000000038
+    },
+    {
+      "id": "mine",
+      "level": 7,
+      "cost": 2200,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.16,
+      "productionTime": 4.40000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.6960000000000086,
+      "~DO NOT EXPORT : total 2 workers": 2.992000000000007,
+      "~DO NOT EXPORT : total 3 workers": 2.288000000000005,
+      "~DO NOT EXPORT : total 4 workers": 1.5840000000000036
+    },
+    {
+      "id": "mine",
+      "level": 8,
+      "cost": 2600,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.17,
+      "productionTime": 4.30000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.569000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.8380000000000063,
+      "~DO NOT EXPORT : total 3 workers": 2.1070000000000046,
+      "~DO NOT EXPORT : total 4 workers": 1.376000000000003
+    },
+    {
+      "id": "mine",
+      "level": 9,
+      "cost": 3200,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.18,
+      "productionTime": 4.20000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.444000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.6880000000000064,
+      "~DO NOT EXPORT : total 3 workers": 1.9320000000000048,
+      "~DO NOT EXPORT : total 4 workers": 1.1760000000000028
+    },
+    {
+      "id": "mine",
+      "level": 10,
+      "cost": 4000,
+      "workersRequired": 1,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.19,
+      "productionTime": 4.10000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.3210000000000086,
+      "~DO NOT EXPORT : total 2 workers": 2.5420000000000065,
+      "~DO NOT EXPORT : total 3 workers": 1.7630000000000043,
+      "~DO NOT EXPORT : total 4 workers": 0.9840000000000027
+    },
+    {
+      "id": "mine",
+      "level": 11,
+      "cost": 5000,
+      "workersRequired": 1,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.2,
+      "productionTime": 4.00000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.2000000000000077,
+      "~DO NOT EXPORT : total 2 workers": 2.4000000000000057,
+      "~DO NOT EXPORT : total 3 workers": 1.6000000000000036,
+      "~DO NOT EXPORT : total 4 workers": 0.8000000000000016
+    },
+    {
+      "id": "mine",
+      "level": 12,
+      "cost": 6000,
+      "workersRequired": 1,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.21,
+      "productionTime": 3.90000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.081000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.262000000000006,
+      "~DO NOT EXPORT : total 3 workers": 1.443000000000004,
+      "~DO NOT EXPORT : total 4 workers": 0.6240000000000019
+    },
+    {
+      "id": "mine",
+      "level": 13,
+      "cost": 7000,
+      "workersRequired": 1,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.22,
+      "productionTime": 3.80000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.964000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.1280000000000054,
+      "~DO NOT EXPORT : total 3 workers": 1.2920000000000034,
+      "~DO NOT EXPORT : total 4 workers": 0.4560000000000013
+    },
+    {
+      "id": "mine",
+      "level": 14,
+      "cost": 8000,
+      "workersRequired": 1,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.23,
+      "productionTime": 3.70000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.8490000000000077,
+      "~DO NOT EXPORT : total 2 workers": 1.9980000000000053,
+      "~DO NOT EXPORT : total 3 workers": 1.147000000000003,
+      "~DO NOT EXPORT : total 4 workers": 0.2960000000000007
+    },
+    {
+      "id": "mine",
+      "level": 15,
+      "cost": 9000,
+      "workersRequired": 1,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.24,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.7360000000000078,
+      "~DO NOT EXPORT : total 2 workers": 1.8720000000000052,
+      "~DO NOT EXPORT : total 3 workers": 1.0080000000000031,
+      "~DO NOT EXPORT : total 4 workers": 0.14400000000000057
+    },
+    {
+      "id": "sawmill",
+      "level": 1,
+      "cost": 75,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.1,
+      "productionTime": 5,
+      "~DO NOT EXPORT : total 1 worker": 4.5,
+      "~DO NOT EXPORT : total 2 workers": 4,
+      "~DO NOT EXPORT : total 3 workers": 3.5,
+      "~DO NOT EXPORT : total 4 workers": 3
+    },
+    {
+      "id": "sawmill",
+      "level": 2,
+      "cost": 150,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.11,
+      "productionTime": 4.9,
+      "~DO NOT EXPORT : total 1 worker": 4.361000000000001,
+      "~DO NOT EXPORT : total 2 workers": 3.822,
+      "~DO NOT EXPORT : total 3 workers": 3.2830000000000004,
+      "~DO NOT EXPORT : total 4 workers": 2.744
+    },
+    {
+      "id": "sawmill",
+      "level": 3,
+      "cost": 300,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.12,
+      "productionTime": 4.8,
+      "~DO NOT EXPORT : total 1 worker": 4.224,
+      "~DO NOT EXPORT : total 2 workers": 3.6479999999999997,
+      "~DO NOT EXPORT : total 3 workers": 3.072,
+      "~DO NOT EXPORT : total 4 workers": 2.496
+    },
+    {
+      "id": "sawmill",
+      "level": 4,
+      "cost": 600,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.13,
+      "productionTime": 4.7,
+      "~DO NOT EXPORT : total 1 worker": 4.089,
+      "~DO NOT EXPORT : total 2 workers": 3.4779999999999998,
+      "~DO NOT EXPORT : total 3 workers": 2.867,
+      "~DO NOT EXPORT : total 4 workers": 2.256
+    },
+    {
+      "id": "sawmill",
+      "level": 5,
+      "cost": 1200,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.14,
+      "productionTime": 4.6,
+      "~DO NOT EXPORT : total 1 worker": 3.9559999999999995,
+      "~DO NOT EXPORT : total 2 workers": 3.3119999999999994,
+      "~DO NOT EXPORT : total 3 workers": 2.6679999999999997,
+      "~DO NOT EXPORT : total 4 workers": 2.0239999999999996
+    },
+    {
+      "id": "sawmill",
+      "level": 6,
+      "cost": 1800,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.15,
+      "productionTime": 4.50000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.825000000000008,
+      "~DO NOT EXPORT : total 2 workers": 3.1500000000000066,
+      "~DO NOT EXPORT : total 3 workers": 2.4750000000000054,
+      "~DO NOT EXPORT : total 4 workers": 1.8000000000000038
+    },
+    {
+      "id": "sawmill",
+      "level": 7,
+      "cost": 2200,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.16,
+      "productionTime": 4.40000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.6960000000000086,
+      "~DO NOT EXPORT : total 2 workers": 2.992000000000007,
+      "~DO NOT EXPORT : total 3 workers": 2.288000000000005,
+      "~DO NOT EXPORT : total 4 workers": 1.5840000000000036
+    },
+    {
+      "id": "sawmill",
+      "level": 8,
+      "cost": 2600,
+      "workersRequired": 2,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.17,
+      "productionTime": 4.30000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.569000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.8380000000000063,
+      "~DO NOT EXPORT : total 3 workers": 2.1070000000000046,
+      "~DO NOT EXPORT : total 4 workers": 1.376000000000003
+    },
+    {
+      "id": "sawmill",
+      "level": 9,
+      "cost": 3200,
+      "workersRequired": 2,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.18,
+      "productionTime": 4.20000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.444000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.6880000000000064,
+      "~DO NOT EXPORT : total 3 workers": 1.9320000000000048,
+      "~DO NOT EXPORT : total 4 workers": 1.1760000000000028
+    },
+    {
+      "id": "sawmill",
+      "level": 10,
+      "cost": 4000,
+      "workersRequired": 2,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.19,
+      "productionTime": 4.10000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.3210000000000086,
+      "~DO NOT EXPORT : total 2 workers": 2.5420000000000065,
+      "~DO NOT EXPORT : total 3 workers": 1.7630000000000043,
+      "~DO NOT EXPORT : total 4 workers": 0.9840000000000027
+    },
+    {
+      "id": "sawmill",
+      "level": 11,
+      "cost": 5000,
+      "workersRequired": 2,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.2,
+      "productionTime": 4.00000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.2000000000000077,
+      "~DO NOT EXPORT : total 2 workers": 2.4000000000000057,
+      "~DO NOT EXPORT : total 3 workers": 1.6000000000000036,
+      "~DO NOT EXPORT : total 4 workers": 0.8000000000000016
+    },
+    {
+      "id": "sawmill",
+      "level": 12,
+      "cost": 6000,
+      "workersRequired": 2,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.21,
+      "productionTime": 3.90000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.081000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.262000000000006,
+      "~DO NOT EXPORT : total 3 workers": 1.443000000000004,
+      "~DO NOT EXPORT : total 4 workers": 0.6240000000000019
+    },
+    {
+      "id": "sawmill",
+      "level": 13,
+      "cost": 7000,
+      "workersRequired": 3,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.22,
+      "productionTime": 3.80000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.964000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.1280000000000054,
+      "~DO NOT EXPORT : total 3 workers": 1.2920000000000034,
+      "~DO NOT EXPORT : total 4 workers": 0.4560000000000013
+    },
+    {
+      "id": "sawmill",
+      "level": 14,
+      "cost": 8000,
+      "workersRequired": 3,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.23,
+      "productionTime": 3.70000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.8490000000000077,
+      "~DO NOT EXPORT : total 2 workers": 1.9980000000000053,
+      "~DO NOT EXPORT : total 3 workers": 1.147000000000003,
+      "~DO NOT EXPORT : total 4 workers": 0.2960000000000007
+    },
+    {
+      "id": "sawmill",
+      "level": 15,
+      "cost": 9000,
+      "workersRequired": 3,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.24,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.7360000000000078,
+      "~DO NOT EXPORT : total 2 workers": 1.8720000000000052,
+      "~DO NOT EXPORT : total 3 workers": 1.0080000000000031,
+      "~DO NOT EXPORT : total 4 workers": 0.14400000000000057
+    },
+    {
+      "id": "forge",
+      "level": 1,
+      "cost": 75,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.1,
+      "productionTime": 5,
+      "~DO NOT EXPORT : total 1 worker": 4.5,
+      "~DO NOT EXPORT : total 2 workers": 4,
+      "~DO NOT EXPORT : total 3 workers": 3.5,
+      "~DO NOT EXPORT : total 4 workers": 3
+    },
+    {
+      "id": "forge",
+      "level": 2,
+      "cost": 150,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.11,
+      "productionTime": 4.9,
+      "~DO NOT EXPORT : total 1 worker": 4.361000000000001,
+      "~DO NOT EXPORT : total 2 workers": 3.822,
+      "~DO NOT EXPORT : total 3 workers": 3.2830000000000004,
+      "~DO NOT EXPORT : total 4 workers": 2.744
+    },
+    {
+      "id": "forge",
+      "level": 3,
+      "cost": 300,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.12,
+      "productionTime": 4.8,
+      "~DO NOT EXPORT : total 1 worker": 4.224,
+      "~DO NOT EXPORT : total 2 workers": 3.6479999999999997,
+      "~DO NOT EXPORT : total 3 workers": 3.072,
+      "~DO NOT EXPORT : total 4 workers": 2.496
+    },
+    {
+      "id": "forge",
+      "level": 4,
+      "cost": 600,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.13,
+      "productionTime": 4.7,
+      "~DO NOT EXPORT : total 1 worker": 4.089,
+      "~DO NOT EXPORT : total 2 workers": 3.4779999999999998,
+      "~DO NOT EXPORT : total 3 workers": 2.867,
+      "~DO NOT EXPORT : total 4 workers": 2.256
+    },
+    {
+      "id": "forge",
+      "level": 5,
+      "cost": 1200,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.14,
+      "productionTime": 4.6,
+      "~DO NOT EXPORT : total 1 worker": 3.9559999999999995,
+      "~DO NOT EXPORT : total 2 workers": 3.3119999999999994,
+      "~DO NOT EXPORT : total 3 workers": 2.6679999999999997,
+      "~DO NOT EXPORT : total 4 workers": 2.0239999999999996
+    },
+    {
+      "id": "forge",
+      "level": 6,
+      "cost": 1800,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.15,
+      "productionTime": 4.50000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.825000000000008,
+      "~DO NOT EXPORT : total 2 workers": 3.1500000000000066,
+      "~DO NOT EXPORT : total 3 workers": 2.4750000000000054,
+      "~DO NOT EXPORT : total 4 workers": 1.8000000000000038
+    },
+    {
+      "id": "forge",
+      "level": 7,
+      "cost": 2200,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.16,
+      "productionTime": 4.40000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.6960000000000086,
+      "~DO NOT EXPORT : total 2 workers": 2.992000000000007,
+      "~DO NOT EXPORT : total 3 workers": 2.288000000000005,
+      "~DO NOT EXPORT : total 4 workers": 1.5840000000000036
+    },
+    {
+      "id": "forge",
+      "level": 8,
+      "cost": 2600,
+      "workersRequired": 2,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.17,
+      "productionTime": 4.30000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.569000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.8380000000000063,
+      "~DO NOT EXPORT : total 3 workers": 2.1070000000000046,
+      "~DO NOT EXPORT : total 4 workers": 1.376000000000003
+    },
+    {
+      "id": "forge",
+      "level": 9,
+      "cost": 3200,
+      "workersRequired": 2,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.18,
+      "productionTime": 4.20000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.444000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.6880000000000064,
+      "~DO NOT EXPORT : total 3 workers": 1.9320000000000048,
+      "~DO NOT EXPORT : total 4 workers": 1.1760000000000028
+    },
+    {
+      "id": "forge",
+      "level": 10,
+      "cost": 4000,
+      "workersRequired": 2,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.19,
+      "productionTime": 4.10000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.3210000000000086,
+      "~DO NOT EXPORT : total 2 workers": 2.5420000000000065,
+      "~DO NOT EXPORT : total 3 workers": 1.7630000000000043,
+      "~DO NOT EXPORT : total 4 workers": 0.9840000000000027
+    },
+    {
+      "id": "forge",
+      "level": 11,
+      "cost": 5000,
+      "workersRequired": 2,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.2,
+      "productionTime": 4.00000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.2000000000000077,
+      "~DO NOT EXPORT : total 2 workers": 2.4000000000000057,
+      "~DO NOT EXPORT : total 3 workers": 1.6000000000000036,
+      "~DO NOT EXPORT : total 4 workers": 0.8000000000000016
+    },
+    {
+      "id": "forge",
+      "level": 12,
+      "cost": 6000,
+      "workersRequired": 2,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.21,
+      "productionTime": 3.90000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.081000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.262000000000006,
+      "~DO NOT EXPORT : total 3 workers": 1.443000000000004,
+      "~DO NOT EXPORT : total 4 workers": 0.6240000000000019
+    },
+    {
+      "id": "forge",
+      "level": 13,
+      "cost": 7000,
+      "workersRequired": 3,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.22,
+      "productionTime": 3.80000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.964000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.1280000000000054,
+      "~DO NOT EXPORT : total 3 workers": 1.2920000000000034,
+      "~DO NOT EXPORT : total 4 workers": 0.4560000000000013
+    },
+    {
+      "id": "forge",
+      "level": 14,
+      "cost": 8000,
+      "workersRequired": 3,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.23,
+      "productionTime": 3.70000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.8490000000000077,
+      "~DO NOT EXPORT : total 2 workers": 1.9980000000000053,
+      "~DO NOT EXPORT : total 3 workers": 1.147000000000003,
+      "~DO NOT EXPORT : total 4 workers": 0.2960000000000007
+    },
+    {
+      "id": "forge",
+      "level": 15,
+      "cost": 9000,
+      "workersRequired": 3,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.24,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.7360000000000078,
+      "~DO NOT EXPORT : total 2 workers": 1.8720000000000052,
+      "~DO NOT EXPORT : total 3 workers": 1.0080000000000031,
+      "~DO NOT EXPORT : total 4 workers": 0.14400000000000057
+    },
+    {
+      "id": "military_camp",
+      "level": 1,
+      "cost": 75,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.1,
+      "productionTime": 5,
+      "~DO NOT EXPORT : total 1 worker": 4.5,
+      "~DO NOT EXPORT : total 2 workers": 4,
+      "~DO NOT EXPORT : total 3 workers": 3.5,
+      "~DO NOT EXPORT : total 4 workers": 3
+    },
+    {
+      "id": "military_camp",
+      "level": 2,
+      "cost": 150,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.11,
+      "productionTime": 4.9,
+      "~DO NOT EXPORT : total 1 worker": 4.361000000000001,
+      "~DO NOT EXPORT : total 2 workers": 3.822,
+      "~DO NOT EXPORT : total 3 workers": 3.2830000000000004,
+      "~DO NOT EXPORT : total 4 workers": 2.744
+    },
+    {
+      "id": "military_camp",
+      "level": 3,
+      "cost": 300,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.12,
+      "productionTime": 4.8,
+      "~DO NOT EXPORT : total 1 worker": 4.224,
+      "~DO NOT EXPORT : total 2 workers": 3.6479999999999997,
+      "~DO NOT EXPORT : total 3 workers": 3.072,
+      "~DO NOT EXPORT : total 4 workers": 2.496
+    },
+    {
+      "id": "military_camp",
+      "level": 4,
+      "cost": 600,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.13,
+      "productionTime": 4.7,
+      "~DO NOT EXPORT : total 1 worker": 4.089,
+      "~DO NOT EXPORT : total 2 workers": 3.4779999999999998,
+      "~DO NOT EXPORT : total 3 workers": 2.867,
+      "~DO NOT EXPORT : total 4 workers": 2.256
+    },
+    {
+      "id": "military_camp",
+      "level": 5,
+      "cost": 1200,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.14,
+      "productionTime": 4.6,
+      "~DO NOT EXPORT : total 1 worker": 3.9559999999999995,
+      "~DO NOT EXPORT : total 2 workers": 3.3119999999999994,
+      "~DO NOT EXPORT : total 3 workers": 2.6679999999999997,
+      "~DO NOT EXPORT : total 4 workers": 2.0239999999999996
+    },
+    {
+      "id": "military_camp",
+      "level": 6,
+      "cost": 1800,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.15,
+      "productionTime": 4.50000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.825000000000008,
+      "~DO NOT EXPORT : total 2 workers": 3.1500000000000066,
+      "~DO NOT EXPORT : total 3 workers": 2.4750000000000054,
+      "~DO NOT EXPORT : total 4 workers": 1.8000000000000038
+    },
+    {
+      "id": "military_camp",
+      "level": 7,
+      "cost": 2200,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.16,
+      "productionTime": 4.40000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.6960000000000086,
+      "~DO NOT EXPORT : total 2 workers": 2.992000000000007,
+      "~DO NOT EXPORT : total 3 workers": 2.288000000000005,
+      "~DO NOT EXPORT : total 4 workers": 1.5840000000000036
+    },
+    {
+      "id": "military_camp",
+      "level": 8,
+      "cost": 2600,
+      "workersRequired": 2,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.17,
+      "productionTime": 4.30000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.569000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.8380000000000063,
+      "~DO NOT EXPORT : total 3 workers": 2.1070000000000046,
+      "~DO NOT EXPORT : total 4 workers": 1.376000000000003
+    },
+    {
+      "id": "military_camp",
+      "level": 9,
+      "cost": 3200,
+      "workersRequired": 2,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.18,
+      "productionTime": 4.20000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.444000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.6880000000000064,
+      "~DO NOT EXPORT : total 3 workers": 1.9320000000000048,
+      "~DO NOT EXPORT : total 4 workers": 1.1760000000000028
+    },
+    {
+      "id": "military_camp",
+      "level": 10,
+      "cost": 4000,
+      "workersRequired": 2,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.19,
+      "productionTime": 4.10000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.3210000000000086,
+      "~DO NOT EXPORT : total 2 workers": 2.5420000000000065,
+      "~DO NOT EXPORT : total 3 workers": 1.7630000000000043,
+      "~DO NOT EXPORT : total 4 workers": 0.9840000000000027
+    },
+    {
+      "id": "military_camp",
+      "level": 11,
+      "cost": 5000,
+      "workersRequired": 2,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.2,
+      "productionTime": 4.00000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.2000000000000077,
+      "~DO NOT EXPORT : total 2 workers": 2.4000000000000057,
+      "~DO NOT EXPORT : total 3 workers": 1.6000000000000036,
+      "~DO NOT EXPORT : total 4 workers": 0.8000000000000016
+    },
+    {
+      "id": "military_camp",
+      "level": 12,
+      "cost": 6000,
+      "workersRequired": 2,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.21,
+      "productionTime": 3.90000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.081000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.262000000000006,
+      "~DO NOT EXPORT : total 3 workers": 1.443000000000004,
+      "~DO NOT EXPORT : total 4 workers": 0.6240000000000019
+    },
+    {
+      "id": "military_camp",
+      "level": 13,
+      "cost": 7000,
+      "workersRequired": 3,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.22,
+      "productionTime": 3.80000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.964000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.1280000000000054,
+      "~DO NOT EXPORT : total 3 workers": 1.2920000000000034,
+      "~DO NOT EXPORT : total 4 workers": 0.4560000000000013
+    },
+    {
+      "id": "military_camp",
+      "level": 14,
+      "cost": 8000,
+      "workersRequired": 3,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.23,
+      "productionTime": 3.70000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.8490000000000077,
+      "~DO NOT EXPORT : total 2 workers": 1.9980000000000053,
+      "~DO NOT EXPORT : total 3 workers": 1.147000000000003,
+      "~DO NOT EXPORT : total 4 workers": 0.2960000000000007
+    },
+    {
+      "id": "military_camp",
+      "level": 15,
+      "cost": 9000,
+      "workersRequired": 3,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.24,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.7360000000000078,
+      "~DO NOT EXPORT : total 2 workers": 1.8720000000000052,
+      "~DO NOT EXPORT : total 3 workers": 1.0080000000000031,
+      "~DO NOT EXPORT : total 4 workers": 0.14400000000000057
+    },
+    {
+      "id": "magic_tower",
+      "level": 1,
+      "cost": 75,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.1,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.240000000000009,
+      "~DO NOT EXPORT : total 2 workers": 2.880000000000008,
+      "~DO NOT EXPORT : total 3 workers": 2.5200000000000067,
+      "~DO NOT EXPORT : total 4 workers": 2.160000000000006
+    },
+    {
+      "id": "magic_tower",
+      "level": 2,
+      "cost": 150,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.11,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.2040000000000086,
+      "~DO NOT EXPORT : total 2 workers": 2.808000000000008,
+      "~DO NOT EXPORT : total 3 workers": 2.4120000000000066,
+      "~DO NOT EXPORT : total 4 workers": 2.0160000000000053
+    },
+    {
+      "id": "magic_tower",
+      "level": 3,
+      "cost": 300,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.12,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.1680000000000086,
+      "~DO NOT EXPORT : total 2 workers": 2.7360000000000078,
+      "~DO NOT EXPORT : total 3 workers": 2.3040000000000065,
+      "~DO NOT EXPORT : total 4 workers": 1.8720000000000052
+    },
+    {
+      "id": "magic_tower",
+      "level": 4,
+      "cost": 600,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.13,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.1320000000000086,
+      "~DO NOT EXPORT : total 2 workers": 2.6640000000000073,
+      "~DO NOT EXPORT : total 3 workers": 2.196000000000006,
+      "~DO NOT EXPORT : total 4 workers": 1.7280000000000046
+    },
+    {
+      "id": "magic_tower",
+      "level": 5,
+      "cost": 1200,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.14,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.0960000000000085,
+      "~DO NOT EXPORT : total 2 workers": 2.5920000000000067,
+      "~DO NOT EXPORT : total 3 workers": 2.0880000000000054,
+      "~DO NOT EXPORT : total 4 workers": 1.584000000000004
+    },
+    {
+      "id": "magic_tower",
+      "level": 6,
+      "cost": 1800,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.15,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.0600000000000085,
+      "~DO NOT EXPORT : total 2 workers": 2.5200000000000067,
+      "~DO NOT EXPORT : total 3 workers": 1.9800000000000053,
+      "~DO NOT EXPORT : total 4 workers": 1.440000000000004
+    },
+    {
+      "id": "magic_tower",
+      "level": 7,
+      "cost": 2200,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.16,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 3.024000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.4480000000000066,
+      "~DO NOT EXPORT : total 3 workers": 1.872000000000005,
+      "~DO NOT EXPORT : total 4 workers": 1.2960000000000034
+    },
+    {
+      "id": "magic_tower",
+      "level": 8,
+      "cost": 2600,
+      "workersRequired": 2,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.17,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.988000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.3760000000000066,
+      "~DO NOT EXPORT : total 3 workers": 1.7640000000000047,
+      "~DO NOT EXPORT : total 4 workers": 1.1520000000000028
+    },
+    {
+      "id": "magic_tower",
+      "level": 9,
+      "cost": 3200,
+      "workersRequired": 2,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.18,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.952000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.3040000000000065,
+      "~DO NOT EXPORT : total 3 workers": 1.6560000000000046,
+      "~DO NOT EXPORT : total 4 workers": 1.0080000000000027
+    },
+    {
+      "id": "magic_tower",
+      "level": 10,
+      "cost": 4000,
+      "workersRequired": 2,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.19,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.916000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.2320000000000064,
+      "~DO NOT EXPORT : total 3 workers": 1.5480000000000045,
+      "~DO NOT EXPORT : total 4 workers": 0.8640000000000025
+    },
+    {
+      "id": "magic_tower",
+      "level": 11,
+      "cost": 5000,
+      "workersRequired": 2,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.2,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.880000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.160000000000006,
+      "~DO NOT EXPORT : total 3 workers": 1.440000000000004,
+      "~DO NOT EXPORT : total 4 workers": 0.720000000000002
+    },
+    {
+      "id": "magic_tower",
+      "level": 12,
+      "cost": 6000,
+      "workersRequired": 2,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.21,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.844000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.088000000000006,
+      "~DO NOT EXPORT : total 3 workers": 1.3320000000000038,
+      "~DO NOT EXPORT : total 4 workers": 0.5760000000000018
+    },
+    {
+      "id": "magic_tower",
+      "level": 13,
+      "cost": 7000,
+      "workersRequired": 3,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.22,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.808000000000008,
+      "~DO NOT EXPORT : total 2 workers": 2.0160000000000053,
+      "~DO NOT EXPORT : total 3 workers": 1.2240000000000033,
+      "~DO NOT EXPORT : total 4 workers": 0.43200000000000127
+    },
+    {
+      "id": "magic_tower",
+      "level": 14,
+      "cost": 8000,
+      "workersRequired": 3,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.23,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.7720000000000073,
+      "~DO NOT EXPORT : total 2 workers": 1.9440000000000053,
+      "~DO NOT EXPORT : total 3 workers": 1.1160000000000028,
+      "~DO NOT EXPORT : total 4 workers": 0.2880000000000007
+    },
+    {
+      "id": "magic_tower",
+      "level": 15,
+      "cost": 9000,
+      "workersRequired": 3,
+      "maxWorkers": 4,
+      "workerSpeedBonus": 0.24,
+      "productionTime": 3.60000000000001,
+      "~DO NOT EXPORT : total 1 worker": 2.7360000000000078,
+      "~DO NOT EXPORT : total 2 workers": 1.8720000000000052,
+      "~DO NOT EXPORT : total 3 workers": 1.0080000000000031,
+      "~DO NOT EXPORT : total 4 workers": 0.14400000000000057
+    }
+  ],
+  "outputs": [
+    {
+      "id": "wood",
+      "profil": "profil_complexity 0"
+    },
+    {
+      "id": "iron",
+      "profil": "profil_complexity 0"
+    },
+    {
+      "id": "plank",
+      "profil": "profil_complexity 0"
+    },
+    {
+      "id": "sword",
+      "profil": "profil_complexity 0"
+    },
+    {
+      "id": "shield",
+      "profil": "profil_complexity 0"
+    },
+    {
+      "id": "magic",
+      "profil": "profil_complexity 0"
+    },
+    {
+      "id": "rock",
+      "profil": "profil_complexity 0"
+    }
+  ],
+  "outputsProfiles": [
+    {
+      "id": "profil_complexity 0",
+      "level": 1,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 70,
+      "tier2": 30,
+      "tier3": 0,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 1,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 65,
+      "tier2": 35,
+      "tier3": 0,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 1,
+      "quantity": 5,
+      "weight": 350,
+      "group": "C",
+      "tier1": 60,
+      "tier2": 35,
+      "tier3": 5,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 1,
+      "quantity": 10,
+      "weight": 120,
+      "group": "D",
+      "tier1": 55,
+      "tier2": 35,
+      "tier3": 10,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 1,
+      "quantity": 15,
+      "weight": 25,
+      "group": "E",
+      "tier1": 45,
+      "tier2": 40,
+      "tier3": 15,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 1,
+      "quantity": 30,
+      "weight": 5,
+      "group": "F",
+      "tier1": 40,
+      "tier2": 40,
+      "tier3": 15,
+      "tier4": 5,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 2,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 60,
+      "tier2": 35,
+      "tier3": 5,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 2,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 60,
+      "tier2": 35,
+      "tier3": 5,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 2,
+      "quantity": 5,
+      "weight": 350,
+      "group": "C",
+      "tier1": 55,
+      "tier2": 35,
+      "tier3": 10,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 2,
+      "quantity": 10,
+      "weight": 120,
+      "group": "D",
+      "tier1": 45,
+      "tier2": 40,
+      "tier3": 15,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 2,
+      "quantity": 15,
+      "weight": 25,
+      "group": "E",
+      "tier1": 40,
+      "tier2": 40,
+      "tier3": 15,
+      "tier4": 5,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 2,
+      "quantity": 30,
+      "weight": 5,
+      "group": "F",
+      "tier1": 40,
+      "tier2": 35,
+      "tier3": 20,
+      "tier4": 5,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 3,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 55,
+      "tier2": 35,
+      "tier3": 10,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 3,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 50,
+      "tier2": 35,
+      "tier3": 10,
+      "tier4": 5,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 3,
+      "quantity": 5,
+      "weight": 350,
+      "group": "C",
+      "tier1": 45,
+      "tier2": 40,
+      "tier3": 15,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 3,
+      "quantity": 10,
+      "weight": 120,
+      "group": "D",
+      "tier1": 40,
+      "tier2": 40,
+      "tier3": 15,
+      "tier4": 5,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 3,
+      "quantity": 15,
+      "weight": 25,
+      "group": "E",
+      "tier1": 35,
+      "tier2": 40,
+      "tier3": 20,
+      "tier4": 5,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 3,
+      "quantity": 30,
+      "weight": 5,
+      "group": "F",
+      "tier1": 30,
+      "tier2": 35,
+      "tier3": 20,
+      "tier4": 10,
+      "tier5": 5,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 4,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 50,
+      "tier2": 35,
+      "tier3": 10,
+      "tier4": 5,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 4,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 45,
+      "tier2": 40,
+      "tier3": 15,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 4,
+      "quantity": 5,
+      "weight": 350,
+      "group": "C",
+      "tier1": 40,
+      "tier2": 40,
+      "tier3": 15,
+      "tier4": 5,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 4,
+      "quantity": 10,
+      "weight": 120,
+      "group": "D",
+      "tier1": 40,
+      "tier2": 35,
+      "tier3": 20,
+      "tier4": 5,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 4,
+      "quantity": 15,
+      "weight": 25,
+      "group": "E",
+      "tier1": 30,
+      "tier2": 35,
+      "tier3": 20,
+      "tier4": 10,
+      "tier5": 5,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 4,
+      "quantity": 30,
+      "weight": 5,
+      "group": "F",
+      "tier1": 25,
+      "tier2": 40,
+      "tier3": 20,
+      "tier4": 10,
+      "tier5": 5,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 5,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 40,
+      "tier2": 40,
+      "tier3": 15,
+      "tier4": 5,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 5,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 35,
+      "tier2": 45,
+      "tier3": 15,
+      "tier4": 5,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 5,
+      "quantity": 5,
+      "weight": 350,
+      "group": "C",
+      "tier1": 35,
+      "tier2": 40,
+      "tier3": 20,
+      "tier4": 5,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 5,
+      "quantity": 10,
+      "weight": 120,
+      "group": "D",
+      "tier1": 30,
+      "tier2": 35,
+      "tier3": 20,
+      "tier4": 10,
+      "tier5": 5,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 5,
+      "quantity": 15,
+      "weight": 25,
+      "group": "E",
+      "tier1": 25,
+      "tier2": 35,
+      "tier3": 25,
+      "tier4": 10,
+      "tier5": 5,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 5,
+      "quantity": 30,
+      "weight": 5,
+      "group": "F",
+      "tier1": 25,
+      "tier2": 35,
+      "tier3": 25,
+      "tier4": 10,
+      "tier5": 5,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 6,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 40,
+      "tier2": 35,
+      "tier3": 20,
+      "tier4": 5,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 6,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 40,
+      "tier2": 35,
+      "tier3": 20,
+      "tier4": 5,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 6,
+      "quantity": 5,
+      "weight": 350,
+      "group": "C",
+      "tier1": 30,
+      "tier2": 35,
+      "tier3": 20,
+      "tier4": 10,
+      "tier5": 5,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 6,
+      "quantity": 10,
+      "weight": 120,
+      "group": "D",
+      "tier1": 25,
+      "tier2": 35,
+      "tier3": 25,
+      "tier4": 10,
+      "tier5": 5,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 6,
+      "quantity": 15,
+      "weight": 25,
+      "group": "E",
+      "tier1": 25,
+      "tier2": 35,
+      "tier3": 25,
+      "tier4": 10,
+      "tier5": 5,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 6,
+      "quantity": 30,
+      "weight": 5,
+      "group": "F",
+      "tier1": 20,
+      "tier2": 30,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 5,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 7,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 30,
+      "tier2": 40,
+      "tier3": 20,
+      "tier4": 10,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 7,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 30,
+      "tier2": 35,
+      "tier3": 20,
+      "tier4": 10,
+      "tier5": 5,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 7,
+      "quantity": 5,
+      "weight": 350,
+      "group": "C",
+      "tier1": 25,
+      "tier2": 35,
+      "tier3": 25,
+      "tier4": 10,
+      "tier5": 5,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 7,
+      "quantity": 10,
+      "weight": 120,
+      "group": "D",
+      "tier1": 25,
+      "tier2": 35,
+      "tier3": 25,
+      "tier4": 10,
+      "tier5": 5,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 7,
+      "quantity": 15,
+      "weight": 25,
+      "group": "E",
+      "tier1": 20,
+      "tier2": 30,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 5,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 7,
+      "quantity": 30,
+      "weight": 5,
+      "group": "F",
+      "tier1": 20,
+      "tier2": 30,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 5,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 8,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 30,
+      "tier2": 35,
+      "tier3": 20,
+      "tier4": 10,
+      "tier5": 5,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 8,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 25,
+      "tier2": 35,
+      "tier3": 25,
+      "tier4": 10,
+      "tier5": 5,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 8,
+      "quantity": 5,
+      "weight": 350,
+      "group": "C",
+      "tier1": 20,
+      "tier2": 35,
+      "tier3": 25,
+      "tier4": 10,
+      "tier5": 5,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 8,
+      "quantity": 10,
+      "weight": 120,
+      "group": "D",
+      "tier1": 20,
+      "tier2": 30,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 5,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 8,
+      "quantity": 15,
+      "weight": 25,
+      "group": "E",
+      "tier1": 20,
+      "tier2": 30,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 5,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 8,
+      "quantity": 30,
+      "weight": 5,
+      "group": "F",
+      "tier1": 15,
+      "tier2": 30,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 10,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 9,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 25,
+      "tier2": 35,
+      "tier3": 25,
+      "tier4": 10,
+      "tier5": 5,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 9,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 20,
+      "tier2": 35,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 0,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 9,
+      "quantity": 5,
+      "weight": 350,
+      "group": "C",
+      "tier1": 20,
+      "tier2": 30,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 5,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 9,
+      "quantity": 10,
+      "weight": 120,
+      "group": "D",
+      "tier1": 20,
+      "tier2": 30,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 5,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 9,
+      "quantity": 15,
+      "weight": 25,
+      "group": "E",
+      "tier1": 15,
+      "tier2": 30,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 10,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 9,
+      "quantity": 30,
+      "weight": 5,
+      "group": "F",
+      "tier1": 15,
+      "tier2": 30,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 10,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 10,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 20,
+      "tier2": 35,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 0,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 10,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 20,
+      "tier2": 30,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 5,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 10,
+      "quantity": 5,
+      "weight": 350,
+      "group": "C",
+      "tier1": 15,
+      "tier2": 35,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 5,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 10,
+      "quantity": 10,
+      "weight": 120,
+      "group": "D",
+      "tier1": 15,
+      "tier2": 30,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 10,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 10,
+      "quantity": 15,
+      "weight": 25,
+      "group": "E",
+      "tier1": 15,
+      "tier2": 25,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 10,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 10,
+      "quantity": 30,
+      "weight": 5,
+      "group": "F",
+      "tier1": 10,
+      "tier2": 25,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 10,
+      "tier6": 10
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 11,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 20,
+      "tier2": 30,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 5,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 11,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 15,
+      "tier2": 35,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 5,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 11,
+      "quantity": 5,
+      "weight": 350,
+      "group": "C",
+      "tier1": 15,
+      "tier2": 30,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 10,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 11,
+      "quantity": 10,
+      "weight": 120,
+      "group": "D",
+      "tier1": 15,
+      "tier2": 25,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 10,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 11,
+      "quantity": 15,
+      "weight": 25,
+      "group": "E",
+      "tier1": 10,
+      "tier2": 25,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 10,
+      "tier6": 10
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 11,
+      "quantity": 30,
+      "weight": 5,
+      "group": "F",
+      "tier1": 10,
+      "tier2": 25,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 10,
+      "tier6": 10
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 12,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 15,
+      "tier2": 30,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 10,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 12,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 15,
+      "tier2": 30,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 10,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 12,
+      "quantity": 5,
+      "weight": 350,
+      "group": "C",
+      "tier1": 15,
+      "tier2": 25,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 10,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 12,
+      "quantity": 10,
+      "weight": 120,
+      "group": "D",
+      "tier1": 10,
+      "tier2": 30,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 10,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 12,
+      "quantity": 15,
+      "weight": 25,
+      "group": "E",
+      "tier1": 10,
+      "tier2": 25,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 10,
+      "tier6": 10
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 12,
+      "quantity": 30,
+      "weight": 5,
+      "group": "F",
+      "tier1": 10,
+      "tier2": 20,
+      "tier3": 30,
+      "tier4": 20,
+      "tier5": 10,
+      "tier6": 10
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 13,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 15,
+      "tier2": 30,
+      "tier3": 25,
+      "tier4": 15,
+      "tier5": 10,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 13,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 15,
+      "tier2": 25,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 10,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 13,
+      "quantity": 5,
+      "weight": 350,
+      "group": "C",
+      "tier1": 10,
+      "tier2": 25,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 10,
+      "tier6": 10
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 13,
+      "quantity": 10,
+      "weight": 120,
+      "group": "D",
+      "tier1": 10,
+      "tier2": 25,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 10,
+      "tier6": 10
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 13,
+      "quantity": 15,
+      "weight": 25,
+      "group": "E",
+      "tier1": 10,
+      "tier2": 20,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 15,
+      "tier6": 10
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 13,
+      "quantity": 30,
+      "weight": 5,
+      "group": "F",
+      "tier1": 5,
+      "tier2": 20,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 15,
+      "tier6": 15
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 14,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 15,
+      "tier2": 25,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 10,
+      "tier6": 5
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 14,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 10,
+      "tier2": 25,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 10,
+      "tier6": 10
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 14,
+      "quantity": 5,
+      "weight": 350,
+      "group": "C",
+      "tier1": 10,
+      "tier2": 25,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 10,
+      "tier6": 10
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 14,
+      "quantity": 10,
+      "weight": 120,
+      "group": "D",
+      "tier1": 10,
+      "tier2": 20,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 15,
+      "tier6": 10
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 14,
+      "quantity": 15,
+      "weight": 25,
+      "group": "E",
+      "tier1": 5,
+      "tier2": 20,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 15,
+      "tier6": 15
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 14,
+      "quantity": 30,
+      "weight": 5,
+      "group": "F",
+      "tier1": 5,
+      "tier2": 20,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 15,
+      "tier6": 15
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 15,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 10,
+      "tier2": 25,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 10,
+      "tier6": 10
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 15,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 10,
+      "tier2": 20,
+      "tier3": 30,
+      "tier4": 20,
+      "tier5": 10,
+      "tier6": 10
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 15,
+      "quantity": 5,
+      "weight": 350,
+      "group": "C",
+      "tier1": 10,
+      "tier2": 20,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 15,
+      "tier6": 10
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 15,
+      "quantity": 10,
+      "weight": 120,
+      "group": "D",
+      "tier1": 5,
+      "tier2": 20,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 15,
+      "tier6": 15
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 15,
+      "quantity": 15,
+      "weight": 25,
+      "group": "E",
+      "tier1": 5,
+      "tier2": 20,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 15,
+      "tier6": 15
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 15,
+      "quantity": 30,
+      "weight": 5,
+      "group": "F",
+      "tier1": 5,
+      "tier2": 15,
+      "tier3": 25,
+      "tier4": 20,
+      "tier5": 15,
+      "tier6": 20
+    }
+  ],
+  "inputs": [
+    {
+      "id": "sawmill",
+      "quantity": 1,
+      "type": "wood"
+    },
+    {
+      "id": "forge",
+      "quantity": 1,
+      "type": "iron"
+    },
+    {
+      "id": "forge",
+      "quantity": 1,
+      "type": "wood"
+    },
+    {
+      "id": "military_camp",
+      "quantity": 1,
+      "type": "plank"
+    },
+    {
+      "id": "military_camp",
+      "quantity": 1,
+      "type": "iron"
+    }
+  ],
+  "competitors_behavior": [
+    {
+      "id": "bot_timber",
+      "ressources": "wood",
+      "weights": 100
+    },
+    {
+      "id": "bot_timber",
+      "ressources": "iron",
+      "weights": 10
+    },
+    {
+      "id": "bot_timber",
+      "ressources": "plank",
+      "weights": 60
+    },
+    {
+      "id": "bot_timber",
+      "ressources": "sword",
+      "weights": 40
+    },
+    {
+      "id": "bot_timber",
+      "ressources": "increaseWorker",
+      "weights": 5
+    },
+    {
+      "id": "bot_timber",
+      "ressources": "increaseMarketting",
+      "weights": 5
+    },
+    {
+      "id": "bot_timber",
+      "ressources": "increaseStorage",
+      "weights": 5
+    },
+    {
+      "id": "bot_ferro",
+      "ressources": "wood",
+      "weights": 20
+    },
+    {
+      "id": "bot_ferro",
+      "ressources": "iron",
+      "weights": 100
+    },
+    {
+      "id": "bot_ferro",
+      "ressources": "plank",
+      "weights": 10
+    },
+    {
+      "id": "bot_ferro",
+      "ressources": "sword",
+      "weights": 50
+    },
+    {
+      "id": "bot_ferro",
+      "ressources": "increaseWorker",
+      "weights": 5
+    },
+    {
+      "id": "bot_ferro",
+      "ressources": "increaseMarketting",
+      "weights": 5
+    },
+    {
+      "id": "bot_ferro",
+      "ressources": "increaseStorage",
+      "weights": 5
+    },
+    {
+      "id": "bot_forge",
+      "ressources": "wood",
+      "weights": 10
+    },
+    {
+      "id": "bot_forge",
+      "ressources": "iron",
+      "weights": 10
+    },
+    {
+      "id": "bot_forge",
+      "ressources": "plank",
+      "weights": 20
+    },
+    {
+      "id": "bot_forge",
+      "ressources": "sword",
+      "weights": 100
+    },
+    {
+      "id": "bot_forge",
+      "ressources": "increaseWorker",
+      "weights": 5
+    },
+    {
+      "id": "bot_forge",
+      "ressources": "increaseMarketting",
+      "weights": 5
+    },
+    {
+      "id": "bot_forge",
+      "ressources": "increaseStorage",
+      "weights": 5
+    }
+  ],
+  "slots": [
+    {
+      "id": "A",
+      "font": 10
+    },
+    {
+      "id": "B",
+      "description": "lucky",
+      "color": "#456AD7",
+      "font": 12
+    },
+    {
+      "id": "C",
+      "description": "very lucky !",
+      "color": "#FF5733",
+      "font": 15
+    },
+    {
+      "id": "D",
+      "description": "extreme luck !",
+      "color": "#C240FE",
+      "font": 20
+    },
+    {
+      "id": "E",
+      "description": "godly luck !",
+      "color": "#FFFF38",
+      "font": 25
+    },
+    {
+      "id": "F",
+      "description": "stelar luck !",
+      "color": "#00B2FF",
+      "font": 30
+    }
+  ],
+  "competitors": [
+    {
+      "id": "bot_timber",
+      "displayName": "Timber & Co",
+      "spriteId": "Tree",
+      "startingMoney": 50,
+      "increaseByRound": 50,
+      "upgradeEffect": 50
+    },
+    {
+      "id": "bot_ferro",
+      "displayName": "Ferromax",
+      "spriteId": "Vault",
+      "startingMoney": 50,
+      "increaseByRound": 50,
+      "upgradeEffect": 50
+    },
+    {
+      "id": "bot_forge",
+      "displayName": "ForgeKing",
+      "spriteId": "Sword",
+      "startingMoney": 50,
+      "increaseByRound": 50,
+      "upgradeEffect": 50
+    }
+  ],
+  "roundIncome": [
+    {
+      "round": 1,
+      "coins": 50,
+      "ressource_tier": 1
+    },
+    {
+      "round": 2,
+      "coins": 50,
+      "ressource_tier": 1
+    },
+    {
+      "round": 3,
+      "coins": 50,
+      "ressource_tier": 1
+    },
+    {
+      "round": 4,
+      "coins": 50,
+      "ressource_tier": 1
+    },
+    {
+      "round": 5,
+      "coins": 50,
+      "ressource_tier": 1
+    },
+    {
+      "round": 6,
+      "coins": 50,
+      "ressource_tier": 1
+    },
+    {
+      "round": 7,
+      "coins": 50,
+      "ressource_tier": 1
+    },
+    {
+      "round": 8,
+      "coins": 50,
+      "ressource_tier": 1
+    },
+    {
+      "round": 9,
+      "coins": 50,
+      "ressource_tier": 1
+    },
+    {
+      "round": 10,
+      "coins": 50,
+      "ressource_tier": 2
+    },
+    {
+      "round": 11,
+      "coins": 100,
+      "ressource_tier": 2
+    },
+    {
+      "round": 12,
+      "coins": 100,
+      "ressource_tier": 2
+    },
+    {
+      "round": 13,
+      "coins": 100,
+      "ressource_tier": 2
+    },
+    {
+      "round": 14,
+      "coins": 100,
+      "ressource_tier": 2
+    },
+    {
+      "round": 15,
+      "coins": 100,
+      "ressource_tier": 2
+    },
+    {
+      "round": 16,
+      "coins": 300,
+      "ressource_tier": 2
+    },
+    {
+      "round": 17,
+      "coins": 300,
+      "ressource_tier": 2
+    },
+    {
+      "round": 18,
+      "coins": 300,
+      "ressource_tier": 2
+    },
+    {
+      "round": 19,
+      "coins": 300,
+      "ressource_tier": 2
+    },
+    {
+      "round": 20,
+      "coins": 300,
+      "ressource_tier": 3
+    },
+    {
+      "round": 21,
+      "coins": 300,
+      "ressource_tier": 3
+    },
+    {
+      "round": 22,
+      "coins": 300,
+      "ressource_tier": 3
+    },
+    {
+      "round": 23,
+      "coins": 300,
+      "ressource_tier": 3
+    },
+    {
+      "round": 24,
+      "coins": 300,
+      "ressource_tier": 3
+    },
+    {
+      "round": 25,
+      "coins": 300,
+      "ressource_tier": 3
+    },
+    {
+      "round": 26,
+      "coins": 500,
+      "ressource_tier": 3
+    },
+    {
+      "round": 27,
+      "coins": 500,
+      "ressource_tier": 3
+    },
+    {
+      "round": 28,
+      "coins": 500,
+      "ressource_tier": 3
+    },
+    {
+      "round": 29,
+      "coins": 500,
+      "ressource_tier": 3
+    },
+    {
+      "round": 30,
+      "coins": 500,
+      "ressource_tier": 4
+    },
+    {
+      "round": 31,
+      "coins": 750,
+      "ressource_tier": 4
+    },
+    {
+      "round": 32,
+      "coins": 750,
+      "ressource_tier": 4
+    },
+    {
+      "round": 33,
+      "coins": 750,
+      "ressource_tier": 4
+    },
+    {
+      "round": 34,
+      "coins": 750,
+      "ressource_tier": 4
+    },
+    {
+      "round": 35,
+      "coins": 750,
+      "ressource_tier": 4
+    },
+    {
+      "round": 36,
+      "coins": 750,
+      "ressource_tier": 5
+    },
+    {
+      "round": 37,
+      "coins": 750,
+      "ressource_tier": 5
+    },
+    {
+      "round": 38,
+      "coins": 750,
+      "ressource_tier": 5
+    },
+    {
+      "round": 39,
+      "coins": 750,
+      "ressource_tier": 5
+    },
+    {
+      "round": 40,
+      "coins": 1000,
+      "ressource_tier": 5
+    },
+    {
+      "round": 41,
+      "coins": 1000,
+      "ressource_tier": 6
+    },
+    {
+      "round": 42,
+      "coins": 1000,
+      "ressource_tier": 6
+    },
+    {
+      "round": 43,
+      "coins": 1000,
+      "ressource_tier": 6
+    },
+    {
+      "round": 44,
+      "coins": 1000,
+      "ressource_tier": 6
+    },
+    {
+      "round": 45,
+      "coins": 1000,
+      "ressource_tier": 6
+    },
+    {
+      "round": 46,
+      "coins": 1000,
+      "ressource_tier": 6
+    },
+    {
+      "round": 47,
+      "coins": 1000,
+      "ressource_tier": 6
+    },
+    {
+      "round": 48,
+      "coins": 1000,
+      "ressource_tier": 6
+    },
+    {
+      "round": 49,
+      "coins": 1000,
+      "ressource_tier": 6
+    },
+    {
+      "round": 50,
+      "coins": 1000,
+      "ressource_tier": 6
+    },
+    {
+      "round": 51,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 52,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 53,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 54,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 55,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 56,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 57,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 58,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 59,
+      "coins": 1250,
+      "ressource_tier": 6
+    },
+    {
+      "round": 60,
+      "coins": 1250,
+      "ressource_tier": 6
+    }
+  ]
+}

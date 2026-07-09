@@ -37,7 +37,8 @@ export function normalize(raw) {
     if (!round) return;
     (marketProfiles[m.id] = marketProfiles[m.id] || {})[round] = {
       customers: m.customers, avg: m["average amount"],
-      weights: { wood: m.wood, iron: m.iron, plank: m.plank, sword: m.sword },
+      // data-driven: one weight per known resource id (column named like the resource)
+      weights: Object.fromEntries(resourceOrder.map((rid) => [rid, m[rid] || 0])),
     };
   });
 
@@ -108,6 +109,10 @@ export function normalize(raw) {
   const slots = {};
   (raw.slots || []).forEach((s) => { slots[s.id] = { description: s.description || "", color: s.color || "", font: s.font || 12 }; });
 
+  // customers: each demanded resource ("Need") maps to the sprite shown for that client
+  const customerSprites = {};
+  (raw.customers || []).forEach((c) => { if (c.Need) customerSprites[c.Need] = c.Sprite; });
+
   const roundIncome = {}; raw.roundIncome.forEach((r) => (roundIncome[r.round] = { coins: r.coins, tier: r.ressource_tier }));
 
   const behavior = {};
@@ -115,7 +120,7 @@ export function normalize(raw) {
   const competitors = raw.competitors.map((c) => ({ ...c, behavior: behavior[c.id] || {} }));
 
   return {
-    g, resources, resourceOrder, maxTier, machines, purchases, roundIncome, competitors, convert, slots,
+    g, resources, resourceOrder, maxTier, machines, purchases, roundIncome, competitors, convert, slots, customerSprites,
     marketProfiles, taxProfiles, unlockProfiles, worldConfigs, worldLevels, rewards, gears, characters, characterOrder, upgradeProfiles,
   };
 }

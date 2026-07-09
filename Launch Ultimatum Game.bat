@@ -3,7 +3,7 @@
 cd /d "%~dp0"
 
 :: 2. Lancer le serveur Python dans une nouvelle fenêtre PowerShell
-start powershell -NoExit -Command "python -m http.server 8777 --directory web"
+start powershell -NoExit -Command "python -m http.server 8777 --directory 'Ultimatum Game/web'"
 
 :: 3. Attendre 2 secondes pour laisser le temps au serveur de bien démarrer
 timeout /t 2 /nobreak > NUL
