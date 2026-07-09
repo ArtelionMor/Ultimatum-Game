@@ -147,13 +147,14 @@ img { image-rendering: pixelated; }
 .hidden { display: none !important; }
 
 /* ---------- Machine card ---------- */
+#machine-list { display: flex; flex-direction: column; gap: 14px; }
 .machine {
   background: var(--bg-card);
   border: 2px solid var(--border);
   border-radius: 12px;
   padding: 12px;
   display: grid;
-  grid-template-columns: 64px 1fr;
+  grid-template-columns: 140px 1fr;
   grid-template-rows: auto auto auto;
   gap: 4px 12px;
   align-items: center;
@@ -163,13 +164,16 @@ img { image-rendering: pixelated; }
 .machine.assignable:active { transform: scale(.99); }
 .machine.producing { border-color: var(--accent-2); }
 .machine-icon {
-  grid-row: 1 / 4;
-  width: 64px; height: 64px;
-  align-self: start;
+  grid-row: 1 / -1;
+  width: 100%; height: 100%;
+  min-height: 140px;
+  object-fit: contain;
+  align-self: stretch;
 }
 .machine-name { font-weight: bold; font-size: 16px; }
 .machine-recipe { display: flex; align-items: center; gap: 4px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
 .machine-recipe img { width: 36px; height: 36px; vertical-align: middle; }
+.machine-recipe img.out { width: 56px; height: 56px; }
 .machine-recipe .arrow { color: var(--accent); font-weight: bold; }
 
 .machine-footer { grid-column: 2; display: flex; align-items: center; gap: 10px; }
@@ -183,7 +187,7 @@ img { image-rendering: pixelated; }
 
 /* progress bar */
 .progress {
-  grid-column: 1 / 3;
+  grid-column: 2 / 3;
   height: 8px; border-radius: 4px;
   background: rgba(0,0,0,.3);
   overflow: hidden;

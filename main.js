@@ -25,9 +25,10 @@ const Game = {
     // holds the per-level group weights + tier distribution shared by that profile.
     // Falls back to the old flat `outputs` shape if `outputsProfiles` is absent.
     this.cfg._outputs = {};
-    if (raw.outputsProfiles) {
+    const outputsProfiles = raw.outputsProfiles || raw.outputs_profiles; // exporter emits snake_case
+    if (outputsProfiles) {
       const profileRows = {}; // `profil_level` -> [{ group, quantity, weight, tiers }]
-      raw.outputsProfiles.forEach((o) => {
+      outputsProfiles.forEach((o) => {
         const k = o.id + "_" + o.level;
         (profileRows[k] = profileRows[k] || []).push({
           group: o.group, quantity: o.quantity, weight: o.weight,
@@ -556,7 +557,8 @@ const Game = {
     const lane = $("#customer-lane");
     const cust = el("div", "customer");
     cust.style.left = randInt(12, 88) + "%";
-    cust.innerHTML = `<div class="bubble"><span>${need.qty}×</span><img src="${this.tierSrc(need.resId, 1)}"></div><img class="cust-sprite" src="${sprite("Customer")}">`;
+    const custSprite = this.cfg.customerSprites[need.resId] || "Customer"; // sprite chosen by demanded resource
+    cust.innerHTML = `<div class="bubble"><span>${need.qty}×</span><img src="${this.tierSrc(need.resId, 1)}"></div><img class="cust-sprite" src="${sprite(custSprite)}">`;
     const fall = FALL_TIME / (this.cfg.g.customerSpeed || 1); // customerSpeed: higher = faster
     cust.style.setProperty("--fall", fall + "s");
     lane.appendChild(cust);
@@ -1002,8 +1004,8 @@ const Game = {
     m._refs = { name, slots, ad, rm, up }; this.updateMachine(m, node); return node;
   },
   recipeHtml(def) {
-    const ic = (id) => `<img src="${this.tierSrc(id, 1)}" title="${this.res(id).displayName}">`;
-    const out = ic(def.outputs);
+    const ic = (id, cls = "") => `<img class="${cls}" src="${this.tierSrc(id, 1)}" title="${this.res(id).displayName}">`;
+    const out = ic(def.outputs, "out");
     if (!def.inputs.length) return `<span class="arrow">→</span> ${out}`;
     return def.inputs.map((i) => `${i.quantity}×${ic(i.type)}`).join(" ") + ` <span class="arrow">→</span> ${out}`;
   },

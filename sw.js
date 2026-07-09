@@ -1,5 +1,5 @@
 // Service worker minimal : rend le jeu installable et jouable hors-ligne.
-const CACHE = 'ultimatum-v9';
+const CACHE = 'ultimatum-v10';
 
 // Pré-cache le noyau au moment de l'installation.
 self.addEventListener('install', (event) => {
@@ -32,11 +32,12 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Réseau d'abord, repli sur le cache (et on met en cache au passage).
+// Réseau d'abord (en contournant le cache HTTP pour toujours avoir la vraie
+// version à jour), repli sur le cache uniquement hors-ligne.
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   event.respondWith(
-    fetch(event.request)
+    fetch(event.request, { cache: 'no-store' })
       .then((res) => {
         const copy = res.clone();
         caches.open(CACHE).then((cache) => cache.put(event.request, copy)).catch(() => {});
