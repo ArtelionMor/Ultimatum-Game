@@ -1,7 +1,3 @@
-# --- Dev paused: keep Claude from wading through binary assets ---
-# (still versioned in git — just hidden from search/exploration tools)
-Ultimatum Game/web/sprites/
-
 # --- Personal / dev scaffolding — keep out of the public repo ---
 PROJECT_CONTEXT.json
 gemini-code-*.txt
