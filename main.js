@@ -10,6 +10,7 @@ import { Meta } from "./meta.js";
 import { initMenu, showMenu, hideMenu, renderMenu, openCharacterPanel, gearBadges, renderDropList } from "./menu.js";
 import { openCodexCustomer, openCodexResource } from "./codex.js";
 import { openBuildingPanel } from "./building.js";
+import { enterTax, openTaxInfo, closeTaxInfo, prepayTax, renderTaxInfo, nextTaxInfo } from "./game-tax.js";
 
 // ============================================================
 // Game
@@ -101,7 +102,7 @@ const Game = {
   },
 
   transitionTo(n) { this.exitState(this.state); this.state = n; this.enterState(n); },
-  enterState(s) { ({ [S.Menu]: () => this.enterMenu(), [S.Setup]: () => this.enterSetup(), [S.Play]: () => this.enterPlay(), [S.Tax]: () => this.enterTax(), [S.Results]: () => this.enterResults(), [S.GameOver]: () => this.enterGameOver() }[s] || (() => {}))(); },
+  enterState(s) { ({ [S.Menu]: () => this.enterMenu(), [S.Setup]: () => this.enterSetup(), [S.Play]: () => this.enterPlay(), [S.Tax]: () => enterTax(this), [S.Results]: () => this.enterResults(), [S.GameOver]: () => this.enterGameOver() }[s] || (() => {}))(); },
   exitState(s) { void s; },
 
   // ---------- helpers ----------
@@ -288,7 +289,7 @@ const Game = {
     this._supTimer = (this._supTimer || 0) - dt;
     if (this._supTimer <= 0) { this.refreshSuppliers(); this.refreshAffordability(); this._supTimer = 0.2; }
     // Live-refresh the tax/waves screen while it is open (money + projection move in real time).
-    if (this._taxOpen) { this._taxTimer -= dt; if (this._taxTimer <= 0) { this.renderTaxInfo(); this._taxTimer = 0.3; } }
+    if (this._taxOpen) { this._taxTimer -= dt; if (this._taxTimer <= 0) { renderTaxInfo(this); this._taxTimer = 0.3; } }
 
     if (this.waveActive) {
       const m = this.market;
@@ -621,154 +622,6 @@ const Game = {
     return gain;
   },
 
-  // ---------- Tax ----------
-  enterTax() {
-    const cost = this.taxFor(this.round);
-    const p = this.player;
-    const prepaid = p.prepaidTaxRound === this.round; // player already settled this tax in advance
-    // Charge every alive competitor; the player is skipped when they've prepaid.
-    if (cost > 0) this.competitors.forEach((c) => {
-      if (c.eliminated || (c === p && prepaid)) return;
-      c.money = Math.max(0, c.money - cost);
-    });
-    if (prepaid) p.prepaidTaxRound = null;
-    const charged = cost > 0 && !p.eliminated && !prepaid ? cost : 0;
-    $("#tax-before").textContent = p.money + charged;
-    $("#tax-amount").textContent = prepaid && cost > 0 ? "réglé d'avance ✅" : "-" + cost;
-    $("#tax-after").textContent = p.money;
-    $("#tax-title").textContent = cost > 0
-      ? (prepaid ? `Impôt réglé d'avance — Round ${this.round}` : `Impôt — Round ${this.round}`)
-      : "Pas d'impôt ce round";
-    $("#tax-overlay").classList.remove("hidden");
-    setTimeout(() => { $("#tax-overlay").classList.add("hidden"); this.transitionTo(S.Results); }, cost > 0 ? 1900 : 800);
-  },
-
-  // ---------- Tax & waves info screen ----------
-  // The upcoming tax the player still has to face: the earliest tax round that is
-  // this round or later (a tax is charged at the END of its round's wave, so the
-  // current round still counts as "upcoming"). null once no tax remains this game.
-  nextTaxInfo() {
-    let round = Infinity, cost = 0;
-    const last = this.levelCfg.totalRounds;
-    for (const r in this.levelCfg.tax) {
-      const rn = +r;
-      if (rn >= this.round && rn <= last && rn < round) { round = rn; cost = this.levelCfg.tax[r]; }
-    }
-    return round === Infinity ? null : { round, cost };
-  },
-  // Round income guaranteed to land before a given tax is charged: rounds after the
-  // current one up to and including the tax round (that round's income arrives at its
-  // prep, before its wave-end tax). Sales are excluded (unpredictable).
-  incomeUntilTax(taxRound) {
-    let sum = 0;
-    for (let k = this.round + 1; k <= taxRound; k++) { const ri = this.cfg.roundIncome[k]; sum += ri ? ri.coins : 0; }
-    return sum;
-  },
-  // Base early-payment rate (0..1) per step. Configurable via general `earlyTaxDiscount`
-  // (accepts 0.05, "5%" or 5); defaults to 5%.
-  earlyTaxBaseRate() {
-    let d = this.cfg.g.earlyTaxDiscount;
-    if (d == null) return 0.05;
-    if (typeof d === "string") d = parseFloat(d) / (d.includes("%") ? 100 : 1);
-    if (!(d >= 0)) return 0.05;
-    return d > 1 ? d / 100 : d;
-  },
-  // Discount stacks the earlier you pay: (base)+(base-1)+(base-2)+… percentage points,
-  // one term per wave remaining before the tax, each term floored at 0. E.g. base 5%
-  // paid 3 waves early -> 5+4+3 = 12%. Returns the list of percentage-point terms.
-  earlyTaxTerms(taxRound) {
-    const k = Math.max(0, taxRound - this.round);      // waves left before the tax lands
-    const basePts = this.earlyTaxBaseRate() * 100;
-    const terms = [];
-    for (let i = 0; i < k; i++) { const t = basePts - i; if (t <= 0) break; terms.push(t); }
-    return terms;
-  },
-  earlyTaxDiscountRate(taxRound) {
-    const sum = this.earlyTaxTerms(taxRound).reduce((s, t) => s + t, 0);
-    return Math.min(0.95, sum / 100);                  // never make the tax fully free
-  },
-  earlyTaxAmount(cost, taxRound) { return Math.max(0, Math.round(cost * (1 - this.earlyTaxDiscountRate(taxRound)))); },
-
-  openTaxInfo() { this._taxOpen = true; this._taxTimer = 0.3; this.renderTaxInfo(); $("#taxinfo-overlay").classList.remove("hidden"); },
-  closeTaxInfo() { this._taxOpen = false; $("#taxinfo-overlay").classList.add("hidden"); },
-
-  // Player settles the whole of the next tax now, at a discount. One tax at a time.
-  prepayTax() {
-    const info = this.nextTaxInfo();
-    if (!info || this.player.prepaidTaxRound === info.round) return;
-    const amount = this.earlyTaxAmount(info.cost, info.round);
-    if (this.player.money < amount) return;
-    this.player.money -= amount;
-    this.player.prepaidTaxRound = info.round;
-    this.renderTaxInfo(); this.refreshHud();
-  },
-
-  renderTaxInfo() {
-    const body = $("#taxinfo-body"); if (!body) return;
-    const p = this.player, total = this.levelCfg.totalRounds;
-    const info = this.nextTaxInfo();
-
-    // Round timeline with tax markers (🏛️ = tax round).
-    let dots = "";
-    for (let r = 1; r <= total; r++) {
-      const taxHere = this.taxFor(r) > 0;
-      const cls = ["tx-dot"];
-      if (r < this.round) cls.push("past");
-      if (r === this.round) cls.push("now");
-      if (taxHere) cls.push("tax");
-      if (info && r === info.round) cls.push("next");
-      dots += `<div class="${cls.join(" ")}" title="Round ${r}${taxHere ? " · impôt " + this.taxFor(r) + "$" : ""}">${taxHere ? "🏛️" : ""}</div>`;
-    }
-
-    let card;
-    if (!info) {
-      card = `<div class="tx-card"><div class="tx-none">Plus aucun impôt d'ici la fin de la partie 🎉</div></div>`;
-    } else {
-      const prepaid = p.prepaidTaxRound === info.round;
-      const inN = info.round - this.round;
-      const when = inN <= 0 ? "à la fin de cette vague" : `dans ${inN} vague${inN > 1 ? "s" : ""}`;
-      const income = this.incomeUntilTax(info.round);
-      const projected = p.money + income - (prepaid ? 0 : info.cost);
-      const amount = this.earlyTaxAmount(info.cost, info.round);
-      const saved = info.cost - amount;
-      const terms = this.earlyTaxTerms(info.round);
-      const pct = Math.round(this.earlyTaxDiscountRate(info.round) * 100);
-      const breakdown = terms.length > 1 ? ` (${terms.map((t) => +t.toFixed(1)).join("+")})` : "";
-      const afford = p.money >= amount;
-
-      const rows =
-        `<div class="tx-row"><span>Impôt à payer</span><b class="danger">${info.cost}$</b></div>` +
-        `<div class="tx-row"><span>Ton solde actuel</span><b>${p.money}$</b></div>` +
-        `<div class="tx-row"><span>Revenu garanti d'ici là</span><b class="ok">+${income}$</b></div>` +
-        `<div class="tx-row tx-proj"><span>Solde projeté après impôt</span><b class="${projected < 0 ? "danger" : "ok"}">${projected}$</b></div>`;
-
-      let prepay;
-      if (prepaid) {
-        prepay = `<div class="tx-paid">✅ Impôt du Round ${info.round} déjà réglé d'avance</div>`;
-      } else {
-        prepay =
-          `<div class="tx-prepay-line">Payer maintenant : <b>${amount}$</b><span class="tx-save">−${pct}%${breakdown} · tu économises ${saved}$</span></div>` +
-          `<button id="tx-prepay-btn"${afford ? "" : " disabled"}>Payer l'impôt d'avance</button>` +
-          (afford ? "" : `<div class="tx-warn">Solde insuffisant</div>`);
-      }
-
-      card =
-        `<div class="tx-card">
-           <div class="tx-card-head"><span class="tx-card-title">Prochain impôt</span><span class="tx-when">Round ${info.round} · ${when}</span></div>
-           <div class="tx-rows">${rows}</div>
-           <div class="tx-prepay">${prepay}</div>
-         </div>`;
-    }
-
-    body.innerHTML =
-      `<div class="tx-topline">Round <b>${this.round}</b> / ${total}</div>` +
-      `<div class="tx-progress">${dots}</div>` +
-      card;
-
-    const btn = body.querySelector("#tx-prepay-btn");
-    if (btn) btn.onclick = () => this.prepayTax();
-  },
-
   // ---------- Results (standings) ----------
   enterResults() {
     const ranked = [...this.competitors].sort((a, b) => b.money - a.money); // copie: ne pas réordonner this.competitors
@@ -824,7 +677,7 @@ const Game = {
   // HUD chip: amount of the next tax (or ✅ once prepaid), pulsing red when imminent.
   refreshTaxChip() {
     const chip = $("#tax-chip"); if (!chip) return;
-    const info = this.nextTaxInfo();
+    const info = nextTaxInfo(this.levelCfg, this.round);
     if (!info) { chip.textContent = "🏛️ —"; $("#hud-tax").classList.remove("urgent"); return; }
     const prepaid = this.player.prepaidTaxRound === info.round;
     chip.textContent = prepaid ? "🏛️ ✅" : `🏛️ ${info.cost}$`;
@@ -1468,9 +1321,9 @@ $("#resource-close").addEventListener("click", () => Game.closeResourceInfo());
 $("#resource-overlay").addEventListener("click", (e) => { if (e.target.id === "resource-overlay") Game.closeResourceInfo(); });
 // Guarded with ?.: if a stale/cached index.html lacks these nodes, the bootstrap must
 // not throw here — otherwise Game.start() below never runs and the game hangs at R 0/0.
-$("#hud-tax")?.addEventListener("click", () => Game.openTaxInfo());
-$("#taxinfo-close")?.addEventListener("click", () => Game.closeTaxInfo());
-$("#taxinfo-overlay")?.addEventListener("click", (e) => { if (e.target.id === "taxinfo-overlay") Game.closeTaxInfo(); });
+$("#hud-tax")?.addEventListener("click", () => openTaxInfo(Game));
+$("#taxinfo-close")?.addEventListener("click", () => closeTaxInfo(Game));
+$("#taxinfo-overlay")?.addEventListener("click", (e) => { if (e.target.id === "taxinfo-overlay") closeTaxInfo(Game); });
 
 // ---------- Cheat console ----------
 $("#cheat-toggle")?.addEventListener("click", () => { if (Game.cheatsEnabled()) $("#cheat-overlay").classList.toggle("hidden"); });
