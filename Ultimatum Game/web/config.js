@@ -114,9 +114,16 @@ export function normalize(raw) {
   const slots = {};
   (raw.slots || []).forEach((s) => { slots[s.id] = { description: s.description || "", color: s.color || "", font: s.font || 12 }; });
 
-  // customers: each demanded resource ("Need") maps to the sprite shown for that client
+  // customers: each demanded resource ("Need") maps to the sprite shown for that
+  // client, plus a full per-customer view (id, sprite, every need — a customer
+  // may span several rows once multiple needs land in the sheet).
   const customerSprites = {};
-  (raw.customers || []).forEach((c) => { if (c.Need) customerSprites[c.Need] = c.Sprite; });
+  const customerDefs = {}; const customerOrder = [];
+  (raw.customers || []).forEach((c) => {
+    if (!customerDefs[c.id]) { customerDefs[c.id] = { id: c.id, spriteId: c.Sprite, needs: [] }; customerOrder.push(c.id); }
+    if (c.Need && !customerDefs[c.id].needs.includes(c.Need)) customerDefs[c.id].needs.push(c.Need);
+    if (c.Need) customerSprites[c.Need] = c.Sprite;
+  });
 
   const roundIncome = {}; raw.roundIncome.forEach((r) => (roundIncome[r.round] = { coins: r.coins, tier: r.ressource_tier }));
 
@@ -125,7 +132,7 @@ export function normalize(raw) {
   const competitors = raw.competitors.map((c) => ({ ...c, behavior: behavior[c.id] || {} }));
 
   return {
-    g, resources, resourceOrder, maxTier, machines, purchases, roundIncome, competitors, convert, slots, customerSprites,
+    g, resources, resourceOrder, maxTier, machines, purchases, roundIncome, competitors, convert, slots, customerSprites, customerDefs, customerOrder,
     marketProfiles, taxProfiles, unlockProfiles, worldConfigs, worldLevels, rewards, gears, characters, characterOrder, upgradeProfiles,
   };
 }

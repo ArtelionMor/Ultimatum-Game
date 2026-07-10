@@ -7,6 +7,8 @@
 import { $, el, sprite } from "./helpers.js";
 import { SLOT_EMOJI, RARITY_LABEL, RARITIES } from "./constants.js";
 import { Meta } from "./meta.js";
+import { initBuildingPanel, openBuildingPanel } from "./building.js";
+import { initCodex } from "./codex.js";
 
 let Game = null;
 let tab = "levels";
@@ -26,6 +28,8 @@ const gearInstName = (inst) => gearName(inst.slot, inst.rarity, inst.owner);
 
 export function initMenu(game) {
   Game = game;
+  initBuildingPanel(game);
+  initCodex(game);
   $("#menu-tabs").addEventListener("click", (e) => {
     const b = e.target.closest("button[data-tab]");
     if (b) { tab = b.dataset.tab; renderMenu(); }
@@ -227,10 +231,10 @@ function renderCharacterPanel() {
     }
   }
 
-  // affinity lines at current (or first) level
+  // affinity lines at current (or first) level — tap a building to inspect it
   const aff = Object.keys(data.speeds).map((mid) => {
     const m = Game.cfg.machines.find((x) => x.id === mid);
-    return `<div class="cd-aff"><img src="${m ? sprite(m.spriteId) : ""}"><span>${m ? m.displayName : mid}</span><b>+${Math.round(data.speeds[mid] * 100)}%</b></div>`;
+    return `<div class="cd-aff" data-mid="${mid}"><img src="${m ? sprite(m.spriteId) : ""}"><span>${m ? m.displayName : mid}</span><b>+${Math.round(data.speeds[mid] * 100)}%</b></div>`;
   }).join("");
   const p2 = Meta.proba2x(id);
 
@@ -280,6 +284,7 @@ function renderCharacterPanel() {
   const btn = body.querySelector("#cd-upgrade-btn");
   if (btn) btn.onclick = () => { if (Meta.upgradeCharacter(id)) { renderCharacterPanel(); renderMenu(); if (Game.onMetaChanged) Game.onMetaChanged(); } };
   if (owned) body.querySelectorAll(".cd-slot").forEach((n) => { n.onclick = () => showGearEditor(id, n.dataset.slot); });
+  body.querySelectorAll(".cd-aff[data-mid]").forEach((n) => { n.onclick = () => openBuildingPanel(n.dataset.mid); });
 }
 
 // Per-slot gear editor shown inside a character panel.
