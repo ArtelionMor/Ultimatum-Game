@@ -510,6 +510,10 @@ button.cv-btn:disabled { background: #3a4a52; color: #7a8197; }
 
 /* ---------- Results / leaderboard ---------- */
 .panel.wide { min-width: 320px; max-width: 92vw; }
+
+/* The character panel grows tall (gear editor / fuse): let the overlay scroll
+   and grow downward instead of clipping and re-centering the panel. */
+#character-overlay { align-items: safe center; overflow-y: auto; padding: 16px 8px; }
 #results-list { display: flex; flex-direction: column; gap: 6px; margin: 8px 0 18px; }
 .result-row {
   display: grid; grid-template-columns: 22px 30px 1fr auto auto; align-items: center; gap: 8px;
@@ -611,38 +615,110 @@ button.cv-btn:disabled { background: #3a4a52; color: #7a8197; }
 .shard.epic { color: var(--rar-epic); }
 .shard.legendary { color: var(--rar-legendary); }
 
-#menu-tabs { flex: 0 0 auto; display: flex; background: var(--bg-panel); border-bottom: 2px solid var(--border); }
+/* Bottom navigation bar (mobile-friendly: thumb reaches it easily) */
+#menu-tabs {
+  flex: 0 0 auto; display: flex;
+  background: var(--bg-panel); border-top: 2px solid var(--border);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
 #menu-tabs button {
   flex: 1; background: transparent; color: var(--text-dim);
-  border-radius: 0; padding: 12px 4px; font-size: 13px;
-  border-bottom: 3px solid transparent;
+  border-radius: 0; padding: 8px 4px 7px; font-size: 11px;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  border-top: 3px solid transparent; margin-top: -2px;
 }
-#menu-tabs button.active { color: var(--accent); border-bottom-color: var(--accent); }
+#menu-tabs .tab-ico { font-size: 20px; line-height: 1; }
+#menu-tabs .tab-lbl { line-height: 1; }
+#menu-tabs button.active { color: var(--accent); border-top-color: var(--accent); }
 #menu-body { flex: 1; overflow-y: auto; padding: 14px; }
+#menu-body:has(.trophy-road) { padding: 4px 8px; }  /* road fills the height, keep no scroll */
 .menu-section { font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: var(--text-dim); margin: 14px 0 8px; }
 .menu-muted { color: var(--text-dim); font-size: 13px; }
 .menu-muted.center { text-align: center; margin-top: 18px; }
 
-/* ---------- Level cards ---------- */
-.level-list { display: flex; flex-direction: column; gap: 10px; }
-.level-card {
+/* ---------- Trophy road (level select) ---------- */
+/* Bottom-to-top: level 1 sits at the bottom, endless climbs to the top.
+   Few levels -> the road fills the body from the bottom; many levels -> it
+   scrolls and renderLevels() parks the view on the current one. */
+.trophy-road { display: flex; flex-direction: column-reverse; justify-content: flex-start; min-height: 100%; }
+.tr-row {
   position: relative;
+  display: grid; grid-template-columns: 1fr 56px 1fr; align-items: center;
+  flex: 1 0 auto; min-height: 84px;   /* grow to fill when few, never shrink below the card */
+}
+/* keep rail + card on the same grid row (rail is before the card in the DOM,
+   so a left-side card would otherwise be auto-placed onto a new implicit row) */
+.tr-rail { grid-column: 2; grid-row: 1; }
+.tr-card { grid-row: 1; }
+.tr-row.side-right .tr-card { grid-column: 3; }
+.tr-row.side-left .tr-card { grid-column: 1; }
+
+/* central rail: a vertical segment drawn per row so they stack into one line */
+.tr-rail { position: relative; align-self: stretch; display: flex; align-items: center; justify-content: center; }
+.tr-rail::before {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 6px;
+  background: var(--border); border-radius: 3px;
+}
+.tr-row.reached .tr-rail::before {
+  background: linear-gradient(180deg, var(--ok), var(--accent-2));
+}
+.tr-row:first-child .tr-rail::before { bottom: 50%; } /* level 1: rail caps at the bottom node */
+.tr-row:last-child .tr-rail::before { top: 50%; }     /* endless: rail caps at the top node */
+
+/* node circle sitting on the rail */
+.tr-node {
+  position: relative; z-index: 1;
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: bold; font-size: 18px; color: var(--text);
+  background: var(--bg-card); border: 3px solid var(--border);
+}
+.tr-row.reached .tr-node { border-color: var(--ok); color: #fff; }
+.tr-row.current .tr-node {
+  border-color: var(--accent); color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(244,185,66,.18), 0 0 14px rgba(244,185,66,.5);
+  animation: tr-pulse 1.4s ease-in-out infinite;
+}
+.tr-row.endless .tr-node { border-color: var(--rar-epic); color: var(--rar-epic); font-size: 22px; }
+.tr-row.locked .tr-node { opacity: .5; }
+@keyframes tr-pulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(244,185,66,.18), 0 0 14px rgba(244,185,66,.5); }
+  50% { box-shadow: 0 0 0 7px rgba(244,185,66,.08), 0 0 20px rgba(244,185,66,.7); }
+}
+.tr-node-badge {
+  position: absolute; right: -4px; bottom: -4px;
+  width: 20px; height: 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; line-height: 1;
+  background: var(--bg-panel); border: 2px solid var(--border);
+}
+.tr-row.reached .tr-node-badge { color: var(--ok); border-color: var(--ok); }
+.tr-row.current .tr-node-badge { color: var(--accent); border-color: var(--accent); }
+
+/* level card next to the node */
+.tr-card {
   background: var(--bg-card); border: 2px solid var(--border);
-  border-radius: 12px; padding: 12px 14px;
-  display: grid; grid-template-columns: 1fr auto; gap: 2px 10px;
+  border-radius: 12px; padding: 6px 11px; margin: 0 8px;
 }
-.level-card .lv-name { font-weight: bold; font-size: 16px; }
-.level-card .lv-meta { font-size: 12px; color: var(--text-dim); }
-.level-card .lv-reward { font-size: 12px; color: var(--accent); grid-column: 1; }
-.level-card .lv-state { grid-column: 2; grid-row: 1; font-size: 13px; color: var(--ok); }
-.level-card .lv-play {
-  grid-column: 2; grid-row: 2 / 4; align-self: center;
-  padding: 10px 18px;
+.tr-row.side-left .tr-card { text-align: right; }
+.tr-row.current .tr-card { border-color: var(--accent); box-shadow: 0 0 12px rgba(244,185,66,.22); }
+.tr-row.reached:not(.current) .tr-card { border-color: rgba(87,192,107,.5); }
+.tr-row.endless .tr-card { background: linear-gradient(135deg, #353c52 0%, #3d3355 100%); border-color: var(--rar-epic); }
+.tr-row.locked .tr-card { opacity: .5; filter: grayscale(.5); }
+.tr-name { font-weight: bold; font-size: 16px; }
+.tr-meta { font-size: 11px; color: var(--text-dim); margin-top: 1px; }
+.tr-rewards { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+.tr-row.side-left .tr-rewards { justify-content: flex-end; }
+.tr-chip {
+  display: inline-flex; align-items: center; gap: 3px;
+  background: rgba(0,0,0,.28); border: 1px solid var(--rar, var(--border));
+  border-radius: 8px; padding: 1px 6px; font-size: 12px;
 }
-.level-card.locked { opacity: .45; filter: grayscale(.6); }
-.level-card.done { border-color: var(--ok); }
-.level-card.next { border-color: var(--accent); box-shadow: 0 0 12px rgba(244,185,66,.25); }
-.level-card.endless { background: linear-gradient(135deg, #353c52 0%, #3d3355 100%); border-color: var(--rar-epic); }
+.tr-chip img, .tr-chip .chip-ico { width: 16px; height: 16px; font-size: 14px; line-height: 1; }
+.tr-play { margin-top: 4px; padding: 6px 18px; width: 100%; }
+.tr-status { margin-top: 7px; font-size: 12px; }
+.tr-status.done { color: var(--ok); }
+.tr-status.locked { color: var(--text-dim); }
 
 /* ---------- Character collection ---------- */
 .char-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
@@ -655,9 +731,71 @@ button.cv-btn:disabled { background: #3a4a52; color: #7a8197; }
 .char-card .char-avatar { width: 44px; height: 44px; }
 .char-card .char-name { font-weight: bold; font-size: 13px; margin-top: 2px; }
 .char-card .char-lvl { font-size: 11px; color: var(--accent-2); }
-.char-card.locked { opacity: .5; filter: grayscale(.8); }
-.char-card .char-spec img { width: 22px; height: 22px; margin-top: 4px; }
+.char-card.locked .char-lvl { color: var(--text-dim); }
+/* dim only the avatar when locked, so the "Débloquer" button stays vivid */
+.char-card.locked .char-avatar { opacity: .45; filter: grayscale(.85); }
 .char-card .char-gears { min-height: 16px; font-size: 11px; }
+
+/* Upgrade / unlock button on each character card */
+.char-upgrade {
+  width: 100%; margin-top: 8px; padding: 6px 4px;
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  font-size: 12px; font-weight: bold; line-height: 1.1;
+  background: var(--accent); color: #2a2412; border-radius: 8px;
+}
+.char-upgrade .cu-cost { font-size: 10px; font-weight: normal; opacity: .85; }
+.char-upgrade.off {
+  background: var(--bg-panel); color: var(--text-dim);
+  border: 1px solid var(--border); cursor: not-allowed;
+}
+.char-upgrade.maxed { background: transparent; color: var(--accent-2); border: 1px solid var(--accent-2); }
+
+/* ---------- Gear upgrade (fuse) — inside the character panel ---------- */
+.cd-fuse { margin: 8px 0; }
+.cd-fuse .fuse-base-name { font-size: 13px; margin-bottom: 4px; }
+
+/* ---------- Fuse (shared bar / tiles) ---------- */
+.fuse-panel {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px; margin-bottom: 14px;
+}
+.fuse-base { display: flex; align-items: center; gap: 10px; }
+.fuse-base-ico {
+  flex: 0 0 auto; width: 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; font-size: 24px;
+  background: rgba(0,0,0,.3); border: 2px solid var(--rar, var(--border));
+}
+.fuse-base-info { flex: 1; min-width: 0; }
+.fuse-base-name { font-weight: bold; font-size: 14px; }
+.fuse-arrow { color: var(--accent); font-weight: normal; }
+.fuse-bar {
+  position: relative; height: 12px; margin: 6px 0 3px;
+  background: var(--bg); border-radius: 6px; overflow: hidden; display: flex;
+}
+.fuse-bar-cur { background: var(--accent-2); height: 100%; }
+.fuse-bar-add { background: var(--accent); height: 100%; opacity: .7; }
+.fuse-bar-label { font-size: 11px; color: var(--text-dim); }
+.fuse-go {
+  width: 100%; margin-top: 10px; padding: 9px; font-weight: bold;
+  background: var(--accent); color: #2a2412; border-radius: 8px;
+}
+.fuse-go:disabled { background: var(--bg-panel); color: var(--text-dim); border: 1px solid var(--border); cursor: not-allowed; }
+
+.fuse-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.fuse-tile {
+  background: var(--bg-card); border: 2px solid var(--border);
+  border-left: 4px solid var(--rar); border-radius: 10px;
+  padding: 8px 6px; text-align: center; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  transition: transform .1s, border-color .15s;
+}
+.fuse-tile:active { transform: scale(.95); }
+.fuse-tile .ft-ico { font-size: 22px; }
+.fuse-tile .ft-name { font-size: 11px; font-weight: bold; }
+.fuse-tile .ft-fx { font-size: 10px; color: var(--text-dim); }
+.fuse-tile .ft-fuel { font-size: 10px; color: var(--accent); }
+.fuse-tile.base { border-color: var(--accent); box-shadow: 0 0 10px rgba(244,185,66,.35); }
+.fuse-tile.fuel { border-color: var(--accent-2); box-shadow: 0 0 8px rgba(78,201,176,.3); }
 
 .gear-badge {
   display: inline-block; font-size: 11px; line-height: 1;
@@ -683,10 +821,21 @@ button.cv-btn:disabled { background: #3a4a52; color: #7a8197; }
   background: var(--bg-card); border: 1px solid var(--border);
   border-radius: 8px; padding: 8px 10px; margin: 10px 0; font-size: 13px;
 }
-.cd-affs { display: flex; flex-direction: column; gap: 4px; }
-.cd-aff { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-.cd-aff img { width: 24px; height: 24px; }
-.cd-aff b { margin-left: auto; color: var(--accent-2); }
+/* Machine affinities: a horizontally-scrollable strip of cards. Stays one row
+   tall no matter how many buffs a character has; building icon shown big. */
+.cd-affs {
+  display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px;
+  scroll-snap-type: x proximity; scrollbar-width: thin;
+}
+.cd-aff {
+  flex: 0 0 auto; width: 86px; scroll-snap-align: start;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 8px 4px 6px; text-align: center;
+}
+.cd-aff img { width: 72px; height: 72px; border-radius: 8px; }
+.cd-aff span { font-size: 10px; line-height: 1.15; color: var(--text-dim); }
+.cd-aff b { color: var(--accent-2); font-size: 14px; }
 .cd-proba { font-size: 13px; margin: 8px 0; }
 .cd-slots { display: flex; flex-direction: column; gap: 6px; }
 .cd-slot {
