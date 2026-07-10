@@ -12,6 +12,12 @@
       "runtimeExecutable": "python",
       "runtimeArgs": ["-m", "http.server", "8779", "--directory", "web"],
       "port": 8779
+    },
+    {
+      "name": "market-ultimatum-preview2",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8781", "--directory", "web"],
+      "port": 8781
     }
   ]
 }

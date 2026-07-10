@@ -77,10 +77,15 @@ export function normalize(raw) {
     (byGroup[r.group] = byGroup[r.group] || []).push({ weight: r.weights || 0, amount: r.amount || 0, content: r.content || null });
   });
 
-  // gears: two rows per gear id (speed + 2x proba); slot inferred from the id prefix
+  // gears: two rows per gear id (speed + 2x proba); slot inferred from the id prefix.
+  // fuzeValue = fuel this gear yields when consumed in a fuse; numberToUpgrade =
+  // total fuel value needed to upgrade a gear of this rarity to the next one.
   const gears = {};
   raw.gears.forEach((gr) => {
-    const it = (gears[gr.id] = gears[gr.id] || { id: gr.id, rarity: gr.rarity, slot: gr.id.split("_")[0], speed: 0, proba2x: 0 });
+    const it = (gears[gr.id] = gears[gr.id] || {
+      id: gr.id, rarity: gr.rarity, slot: gr.id.split("_")[0], speed: 0, proba2x: 0,
+      fuzeValue: gr.fuzeValue || 0, numberToUpgrade: gr.numberToUpgrade || 0,
+    });
     if (gr.condition === "speed") it.speed = gr.value || 0;
     if (gr.condition === "2x proba") it.proba2x = gr.value || 0;
   });

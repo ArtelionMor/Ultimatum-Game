@@ -1505,6 +1505,28 @@
       "id": "legendary_character"
     }
   ],
+  "chest_config": [
+    {
+      "id": "common_chest",
+      "time": 60,
+      "cost": 60
+    },
+    {
+      "id": "rare_chest",
+      "time": 120,
+      "cost": 120
+    },
+    {
+      "id": "epic_chest",
+      "time": 240,
+      "cost": 240
+    },
+    {
+      "id": "legendary_chest",
+      "time": 480,
+      "cost": 480
+    }
+  ],
   "customers": [
     {
       "id": "dog",
@@ -1543,6 +1565,8 @@
       "rarity": "common",
       "value": 0.02,
       "condition": "speed",
+      "fuzeValue": 1,
+      "numberToUpgrade": 10,
       "HC Value": 10
     },
     {
@@ -1550,6 +1574,8 @@
       "rarity": "common",
       "value": 0.05,
       "condition": "2x proba",
+      "fuzeValue": 1,
+      "numberToUpgrade": 10,
       "HC Value": 10
     },
     {
@@ -1557,6 +1583,8 @@
       "rarity": "rare",
       "value": 0.05,
       "condition": "speed",
+      "fuzeValue": 3,
+      "numberToUpgrade": 30,
       "HC Value": 30
     },
     {
@@ -1564,6 +1592,8 @@
       "rarity": "rare",
       "value": 0.1,
       "condition": "2x proba",
+      "fuzeValue": 3,
+      "numberToUpgrade": 30,
       "HC Value": 30
     },
     {
@@ -1571,6 +1601,8 @@
       "rarity": "epic",
       "value": 0.1,
       "condition": "speed",
+      "fuzeValue": 10,
+      "numberToUpgrade": 100,
       "HC Value": 100
     },
     {
@@ -1578,6 +1610,8 @@
       "rarity": "epic",
       "value": 0.15,
       "condition": "2x proba",
+      "fuzeValue": 10,
+      "numberToUpgrade": 100,
       "HC Value": 100
     },
     {
@@ -1585,6 +1619,8 @@
       "rarity": "legendary",
       "value": 0.15,
       "condition": "speed",
+      "fuzeValue": 100,
+      "numberToUpgrade": 1000,
       "HC Value": 1000
     },
     {
@@ -1592,6 +1628,8 @@
       "rarity": "legendary",
       "value": 0.2,
       "condition": "2x proba",
+      "fuzeValue": 100,
+      "numberToUpgrade": 1000,
       "HC Value": 1000
     },
     {
@@ -1599,6 +1637,8 @@
       "rarity": "common",
       "value": 0.1,
       "condition": "speed",
+      "fuzeValue": 1,
+      "numberToUpgrade": 10,
       "HC Value": 10
     },
     {
@@ -1606,6 +1646,8 @@
       "rarity": "common",
       "value": 0.05,
       "condition": "2x proba",
+      "fuzeValue": 1,
+      "numberToUpgrade": 10,
       "HC Value": 10
     },
     {
@@ -1613,6 +1655,8 @@
       "rarity": "rare",
       "value": 0.15,
       "condition": "speed",
+      "fuzeValue": 3,
+      "numberToUpgrade": 30,
       "HC Value": 30
     },
     {
@@ -1620,6 +1664,8 @@
       "rarity": "rare",
       "value": 0.1,
       "condition": "2x proba",
+      "fuzeValue": 3,
+      "numberToUpgrade": 30,
       "HC Value": 30
     },
     {
@@ -1627,6 +1673,8 @@
       "rarity": "epic",
       "value": 0.2,
       "condition": "speed",
+      "fuzeValue": 10,
+      "numberToUpgrade": 100,
       "HC Value": 100
     },
     {
@@ -1634,6 +1682,8 @@
       "rarity": "epic",
       "value": 0.15,
       "condition": "2x proba",
+      "fuzeValue": 10,
+      "numberToUpgrade": 100,
       "HC Value": 100
     },
     {
@@ -1641,6 +1691,8 @@
       "rarity": "legendary",
       "value": 0.25,
       "condition": "speed",
+      "fuzeValue": 100,
+      "numberToUpgrade": 1000,
       "HC Value": 1000
     },
     {
@@ -1648,6 +1700,8 @@
       "rarity": "legendary",
       "value": 0.2,
       "condition": "2x proba",
+      "fuzeValue": 100,
+      "numberToUpgrade": 1000,
       "HC Value": 1000
     },
     {
@@ -1655,6 +1709,8 @@
       "rarity": "common",
       "value": 0.05,
       "condition": "speed",
+      "fuzeValue": 1,
+      "numberToUpgrade": 10,
       "HC Value": 10
     },
     {
@@ -1662,6 +1718,8 @@
       "rarity": "common",
       "value": 0,
       "condition": "2x proba",
+      "fuzeValue": 1,
+      "numberToUpgrade": 10,
       "HC Value": 10
     },
     {
@@ -1669,6 +1727,8 @@
       "rarity": "rare",
       "value": 0.1,
       "condition": "speed",
+      "fuzeValue": 3,
+      "numberToUpgrade": 30,
       "HC Value": 30
     },
     {
@@ -1676,6 +1736,8 @@
       "rarity": "rare",
       "value": 0.03,
       "condition": "2x proba",
+      "fuzeValue": 3,
+      "numberToUpgrade": 30,
       "HC Value": 30
     },
     {
@@ -1683,6 +1745,8 @@
       "rarity": "epic",
       "value": 0.15,
       "condition": "speed",
+      "fuzeValue": 10,
+      "numberToUpgrade": 100,
       "HC Value": 100
     },
     {
@@ -1690,6 +1754,8 @@
       "rarity": "epic",
       "value": 0.05,
       "condition": "2x proba",
+      "fuzeValue": 10,
+      "numberToUpgrade": 100,
       "HC Value": 100
     },
     {
@@ -1697,6 +1763,8 @@
       "rarity": "legendary",
       "value": 0.2,
       "condition": "speed",
+      "fuzeValue": 100,
+      "numberToUpgrade": 1000,
       "HC Value": 1000
     },
     {
@@ -1704,6 +1772,8 @@
       "rarity": "legendary",
       "value": 0.1,
       "condition": "2x proba",
+      "fuzeValue": 100,
+      "numberToUpgrade": 1000,
       "HC Value": 1000
     }
   ],
@@ -2883,32 +2953,6 @@
       "pillow": 0
     }
   ],
-  "outputs": [
-    {
-      "id": "pillow",
-      "profil": "profil_complexity 0"
-    },
-    {
-      "id": "tennisBall",
-      "profil": "profil_complexity 0"
-    },
-    {
-      "id": "carrot",
-      "profil": "profil_complexity 0"
-    },
-    {
-      "id": "nenufar",
-      "profil": "profil_complexity 0"
-    },
-    {
-      "id": "nest",
-      "profil": "profil_complexity 0"
-    },
-    {
-      "id": "candle",
-      "profil": "profil_complexity 0"
-    }
-  ],
   "purshases": [
     {
       "id": "more_worker_1",
@@ -3473,6 +3517,32 @@
       "type": "increaseStorage",
       "effect": 50,
       "price": 3800
+    }
+  ],
+  "outputs": [
+    {
+      "id": "pillow",
+      "profil": "profil_complexity 0"
+    },
+    {
+      "id": "tennisBall",
+      "profil": "profil_complexity 0"
+    },
+    {
+      "id": "carrot",
+      "profil": "profil_complexity 0"
+    },
+    {
+      "id": "nenufar",
+      "profil": "profil_complexity 0"
+    },
+    {
+      "id": "nest",
+      "profil": "profil_complexity 0"
+    },
+    {
+      "id": "candle",
+      "profil": "profil_complexity 0"
     }
   ],
   "outputs_profiles": [
@@ -7750,6 +7820,78 @@
       "unlockConfig": "tuto_level_2_unlock_config"
     },
     {
+      "id": "level6_world_config",
+      "competitors": "bot_cat",
+      "nbOfRounds": 12,
+      "taxConfig": "tax_config_2",
+      "marketConfig": "round_config_base",
+      "unlockConfig": "base"
+    },
+    {
+      "id": "level6_world_config",
+      "competitors": "bot_octopus",
+      "nbOfRounds": 12,
+      "taxConfig": "tax_config_2",
+      "marketConfig": "round_config_base",
+      "unlockConfig": "base"
+    },
+    {
+      "id": "level6_world_config",
+      "competitors": "bot_sloth",
+      "nbOfRounds": 12,
+      "taxConfig": "tax_config_2",
+      "marketConfig": "round_config_base",
+      "unlockConfig": "base"
+    },
+    {
+      "id": "level7_world_config",
+      "competitors": "bot_cat",
+      "nbOfRounds": 15,
+      "taxConfig": "tax_config_2",
+      "marketConfig": "round_config_base",
+      "unlockConfig": "base"
+    },
+    {
+      "id": "level7_world_config",
+      "competitors": "bot_octopus",
+      "nbOfRounds": 15,
+      "taxConfig": "tax_config_2",
+      "marketConfig": "round_config_base",
+      "unlockConfig": "base"
+    },
+    {
+      "id": "level7_world_config",
+      "competitors": "bot_sloth",
+      "nbOfRounds": 15,
+      "taxConfig": "tax_config_2",
+      "marketConfig": "round_config_base",
+      "unlockConfig": "base"
+    },
+    {
+      "id": "level8_world_config",
+      "competitors": "bot_cat",
+      "nbOfRounds": 20,
+      "taxConfig": "tax_config_2",
+      "marketConfig": "round_config_base",
+      "unlockConfig": "base"
+    },
+    {
+      "id": "level8_world_config",
+      "competitors": "bot_octopus",
+      "nbOfRounds": 20,
+      "taxConfig": "tax_config_2",
+      "marketConfig": "round_config_base",
+      "unlockConfig": "base"
+    },
+    {
+      "id": "level8_world_config",
+      "competitors": "bot_sloth",
+      "nbOfRounds": 20,
+      "taxConfig": "tax_config_2",
+      "marketConfig": "round_config_base",
+      "unlockConfig": "base"
+    },
+    {
       "id": "levelbase_world_config",
       "competitors": "bot_cat",
       "nbOfRounds": 75,
@@ -7798,6 +7940,141 @@
     {
       "id": "level5",
       "config": "level5_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level6",
+      "config": "level6_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level7",
+      "config": "level7_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level8",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level9",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level10",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level11",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level12",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level13",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level14",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level15",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level16",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level17",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level18",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level19",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level20",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level21",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level22",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level23",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level24",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level25",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level26",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level27",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level28",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level29",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level30",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level31",
+      "config": "level8_world_config",
+      "reward": "1_legendary_chest"
+    },
+    {
+      "id": "level32",
+      "config": "level8_world_config",
       "reward": "1_legendary_chest"
     },
     {

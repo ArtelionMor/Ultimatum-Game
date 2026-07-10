@@ -1352,9 +1352,14 @@ const Game = {
     Meta.state[kind] = Math.max(0, (Meta.state[kind] || 0) + v);
     this._cheatMetaDone();
   },
+  // Shards are nominative now: a rarity button tops up every character of that
+  // profile (e.g. "common_shard" -> all common_character heroes).
   cheatAddShards(id, v) {
     if (!this.cheatsEnabled()) return;
-    Meta.state.shards[id] = Math.max(0, (Meta.state.shards[id] || 0) + v);
+    const profile = id.replace(/_shard$/, "") + "_character";
+    this.cfg.characterOrder.forEach((cid) => {
+      if (this.cfg.characters[cid].profile === profile) Meta.state.charShards[cid] = Math.max(0, (Meta.state.charShards[cid] || 0) + v);
+    });
     this._cheatMetaDone();
   },
   cheatAddChest(id, v) {
