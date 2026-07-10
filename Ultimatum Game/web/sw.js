@@ -1,5 +1,5 @@
 // Service worker minimal : rend le jeu installable et jouable hors-ligne.
-const CACHE = 'ultimatum-v10';
+const CACHE = 'ultimatum-v11';
 
 // Pré-cache le noyau au moment de l'installation.
 self.addEventListener('install', (event) => {
@@ -13,6 +13,10 @@ self.addEventListener('install', (event) => {
         './config.js',
         './constants.js',
         './helpers.js',
+        './meta.js',
+        './menu.js',
+        './building.js',
+        './codex.js',
         './manifest.json',
         './icon-192.png',
         './icon-512.png'

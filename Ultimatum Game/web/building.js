@@ -247,23 +247,29 @@ function renderGraph(slot, focusId) {
     });
     g.appendChild(text);
 
-    // mini icons: what it produces (+ attracted customer) — readable at a glance
+    // mini icons: what it produces (+ attracted customer) — readable, and each
+    // opens its own codex page (the rest of the node refocuses the building).
+    const iconClick = (node, fn) => node.addEventListener("click", (e) => { if (svg._dragDist > 6) return; e.stopPropagation(); fn(); });
     if (isMachine) {
       const md = machineDef(id);
       let ix = NODE_W - 20;
       productsOf(md).forEach((rid) => {
         customersFor(rid).forEach((c) => {
           const ci = document.createElementNS(SVG_NS, "image");
-          ci.setAttribute("href", sprite(c.spriteId));
+          ci.setAttribute("href", sprite(c.spriteId)); ci.setAttribute("class", "bn-mini");
           ci.setAttribute("x", ix); ci.setAttribute("y", NODE_H - 20); ci.setAttribute("width", 16); ci.setAttribute("height", 16);
+          iconClick(ci, () => openCodexCustomer(c.id));
           g.appendChild(ci); ix -= 18;
         });
         const oi = document.createElementNS(SVG_NS, "image");
-        oi.setAttribute("href", sprite(res(rid).spriteId));
+        oi.setAttribute("href", sprite(res(rid).spriteId)); oi.setAttribute("class", "bn-mini");
         oi.setAttribute("x", ix); oi.setAttribute("y", NODE_H - 20); oi.setAttribute("width", 16); oi.setAttribute("height", 16);
+        iconClick(oi, () => openCodexResource(rid));
         g.appendChild(oi); ix -= 18;
       });
       g.addEventListener("click", () => { if (svg._dragDist > 6) return; openBuildingPanel(id); });
+    } else {
+      iconClick(g, () => openCodexResource(id.slice(4)));   // raw-resource node -> its codex page
     }
     svg.appendChild(g);
   });

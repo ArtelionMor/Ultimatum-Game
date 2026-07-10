@@ -576,6 +576,20 @@ button.codex-row:active { border-color: var(--accent); }
 .codex-row .price { margin-left: auto; display: flex; align-items: center; gap: 4px; color: var(--accent); font-weight: bold; }
 .codex-row .price img { width: 16px; height: 16px; }
 
+/* in-game clickable clients / resources -> codex */
+.customer .bubble, .customer .cust-sprite { cursor: pointer; }
+.cinv-stack { cursor: pointer; }
+.wp-chip { cursor: pointer; }
+.machine-recipe img[data-res] { cursor: pointer; }
+.res-custs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+.res-cust {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 5px 10px; color: var(--text); font-size: 13px; cursor: pointer;
+}
+.res-cust:active { border-color: var(--accent); }
+.res-cust img { width: 24px; height: 24px; }
+
 /* recipe graph: scope toggle + legend + pan/zoomable viewport */
 .bg-toggle {
   display: flex; align-items: center; gap: 7px;
@@ -605,6 +619,8 @@ button.codex-row:active { border-color: var(--accent); }
 .bn.ctx rect { opacity: .65; }
 .bn.ctx image, .bn.ctx text { opacity: .65; }
 .bn-name { fill: var(--text); font-size: 11px; font-weight: bold; }
+.bn-mini { cursor: pointer; }
+.bn.ctx .bn-mini { opacity: .65; }
 .bedge { fill: none; stroke-width: 2; }
 .bedge.up { stroke: var(--accent-2); }
 .bedge.down { stroke: #d16ba5; }
