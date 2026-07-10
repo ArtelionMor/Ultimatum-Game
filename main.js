@@ -8,6 +8,8 @@ import { sprite, $, el, randInt } from "./helpers.js";
 import { normalize, resolveLevel } from "./config.js";
 import { Meta } from "./meta.js";
 import { initMenu, showMenu, hideMenu, renderMenu, openCharacterPanel, gearBadges, renderDropList } from "./menu.js";
+import { openCodexCustomer, openCodexResource } from "./codex.js";
+import { openBuildingPanel } from "./building.js";
 
 // ============================================================
 // Game
@@ -116,6 +118,8 @@ const Game = {
   res(id) { return this.cfg.resources[id]; },
   tierInfo(id, tier) { return this.cfg.resources[id].tiers[tier]; },
   machineDef(id) { return this.cfg.machines.find((m) => m.id === id); },
+  // First customer whose needs include this resource (codex navigation helper).
+  customerForResource(resId) { return (this.cfg.customerOrder || []).find((cid) => this.cfg.customerDefs[cid].needs.includes(resId)) || null; },
   emptyStock() { const s = {}; this.cfg.resourceOrder.forEach((r) => { s[r] = {}; }); return s; },
   stockTotal(c) { let n = 0; for (const r in c.stock) for (const t in c.stock[r]) n += c.stock[r][t]; return n; },
   stockOf(c, resId) { let n = 0; const m = c.stock[resId] || {}; for (const t in m) n += m[t]; return n; },
@@ -511,7 +515,7 @@ const Game = {
     const totalW = order.reduce((s, r) => s + (mk.weights[r] || 0), 0) || 1;
     const chips = order.filter((r) => (mk.weights[r] || 0) > 0)
       .sort((a, b) => (mk.weights[b] || 0) - (mk.weights[a] || 0))
-      .map((r) => `<div class="wp-chip"><img src="${this.tierSrc(r, 1)}" title="${this.res(r).displayName}"><span>${Math.round((mk.weights[r] || 0) / totalW * 100)}%</span></div>`)
+      .map((r) => `<div class="wp-chip" data-res="${r}"><img src="${this.tierSrc(r, 1)}" title="${this.res(r).displayName}"><span>${Math.round((mk.weights[r] || 0) / totalW * 100)}%</span></div>`)
       .join("");
     wrap.innerHTML =
       `<div class="wp-head"><span class="wp-title">Vague ${pr}</span>` +
@@ -561,6 +565,9 @@ const Game = {
     cust.innerHTML = `<div class="bubble"><span>${need.qty}×</span><img src="${this.tierSrc(need.resId, 1)}"></div><img class="cust-sprite" src="${sprite(custSprite)}">`;
     const fall = FALL_TIME / (this.cfg.g.customerSpeed || 1); // customerSpeed: higher = faster
     cust.style.setProperty("--fall", fall + "s");
+    // tap the bubble to inspect the wanted resource, the sprite to inspect the client
+    cust.querySelector(".bubble").onclick = (e) => { e.stopPropagation(); openCodexResource(need.resId); };
+    cust.querySelector(".cust-sprite").onclick = (e) => { e.stopPropagation(); const cid = this.customerForResource(need.resId); if (cid) openCodexCustomer(cid); };
     lane.appendChild(cust);
     requestAnimationFrame(() => cust.classList.add("falling"));
 
@@ -1001,10 +1008,15 @@ const Game = {
     ad.onclick = (e) => { e.stopPropagation(); this.assignWorker(m); };
     up.onclick = (e) => { e.stopPropagation(); this.upgradeMachine(m); };
     node.onclick = () => { if (this.selectedWorker) this.assignWorker(m); };
+    // tap the building sprite -> its detail widget (unless assigning a worker)
+    icon.style.cursor = "pointer";
+    icon.onclick = (e) => { if (this.selectedWorker) return; e.stopPropagation(); openBuildingPanel(m.id); };
+    // tap an ingredient/output icon in the recipe -> its codex page
+    recipe.addEventListener("click", (e) => { const img = e.target.closest("img[data-res]"); if (img) { e.stopPropagation(); openCodexResource(img.dataset.res); } });
     m._refs = { name, slots, ad, rm, up }; this.updateMachine(m, node); return node;
   },
   recipeHtml(def) {
-    const ic = (id, cls = "") => `<img class="${cls}" src="${this.tierSrc(id, 1)}" title="${this.res(id).displayName}">`;
+    const ic = (id, cls = "") => `<img class="${cls}" data-res="${id}" src="${this.tierSrc(id, 1)}" title="${this.res(id).displayName}">`;
     const out = ic(def.outputs, "out");
     if (!def.inputs.length) return `<span class="arrow">→</span> ${out}`;
     return def.inputs.map((i) => `${i.quantity}×${ic(i.type)}`).join(" ") + ` <span class="arrow">→</span> ${out}`;
@@ -1178,10 +1190,25 @@ const Game = {
       );
       tiers.appendChild(row);
     }
+    // customers who want this resource -> tap to open its codex page
+    const actions = body.querySelector("#res-actions");
+    const wanting = (this.cfg.customerOrder || []).filter((cid) => this.cfg.customerDefs[cid].needs.includes(rid));
+    if (wanting.length) {
+      actions.insertAdjacentElement("beforebegin", el("div", "cp-section", "Clients intéressés"));
+      const cwrap = el("div", "res-custs");
+      wanting.forEach((cid) => {
+        const c = this.cfg.customerDefs[cid];
+        const b = el("button", "res-cust");
+        b.innerHTML = `<img src="${sprite(c.spriteId)}"><span>${cid.charAt(0).toUpperCase() + cid.slice(1)}</span>`;
+        b.onclick = () => openCodexCustomer(cid);
+        cwrap.appendChild(b);
+      });
+      actions.insertAdjacentElement("beforebegin", cwrap);
+    }
     if (this.cfg.convert[rid]) {
       const btn = el("button", "cv-btn", "🔁 Raffiner");
       btn.onclick = () => { this.closeResourceInfo(); this.openConvert(rid); };
-      body.querySelector("#res-actions").appendChild(btn);
+      actions.appendChild(btn);
     }
   },
   botSpecialty(c) {
@@ -1224,7 +1251,8 @@ const Game = {
     this.cfg.resourceOrder.forEach((rid) => {
       if (this.stockOf(c, rid) <= 0) return; any = true;
       const row = el("div", "cp-inv-row");
-      const ic = this.tierImg(rid, this.bestTier(c, rid) || 1); ic.className = "cp-inv-icon"; ic.title = this.res(rid).displayName;
+      const ic = this.tierImg(rid, this.bestTier(c, rid) || 1); ic.className = "cp-inv-icon clickable"; ic.title = this.res(rid).displayName;
+      ic.onclick = () => openCodexResource(rid);
       const tiers = el("div", "cp-inv-tiers");
       for (let t = 1; t <= maxT; t++) { const n = this.tierCount(c, rid, t); if (n > 0) tiers.appendChild(el("span", "cp-tier-chip", `T${t}·${n}`)); }
       row.append(ic, tiers); inv.appendChild(row);
@@ -1237,21 +1265,23 @@ const Game = {
   renderCounterInv(c) {
     const wrap = c._invRef; if (!wrap) return;
     wrap.innerHTML = "";
+    const stackFor = (rid, img, n) => {
+      const stack = el("div", "cinv-stack");
+      stack.append(img, el("span", null, n));
+      stack.onclick = (e) => { e.stopPropagation(); openCodexResource(rid); };  // resource, not the seller
+      return stack;
+    };
     if (c.isPlayer) {
       this.cfg.resourceOrder.forEach((rid) => {
         const n = this.stockOf(this.player, rid); if (n <= 0) return;
-        const stack = el("div", "cinv-stack");
-        stack.append(this.tierImg(rid, this.bestTier(this.player, rid) || 1), el("span", null, n));
-        wrap.appendChild(stack);
+        wrap.appendChild(stackFor(rid, this.tierImg(rid, this.bestTier(this.player, rid) || 1), n));
       });
     } else {
       this.cfg.resourceOrder.forEach((rid) => {
         const m = c.stock[rid] || {};
         Object.keys(m).map(Number).sort((a, b) => b - a).forEach((t) => {
           if (m[t] <= 0) return;
-          const stack = el("div", "cinv-stack");
-          stack.append(this.tierImg(rid, t), el("span", null, m[t]));
-          wrap.appendChild(stack);
+          wrap.appendChild(stackFor(rid, this.tierImg(rid, t), m[t]));
         });
       });
     }
@@ -1433,6 +1463,7 @@ $("#convert-close").addEventListener("click", () => Game.closeConvert());
 $("#convert-overlay").addEventListener("click", (e) => { if (e.target.id === "convert-overlay") Game.closeConvert(); });
 $("#competitor-close").addEventListener("click", () => Game.closeCompetitor());
 $("#competitor-overlay").addEventListener("click", (e) => { if (e.target.id === "competitor-overlay") Game.closeCompetitor(); });
+$("#wave-preview")?.addEventListener("click", (e) => { const chip = e.target.closest(".wp-chip[data-res]"); if (chip) openCodexResource(chip.dataset.res); });
 $("#resource-close").addEventListener("click", () => Game.closeResourceInfo());
 $("#resource-overlay").addEventListener("click", (e) => { if (e.target.id === "resource-overlay") Game.closeResourceInfo(); });
 // Guarded with ?.: if a stale/cached index.html lacks these nodes, the bootstrap must
