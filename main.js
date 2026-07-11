@@ -14,6 +14,7 @@ import { enterTax, openTaxInfo, closeTaxInfo, prepayTax, renderTaxInfo, nextTaxI
 import { freeWorkers, crewSpeedBonus, crewProba2x, addWorker, selectWorker, assignWorker, removeWorker, unassignWorker } from "./game-workers.js";
 import { nextWorker, buyWorker, nextMkt, buyMkt, nextStorage, buyStorage, nextMachineLevel, upgradeMachine } from "./game-shop.js";
 import { planBot, releaseBotStock } from "./game-bots.js";
+import { spawnCustomer, restackCustomers } from "./game-customers.js";
 
 // ============================================================
 // Game
@@ -272,9 +273,9 @@ const Game = {
     if (this.waveActive) {
       const m = this.market;
       m.spawnTimer -= dt;
-      if (m.remaining > 0 && m.spawnTimer <= 0) { m.spawnTimer = SPAWN_INTERVAL / (this.cfg.g.customerRate || 1); m.remaining--; this.spawnCustomer(); }
+      if (m.remaining > 0 && m.spawnTimer <= 0) { m.spawnTimer = SPAWN_INTERVAL / (this.cfg.g.customerRate || 1); m.remaining--; spawnCustomer(this); }
       this._stackTimer = (this._stackTimer || 0) - dt;
-      if (this._stackTimer <= 0) { this.restackCustomers(); this._stackTimer = 0.1; }
+      if (this._stackTimer <= 0) { restackCustomers(); this._stackTimer = 0.1; }
       if (m.remaining <= 0 && m.served >= m.total) this.endWave();
     } else {
       this.prepTimer -= dt;
@@ -388,97 +389,6 @@ const Game = {
     const c = $("#wp-countdown"); if (!c) return;
     c.textContent = this.waveActive ? "en cours" : "↓ " + Math.max(0, Math.ceil(this.prepTimer)) + "s";
     c.classList.toggle("imminent", !this.waveActive && this.prepTimer <= 5);
-  },
-
-  pickNeed() {
-    const w = this.market.def.weights; const order = this.cfg.resourceOrder;
-    const tot = order.reduce((s, r) => s + (w[r] || 0), 0);
-    let r = Math.random() * tot; let res = order.find((x) => w[x] > 0) || order[0];
-    for (const x of order) { if (!w[x]) continue; r -= w[x]; if (r <= 0) { res = x; break; } }
-    const avg = this.market.def.avg; const qty = Math.max(1, [avg - 1, avg, avg + 1][randInt(0, 2)]);
-    return { resId: res, qty };
-  },
-
-  attractiveness(c, resId) { return c.marketing + this.tierInfo(resId, this.bestTier(c, resId)).influence; },
-
-  chooseShop(eligible, resId) {
-    const min = this.cfg.g.minimalPercentage;
-    const A = eligible.map((c) => this.attractiveness(c, resId));
-    const sum = A.reduce((s, x) => s + x, 0);
-    let p = A.map((x) => x / sum);
-    // enforce floor then renormalize the non-floored proportionally
-    const fixed = p.map((x) => x < min);
-    const fixedSum = p.reduce((s, x, i) => s + (fixed[i] ? min : 0), 0);
-    const freeSum = p.reduce((s, x, i) => s + (fixed[i] ? 0 : x), 0);
-    p = p.map((x, i) => fixed[i] ? min : (freeSum > 0 ? x / freeSum * (1 - fixedSum) : (1 - fixedSum) / p.length));
-    let r = Math.random(); for (let i = 0; i < eligible.length; i++) { r -= p[i]; if (r <= 0) return eligible[i]; }
-    return eligible[eligible.length - 1];
-  },
-
-  spawnCustomer() {
-    const need = this.pickNeed();
-    const m = this.market; m.active++;
-    const lane = $("#customer-lane");
-    const cust = el("div", "customer");
-    cust.style.left = randInt(12, 88) + "%";
-    const custSprite = this.cfg.customerSprites[need.resId] || "Customer"; // sprite chosen by demanded resource
-    cust.innerHTML = `<div class="bubble"><span>${need.qty}×</span><img src="${this.tierSrc(need.resId, 1)}"></div><img class="cust-sprite" src="${sprite(custSprite)}">`;
-    const fall = FALL_TIME / (this.cfg.g.customerSpeed || 1); // customerSpeed: higher = faster
-    cust.style.setProperty("--fall", fall + "s");
-    // tap the bubble to inspect the wanted resource, the sprite to inspect the client
-    cust.querySelector(".bubble").onclick = (e) => { e.stopPropagation(); openCodexResource(need.resId); };
-    cust.querySelector(".cust-sprite").onclick = (e) => { e.stopPropagation(); const cid = this.customerForResource(need.resId); if (cid) openCodexCustomer(cid); };
-    lane.appendChild(cust);
-    requestAnimationFrame(() => cust.classList.add("falling"));
-
-    setTimeout(() => {
-      const eligible = this.competitors.filter((c) => !c.eliminated && this.stockOf(c, need.resId) >= need.qty);
-      if (eligible.length) {
-        const winner = this.chooseShop(eligible, need.resId);
-        const gain = this.sellTo(winner, need.resId, need.qty);
-        if (winner._counter) {
-          const cr = winner._counter.getBoundingClientRect(), lr = lane.getBoundingClientRect();
-          cust.style.left = (cr.left - lr.left + cr.width / 2) + "px";
-          cust.classList.add("toShop");
-          this.flashStall(winner, gain);
-        }
-      } else {
-        cust.classList.add("nobody"); // turns red
-        const x = parseFloat(cust.style.left) || 50;
-        cust.style.left = (x < 50 ? -25 : 125) + "%"; // slide off to the nearest edge
-      }
-      setTimeout(() => cust.remove(), 750);
-      m.served++; m.active--;
-      this.refreshSuppliers();
-    }, fall * 1000);
-  },
-
-  // Depth-sort customers so the closest ones (lowest on screen) paint on top.
-  // Two z bands keep every bubble above every sprite; within each band, closer = higher.
-  restackCustomers() {
-    const lane = $("#customer-lane");
-    if (!lane) return;
-    const custs = [...lane.querySelectorAll(".customer")];
-    if (custs.length < 2) return;
-    custs
-      .map((c) => ({ c, y: c.getBoundingClientRect().top }))
-      .sort((a, b) => a.y - b.y) // farthest (higher up) first, closest (lower) last
-      .forEach(({ c }, i) => {
-        const sprite = c.querySelector(".cust-sprite");
-        const bubble = c.querySelector(".bubble");
-        if (sprite) sprite.style.zIndex = 1 + i;
-        if (bubble) bubble.style.zIndex = 1000 + i;
-      });
-  },
-
-  sellTo(c, resId, qty) {
-    let gain = 0;
-    const m = c.stock[resId];
-    const tiers = Object.keys(m).map(Number).sort((a, b) => b - a); // highest tier first
-    for (const t of tiers) { while (qty > 0 && m[t] > 0) { m[t]--; qty--; gain += this.tierInfo(resId, t).price; } }
-    c.money += gain; c.salesThisRound += gain;
-    if (c === this.player) this._invDirty = true;
-    return gain;
   },
 
   // ---------- Results (standings) ----------
