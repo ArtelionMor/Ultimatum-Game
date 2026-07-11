@@ -12,6 +12,7 @@ import { openCodexCustomer, openCodexResource } from "./codex.js";
 import { openBuildingPanel } from "./building.js";
 import { enterTax, openTaxInfo, closeTaxInfo, prepayTax, renderTaxInfo, nextTaxInfo } from "./game-tax.js";
 import { freeWorkers, crewSpeedBonus, crewProba2x, addWorker, selectWorker, assignWorker, removeWorker, unassignWorker } from "./game-workers.js";
+import { nextWorker, buyWorker, nextMkt, buyMkt, nextStorage, buyStorage, nextMachineLevel, upgradeMachine } from "./game-shop.js";
 
 // ============================================================
 // Game
@@ -356,17 +357,6 @@ const Game = {
     for (let i = 0; i < tierPcts.length; i++) { r -= tierPcts[i]; if (r <= 0) return i + 1; }
     return 1;
   },
-
-  // ---------- Tycoon purchases ----------
-  nextWorker() { return this.cfg.purchases.increaseWorker[this.player.buys.increaseWorker]; },
-  buyWorker() { const n = this.nextWorker(); if (!n || this.player.workers.length >= this.cfg.g.maxWorkersTotal || this.player.money < n.price) return; this.player.money -= n.price; this.player.buys.increaseWorker++; for (let i = 0; i < n.effect; i++) addWorker(this); this.renderShop(); this.renderWorkers(); this.refreshHud(); },
-  nextMkt() { return this.cfg.purchases.increaseMarketting[this.player.buys.increaseMarketting]; },
-  buyMkt() { const n = this.nextMkt(); if (!n || this.player.money < n.price) return; this.player.money -= n.price; this.player.buys.increaseMarketting++; this.player.marketing = n.effect; this.renderShop(); this.refreshHud(); },
-  nextStorage() { return this.cfg.purchases.increaseStorage[this.player.buys.increaseStorage]; },
-  buyStorage() { const n = this.nextStorage(); if (!n || this.player.money < n.price) return; this.player.money -= n.price; this.player.buys.increaseStorage++; this.player.storageCap += n.effect; this.renderShop(); this.renderInventory(); this.refreshHud(); },
-
-  nextMachineLevel(m) { const lv = this.machineDef(m.id).levels[m.level]; return lv || null; }, // levels[m.level] is the (m.level+1)th
-  upgradeMachine(m) { const nx = this.nextMachineLevel(m); if (!nx || this.player.money < nx.cost) return; this.player.money -= nx.cost; m.level++; this.refreshMachineCard(m); this.renderShop(); this.refreshHud(); },
 
   // ---------- Bots ----------
   // Reserve for the next upcoming tax, minus the guaranteed income the bot will still
@@ -770,19 +760,19 @@ const Game = {
       b.disabled = disFn(); b.onclick = fn; bar.appendChild(b);
       this._shopBtns.push({ b, disFn });
     };
-    const w = this.nextWorker();
-    mk(`<img src="${sprite("Worker")}">`, `Ouvrier ×${this.player.workers.length}`, w ? "$" + w.price : "MAX", () => !w || this.player.workers.length >= this.cfg.g.maxWorkersTotal || this.player.money < w.price, () => this.buyWorker());
-    const mkt = this.nextMkt();
-    mk("📣", `Mkt ${this.player.marketing.toFixed(1)}`, mkt ? "$" + mkt.price : "MAX", () => !mkt || this.player.money < mkt.price, () => this.buyMkt());
-    const st = this.nextStorage();
-    mk("📦", `Stock ${this.player.storageCap}`, st ? "$" + st.price : "MAX", () => !st || this.player.money < st.price, () => this.buyStorage());
+    const w = nextWorker(this);
+    mk(`<img src="${sprite("Worker")}">`, `Ouvrier ×${this.player.workers.length}`, w ? "$" + w.price : "MAX", () => !w || this.player.workers.length >= this.cfg.g.maxWorkersTotal || this.player.money < w.price, () => buyWorker(this));
+    const mkt = nextMkt(this);
+    mk("📣", `Mkt ${this.player.marketing.toFixed(1)}`, mkt ? "$" + mkt.price : "MAX", () => !mkt || this.player.money < mkt.price, () => buyMkt(this));
+    const st = nextStorage(this);
+    mk("📦", `Stock ${this.player.storageCap}`, st ? "$" + st.price : "MAX", () => !st || this.player.money < st.price, () => buyStorage(this));
   },
   // Re-evaluate buy/upgrade buttons' enabled state in place whenever money changes.
   refreshAffordability() {
     if (this._shopBtns) this._shopBtns.forEach(({ b, disFn }) => { b.disabled = disFn(); });
     this.player.machines.forEach((m) => {
       if (!m._refs || !m._refs.up) return;
-      const nx = this.nextMachineLevel(m);
+      const nx = nextMachineLevel(this, m);
       m._refs.up.disabled = !nx || this.player.money < nx.cost;
     });
   },
@@ -804,7 +794,7 @@ const Game = {
     node.append(icon, name, recipe, footer, prog);
     rm.onclick = (e) => { e.stopPropagation(); removeWorker(this, m); };
     ad.onclick = (e) => { e.stopPropagation(); assignWorker(this, m); };
-    up.onclick = (e) => { e.stopPropagation(); this.upgradeMachine(m); };
+    up.onclick = (e) => { e.stopPropagation(); upgradeMachine(this, m); };
     node.onclick = () => { if (this.selectedWorker) assignWorker(this, m); };
     // tap the building sprite -> its detail widget (unless assigning a worker)
     icon.style.cursor = "pointer";
@@ -830,7 +820,7 @@ const Game = {
     }
     r.ad.disabled = m.crew.length >= L.maxWorkers || freeWorkers(this.player).length <= 0;
     r.rm.disabled = m.crew.length <= 0;
-    const nx = this.nextMachineLevel(m);
+    const nx = nextMachineLevel(this, m);
     if (nx) { r.up.innerHTML = `⬆ $${nx.cost}`; r.up.disabled = this.player.money < nx.cost; } else { r.up.innerHTML = "⬆ MAX"; r.up.disabled = true; }
     node.classList.toggle("producing", m.producing);
     node.classList.toggle("assignable", !!this.selectedWorker && m.crew.length < L.maxWorkers);
