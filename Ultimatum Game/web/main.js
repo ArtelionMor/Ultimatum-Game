@@ -15,6 +15,7 @@ import { freeWorkers, crewSpeedBonus, crewProba2x, addWorker, selectWorker, assi
 import { nextWorker, buyWorker, nextMkt, buyMkt, nextStorage, buyStorage, nextMachineLevel, upgradeMachine } from "./game-shop.js";
 import { planBot, releaseBotStock } from "./game-bots.js";
 import { spawnCustomer, restackCustomers } from "./game-customers.js";
+import { tickProduction } from "./game-production.js";
 
 // ============================================================
 // Game
@@ -259,7 +260,7 @@ const Game = {
   },
 
   updatePlay(dt) {
-    this.tickProduction(dt);
+    tickProduction(this, dt);
     // The inventory DOM is only written when the section is on screen (see the
     // IntersectionObserver in setupInventoryObserver). Off-screen production just
     // accumulates in the model + flips _invDirty, so it never shifts the layout
@@ -307,58 +308,6 @@ const Game = {
   },
 
   lvl(machine) { return this.machineDef(machine.id).levels[machine.level - 1]; },
-  effTime(machine) { const L = this.lvl(machine); return Math.max(0.3, L.productionTime * (1 - crewSpeedBonus(L, machine))); },
-  hasInputs(p, def) { return def.inputs.every((i) => this.stockOf(p, i.type) >= i.quantity); },
-  consumeInputs(p, def) { def.inputs.forEach((i) => { let need = i.quantity; const m = p.stock[i.type]; for (const t of Object.keys(m).sort((a, b) => a - b)) { while (need > 0 && m[t] > 0) { m[t]--; need--; } } }); if (p === this.player) this._invDirty = true; },
-
-  tickProduction(dt) {
-    const p = this.player;
-    p.machines.forEach((m) => {
-      const def = this.machineDef(m.id), L = this.lvl(m);
-      const staffed = m.crew.length >= L.workersRequired;
-      if (!staffed) { m.producing = false; m.elapsed = 0; this.setProgress(m, 0); return; }
-      const converts = def.inputs.length > 0;
-      // A converter needs its inputs to even run.
-      if (converts && !this.hasInputs(p, def)) { m.producing = false; m.elapsed = 0; this.setProgress(m, 0); return; }
-      // Storage full: only pure generators pause. Converters keep running — they
-      // consume inputs (freeing space) before storing output, so they never deadlock.
-      if (!converts && this.stockTotal(p) >= p.storageCap) { m.producing = false; this.setProgress(m, 1); return; }
-      m.producing = true;
-      m.elapsed += dt;
-      const time = this.effTime(m);
-      this.setProgress(m, Math.min(1, m.elapsed / time));
-      if (m.elapsed >= time) {
-        m.elapsed = 0;
-        if (converts) { if (!this.hasInputs(p, def)) return; this.consumeInputs(p, def); }
-        const out = this.pickOutput(def.outputs, m.level);
-        const tier = this.rollTier(out.tiers);   // one tier for the whole spawn (matches the "+N Tier T" popup)
-        // characters' "2x proba" (affinity + gear): chance to double the spawn
-        const doubled = Math.random() < crewProba2x(m);
-        const qty = out.quantity * (doubled ? 2 : 1);
-        let added = 0;
-        for (let i = 0; i < qty; i++) {
-          if (this.stockTotal(p) >= p.storageCap) break;
-          this.addStock(p, def.outputs, tier, 1);
-          this.flyToInventory(m, def.outputs, tier);
-          added++;
-        }
-        if (added > 0) this.showSpawnPopup(m, def.outputs, added, tier, out.group);
-      }
-    });
-  },
-
-  pickOutput(resId, level) {
-    const list = this.cfg._outputs[resId + "_" + Math.min(level, 15)] || this.cfg._outputs[resId + "_1"];
-    const total = list.reduce((s, o) => s + o.weight, 0);
-    let r = Math.random() * total;
-    for (const o of list) { r -= o.weight; if (r <= 0) return o; }
-    return list[list.length - 1];
-  },
-  rollTier(tierPcts) {
-    let r = Math.random() * 100;
-    for (let i = 0; i < tierPcts.length; i++) { r -= tierPcts[i]; if (r <= 0) return i + 1; }
-    return 1;
-  },
 
   // ---------- Next-wave preview (top menu) ----------
   // The wave whose demand to advertise: during a wave, the next one; during prep, the
