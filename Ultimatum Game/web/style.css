@@ -538,6 +538,19 @@ button.cv-btn:disabled { background: #3a4a52; color: #7a8197; }
 }
 .bp-res:active { color: var(--accent); }
 
+/* drop-rate section (group-A tier distribution by level) */
+.bp-drop-pick { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 13px; color: var(--text-dim); }
+.bp-drop-select { background: var(--bg-card); color: var(--text); border: 2px solid var(--border); border-radius: 8px; padding: 4px 8px; font-size: 13px; }
+.bp-drop-lvl { font-size: 13px; color: var(--text-dim); margin-bottom: 8px; }
+.bp-drop-bars { display: flex; flex-direction: column; gap: 5px; }
+.bp-drop-row { display: grid; grid-template-columns: 26px 52px 1fr 42px; align-items: center; gap: 8px; }
+.bp-drop-row.zero { opacity: .4; }
+.bp-drop-icon { width: 26px; height: 26px; }
+.bp-drop-name { font-size: 12px; font-weight: bold; }
+.bp-drop-track { height: 12px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.bp-drop-fill { height: 100%; border-radius: 6px 0 0 6px; transition: width .2s ease; }
+.bp-drop-pct { font-size: 12px; text-align: right; color: var(--text); }
+
 /* ---------- Codex (customers & resources browser) ---------- */
 #codex-overlay { z-index: 1700; align-items: safe center; overflow-y: auto; padding: 16px 8px; }
 #codex-overlay .panel { text-align: left; width: min(560px, 92vw); }

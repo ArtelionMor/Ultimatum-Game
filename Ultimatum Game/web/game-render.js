@@ -5,12 +5,12 @@
  */
 "use strict";
 
-import { $, el, sprite } from "./helpers.js";
+import { $, el, sprite, openOverlay } from "./helpers.js";
 import { S } from "./constants.js";
 import { Meta } from "./meta.js";
 import { openCharacterPanel, gearBadges } from "./menu.js";
-import { openCodexCustomer, openCodexResource } from "./codex.js";
 import { openBuildingPanel } from "./building.js";
+import { openResource } from "./resource.js";
 import { nextTaxInfo } from "./game-tax.js";
 import { freeWorkers, selectWorker, assignWorker, removeWorker, unassignWorker } from "./game-workers.js";
 import { nextWorker, buyWorker, nextMkt, buyMkt, nextStorage, buyStorage, nextMachineLevel, upgradeMachine } from "./game-shop.js";
@@ -81,7 +81,7 @@ export const renderMethods = {
       const icon = this.tierImg(rid, this.bestTier(this.player, rid) || 1); icon.className = "inv-row-icon"; icon.title = this.res(rid).displayName;
       rowHead.append(icon, el("span", "inv-refine", "🔁"));
       rowHead.classList.add("clickable"); rowHead.title = this.res(rid).displayName;
-      rowHead.onclick = () => this.openResourceInfo(rid); // resource widget (refine lives inside it)
+      rowHead.onclick = () => openResource(rid, { player: this.player, allowRefine: true }); // resource widget (refine lives inside it)
       row.appendChild(rowHead);
       this._invCells[rid] = {};
       for (let t = 1; t <= maxT; t++) {
@@ -130,7 +130,7 @@ export const renderMethods = {
     this._convertResId = resId;
     $("#convert-title").textContent = `Raffiner — ${this.res(resId).displayName}`;
     this.renderConvertList();
-    $("#convert-overlay").classList.remove("hidden");
+    openOverlay("convert-overlay");
   },
   closeConvert() { this._convertResId = null; $("#convert-overlay").classList.add("hidden"); },
   // Build the refine list once (stable button elements so clicks register).
@@ -143,10 +143,14 @@ export const renderMethods = {
       const rule = rules[tier];
       const row = el("div", "convert-row");
       const from = el("div", "cv-side");
-      from.append(this.tierImg(resId, tier), el("span", "cv-q", `${rule.quantity}× T${tier}`));
+      const fromImg = this.tierImg(resId, tier); fromImg.classList.add("clickable");
+      fromImg.onclick = () => openResource(resId, { player: this.player, allowRefine: true });
+      from.append(fromImg, el("span", "cv-q", `${rule.quantity}× T${tier}`));
       const arrow = el("span", "cv-arrow", "→");
       const to = el("div", "cv-side");
-      to.append(this.tierImg(rule.resultRes, rule.resultTier), el("span", "cv-q", `${rule.resultQty}× T${rule.resultTier}`));
+      const toImg = this.tierImg(rule.resultRes, rule.resultTier); toImg.classList.add("clickable");
+      toImg.onclick = () => openResource(rule.resultRes, { player: this.player, allowRefine: true });
+      to.append(toImg, el("span", "cv-q", `${rule.resultQty}× T${rule.resultTier}`));
       const haveEl = el("span", "cv-have", "");
       const btn = el("button", "cv-btn", "Raffiner");
       btn.onclick = () => { if (this.doConvert(resId, tier)) this.updateConvertList(); };
@@ -219,9 +223,9 @@ export const renderMethods = {
     node.onclick = () => { if (this.selectedWorker) assignWorker(this, m); };
     // tap the building sprite -> its detail widget (unless assigning a worker)
     icon.style.cursor = "pointer";
-    icon.onclick = (e) => { if (this.selectedWorker) return; e.stopPropagation(); openBuildingPanel(m.id); };
+    icon.onclick = (e) => { if (this.selectedWorker) return; e.stopPropagation(); openBuildingPanel(m.id, { level: m.level }); };
     // tap an ingredient/output icon in the recipe -> its codex page
-    recipe.addEventListener("click", (e) => { const img = e.target.closest("img[data-res]"); if (img) { e.stopPropagation(); openCodexResource(img.dataset.res); } });
+    recipe.addEventListener("click", (e) => { const img = e.target.closest("img[data-res]"); if (img) { e.stopPropagation(); openResource(img.dataset.res); } });
     m._refs = { name, slots, ad, rm, up }; this.updateMachine(m, node); return node;
   },
   recipeHtml(def) {
@@ -359,67 +363,9 @@ export const renderMethods = {
   },
 
   // --- competitor info widget ---
-  openCompetitor(c) { this._infoC = c; this.renderCompetitorPanel(); $("#competitor-overlay").classList.remove("hidden"); },
+  openCompetitor(c) { this._infoC = c; this.renderCompetitorPanel(); openOverlay("competitor-overlay"); },
   closeCompetitor() { this._infoC = null; $("#competitor-overlay").classList.add("hidden"); },
 
-  // --- resource info widget (click an inventory resource) ---
-  openResourceInfo(rid) { this._infoRes = rid; this.renderResourcePanel(); $("#resource-overlay").classList.remove("hidden"); },
-  closeResourceInfo() { this._infoRes = null; $("#resource-overlay").classList.add("hidden"); },
-  renderResourcePanel() {
-    const rid = this._infoRes; if (!rid) return;
-    const r = this.res(rid), maxT = this.cfg.maxTier;
-    const body = $("#resource-body");
-    const desc = r.description
-      ? `<div class="res-desc">${r.description}</div>`
-      : `<div class="res-desc muted">Pas encore de description — ajoute "description" à cette ressource dans le config.</div>`;
-    body.innerHTML =
-      `<div class="cp-head">
-        <img class="cp-skin" src="${this.tierSrc(rid, this.bestTier(this.player, rid) || 1)}">
-        <div class="cp-id">
-          <div class="cp-name">${r.displayName}</div>
-          <div class="cp-tags"><span class="cp-tag">#${rid}</span></div>
-        </div>
-      </div>
-      ${desc}
-      <div class="cp-section">Tiers</div>
-      <div class="res-tiers"></div>
-      <div id="res-actions"></div>`;
-    const tiers = body.querySelector(".res-tiers");
-    for (let t = 1; t <= maxT; t++) {
-      const ti = this.cfg.resources[rid].tiers[t]; if (!ti) continue;
-      const have = this.tierCount(this.player, rid, t);
-      const row = el("div", "res-tier-row" + (have > 0 ? " owned" : ""));
-      const img = this.tierImg(rid, t); img.className = "res-tier-img";
-      row.append(
-        img,
-        el("span", "res-tier-name", `Tier ${t}`),
-        el("span", "res-tier-price", `💰 ${ti.price}`),
-        el("span", "res-tier-inf", `📣 ${ti.influence}`),
-        el("span", "res-tier-have", `×${have}`)
-      );
-      tiers.appendChild(row);
-    }
-    // customers who want this resource -> tap to open its codex page
-    const actions = body.querySelector("#res-actions");
-    const wanting = (this.cfg.customerOrder || []).filter((cid) => this.cfg.customerDefs[cid].needs.includes(rid));
-    if (wanting.length) {
-      actions.insertAdjacentElement("beforebegin", el("div", "cp-section", "Clients intéressés"));
-      const cwrap = el("div", "res-custs");
-      wanting.forEach((cid) => {
-        const c = this.cfg.customerDefs[cid];
-        const b = el("button", "res-cust");
-        b.innerHTML = `<img src="${sprite(c.spriteId)}"><span>${cid.charAt(0).toUpperCase() + cid.slice(1)}</span>`;
-        b.onclick = () => openCodexCustomer(cid);
-        cwrap.appendChild(b);
-      });
-      actions.insertAdjacentElement("beforebegin", cwrap);
-    }
-    if (this.cfg.convert[rid]) {
-      const btn = el("button", "cv-btn", "🔁 Raffiner");
-      btn.onclick = () => { this.closeResourceInfo(); this.openConvert(rid); };
-      actions.appendChild(btn);
-    }
-  },
   botSpecialty(c) {
     if (!c.behavior) return "";
     let best = null, bw = -1;
@@ -461,7 +407,7 @@ export const renderMethods = {
       if (this.stockOf(c, rid) <= 0) return; any = true;
       const row = el("div", "cp-inv-row");
       const ic = this.tierImg(rid, this.bestTier(c, rid) || 1); ic.className = "cp-inv-icon clickable"; ic.title = this.res(rid).displayName;
-      ic.onclick = () => openCodexResource(rid);
+      ic.onclick = () => openResource(rid);
       const tiers = el("div", "cp-inv-tiers");
       for (let t = 1; t <= maxT; t++) { const n = this.tierCount(c, rid, t); if (n > 0) tiers.appendChild(el("span", "cp-tier-chip", `T${t}·${n}`)); }
       row.append(ic, tiers); inv.appendChild(row);
@@ -477,7 +423,7 @@ export const renderMethods = {
     const stackFor = (rid, img, n) => {
       const stack = el("div", "cinv-stack");
       stack.append(img, el("span", null, n));
-      stack.onclick = (e) => { e.stopPropagation(); openCodexResource(rid); };  // resource, not the seller
+      stack.onclick = (e) => { e.stopPropagation(); openResource(rid); };  // resource, not the seller
       return stack;
     };
     if (c.isPlayer) {

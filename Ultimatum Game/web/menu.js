@@ -4,11 +4,12 @@
  */
 "use strict";
 
-import { $, el, sprite } from "./helpers.js";
+import { $, el, sprite, openOverlay } from "./helpers.js";
 import { SLOT_EMOJI, RARITY_LABEL, RARITIES } from "./constants.js";
 import { Meta } from "./meta.js";
 import { initBuildingPanel, openBuildingPanel } from "./building.js";
 import { initCodex } from "./codex.js";
+import { initResourcePanel } from "./resource.js";
 
 let Game = null;
 let tab = "levels";
@@ -30,6 +31,7 @@ export function initMenu(game) {
   Game = game;
   initBuildingPanel(game);
   initCodex(game);
+  initResourcePanel(game);
   $("#menu-tabs").addEventListener("click", (e) => {
     const b = e.target.closest("button[data-tab]");
     if (b) { tab = b.dataset.tab; renderMenu(); }
@@ -207,7 +209,7 @@ let panelChar = null;
 export function openCharacterPanel(charId) {
   panelChar = charId;
   renderCharacterPanel();
-  $("#character-overlay").classList.remove("hidden");
+  openOverlay("character-overlay");
 }
 export function closeCharacterPanel() { panelChar = null; $("#character-overlay").classList.add("hidden"); }
 
