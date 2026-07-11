@@ -9,7 +9,8 @@
 
 import { $, el, sprite, randInt } from "./helpers.js";
 import { FALL_TIME } from "./constants.js";
-import { openCodexResource, openCodexCustomer } from "./codex.js";
+import { openCodexCustomer } from "./codex.js";
+import { openResource } from "./resource.js";
 
 function pickNeed(marketDef, order) {
   const w = marketDef.weights;
@@ -57,7 +58,7 @@ export function spawnCustomer(game) {
   const fall = FALL_TIME / (game.cfg.g.customerSpeed || 1); // customerSpeed: higher = faster
   cust.style.setProperty("--fall", fall + "s");
   // tap the bubble to inspect the wanted resource, the sprite to inspect the client
-  cust.querySelector(".bubble").onclick = (e) => { e.stopPropagation(); openCodexResource(need.resId); };
+  cust.querySelector(".bubble").onclick = (e) => { e.stopPropagation(); openResource(need.resId); };
   cust.querySelector(".cust-sprite").onclick = (e) => { e.stopPropagation(); const cid = game.customerForResource(need.resId); if (cid) openCodexCustomer(cid); };
   lane.appendChild(cust);
   requestAnimationFrame(() => cust.classList.add("falling"));

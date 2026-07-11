@@ -8,8 +8,8 @@ import { sprite, $, el, randInt } from "./helpers.js";
 import { normalize, resolveLevel } from "./config.js";
 import { Meta } from "./meta.js";
 import { initMenu, showMenu, hideMenu, renderMenu, openCharacterPanel, gearBadges, renderDropList } from "./menu.js";
-import { openCodexCustomer, openCodexResource } from "./codex.js";
 import { openBuildingPanel } from "./building.js";
+import { openResource } from "./resource.js";
 import { enterTax, openTaxInfo, closeTaxInfo, prepayTax, renderTaxInfo, nextTaxInfo } from "./game-tax.js";
 import { freeWorkers, crewSpeedBonus, crewProba2x, addWorker, selectWorker, assignWorker, removeWorker, unassignWorker } from "./game-workers.js";
 import { nextWorker, buyWorker, nextMkt, buyMkt, nextStorage, buyStorage, nextMachineLevel, upgradeMachine } from "./game-shop.js";
@@ -394,9 +394,7 @@ $("#convert-close").addEventListener("click", () => Game.closeConvert());
 $("#convert-overlay").addEventListener("click", (e) => { if (e.target.id === "convert-overlay") Game.closeConvert(); });
 $("#competitor-close").addEventListener("click", () => Game.closeCompetitor());
 $("#competitor-overlay").addEventListener("click", (e) => { if (e.target.id === "competitor-overlay") Game.closeCompetitor(); });
-$("#wave-preview")?.addEventListener("click", (e) => { const chip = e.target.closest(".wp-chip[data-res]"); if (chip) openCodexResource(chip.dataset.res); });
-$("#resource-close").addEventListener("click", () => Game.closeResourceInfo());
-$("#resource-overlay").addEventListener("click", (e) => { if (e.target.id === "resource-overlay") Game.closeResourceInfo(); });
+$("#wave-preview")?.addEventListener("click", (e) => { const chip = e.target.closest(".wp-chip[data-res]"); if (chip) openResource(chip.dataset.res); });
 // Guarded with ?.: if a stale/cached index.html lacks these nodes, the bootstrap must
 // not throw here — otherwise Game.start() below never runs and the game hangs at R 0/0.
 $("#hud-tax")?.addEventListener("click", () => openTaxInfo(Game));

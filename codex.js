@@ -1,13 +1,14 @@
 /* Market Ultimatum — codex.js
- * Customers & resources browser. Two tabs on top; opening from a specific
- * customer/resource jumps straight to its page, switching tabs shows a grid of
- * every entry (tap one to open it).
- *  - customer page: everything it wants to buy (tap a want -> resource page)
- *  - resource page: its tiers & prices (+ which customers want it)
+ * Customers & resources browser. Two tabs on top; the customers tab has its own
+ * pages, the resources tab is a grid that hands off to the shared resource
+ * widget (resource.js). Opening from a specific customer jumps to its page.
+ *  - customer page: everything it wants to buy (tap a want -> resource widget)
+ *  - resource: opens openResource() overlay, same as everywhere else
  */
 "use strict";
 
-import { $, el, sprite } from "./helpers.js";
+import { $, el, sprite, openOverlay } from "./helpers.js";
+import { openResource } from "./resource.js";
 
 let Game = null;
 let tab = "customers";   // "customers" | "resources"
@@ -24,13 +25,11 @@ export function initCodex(game) {
 }
 
 export function openCodexCustomer(custId) { tab = "customers"; selected = custId; show(); }
-export function openCodexResource(resId) { tab = "resources"; selected = resId; show(); }
-function show() { renderCodex(); $("#codex-overlay").classList.remove("hidden"); }
+function show() { renderCodex(); openOverlay("codex-overlay"); }
 export function closeCodex() { $("#codex-overlay").classList.add("hidden"); }
 
 const res = (id) => Game.cfg.resources[id] || { displayName: id, spriteId: "", description: "", tiers: {} };
 const cust = (id) => Game.cfg.customerDefs[id];
-const customersWanting = (resId) => Game.cfg.customerOrder.filter((cid) => cust(cid).needs.includes(resId));
 const resIcon = (r) => (r.tiers && r.tiers[1] && r.tiers[1].spriteId) || r.spriteId;
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
@@ -38,7 +37,7 @@ function renderCodex() {
   $("#codex-tabs").querySelectorAll("button[data-tab]").forEach((b) => b.classList.toggle("active", b.dataset.tab === tab));
   const body = $("#codex-body"); body.innerHTML = "";
   if (tab === "customers") { if (selected) renderCustomer(body, selected); else renderCustomerGrid(body); }
-  else { if (selected) renderResource(body, selected); else renderResourceGrid(body); }
+  else renderResourceGrid(body);   // resources open in the shared resource widget (overlay)
 }
 
 function backLink(label) {
@@ -66,7 +65,7 @@ function renderResourceGrid(body) {
     const r = res(rid);
     const card = el("button", "codex-card");
     card.innerHTML = `<img src="${sprite(resIcon(r))}"><span>${r.displayName}</span>`;
-    card.onclick = () => { selected = rid; renderCodex(); };
+    card.onclick = () => openResource(rid);
     grid.appendChild(card);
   });
   body.appendChild(grid);
@@ -84,37 +83,7 @@ function renderCustomer(body, cid) {
     const r = res(rid);
     const row = el("button", "codex-row");
     row.innerHTML = `<img src="${sprite(resIcon(r))}"><span>${r.displayName}</span><span class="codex-go">›</span>`;
-    row.onclick = () => openCodexResource(rid);
+    row.onclick = () => openResource(rid);
     body.appendChild(row);
   });
-}
-
-// ---------- Resource page ----------
-function renderResource(body, rid) {
-  const r = res(rid);
-  body.appendChild(backLink("Toutes les ressources"));
-  body.appendChild(el("div", "codex-head",
-    `<img src="${sprite(resIcon(r))}"><div><div class="codex-name">${r.displayName}</div>` +
-    (r.description ? `<div class="codex-desc">${r.description}</div>` : "") + `</div>`));
-
-  body.appendChild(el("div", "cp-section", "Tiers & prix"));
-  Object.keys(r.tiers || {}).map(Number).sort((a, b) => a - b).forEach((t) => {
-    const tier = r.tiers[t];
-    const row = el("div", "codex-row");
-    row.innerHTML = `<img src="${sprite(tier.spriteId)}"><span>Tier ${t}</span>` +
-      `<span class="price"><img src="${sprite("Coins")}">${tier.price}</span>`;
-    body.appendChild(row);
-  });
-
-  const wanting = customersWanting(rid);
-  if (wanting.length) {
-    body.appendChild(el("div", "cp-section", "Clients intéressés"));
-    wanting.forEach((cid) => {
-      const c = cust(cid);
-      const row = el("button", "codex-row");
-      row.innerHTML = `<img src="${sprite(c.spriteId)}"><span>${cap(cid)}</span><span class="codex-go">›</span>`;
-      row.onclick = () => openCodexCustomer(cid);
-      body.appendChild(row);
-    });
-  }
 }

@@ -13,12 +13,15 @@
  */
 "use strict";
 
-import { $, el, sprite } from "./helpers.js";
-import { openCodexCustomer, openCodexResource } from "./codex.js";
+import { $, el, sprite, openOverlay } from "./helpers.js";
+import { openCodexCustomer } from "./codex.js";
+import { openResource } from "./resource.js";
 
 let Game = null;
 let current = null;   // focused machine id
 let showUses = true;  // graph scope: true = recipes using this building too, false = only its ingredient chain
+let fixedLevel = null; // drop-rate level fixed by context (in-game machine level); null = meta -> level dropdown
+let dropLevel = 1;     // level currently shown in the drop-rate section (dropdown value in meta)
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const NODE_W = 150, NODE_H = 56, COL_GAP = 205, ROW_GAP = 78;
@@ -29,11 +32,15 @@ export function initBuildingPanel(game) {
   $("#building-overlay").addEventListener("click", (e) => { if (e.target.id === "building-overlay") closeBuildingPanel(); });
 }
 
-export function openBuildingPanel(machineId) {
+// ctx.level (in-game machine level) fixes the drop-rate section to that level and
+// hides the level dropdown; without it (meta) the dropdown lets you preview any level.
+export function openBuildingPanel(machineId, ctx = {}) {
   if (!Game || !Game.cfg.machines.some((m) => m.id === machineId)) return;
   current = machineId;
+  fixedLevel = ctx.level != null ? ctx.level : null;
+  dropLevel = fixedLevel != null ? fixedLevel : 1;
   renderBuildingPanel();
-  $("#building-overlay").classList.remove("hidden");
+  openOverlay("building-overlay");
 }
 export function closeBuildingPanel() { current = null; $("#building-overlay").classList.add("hidden"); }
 
@@ -49,6 +56,24 @@ function customersFor(resId) {
 }
 // A machine's products, as a list (single `outputs` today, may grow).
 const productsOf = (m) => (m.outputs ? [m.outputs] : []);
+
+// ---------- Drop rate (tier distribution of the dominant "A" group) ----------
+// Colors per tier for the drop-rate bars (T1 -> T6). Data-driven elsewhere: only
+// these presentation colors are hard-coded; every percentage comes from config.
+const TIER_COLORS = ["#7ed957", "#57b6d9", "#9b7bf1", "#e07be0", "#f0932b", "#e05b5b"];
+// Levels a resource actually defines in _outputs, sorted ascending.
+const levelsFor = (rid) => {
+  const out = Game.cfg._outputs || {};
+  return Object.keys(out).map((k) => (k.startsWith(rid + "_") ? +k.slice(rid.length + 1) : NaN))
+    .filter((n) => !Number.isNaN(n)).sort((a, b) => a - b);
+};
+// Group-A tier percentages [t1..t6] for a resource at a level (falls back to L1).
+const dropTiers = (rid, level) => {
+  const out = Game.cfg._outputs || {};
+  const rows = out[rid + "_" + level] || out[rid + "_1"] || [];
+  const a = rows.find((r) => r.group === "A") || rows[0];
+  return a ? a.tiers : null;
+};
 
 // ---------- Recipe graph data ----------
 // Nodes are machine ids, plus "res:<id>" pseudo-nodes for raw ingredients that
@@ -155,12 +180,51 @@ function renderBuildingPanel() {
     </div>
     <div class="cp-section">Production & clients</div>
     <div class="bp-prods">${prodRows}</div>
+    ${m.outputs ? `<div class="cp-section">Drop rate — Groupe A</div><div id="bp-drop-slot"></div>` : ""}
     <div class="cp-section">Recettes</div>
     <div id="bp-graph-slot"></div>`;
 
-  body.querySelectorAll("[data-res]").forEach((n) => { n.onclick = () => openCodexResource(n.dataset.res); });
+  body.querySelectorAll("[data-res]").forEach((n) => { n.onclick = () => openResource(n.dataset.res); });
   body.querySelectorAll("[data-cust]").forEach((n) => { n.onclick = () => openCodexCustomer(n.dataset.cust); });
+  if (m.outputs) renderDropRate($("#bp-drop-slot"), m.outputs);
   renderGraph($("#bp-graph-slot"), m.id);
+}
+
+// Drop-rate section: an optional level dropdown (meta only) + one bar per tier
+// showing the group-A tier probabilities at `dropLevel`. Rebuilt in place on
+// dropdown change so it stays dynamic when the config gets rebalanced later.
+function renderDropRate(slot, rid) {
+  slot.innerHTML = "";
+  const levels = levelsFor(rid);
+  if (!levels.length) { slot.appendChild(el("div", "menu-muted", "Pas de table de drop pour cette ressource.")); return; }
+  if (!levels.includes(dropLevel)) dropLevel = levels[0];
+
+  // level picker (meta): fixed level in-game -> just a label
+  if (fixedLevel != null) {
+    slot.appendChild(el("div", "bp-drop-lvl", `Niveau ${dropLevel}`));
+  } else {
+    const pick = el("div", "bp-drop-pick", `<span>Niveau</span>`);
+    const sel = el("select", "bp-drop-select");
+    levels.forEach((L) => { const o = el("option", null, `Niveau ${L}`); o.value = L; if (L === dropLevel) o.selected = true; sel.appendChild(o); });
+    sel.onchange = () => { dropLevel = +sel.value; renderDropRate(slot, rid); };
+    pick.appendChild(sel);
+    slot.appendChild(pick);
+  }
+
+  const tiers = dropTiers(rid, dropLevel);
+  if (!tiers) return;
+  const maxT = Game.cfg.maxTier;
+  const bars = el("div", "bp-drop-bars");
+  for (let t = 1; t <= maxT; t++) {
+    const pct = tiers[t - 1] || 0;
+    const row = el("div", "bp-drop-row" + (pct > 0 ? "" : " zero"));
+    const tSprite = (res(rid).tiers[t] || {}).spriteId || res(rid).spriteId;
+    const img = `<img class="bp-drop-icon" src="${sprite(tSprite)}">`;
+    const track = `<div class="bp-drop-track"><div class="bp-drop-fill" style="width:${pct}%;background:${TIER_COLORS[t - 1] || "#888"}"></div></div>`;
+    row.innerHTML = `${img}<span class="bp-drop-name">Tier ${t}</span>${track}<span class="bp-drop-pct">${pct}%</span>`;
+    bars.appendChild(row);
+  }
+  slot.appendChild(bars);
 }
 
 function renderGraph(slot, focusId) {
@@ -264,12 +328,12 @@ function renderGraph(slot, focusId) {
         const oi = document.createElementNS(SVG_NS, "image");
         oi.setAttribute("href", sprite(res(rid).spriteId)); oi.setAttribute("class", "bn-mini");
         oi.setAttribute("x", ix); oi.setAttribute("y", NODE_H - 20); oi.setAttribute("width", 16); oi.setAttribute("height", 16);
-        iconClick(oi, () => openCodexResource(rid));
+        iconClick(oi, () => openResource(rid));
         g.appendChild(oi); ix -= 18;
       });
       g.addEventListener("click", () => { if (svg._dragDist > 6) return; openBuildingPanel(id); });
     } else {
-      iconClick(g, () => openCodexResource(id.slice(4)));   // raw-resource node -> its codex page
+      iconClick(g, () => openResource(id.slice(4)));   // raw-resource node -> its resource widget
     }
     svg.appendChild(g);
   });
