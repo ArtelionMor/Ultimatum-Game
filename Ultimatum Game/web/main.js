@@ -11,6 +11,7 @@ import { initMenu, showMenu, hideMenu, renderMenu, openCharacterPanel, gearBadge
 import { openCodexCustomer, openCodexResource } from "./codex.js";
 import { openBuildingPanel } from "./building.js";
 import { enterTax, openTaxInfo, closeTaxInfo, prepayTax, renderTaxInfo, nextTaxInfo } from "./game-tax.js";
+import { freeWorkers, crewSpeedBonus, crewProba2x, addWorker, selectWorker, assignWorker, removeWorker, unassignWorker } from "./game-workers.js";
 
 // ============================================================
 // Game
@@ -196,7 +197,7 @@ const Game = {
       machines: [], buys: { increaseWorker: 0, increaseMarketting: 0, increaseStorage: 0 },
       salesThisRound: 0, prepaidTaxRound: null,
     };
-    for (let i = 0; i < g.startingWorkers; i++) this.addWorker();
+    for (let i = 0; i < g.startingWorkers; i++) addWorker(this);
     this.cfg.machines.forEach((m) => { const r = this.machineUnlockRound(m.id); if (r != null && r <= 1) this.giveMachine(this.player, m.id); });
 
     // The level defines the exact bot lineup.
@@ -212,31 +213,6 @@ const Game = {
   },
 
   giveMachine(p, id) { if (!p.machines.some((m) => m.id === id)) p.machines.push({ id, level: 1, crew: [], elapsed: 0, producing: false }); },
-
-  // ---------- Worker entities ----------
-  // Workers are individuals: the player's unlocked characters staff the pool first
-  // (they carry affinity + gear bonuses), then anonymous hires fill the rest.
-  addWorker() {
-    const w = this.player.workers;
-    const usedChars = new Set(w.map((x) => x.charId).filter(Boolean));
-    const nextChar = Meta.ownedCharacters().find((id) => !usedChars.has(id)) || null;
-    w.push({ uid: (this._wuid = (this._wuid || 0) + 1), charId: nextChar, machineId: null });
-  },
-  workerName(w) { return w.charId || "Ouvrier"; },
-  freeWorkers() { return this.player.workers.filter((w) => !w.machineId); },
-  crewOf(m) { return m.crew; },
-  // Total speed bonus of a machine's crew: base per-worker bonus from the machine
-  // level + each character's affinity/gear speed on this machine.
-  crewSpeedBonus(m) {
-    const L = this.lvl(m);
-    return m.crew.reduce((s, w) => s + L.workerSpeedBonus + (w.charId ? Meta.speedBonus(w.charId, m.id) : 0), 0);
-  },
-  // Chance the whole spawn doubles: characters roll together (1 - prod of misses).
-  crewProba2x(m) {
-    let miss = 1;
-    m.crew.forEach((w) => { if (w.charId) miss *= 1 - Math.min(1, Meta.proba2x(w.charId)); });
-    return 1 - miss;
-  },
 
   // ---------- Play (single screen: continuous production + customer waves) ----------
   enterPlay() {
@@ -328,7 +304,7 @@ const Game = {
   },
 
   lvl(machine) { return this.machineDef(machine.id).levels[machine.level - 1]; },
-  effTime(machine) { const L = this.lvl(machine); return Math.max(0.3, L.productionTime * (1 - this.crewSpeedBonus(machine))); },
+  effTime(machine) { const L = this.lvl(machine); return Math.max(0.3, L.productionTime * (1 - crewSpeedBonus(L, machine))); },
   hasInputs(p, def) { return def.inputs.every((i) => this.stockOf(p, i.type) >= i.quantity); },
   consumeInputs(p, def) { def.inputs.forEach((i) => { let need = i.quantity; const m = p.stock[i.type]; for (const t of Object.keys(m).sort((a, b) => a - b)) { while (need > 0 && m[t] > 0) { m[t]--; need--; } } }); if (p === this.player) this._invDirty = true; },
 
@@ -354,7 +330,7 @@ const Game = {
         const out = this.pickOutput(def.outputs, m.level);
         const tier = this.rollTier(out.tiers);   // one tier for the whole spawn (matches the "+N Tier T" popup)
         // characters' "2x proba" (affinity + gear): chance to double the spawn
-        const doubled = Math.random() < this.crewProba2x(m);
+        const doubled = Math.random() < crewProba2x(m);
         const qty = out.quantity * (doubled ? 2 : 1);
         let added = 0;
         for (let i = 0; i < qty; i++) {
@@ -383,7 +359,7 @@ const Game = {
 
   // ---------- Tycoon purchases ----------
   nextWorker() { return this.cfg.purchases.increaseWorker[this.player.buys.increaseWorker]; },
-  buyWorker() { const n = this.nextWorker(); if (!n || this.player.workers.length >= this.cfg.g.maxWorkersTotal || this.player.money < n.price) return; this.player.money -= n.price; this.player.buys.increaseWorker++; for (let i = 0; i < n.effect; i++) this.addWorker(); this.renderShop(); this.renderWorkers(); this.refreshHud(); },
+  buyWorker() { const n = this.nextWorker(); if (!n || this.player.workers.length >= this.cfg.g.maxWorkersTotal || this.player.money < n.price) return; this.player.money -= n.price; this.player.buys.increaseWorker++; for (let i = 0; i < n.effect; i++) addWorker(this); this.renderShop(); this.renderWorkers(); this.refreshHud(); },
   nextMkt() { return this.cfg.purchases.increaseMarketting[this.player.buys.increaseMarketting]; },
   buyMkt() { const n = this.nextMkt(); if (!n || this.player.money < n.price) return; this.player.money -= n.price; this.player.buys.increaseMarketting++; this.player.marketing = n.effect; this.renderShop(); this.refreshHud(); },
   nextStorage() { return this.cfg.purchases.increaseStorage[this.player.buys.increaseStorage]; },
@@ -391,37 +367,6 @@ const Game = {
 
   nextMachineLevel(m) { const lv = this.machineDef(m.id).levels[m.level]; return lv || null; }, // levels[m.level] is the (m.level+1)th
   upgradeMachine(m) { const nx = this.nextMachineLevel(m); if (!nx || this.player.money < nx.cost) return; this.player.money -= nx.cost; m.level++; this.refreshMachineCard(m); this.renderShop(); this.refreshHud(); },
-
-  // ---------- Workers (individual entities) ----------
-  // Tap a free worker to arm it, then tap a machine — or drag & drop directly.
-  selectWorker(w) { this.selectedWorker = this.selectedWorker === w ? null : w; this.renderWorkers(); },
-  // Assign a specific worker (defaults to the armed/first free one) to a machine.
-  assignWorker(m, worker) {
-    const L = this.lvl(m);
-    const w = worker || this.selectedWorker || this.freeWorkers()[0];
-    if (!w || m.crew.length >= L.maxWorkers) return;
-    if (w.machineId) this.unassignWorker(w, { silent: true }); // moving between machines
-    w.machineId = m.id; m.crew.push(w);
-    this.selectedWorker = null;
-    this.renderWorkers(); this.refreshMachineCard(m);
-  },
-  // Pull one worker off a machine (a specific one when given, else the last added).
-  removeWorker(m, worker) {
-    if (!m.crew.length) return;
-    const w = worker || m.crew[m.crew.length - 1];
-    this.unassignWorker(w, { silent: true });
-    this.renderWorkers(); this.refreshMachineCard(m);
-  },
-  unassignWorker(w, opts) {
-    if (!w.machineId) return;
-    const m = this.player.machines.find((x) => x.id === w.machineId);
-    w.machineId = null;
-    if (m) {
-      m.crew = m.crew.filter((x) => x !== w);
-      if (m.crew.length < this.lvl(m).workersRequired) { m.producing = false; m.elapsed = 0; this.setProgress(m, 0); }
-      if (!opts || !opts.silent) { this.renderWorkers(); this.refreshMachineCard(m); }
-    }
-  },
 
   // ---------- Bots ----------
   // Reserve for the next upcoming tax, minus the guaranteed income the bot will still
@@ -857,10 +802,10 @@ const Game = {
     btns.append(rm, ad, up); footer.appendChild(btns);
     const prog = el("div", "progress"); prog.appendChild(el("div"));
     node.append(icon, name, recipe, footer, prog);
-    rm.onclick = (e) => { e.stopPropagation(); this.removeWorker(m); };
-    ad.onclick = (e) => { e.stopPropagation(); this.assignWorker(m); };
+    rm.onclick = (e) => { e.stopPropagation(); removeWorker(this, m); };
+    ad.onclick = (e) => { e.stopPropagation(); assignWorker(this, m); };
     up.onclick = (e) => { e.stopPropagation(); this.upgradeMachine(m); };
-    node.onclick = () => { if (this.selectedWorker) this.assignWorker(m); };
+    node.onclick = () => { if (this.selectedWorker) assignWorker(this, m); };
     // tap the building sprite -> its detail widget (unless assigning a worker)
     icon.style.cursor = "pointer";
     icon.onclick = (e) => { if (this.selectedWorker) return; e.stopPropagation(); openBuildingPanel(m.id); };
@@ -883,7 +828,7 @@ const Game = {
       if (i < m.crew.length) r.slots.appendChild(this.workerChip(m.crew[i]));
       else r.slots.appendChild(el("div", "slot" + (i < L.workersRequired ? " required" : "")));
     }
-    r.ad.disabled = m.crew.length >= L.maxWorkers || this.freeWorkers().length <= 0;
+    r.ad.disabled = m.crew.length >= L.maxWorkers || freeWorkers(this.player).length <= 0;
     r.rm.disabled = m.crew.length <= 0;
     const nx = this.nextMachineLevel(m);
     if (nx) { r.up.innerHTML = `⬆ $${nx.cost}`; r.up.disabled = this.player.money < nx.cost; } else { r.up.innerHTML = "⬆ MAX"; r.up.disabled = true; }
@@ -895,8 +840,8 @@ const Game = {
   // --- workers (bar + chips + drag & drop) ---
   renderWorkers() {
     const wrap = $("#worker-icons"); wrap.innerHTML = "";
-    this.freeWorkers().forEach((w) => wrap.appendChild(this.workerChip(w)));
-    const free = this.freeWorkers().length;
+    freeWorkers(this.player).forEach((w) => wrap.appendChild(this.workerChip(w)));
+    const free = freeWorkers(this.player).length;
     const hint = $("#worker-hint");
     hint.textContent = free === 0 ? "Tous tes ouvriers sont assignés"
       : this.selectedWorker ? "Touche une machine (+)"
@@ -921,8 +866,8 @@ const Game = {
   },
   workerChipClick(w) {
     if (w.charId) { openCharacterPanel(w.charId); return; }
-    if (w.machineId) { this.unassignWorker(w); return; }
-    this.selectWorker(w);
+    if (w.machineId) { unassignWorker(this, w); return; }
+    selectWorker(this, w);
   },
 
   // Pointer-based drag & drop (touch friendly): a ghost follows the finger; drop
@@ -957,8 +902,8 @@ const Game = {
         this.clearDropHighlight();
         if (!dragging) { this.workerChipClick(w); return; }
         const target = this.dropTargetAt(ev);
-        if (target === "bar") this.unassignWorker(w);
-        else if (target) this.assignWorker(target, w);
+        if (target === "bar") unassignWorker(this, w);
+        else if (target) assignWorker(this, target, w);
       };
       window.addEventListener("pointermove", move);
       window.addEventListener("pointerup", up);
