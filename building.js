@@ -199,16 +199,25 @@ function renderDropRate(slot, rid) {
   if (!levels.length) { slot.appendChild(el("div", "menu-muted", "Pas de table de drop pour cette ressource.")); return; }
   if (!levels.includes(dropLevel)) dropLevel = levels[0];
 
-  // level picker (meta): fixed level in-game -> just a label
+  // level picker (meta): fixed level in-game -> just a label; otherwise a compact
+  // stepper (‹ Niveau N ›) that walks the defined levels — mobile-friendly, no
+  // native full-screen <select>.
   if (fixedLevel != null) {
     slot.appendChild(el("div", "bp-drop-lvl", `Niveau ${dropLevel}`));
   } else {
-    const pick = el("div", "bp-drop-pick", `<span>Niveau</span>`);
-    const sel = el("select", "bp-drop-select");
-    levels.forEach((L) => { const o = el("option", null, `Niveau ${L}`); o.value = L; if (L === dropLevel) o.selected = true; sel.appendChild(o); });
-    sel.onchange = () => { dropLevel = +sel.value; renderDropRate(slot, rid); };
-    pick.appendChild(sel);
-    slot.appendChild(pick);
+    const i = levels.indexOf(dropLevel);
+    const step = el("div", "bp-drop-pick", `<span>Niveau</span>`);
+    const stepper = el("div", "bp-drop-step");
+    const prev = el("button", "bp-drop-arrow", "‹");
+    const val = el("div", "bp-drop-val", `Niveau ${dropLevel}`);
+    const next = el("button", "bp-drop-arrow", "›");
+    prev.disabled = i <= 0;
+    next.disabled = i >= levels.length - 1;
+    prev.onclick = () => { if (i > 0) { dropLevel = levels[i - 1]; renderDropRate(slot, rid); } };
+    next.onclick = () => { if (i < levels.length - 1) { dropLevel = levels[i + 1]; renderDropRate(slot, rid); } };
+    stepper.append(prev, val, next);
+    step.appendChild(stepper);
+    slot.appendChild(step);
   }
 
   const tiers = dropTiers(rid, dropLevel);
