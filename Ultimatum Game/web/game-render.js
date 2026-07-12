@@ -5,7 +5,7 @@
  */
 "use strict";
 
-import { $, el, sprite, openOverlay } from "./helpers.js";
+import { $, el, sprite, openOverlay, chainOverscroll } from "./helpers.js";
 import { S } from "./constants.js";
 import { Meta } from "./meta.js";
 import { openCharacterPanel, gearBadges } from "./menu.js";
@@ -73,6 +73,7 @@ export const renderMethods = {
     bar.appendChild(head);
 
     const scroll = el("div", "inv-scroll");
+    chainOverscroll(scroll);  // at the list's top/bottom, keep the swipe scrolling the page
     const producible = this.producibleResources();
     this.cfg.resourceOrder.forEach((rid) => {
       if (!producible.has(rid)) return;
@@ -356,6 +357,7 @@ export const renderMethods = {
       s.innerHTML = `<img class="counter-avatar" src="${sprite(c.spriteId)}"><div class="counter-name">${c.name}</div><div class="counter-money"><img src="${sprite("Coins")}"><span class="cmoney">${c.money}</span></div><div class="counter-mkt">📣${c.marketing.toFixed(1)}</div><div class="counter-inv"></div>`;
       c._moneyRef = s.querySelector(".cmoney");
       c._invRef = s.querySelector(".counter-inv");
+      chainOverscroll(c._invRef);  // at the stack's top/bottom, keep the swipe scrolling the page
       this.renderCounterInv(c);
       s.onclick = () => this.openCompetitor(c);
       wrap.appendChild(s);
