@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Market Ultimatum — Level Designer</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>Level Designer</h1>
+  <select id="levelSel" title="Niveau sélectionné — les onglets Économie, Concurrents et Export portent sur lui"></select>
+  <span class="sp"></span>
+  <button id="open">Ouvrir…</button>
+  <button id="save" class="primary">Sauvegarder</button>
+  <button id="reload" title="Recharger le JSON depuis le disque (après une modif de Claude)">↻ Depuis le disque</button>
+  <span id="status"></span>
+</header>
+
+<nav>
+  <button data-tab="level" aria-selected="true">Niveau</button>
+  <button data-tab="econ" aria-selected="false">Économie</button>
+  <button data-tab="bots" aria-selected="false">Concurrents</button>
+  <button data-tab="export" aria-selected="false">Export</button>
+</nav>
+
+<main>
+  <!-- ---------------- Niveau ---------------- -->
+  <section class="tab" id="tab-level">
+    <div class="cols">
+      <div class="card">
+        <h2>Palette de blocs</h2>
+        <div id="blocks"></div>
+        <button id="addBlock">+ Nouveau bloc</button>
+        <p class="hint">Un bloc est un motif réutilisable de N rounds. Son mix vise des
+          <b>rôles</b> (focus, second…), pas des ressources : tu lies les rôles à de vraies
+          ressources en posant le bloc dans un niveau. Un même bloc = autant de variantes que
+          de liaisons.</p>
+      </div>
+
+      <div>
+        <div id="biomes"></div>
+        <div class="row">
+          <button id="addBiome">+ Biome</button>
+          <span class="hint">Un biome regroupe des niveaux (Meadow, Town…). Clique une carte
+            de niveau pour la sélectionner : Économie, Concurrents et Export portent sur elle.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------------- Économie ---------------- -->
+  <section class="tab" id="tab-econ" hidden>
+    <div class="card">
+      <div class="row">
+        <label>Prix évalués au tier</label>
+        <select id="tierSel"></select>
+        <span class="sp"></span>
+        <label><input type="checkbox" id="shareScale" checked> Échelle commune entre ressources</label>
+      </div>
+      <div class="stats" id="econStats" style="margin-top:12px"></div>
+    </div>
+
+    <div class="card">
+      <h2>Demande par ressource (unités attendues / round)</h2>
+      <div class="sm-grid" id="smUnits"></div>
+    </div>
+
+    <div class="card">
+      <h2>Valeur totale du marché par round</h2>
+      <div id="chValue"></div>
+    </div>
+
+    <div class="card">
+      <h2>Valeur cumulée du marché (somme partielle)</h2>
+      <div id="chCum"></div>
+    </div>
+
+    <div class="card">
+      <h2>Part de marché sur tout le niveau</h2>
+      <div id="chShare"></div>
+    </div>
+
+    <div class="card">
+      <h2>Table des rounds</h2>
+      <div class="scroll" id="roundTable"></div>
+    </div>
+  </section>
+
+  <!-- ---------------- Concurrents ---------------- -->
+  <section class="tab" id="tab-bots" hidden>
+    <div class="card">
+      <div class="row">
+        <label>Ajouter un concurrent :</label>
+        <select id="botSel"></select>
+        <button id="addBot">Ajouter</button>
+        <span class="sp"></span>
+        <span class="hint">Les poids sont des cotes de tirage relatives (voir game-bots.js).</span>
+      </div>
+    </div>
+    <div id="botList"></div>
+  </section>
+
+  <!-- ---------------- Export ---------------- -->
+  <section class="tab" id="tab-export" hidden>
+    <div class="card">
+      <h2>Diagnostics</h2>
+      <div id="diag"></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <button id="dlGame" class="primary">Export jeu — config_levels.json (tous les niveaux)</button>
+        <button id="dlDoc">Télécharger leveldesign.json</button>
+        <button id="dlMarket">Télécharger market_config</button>
+        <button id="dlBots">Télécharger competitors_behavior</button>
+        <button id="copyLevelIds">Copier les ids des niveaux</button>
+        <button id="copyClaude">Copier le briefing pour Claude</button>
+      </div>
+      <h3 style="margin-top:14px">market_config — <span id="mcCount"></span> lignes</h3>
+      <pre id="outMarket"></pre>
+      <h3>competitors_behavior <span class="hint">(v2 : une ligne par bot × vague, scopée par niveau)</span></h3>
+      <pre id="outBots"></pre>
+      <h3>competitors_buffs <span class="hint">(personnages équipés, rationalisés)</span></h3>
+      <pre id="outBuffs"></pre>
+    </div>
+  </section>
+</main>
+
+<datalist id="blk-cats"></datalist>
+<script type="module" src="app.js"></script>
+</body>
+</html>

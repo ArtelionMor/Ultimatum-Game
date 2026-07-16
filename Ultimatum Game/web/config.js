@@ -19,20 +19,25 @@ export function normalize(raw) {
   const inputsByMachine = {};
   raw.inputs.forEach((i) => { (inputsByMachine[i.id] = inputsByMachine[i.id] || []).push({ type: i.type, quantity: i.quantity }); });
 
+  // the exporter renames sections over time: read the new name, fall back to the old
+  const rawUpgrades = raw.upgrade_machines_profile || raw.upgrades || [];
+
   const machines = raw.machines.map((m) => ({
     id: m.id, displayName: m.displayName, spriteId: m.spriteId, outputs: m.outputs,
     unlockAtRound: m.unlockAtRound,
     inputs: inputsByMachine[m.id] || [],
-    levels: raw.upgrades.filter((u) => u.id === m.id).sort((a, b) => a.level - b.level)
+    // new schema: the machine's `upgrades` column names its profile; old flat format keyed rows by machine id
+    levels: rawUpgrades.filter((u) => u.id === (m.upgrades || m.id)).sort((a, b) => a.level - b.level)
       .map((u) => ({ level: u.level, cost: u.cost, workersRequired: u.workersRequired, maxWorkers: u.maxWorkers, workerSpeedBonus: u.workerSpeedBonus, productionTime: u.productionTime })),
   }));
 
   const purchases = { increaseWorker: [], increaseMarketting: [], increaseStorage: [] };
   raw.purshases.forEach((p) => { if (purchases[p.type]) purchases[p.type].push({ effect: p.effect, price: p.price }); });
 
-  // market profiles: market_config rows share a profile `id` and carry their `round` (round_N)
+  // market profiles: market_config rows share a profile `id` and carry their `round` (round_N).
+  // The sheet no longer carries this section — it comes from the level designer.
   const marketProfiles = {};
-  raw.market_config.forEach((m) => {
+  (raw.market_config || []).forEach((m) => {
     const round = parseInt(String(m.round).replace(/\D+/g, ""), 10);
     if (!round) return;
     (marketProfiles[m.id] = marketProfiles[m.id] || {})[round] = {
@@ -90,23 +95,52 @@ export function normalize(raw) {
     if (gr.condition === "2x proba") it.proba2x = gr.value || 0;
   });
 
-  // characters: one row per (character, level) with up to 3 machine speed bonuses
+  // characters (2026-07 rework): ONE row per character. It boosts the machines
+  // it lists (machine1/machine_1…); the per-level bonus is a percent taken from
+  // its progress profile, scaled by `multiplier` (legendaries > commons).
   const characters = {}; const characterOrder = [];
   raw.characters.forEach((c) => {
-    if (!characters[c.id]) { characters[c.id] = { id: c.id, profile: c.upgrade_profile, mainMachine: c.condition, levels: {} }; characterOrder.push(c.id); }
-    const speeds = {};
-    [1, 2, 3].forEach((n) => { const mach = c["condition_" + n]; if (mach) speeds[mach] = c["speed_" + n] || 0; });
-    characters[c.id].levels[c.level] = { speeds, proba2x: c["2x proba"] || 0 };
+    if (characters[c.id]) return;
+    const machines = Object.keys(c).filter((k) => /^machine[_ ]?\d+$/i.test(k)).sort()
+      .map((k) => c[k]).filter(Boolean);
+    characters[c.id] = {
+      id: c.id, displayName: c.name || c.id, profile: c.upgrade_profile,
+      typeSlot: c.typeSlot, spriteId: c.spriteIngame || null,
+      progressProfile: c.progress_profile, multiplier: c.multiplier || 1,
+      machines, mainMachine: machines[0] || null,
+    };
+    characterOrder.push(c.id);
   });
-  for (const id in characters) characters[id].maxLevel = Math.max(...Object.keys(characters[id].levels).map(Number));
+
+  // per-level progress percentages (5 = +5% production speed at that level).
+  // level_profile_N rows: {id, level, <value>} — the value column is exported
+  // under a shifting header (currently "machine1"), so take the first column
+  // that isn't id/level. The section also holds multiplier_profile_N rows
+  // (no level column): reference data, skipped here.
+  const progressProfiles = {};
+  (raw.character_progress_profile || []).forEach((p) => {
+    if (p.id == null || p.level == null) return;
+    const valueKey = Object.keys(p).find((k) => k !== "id" && k !== "level");
+    (progressProfiles[p.id] = progressProfiles[p.id] || {})[p.level] = (valueKey && p[valueKey]) || 0;
+  });
+
+  // character slots: one per resource; `containment` = the race (typeSlot) it accepts
+  const characterSlots = (raw.character_slot || [])
+    .map((s) => ({ id: s.id, order: s.order || 0, containment: s.containment }))
+    .sort((a, b) => a.order - b.order);
 
   // upgrade profiles: shard cost to reach each level (level 1 = unlock cost)
   const upgradeProfiles = {};
-  raw.upgrade_profile.forEach((u) => { (upgradeProfiles[u.id] = upgradeProfiles[u.id] || {})[u.level] = { amount: u.amount, content: u.content }; });
+  (raw.upgrade_character_profile || raw.upgrade_profile || []).forEach((u) => { (upgradeProfiles[u.id] = upgradeProfiles[u.id] || {})[u.level] = { amount: u.amount, content: u.content }; });
+  // a character's max level = the last level its upgrade profile can pay for
+  for (const id in characters) {
+    const lv = Object.keys(upgradeProfiles[characters[id].profile] || {}).map(Number);
+    characters[id].maxLevel = lv.length ? Math.max(...lv) : 1;
+  }
 
   // convert: N units of (id, tier) -> result_quantity (default 1) of (result_ressource, result_tier)
   const convert = {};
-  (raw.convert || []).forEach((c) => {
+  (raw.convert_profile || raw.convert || []).forEach((c) => {
     (convert[c.id] = convert[c.id] || {})[c.tier] = { quantity: c.quantity, resultRes: c.result_ressource, resultTier: c.result_tier, resultQty: c.result_quantity || 1 };
   });
 
@@ -127,13 +161,35 @@ export function normalize(raw) {
 
   const roundIncome = {}; raw.roundIncome.forEach((r) => (roundIncome[r.round] = { coins: r.coins, tier: r.ressource_tier }));
 
-  const behavior = {};
-  raw.competitors_behavior.forEach((b) => { (behavior[b.id] = behavior[b.id] || {})[b.ressources] = b.weights || 0; });
-  const competitors = raw.competitors.map((c) => ({ ...c, behavior: behavior[c.id] || {} }));
+  // competitors_behavior v2: one row per (level, bot, wave). `config` = the
+  // world_level id, `round` = round_N; weight columns are named by resource id
+  // plus the 3 purchase actions (same data-driven style as market_config).
+  const PURCHASE_ACTIONS = ["increaseWorker", "increaseMarketting", "increaseStorage"];
+  const behaviorProfiles = {};
+  (raw.competitors_behavior || []).forEach((b) => {
+    const round = parseInt(String(b.round).replace(/\D+/g, ""), 10);
+    if (!round) return; // old-format rows (no round column) are ignored
+    const w = {};
+    resourceOrder.forEach((rid) => { if (b[rid]) w[rid] = b[rid]; });
+    PURCHASE_ACTIONS.forEach((p) => { if (b[p]) w[p] = b[p]; });
+    const byBot = (behaviorProfiles[b.config] = behaviorProfiles[b.config] || {});
+    (byBot[b.id] = byBot[b.id] || {})[round] = w;
+  });
+
+  // competitors_buffs: one row per non-zero (level, bot, buff).
+  // speed & proba2x are percents (0..100), marketing is a flat attractiveness bonus.
+  const buffProfiles = {};
+  (raw.competitors_buffs || []).forEach((b) => {
+    const byBot = (buffProfiles[b.config] = buffProfiles[b.config] || {});
+    (byBot[b.id] = byBot[b.id] || {})[b.buff] = b.value || 0;
+  });
+
+  const competitors = raw.competitors.map((c) => ({ ...c }));
 
   return {
     g, resources, resourceOrder, maxTier, machines, purchases, roundIncome, competitors, convert, slots, customerSprites, customerDefs, customerOrder,
     marketProfiles, taxProfiles, unlockProfiles, worldConfigs, worldLevels, rewards, gears, characters, characterOrder, upgradeProfiles,
+    behaviorProfiles, buffProfiles, progressProfiles, characterSlots,
   };
 }
 
@@ -147,9 +203,25 @@ export function resolveLevel(cfg, levelId) {
   if (!level) throw new Error("Unknown level: " + levelId);
   const wc = cfg.worldConfigs[level.config];
   if (!wc) throw new Error("Unknown world config: " + level.config);
-  const market = cfg.marketProfiles[wc.marketConfig] || {};
+  // same id chain as the bots below: marketConfig column, else the ids themselves
+  const market = cfg.marketProfiles[wc.marketConfig] || cfg.marketProfiles[level.id] || cfg.marketProfiles[wc.id] || {};
   const tax = cfg.taxProfiles[wc.taxConfig] || {};
   const unlocks = cfg.unlockProfiles[wc.unlockConfig] || {};
-  const bots = wc.competitors.map((id) => cfg.competitors.find((c) => c.id === id)).filter(Boolean);
-  return { id: level.id, reward: level.reward, totalRounds: wc.nbOfRounds, market, tax, unlocks, bots };
+  // behavior/buffs are scoped by world_level id: the same bot can play
+  // differently in every level (competitors_behavior v2). Fallbacks on the
+  // marketConfig id then the world_config id, so any of those columns can
+  // carry the designer level id and wire market + bots + buffs at once.
+  const scope = [level.id, wc.marketConfig, wc.id].find((k) => cfg.behaviorProfiles[k]) || level.id;
+  const behavior = cfg.behaviorProfiles[scope] || {};
+  const buffs = cfg.buffProfiles[scope] || {};
+  // the designer's bot lineup IS the level's lineup; the sheet `competitors`
+  // column only drives levels that were not designed in the tool.
+  const lineup = Object.keys(behavior).length ? Object.keys(behavior) : wc.competitors;
+  const bots = lineup
+    .map((id) => cfg.competitors.find((c) => c.id === id)).filter(Boolean)
+    .map((c) => ({ ...c, behaviorByRound: behavior[c.id] || {}, buffs: buffs[c.id] || {} }));
+  // the market profile defines the level's length; sheet nbOfRounds is only a fallback
+  const rounds = Object.keys(market).map(Number);
+  const totalRounds = rounds.length ? Math.max(...rounds) : (wc.nbOfRounds || 0);
+  return { id: level.id, reward: level.reward, totalRounds, market, tax, unlocks, bots };
 }

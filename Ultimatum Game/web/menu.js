@@ -61,7 +61,7 @@ function renderCurrencies() {
   const s = Meta.state;
   const wrap = $("#menu-currencies"); wrap.innerHTML = "";
   const chip = (icon, val, title) => { const c = el("div", "cur-chip"); c.title = title; c.innerHTML = `${icon}<b>${val}</b>`; wrap.appendChild(c); };
-  chip(`<img src="${sprite("Coins")}">`, s.coins, "Pièces");
+  chip(`<img src="${sprite("Coins", "UI")}">`, s.coins, "Pièces");
   chip("💎", s.gems, "Gemmes");
   // Character shards are nominative now — shown on each character, not here.
 }
@@ -140,7 +140,7 @@ function chipRarity(content) {
   return "";
 }
 function chipIcon(content) {
-  if (content === "coins") return `<img src="${sprite("Coins")}">`;
+  if (content === "coins") return `<img src="${sprite("Coins", "UI")}">`;
   if (content === "gems") return `<span class="chip-ico">💎</span>`;
   if (content.endsWith("_shard")) return `<span class="chip-ico shard ${rarityOf(content)}">🔷</span>`;
   if (content.endsWith("_chest")) return `<span class="chip-ico">🎁</span>`;
@@ -157,12 +157,13 @@ function dropLabel(content) {
 function renderCharacters(body) {
   const grid = el("div", "char-grid");
   Game.cfg.characterOrder.forEach((id) => {
+    const ch = Game.cfg.characters[id];
     const owned = Meta.isOwned(id);
     const lvl = Meta.charLevel(id);
     const card = el("div", "char-card" + (owned ? "" : " locked"));
     card.innerHTML =
-      `<img class="char-avatar" src="${sprite("Worker")}">` +
-      `<div class="char-name">${id}</div>` +
+      `<img class="char-avatar" src="${ch.spriteId ? sprite(ch.spriteId, "Characters") : sprite("Worker", "UI")}" onerror="this.onerror=null;this.src='${sprite("Worker", "UI")}'">` +
+      `<div class="char-name">${ch.displayName}</div>` +
       `<div class="char-lvl">${owned ? "Nv. " + lvl : "🔒 Verrouillé"}</div>`;
     card.appendChild(upgradeButton(id));
     card.onclick = () => openCharacterPanel(id);
@@ -219,7 +220,7 @@ function renderCharacterPanel() {
   const ch = Game.cfg.characters[id];
   const owned = Meta.isOwned(id);
   const lvl = Meta.charLevel(id);
-  const data = owned ? ch.levels[lvl] : ch.levels[1];
+  const speed = Meta.charSpeed(id); // progress% × multiplier at the current level
 
   // what is this character doing right now? (only meaningful during a run)
   let activity = "";
@@ -233,10 +234,10 @@ function renderCharacterPanel() {
     }
   }
 
-  // affinity lines at current (or first) level — tap a building to inspect it
-  const aff = Object.keys(data.speeds).map((mid) => {
+  // the machines this character boosts — tap a building to inspect it
+  const aff = ch.machines.map((mid) => {
     const m = Game.cfg.machines.find((x) => x.id === mid);
-    return `<div class="cd-aff" data-mid="${mid}"><img src="${m ? sprite(m.spriteId) : ""}"><span>${m ? m.displayName : mid}</span><b>+${Math.round(data.speeds[mid] * 100)}%</b></div>`;
+    return `<div class="cd-aff" data-mid="${mid}"><img src="${m ? sprite(m.spriteId, "Machines") : ""}"><span>${m ? m.displayName : mid}</span><b>+${Math.round(speed * 100)}%</b></div>`;
   }).join("");
   const p2 = Meta.proba2x(id);
 
@@ -268,10 +269,10 @@ function renderCharacterPanel() {
 
   body.innerHTML =
     `<div class="cp-head">
-      <img class="cp-skin" src="${sprite("Worker")}">
+      <img class="cp-skin" src="${ch.spriteId ? sprite(ch.spriteId, "Characters") : sprite("Worker", "UI")}" onerror="this.onerror=null;this.src='${sprite("Worker", "UI")}'">
       <div class="cp-id">
-        <div class="cp-name">${id} ${owned ? `<span class="lvl">Nv.${lvl}</span>` : '<span class="cp-elim">verrouillé</span>'}</div>
-        <div class="cp-tags"><span class="cp-tag">${ch.profile.replace("_character", "")}</span></div>
+        <div class="cp-name">${ch.displayName} ${owned ? `<span class="lvl">Nv.${lvl}</span>` : '<span class="cp-elim">verrouillé</span>'}</div>
+        <div class="cp-tags"><span class="cp-tag">${(ch.profile || "").replace("_character", "")}</span>${ch.typeSlot ? `<span class="cp-tag">${ch.typeSlot}</span>` : ""}</div>
       </div>
     </div>
     ${activity}
@@ -415,7 +416,7 @@ function dropRarity(d) {
   return "";
 }
 function dropHtml(d) {
-  if (d.type === "coins") return `<img src="${sprite("Coins")}"><span>+${d.amount} pièces</span>`;
+  if (d.type === "coins") return `<img src="${sprite("Coins", "UI")}"><span>+${d.amount} pièces</span>`;
   if (d.type === "gems") return `<span class="drop-ico">💎</span><span>+${d.amount} gemmes</span>`;
   if (d.type === "shard") return `<span class="drop-ico">🔷</span><span>+${d.amount} éclats ${d.charId}</span>`;
   if (d.type === "chest") return `<span class="drop-ico">🎁</span><span>+${d.amount} ${CHEST_LABEL[d.id] || d.id}</span>`;

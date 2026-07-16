@@ -1,0 +1,1374 @@
+{
+  "version": 1,
+  "blocks": [
+    {
+      "id": "blk_intro",
+      "name": "Intro mono-ressource",
+      "rounds": 1,
+      "roles": [
+        "100%"
+      ],
+      "customers": {
+        "mode": "const",
+        "value": 6
+      },
+      "avg": {
+        "mode": "list",
+        "values": [
+          2,
+          3,
+          4
+        ]
+      },
+      "mix": [
+        {
+          "role": "100%",
+          "weight": {
+            "mode": "const",
+            "value": 3
+          }
+        }
+      ],
+      "defaultBind": {},
+      "category": "Mono"
+    },
+    {
+      "id": "blk_duo",
+      "name": "Duo 80-20",
+      "rounds": 1,
+      "roles": [
+        "80%",
+        "20%"
+      ],
+      "customers": {
+        "mode": "const",
+        "value": 10
+      },
+      "avg": {
+        "mode": "const",
+        "value": 1
+      },
+      "mix": [
+        {
+          "role": "80%",
+          "weight": {
+            "mode": "const",
+            "value": 4
+          }
+        },
+        {
+          "role": "20%",
+          "weight": {
+            "mode": "const",
+            "value": 1
+          }
+        }
+      ],
+      "defaultBind": {},
+      "category": "Duo"
+    },
+    {
+      "id": "blk_mrmh8ook",
+      "name": "Duo 50 - 50",
+      "rounds": 1,
+      "roles": [
+        "Half",
+        "Half2"
+      ],
+      "customers": {
+        "mode": "const",
+        "value": 10
+      },
+      "avg": {
+        "mode": "ramp",
+        "from": 1,
+        "to": 2
+      },
+      "mix": [
+        {
+          "role": "Half",
+          "weight": {
+            "mode": "const",
+            "value": 1
+          }
+        },
+        {
+          "role": "Half2",
+          "weight": {
+            "mode": "const",
+            "value": 1
+          }
+        }
+      ],
+      "defaultBind": {},
+      "category": "Duo"
+    },
+    {
+      "id": "blk_mrmhfzix",
+      "name": "Mono",
+      "rounds": 1,
+      "roles": [
+        "100%"
+      ],
+      "customers": {
+        "mode": "const",
+        "value": 10
+      },
+      "avg": {
+        "mode": "const",
+        "value": 1
+      },
+      "mix": [
+        {
+          "role": "100%",
+          "weight": {
+            "mode": "const",
+            "value": 1
+          }
+        }
+      ],
+      "defaultBind": {},
+      "category": "Mono"
+    },
+    {
+      "id": "blk_mrmngnwg",
+      "name": "Trio 1/3",
+      "rounds": 1,
+      "category": "Trio",
+      "roles": [
+        "third1",
+        "third2",
+        "third3"
+      ],
+      "customers": {
+        "mode": "const",
+        "value": 10
+      },
+      "avg": {
+        "mode": "const",
+        "value": 1
+      },
+      "mix": [
+        {
+          "role": "third1",
+          "weight": {
+            "mode": "const",
+            "value": 1
+          }
+        },
+        {
+          "role": "third2",
+          "weight": {
+            "mode": "const",
+            "value": 1
+          }
+        },
+        {
+          "role": "third3",
+          "weight": {
+            "mode": "const",
+            "value": 1
+          }
+        }
+      ],
+      "defaultBind": {}
+    },
+    {
+      "id": "blk_mrmnh0ww",
+      "name": "Trio 25 - 25 - 50",
+      "rounds": 1,
+      "category": "Trio",
+      "roles": [
+        "50%",
+        "quarter1",
+        "quarter2"
+      ],
+      "customers": {
+        "mode": "const",
+        "value": 10
+      },
+      "avg": {
+        "mode": "const",
+        "value": 1
+      },
+      "mix": [
+        {
+          "role": "50%",
+          "weight": {
+            "mode": "const",
+            "value": 2
+          }
+        },
+        {
+          "role": "quarter1",
+          "weight": {
+            "mode": "const",
+            "value": 1
+          }
+        },
+        {
+          "role": "quarter2",
+          "weight": {
+            "mode": "const",
+            "value": 1
+          }
+        }
+      ],
+      "defaultBind": {}
+    },
+    {
+      "id": "blk_mrmpxk97",
+      "name": "Quad Equi",
+      "rounds": 1,
+      "category": "Quad",
+      "roles": [
+        "Corner1",
+        "Corner2",
+        "Corner3",
+        "Corner4"
+      ],
+      "customers": {
+        "mode": "const",
+        "value": 10
+      },
+      "avg": {
+        "mode": "const",
+        "value": 1
+      },
+      "mix": [
+        {
+          "role": "Corner1",
+          "weight": {
+            "mode": "const",
+            "value": 1
+          }
+        },
+        {
+          "role": "Corner2",
+          "weight": {
+            "mode": "const",
+            "value": 1
+          }
+        },
+        {
+          "role": "Corner3",
+          "weight": {
+            "mode": "const",
+            "value": 1
+          }
+        },
+        {
+          "role": "Corner4",
+          "weight": {
+            "mode": "const",
+            "value": 1
+          }
+        }
+      ],
+      "defaultBind": {}
+    }
+  ],
+  "biomes": [
+    {
+      "id": "biome_1",
+      "name": "Meadow"
+    },
+    {
+      "id": "biome_2",
+      "name": "Forest"
+    }
+  ],
+  "levels": [
+    {
+      "id": "Tutorial_1",
+      "marketConfigId": "Tutorial_1",
+      "instances": [
+        {
+          "blockId": "blk_intro",
+          "bind": {
+            "100%": "tennisBall"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_intro",
+          "bind": {
+            "100%": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "tennisBall",
+            "Half2": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_duo",
+          "bind": {
+            "80%": "tennisBall",
+            "20%": "carrot"
+          },
+          "overrides": {
+            "avg": 2,
+            "customers": 20
+          }
+        },
+        {
+          "blockId": "blk_mrmhfzix",
+          "bind": {
+            "100%": "carrot"
+          },
+          "overrides": {
+            "avg": 3
+          }
+        }
+      ],
+      "competitors": [
+        {
+          "id": "bot_cat",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "weights": {
+            "tennisBall": 62,
+            "carrot": 100,
+            "increaseWorker": 5,
+            "increaseMarketting": 5,
+            "increaseStorage": 5
+          },
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {}
+        }
+      ],
+      "biomeId": "biome_1"
+    },
+    {
+      "id": "Tutorial_2",
+      "marketConfigId": "Tutorial_2",
+      "instances": [
+        {
+          "blockId": "blk_intro",
+          "bind": {
+            "100%": "tennisBall"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "tennisBall",
+            "Half2": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_duo",
+          "bind": {
+            "80%": "carrot",
+            "20%": "tennisBall"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmhfzix",
+          "bind": {
+            "100%": "tennisBall"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "tennisBall",
+            "Half2": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_duo",
+          "bind": {
+            "80%": "tennisBall",
+            "20%": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmhfzix",
+          "bind": {
+            "100%": "carrot"
+          },
+          "overrides": {}
+        }
+      ],
+      "competitors": [
+        {
+          "id": "bot_cat",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        },
+        {
+          "id": "bot_octopus",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        }
+      ],
+      "biomeId": "biome_1"
+    },
+    {
+      "id": "Tutorial_3",
+      "biomeId": "biome_1",
+      "marketConfigId": "Tutorial_3",
+      "instances": [
+        {
+          "blockId": "blk_intro",
+          "bind": {
+            "100%": "tennisBall"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "tennisBall",
+            "Half2": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_duo",
+          "bind": {
+            "80%": "tennisBall",
+            "20%": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_duo",
+          "bind": {
+            "80%": "carrot",
+            "20%": "tennisBall"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmhfzix",
+          "bind": {
+            "100%": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "tennisBall",
+            "Half2": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmhfzix",
+          "bind": {
+            "100%": "tennisBall"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_duo",
+          "bind": {
+            "80%": "tennisBall",
+            "20%": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_duo",
+          "bind": {
+            "80%": "carrot",
+            "20%": "tennisBall"
+          },
+          "overrides": {}
+        }
+      ],
+      "competitors": [
+        {
+          "id": "bot_cat",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        },
+        {
+          "id": "bot_octopus",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        }
+      ]
+    },
+    {
+      "id": "Bottle_Intro",
+      "biomeId": "biome_1",
+      "marketConfigId": "world_config_3",
+      "instances": [
+        {
+          "blockId": "blk_intro",
+          "bind": {
+            "100%": "tennisBall"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "tennisBall",
+            "Half2": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_duo",
+          "bind": {
+            "80%": "tennisBall",
+            "20%": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_duo",
+          "bind": {
+            "80%": "carrot",
+            "20%": "tennisBall"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmhfzix",
+          "bind": {
+            "100%": "bottle"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "bottle",
+            "Half2": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmngnwg",
+          "bind": {
+            "third1": "tennisBall",
+            "third2": "carrot",
+            "third3": "bottle"
+          },
+          "overrides": {}
+        }
+      ],
+      "competitors": [
+        {
+          "id": "bot_cat",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        },
+        {
+          "id": "bot_octopus",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        }
+      ]
+    },
+    {
+      "id": "Bottle_2_Intense",
+      "biomeId": "biome_1",
+      "marketConfigId": "world_config_3",
+      "instances": [
+        {
+          "blockId": "blk_intro",
+          "bind": {
+            "100%": "tennisBall"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "tennisBall",
+            "Half2": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmngnwg",
+          "bind": {
+            "third1": "tennisBall",
+            "third2": "carrot",
+            "third3": "bottle"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmngnwg",
+          "bind": {
+            "third1": "tennisBall",
+            "third2": "carrot",
+            "third3": "bottle"
+          },
+          "overrides": {
+            "customers": 15
+          }
+        },
+        {
+          "blockId": "blk_mrmngnwg",
+          "bind": {
+            "third1": "tennisBall",
+            "third2": "carrot",
+            "third3": "bottle"
+          },
+          "overrides": {
+            "avg": 2
+          }
+        },
+        {
+          "blockId": "blk_duo",
+          "bind": {
+            "80%": "bottle",
+            "20%": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_duo",
+          "bind": {
+            "80%": "carrot",
+            "20%": "tennisBall"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmhfzix",
+          "bind": {
+            "100%": "bottle"
+          },
+          "overrides": {
+            "customers": 20
+          }
+        },
+        {
+          "blockId": "blk_mrmngnwg",
+          "bind": {
+            "third1": "tennisBall",
+            "third2": "carrot",
+            "third3": "bottle"
+          },
+          "overrides": {}
+        }
+      ],
+      "competitors": [
+        {
+          "id": "bot_cat",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        },
+        {
+          "id": "bot_octopus",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        },
+        {
+          "id": "bot_sloth",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        }
+      ]
+    },
+    {
+      "id": "Bottle_3_Slow",
+      "biomeId": "biome_1",
+      "marketConfigId": "Bottle_3_Slow",
+      "instances": [
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "tennisBall",
+            "Half2": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmngnwg",
+          "bind": {
+            "third1": "tennisBall",
+            "third2": "carrot",
+            "third3": "bottle"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmnh0ww",
+          "bind": {
+            "50%": "bottle",
+            "quarter1": "carrot",
+            "quarter2": "tennisBall"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmnh0ww",
+          "bind": {
+            "50%": "carrot",
+            "quarter1": "tennisBall",
+            "quarter2": "bottle"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_duo",
+          "bind": {
+            "80%": "bottle",
+            "20%": "carrot"
+          },
+          "overrides": {
+            "customers": 20
+          }
+        },
+        {
+          "blockId": "blk_mrmhfzix",
+          "bind": {
+            "100%": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "carrot",
+            "Half2": "bottle"
+          },
+          "overrides": {}
+        }
+      ],
+      "competitors": [
+        {
+          "id": "bot_cat",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        },
+        {
+          "id": "bot_octopus",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        },
+        {
+          "id": "bot_sloth",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        }
+      ]
+    },
+    {
+      "id": "Bottle_4_Intense",
+      "biomeId": "biome_1",
+      "marketConfigId": "Bottle_4_Intense",
+      "instances": [
+        {
+          "blockId": "blk_duo",
+          "bind": {
+            "80%": "tennisBall",
+            "20%": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmngnwg",
+          "bind": {
+            "third1": "tennisBall",
+            "third2": "carrot",
+            "third3": "bottle"
+          },
+          "overrides": {
+            "customers": 15
+          }
+        },
+        {
+          "blockId": "blk_mrmngnwg",
+          "bind": {
+            "third1": "tennisBall",
+            "third2": "carrot",
+            "third3": "bottle"
+          },
+          "overrides": {
+            "customers": 10,
+            "avg": 2
+          }
+        },
+        {
+          "blockId": "blk_mrmngnwg",
+          "bind": {
+            "third1": "tennisBall",
+            "third2": "carrot",
+            "third3": "bottle"
+          },
+          "overrides": {
+            "customers": 10,
+            "avg": 3
+          }
+        },
+        {
+          "blockId": "blk_mrmngnwg",
+          "bind": {
+            "third1": "tennisBall",
+            "third2": "carrot",
+            "third3": "bottle"
+          },
+          "overrides": {
+            "customers": 10,
+            "avg": 4
+          }
+        },
+        {
+          "blockId": "blk_mrmhfzix",
+          "bind": {
+            "100%": "carrot"
+          },
+          "overrides": {
+            "customers": 20
+          }
+        },
+        {
+          "blockId": "blk_mrmhfzix",
+          "bind": {
+            "100%": "tennisBall"
+          },
+          "overrides": {
+            "customers": 13,
+            "avg": 2
+          }
+        },
+        {
+          "blockId": "blk_mrmhfzix",
+          "bind": {
+            "100%": "bottle"
+          },
+          "overrides": {
+            "customers": 13,
+            "avg": 2
+          }
+        },
+        {
+          "blockId": "blk_mrmhfzix",
+          "bind": {
+            "100%": "bottle"
+          },
+          "overrides": {
+            "customers": 16,
+            "avg": 2
+          }
+        },
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "bottle",
+            "Half2": "carrot"
+          },
+          "overrides": {
+            "customers": 20
+          }
+        }
+      ],
+      "competitors": [
+        {
+          "id": "bot_cat",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        },
+        {
+          "id": "bot_octopus",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        },
+        {
+          "id": "bot_sloth",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        }
+      ]
+    },
+    {
+      "id": "Nenuphar_Intro",
+      "biomeId": "biome_1",
+      "marketConfigId": "Nenuphar_Intro",
+      "instances": [
+        {
+          "blockId": "blk_intro",
+          "bind": {
+            "100%": "nenufar"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "carrot",
+            "Half2": "tennisBall"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "tennisBall",
+            "Half2": "nenufar"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmngnwg",
+          "bind": {
+            "third1": "tennisBall",
+            "third2": "carrot",
+            "third3": "nenufar"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmpxk97",
+          "bind": {
+            "Corner1": "tennisBall",
+            "Corner2": "carrot",
+            "Corner3": "bottle",
+            "Corner4": "nenufar"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmnh0ww",
+          "bind": {
+            "50%": "nenufar",
+            "quarter1": "carrot",
+            "quarter2": "bottle"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmngnwg",
+          "bind": {
+            "third1": "tennisBall",
+            "third2": "nenufar",
+            "third3": "bottle"
+          },
+          "overrides": {
+            "customers": 15
+          }
+        }
+      ],
+      "competitors": [
+        {
+          "id": "bot_cat",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        },
+        {
+          "id": "bot_octopus",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        },
+        {
+          "id": "bot_sloth",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        }
+      ]
+    },
+    {
+      "id": "Nest_Intro",
+      "biomeId": "biome_1",
+      "marketConfigId": "Nest_Intro",
+      "instances": [
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "nenufar",
+            "Half2": "tennisBall"
+          },
+          "overrides": {
+            "customers": 15
+          }
+        },
+        {
+          "blockId": "blk_mrmnh0ww",
+          "bind": {
+            "50%": "nenufar",
+            "quarter1": "tennisBall",
+            "quarter2": "carrot"
+          },
+          "overrides": {
+            "customers": 15
+          }
+        },
+        {
+          "blockId": "blk_mrmngnwg",
+          "bind": {
+            "third1": "carrot",
+            "third2": "bottle",
+            "third3": "nenufar"
+          },
+          "overrides": {
+            "avg": 2
+          }
+        },
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "bottle",
+            "Half2": "nenufar"
+          },
+          "overrides": {
+            "avg": 2
+          }
+        },
+        {
+          "blockId": "blk_mrmhfzix",
+          "bind": {
+            "100%": "nest"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "nest",
+            "Half2": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmngnwg",
+          "bind": {
+            "third1": "nest",
+            "third2": "tennisBall",
+            "third3": "nenufar"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmngnwg",
+          "bind": {
+            "third1": "nest",
+            "third3": "carrot",
+            "third2": "bottle"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmhfzix",
+          "bind": {
+            "100%": "nest"
+          },
+          "overrides": {
+            "customers": 20,
+            "avg": 2
+          }
+        }
+      ],
+      "competitors": [
+        {
+          "id": "bot_sloth",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        },
+        {
+          "id": "bot_cat",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        },
+        {
+          "id": "bot_octopus",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        }
+      ]
+    },
+    {
+      "id": "Nest_1_Normal",
+      "biomeId": "biome_1",
+      "marketConfigId": "world_config_9",
+      "instances": [
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "tennisBall",
+            "Half2": "carrot"
+          },
+          "overrides": {
+            "customers": 15
+          }
+        },
+        {
+          "blockId": "blk_mrmnh0ww",
+          "bind": {
+            "50%": "nenufar",
+            "quarter1": "bottle",
+            "quarter2": "carrot"
+          },
+          "overrides": {
+            "customers": 15
+          }
+        },
+        {
+          "blockId": "blk_mrmngnwg",
+          "bind": {
+            "third1": "carrot",
+            "third2": "bottle",
+            "third3": "nenufar"
+          },
+          "overrides": {
+            "avg": 2
+          }
+        },
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "bottle",
+            "Half2": "nenufar"
+          },
+          "overrides": {
+            "avg": 2
+          }
+        },
+        {
+          "blockId": "blk_mrmhfzix",
+          "bind": {
+            "100%": "nest"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "nest",
+            "Half2": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmngnwg",
+          "bind": {
+            "third1": "nest",
+            "third2": "tennisBall",
+            "third3": "nenufar"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmngnwg",
+          "bind": {
+            "third1": "nest",
+            "third3": "carrot",
+            "third2": "bottle"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmhfzix",
+          "bind": {
+            "100%": "nest"
+          },
+          "overrides": {
+            "customers": 20,
+            "avg": 2
+          }
+        }
+      ],
+      "competitors": [
+        {
+          "id": "bot_cat",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        },
+        {
+          "id": "bot_octopus",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        },
+        {
+          "id": "bot_sloth",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "weights": {}
+        }
+      ]
+    }
+  ]
+}

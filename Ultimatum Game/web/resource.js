@@ -59,7 +59,7 @@ function renderResourcePanel() {
   if (producers.length) {
     const wrap = el("div", "res-custs");
     producers.forEach((m) => {
-      const b = el("button", "res-cust", `<img src="${sprite(m.spriteId)}"><span>${m.displayName}</span>`);
+      const b = el("button", "res-cust", `<img src="${sprite(m.spriteId, "Machines")}"><span>${m.displayName}</span>`);
       b.onclick = () => openBuildingPanel(m.id);
       wrap.appendChild(b);
     });
@@ -94,7 +94,7 @@ function renderResourcePanel() {
     const cwrap = el("div", "res-custs");
     wanting.forEach((cid) => {
       const c = Game.cfg.customerDefs[cid];
-      const b = el("button", "res-cust", `<img src="${sprite(c.spriteId)}"><span>${cap(cid)}</span>`);
+      const b = el("button", "res-cust", `<img src="${sprite(c.spriteId, "Characters")}"><span>${cap(cid)}</span>`);
       b.onclick = () => openCodexCustomer(cid);
       cwrap.appendChild(b);
     });

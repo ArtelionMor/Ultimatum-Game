@@ -19,6 +19,20 @@ export function taxReserve(cfg, levelCfg, b, round) {
   return Math.max(0, cost - future);
 }
 
+// Weights driving the bot for a given wave (competitors_behavior v2). Falls
+// back to the nearest earlier wave so a shorter table still drives late rounds.
+export function botBehavior(b, round) {
+  const byRound = b.behaviorByRound || {};
+  if (byRound[round]) return byRound[round];
+  let best = 0;
+  for (const r in byRound) { const rn = +r; if (rn <= round && rn > best) best = rn; }
+  return byRound[best] || {};
+}
+
+// speed buff (%): the bot produces cheaper — the economic analog of "produces
+// faster" for bots, which buy units instead of running machines.
+function unitCost(b, ti) { return Math.ceil(ti.price / (1 + (b.buffs.speed || 0) / 100)); }
+
 export function simulateBot(game, b) {
   const inc = game.cfg.roundIncome[game.round];
   b.money += b.def.increaseByRound + b.def.upgradeEffect * b.upgradesBought;
@@ -38,14 +52,15 @@ export function simulateBot(game, b) {
   const target = {};
   order.forEach((r) => { const demand = mk.customers * ((mk.weights[r] || 0) / totalW) * mk.avg; target[r] = Math.ceil(demand / numAlive * 1.3); });
 
-  const actions = Object.keys(b.behavior).filter((k) => b.behavior[k] > 0);
+  const behavior = botBehavior(b, game.round);
+  const actions = Object.keys(behavior).filter((k) => behavior[k] > 0);
   let guard = 600;
   while (guard-- > 0) {
     const pool = actions.filter((a) => botUseful(game, b, a, tier, reserve, target));
     if (!pool.length) break;
-    const tot = pool.reduce((s, a) => s + b.behavior[a], 0);
+    const tot = pool.reduce((s, a) => s + behavior[a], 0);
     let r = Math.random() * tot; let pick = pool[0];
-    for (const a of pool) { r -= b.behavior[a]; if (r <= 0) { pick = a; break; } }
+    for (const a of pool) { r -= behavior[a]; if (r <= 0) { pick = a; break; } }
     botDo(game, b, pick, tier);
   }
 }
@@ -56,14 +71,16 @@ export function botUseful(game, b, a, tier, reserve, target) {
   if (a === "increaseStorage") { const n = game.cfg.purchases.increaseStorage[b.buys.increaseStorage]; return n && b.money - n.price >= reserve; }
   // produce only above the tax reserve, with storage room, and not past the sellable target
   const ti = game.tierInfo(a, tier);
-  return ti && b.money - ti.price >= reserve && game.stockTotal(b) < b.storageCap && game.stockOf(b, a) < target[a];
+  return ti && b.money - unitCost(b, ti) >= reserve && game.stockTotal(b) < b.storageCap && game.stockOf(b, a) < target[a];
 }
 
 export function botDo(game, b, a, tier) {
   if (a === "increaseWorker") { const n = game.cfg.purchases.increaseWorker[b.buys.increaseWorker]; b.money -= n.price; b.buys.increaseWorker++; b.upgradesBought++; return; }
   if (a === "increaseMarketting") { const n = game.cfg.purchases.increaseMarketting[b.buys.increaseMarketting]; b.money -= n.price; b.buys.increaseMarketting++; b.marketing = n.effect; b.upgradesBought++; return; }
   if (a === "increaseStorage") { const n = game.cfg.purchases.increaseStorage[b.buys.increaseStorage]; b.money -= n.price; b.buys.increaseStorage++; b.storageCap += n.effect; b.upgradesBought++; return; }
-  const ti = game.tierInfo(a, tier); b.money -= ti.price; game.addStock(b, a, tier, 1);
+  const ti = game.tierInfo(a, tier); b.money -= unitCost(b, ti);
+  // proba2x buff (%): chance to double the unit, like the characters' 2x
+  game.addStock(b, a, tier, Math.random() * 100 < (b.buffs.proba2x || 0) ? 2 : 1);
 }
 
 // Plan a bot's whole round (money/upgrades resolved now), then queue its target

@@ -14,6 +14,7 @@ import { openResource } from "./resource.js";
 import { nextTaxInfo } from "./game-tax.js";
 import { freeWorkers, selectWorker, assignWorker, removeWorker, unassignWorker } from "./game-workers.js";
 import { nextWorker, buyWorker, nextMkt, buyMkt, nextStorage, buyStorage, nextMachineLevel, upgradeMachine } from "./game-shop.js";
+import { botBehavior } from "./game-bots.js";
 
 export const renderMethods = {
   refreshHud() {
@@ -187,7 +188,7 @@ export const renderMethods = {
       this._shopBtns.push({ b, disFn });
     };
     const w = nextWorker(this);
-    mk(`<img src="${sprite("Worker")}">`, `Ouvrier ×${this.player.workers.length}`, w ? "$" + w.price : "MAX", () => !w || this.player.workers.length >= this.cfg.g.maxWorkersTotal || this.player.money < w.price, () => buyWorker(this));
+    mk(`<img src="${sprite("Worker", "UI")}">`, `Ouvrier ×${this.player.workers.length}`, w ? "$" + w.price : "MAX", () => !w || this.player.workers.length >= this.cfg.g.maxWorkersTotal || this.player.money < w.price, () => buyWorker(this));
     const mkt = nextMkt(this);
     mk("📣", `Mkt ${this.player.marketing.toFixed(1)}`, mkt ? "$" + mkt.price : "MAX", () => !mkt || this.player.money < mkt.price, () => buyMkt(this));
     const st = nextStorage(this);
@@ -208,7 +209,7 @@ export const renderMethods = {
   buildMachine(m) {
     const def = this.machineDef(m.id);
     const node = el("div", "machine");
-    const icon = el("img", "machine-icon"); icon.src = sprite(def.spriteId);
+    const icon = el("img", "machine-icon"); icon.src = sprite(def.spriteId, "Machines");
     const name = el("div", "machine-name");
     const recipe = el("div", "machine-recipe", this.recipeHtml(def));
     const footer = el("div", "machine-footer");
@@ -274,7 +275,7 @@ export const renderMethods = {
     const isChar = !!w.charId;
     const chip = el("div", "wchip" + (isChar ? " char" : "") + (this.selectedWorker === w ? " selected" : "") + (w.machineId ? " onmachine" : ""));
     chip.innerHTML =
-      `<span class="wava"><img src="${sprite("Worker")}" draggable="false">` +
+      `<span class="wava"><img src="${sprite("Worker", "UI")}" draggable="false">` +
       (isChar ? `<span class="wgears">${gearBadges(w.charId)}</span>` : "") + `</span>` +
       (isChar ? `<span class="wname">${w.charId}<span class="wlvl">${Meta.charLevel(w.charId)}</span></span>` : "");
     this.makeDraggable(chip, w);
@@ -354,7 +355,7 @@ export const renderMethods = {
     const alive = this.competitors.filter((c) => !c.eliminated); // fixed order (joueur puis bots), indépendant de l'argent
     alive.forEach((c) => {
       const s = el("div", "counter" + (c.isPlayer ? " me" : "")); c._counter = s;
-      s.innerHTML = `<img class="counter-avatar" src="${sprite(c.spriteId)}"><div class="counter-name">${c.name}</div><div class="counter-money"><img src="${sprite("Coins")}"><span class="cmoney">${c.money}</span></div><div class="counter-mkt">📣${c.marketing.toFixed(1)}</div><div class="counter-inv"></div>`;
+      s.innerHTML = `<img class="counter-avatar" src="${sprite(c.spriteId, c.spriteFolder)}"><div class="counter-name">${c.name}</div><div class="counter-money"><img src="${sprite("Coins", "UI")}"><span class="cmoney">${c.money}</span></div><div class="counter-mkt">📣${c.marketing.toFixed(1)}</div><div class="counter-inv"></div>`;
       c._moneyRef = s.querySelector(".cmoney");
       c._invRef = s.querySelector(".counter-inv");
       chainOverscroll(c._invRef);  // at the stack's top/bottom, keep the swipe scrolling the page
@@ -369,9 +370,9 @@ export const renderMethods = {
   closeCompetitor() { this._infoC = null; $("#competitor-overlay").classList.add("hidden"); },
 
   botSpecialty(c) {
-    if (!c.behavior) return "";
+    const w = botBehavior(c, this.round); // per-wave weights: the specialty can shift as the market pivots
     let best = null, bw = -1;
-    this.cfg.resourceOrder.forEach((r) => { const w = c.behavior[r] || 0; if (w > bw) { bw = w; best = r; } });
+    this.cfg.resourceOrder.forEach((r) => { const x = w[r] || 0; if (x > bw) { bw = x; best = r; } });
     return best && bw > 0 ? "Spécialité : " + this.res(best).displayName : "";
   },
   renderCompetitorPanel() {
@@ -382,7 +383,7 @@ export const renderMethods = {
     const spec = c.isPlayer ? "" : this.botSpecialty(c);
     body.innerHTML =
       `<div class="cp-head">
-        <img class="cp-skin" src="${sprite(c.spriteId)}">
+        <img class="cp-skin" src="${sprite(c.spriteId, c.spriteFolder)}">
         <div class="cp-id">
           <div class="cp-name">${c.name}${c.eliminated ? ' <span class="cp-elim">éliminé</span>' : ""}</div>
           <div class="cp-tags"><span class="cp-tag">@${tag}</span>${spec ? `<span class="cp-spec">${spec}</span>` : ""}</div>
@@ -461,7 +462,7 @@ export const renderMethods = {
   // little coins springing out of a counter when it earns money
   coinBurst(s, n) {
     for (let i = 0; i < n; i++) {
-      const coin = el("img", "coin-particle"); coin.src = sprite("Coins");
+      const coin = el("img", "coin-particle"); coin.src = sprite("Coins", "UI");
       coin.style.setProperty("--dx", Math.round(Math.random() * 80 - 40) + "px");
       coin.style.setProperty("--dy", Math.round(-32 - Math.random() * 40) + "px");
       coin.style.animationDelay = (Math.random() * 0.1).toFixed(2) + "s";
@@ -474,7 +475,7 @@ export const renderMethods = {
     const list = $("#results-list"); list.innerHTML = "";
     ranked.forEach((c, i) => {
       const row = el("div", "result-row" + (c.isPlayer ? " me" : "") + (elimNow.includes(c) ? " eliminated" : ""));
-      row.innerHTML = `<span class="rank">${i + 1}</span><img src="${sprite(c.spriteId)}"><span class="rname">${c.name}</span><span class="rsales">+${c.salesThisRound}</span><span class="rmoney"><img src="${sprite("Coins")}">${c.money}</span>` + (elimNow.includes(c) ? `<span class="rx">ÉLIMINÉ</span>` : "");
+      row.innerHTML = `<span class="rank">${i + 1}</span><img src="${sprite(c.spriteId, c.spriteFolder)}"><span class="rname">${c.name}</span><span class="rsales">+${c.salesThisRound}</span><span class="rmoney"><img src="${sprite("Coins", "UI")}">${c.money}</span>` + (elimNow.includes(c) ? `<span class="rx">ÉLIMINÉ</span>` : "");
       list.appendChild(row);
     });
     $("#results-title").textContent = elimNow.length ? (elimNow.includes(this.player) ? "Tu es éliminé…" : `${elimNow.map((c) => c.name).join(", ")} éliminé`) : `Round ${this.round} — classement`;

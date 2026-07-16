@@ -167,14 +167,14 @@ function renderBuildingPanel() {
     const r = res(rid);
     const cust = customersFor(rid);
     const custHtml = cust.length
-      ? cust.map((c) => `<img class="bp-cust" data-cust="${c.id}" src="${sprite(c.spriteId)}" title="Client attiré">`).join("")
+      ? cust.map((c) => `<img class="bp-cust" data-cust="${c.id}" src="${sprite(c.spriteId, "Characters")}" title="Client attiré">`).join("")
       : `<span class="menu-muted">aucun client direct</span>`;
-    return `<div class="bp-prod"><button class="bp-res" data-res="${rid}"><img src="${sprite(r.spriteId)}"><span class="bp-prod-name">${r.displayName}</span></button><span class="bp-attract">→</span>${custHtml}</div>`;
+    return `<div class="bp-prod"><button class="bp-res" data-res="${rid}"><img src="${sprite(r.spriteId, "Ressources")}"><span class="bp-prod-name">${r.displayName}</span></button><span class="bp-attract">→</span>${custHtml}</div>`;
   }).join("") || `<div class="menu-muted">Ne produit rien directement.</div>`;
 
   body.innerHTML =
     `<div class="bp-head">
-      <img class="bp-sprite" src="${sprite(m.spriteId)}">
+      <img class="bp-sprite" src="${sprite(m.spriteId, "Machines")}">
       <div><div class="bp-name">${m.displayName}</div>
       ${desc ? `<div class="bp-desc">${desc}</div>` : ""}</div>
     </div>
@@ -228,7 +228,7 @@ function renderDropRate(slot, rid) {
     const pct = tiers[t - 1] || 0;
     const row = el("div", "bp-drop-row" + (pct > 0 ? "" : " zero"));
     const tSprite = (res(rid).tiers[t] || {}).spriteId || res(rid).spriteId;
-    const img = `<img class="bp-drop-icon" src="${sprite(tSprite)}">`;
+    const img = `<img class="bp-drop-icon" src="${sprite(tSprite, "Ressources")}">`;
     const track = `<div class="bp-drop-track"><div class="bp-drop-fill" style="width:${pct}%;background:${TIER_COLORS[t - 1] || "#888"}"></div></div>`;
     row.innerHTML = `${img}<span class="bp-drop-name">Tier ${t}</span>${track}<span class="bp-drop-pct">${pct}%</span>`;
     bars.appendChild(row);
@@ -306,7 +306,7 @@ function renderGraph(slot, focusId) {
     else { const r = res(id.slice(4)); name = r.displayName; spriteId = r.tiers ? (r.tiers[1] || {}).spriteId || r.spriteId : r.spriteId; }
 
     const img = document.createElementNS(SVG_NS, "image");
-    img.setAttribute("href", sprite(spriteId));
+    img.setAttribute("href", sprite(spriteId, isMachine ? "Machines" : "Ressources"));
     img.setAttribute("x", 6); img.setAttribute("y", 10); img.setAttribute("width", 36); img.setAttribute("height", 36);
     g.appendChild(img);
 
@@ -329,13 +329,13 @@ function renderGraph(slot, focusId) {
       productsOf(md).forEach((rid) => {
         customersFor(rid).forEach((c) => {
           const ci = document.createElementNS(SVG_NS, "image");
-          ci.setAttribute("href", sprite(c.spriteId)); ci.setAttribute("class", "bn-mini");
+          ci.setAttribute("href", sprite(c.spriteId, "Characters")); ci.setAttribute("class", "bn-mini");
           ci.setAttribute("x", ix); ci.setAttribute("y", NODE_H - 20); ci.setAttribute("width", 16); ci.setAttribute("height", 16);
           iconClick(ci, () => openCodexCustomer(c.id));
           g.appendChild(ci); ix -= 18;
         });
         const oi = document.createElementNS(SVG_NS, "image");
-        oi.setAttribute("href", sprite(res(rid).spriteId)); oi.setAttribute("class", "bn-mini");
+        oi.setAttribute("href", sprite(res(rid).spriteId, "Ressources")); oi.setAttribute("class", "bn-mini");
         oi.setAttribute("x", ix); oi.setAttribute("y", NODE_H - 20); oi.setAttribute("width", 16); oi.setAttribute("height", 16);
         iconClick(oi, () => openResource(rid));
         g.appendChild(oi); ix -= 18;

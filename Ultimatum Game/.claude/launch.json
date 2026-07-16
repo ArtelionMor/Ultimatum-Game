@@ -18,6 +18,12 @@
       "runtimeExecutable": "python",
       "runtimeArgs": ["-m", "http.server", "8781", "--directory", "web"],
       "port": 8781
+    },
+    {
+      "name": "level-designer",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["tools/level-designer/serve.py", "8790"],
+      "port": 8790
     }
   ]
 }

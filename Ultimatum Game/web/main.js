@@ -28,7 +28,14 @@ const Game = {
   levelCfg: null, // effective config of the level being played (resolveLevel)
 
   async start() {
-    const raw = await fetch("config_export.json").then((r) => r.json());
+    // Two sources: the sheet export, plus the level designer's output
+    // (market_config + competitors_behavior + competitors_buffs). The sheet no
+    // longer carries those sections, so a sheet re-export can't erase the levels.
+    const [raw, rawLevels] = await Promise.all([
+      fetch("config_export.json").then((r) => r.json()),
+      fetch("config_levels.json").then((r) => (r.ok ? r.json() : {})).catch(() => ({})),
+    ]);
+    Object.assign(raw, rawLevels);
     this.cfg = normalize(raw);
     // Production lookup keyed `resourceId_level`. New config schema: `outputs`
     // maps each resource id to a profile name (`profil`), and `outputsProfiles`
@@ -152,9 +159,9 @@ const Game = {
   // until per-tier art exists). Drop tier files in web/sprites/tiers/.
   // Per-tier sprite id from config (falls back to the resource's default sprite).
   tierSpriteId(resId, tier) { const t = this.cfg.resources[resId].tiers[tier]; return (t && t.spriteId) || this.res(resId).spriteId; },
-  tierSrc(resId, tier) { return `sprites/${this.tierSpriteId(resId, tier)}.png`; },
+  tierSrc(resId, tier) { return `sprites/Ressources/${this.tierSpriteId(resId, tier)}.png`; },
   tierImg(resId, tier) {
-    const candidates = [ this.tierSrc(resId, tier), `sprites/${this.res(resId).spriteId}.png` ]; // tier art, else default
+    const candidates = [ this.tierSrc(resId, tier), `sprites/Ressources/${this.res(resId).spriteId}.png` ]; // tier art, else default
     const img = new Image();
     let i = 0;
     img.onerror = () => { i++; if (i < candidates.length) img.src = candidates[i]; else img.onerror = null; };
@@ -197,7 +204,7 @@ const Game = {
     this.round = 0;
     this.selectedWorker = null;
     this.player = {
-      id: "player", name: "Toi", spriteId: "Worker", isPlayer: true, eliminated: false,
+      id: "player", name: "Toi", spriteId: "Worker", spriteFolder: "UI", isPlayer: true, eliminated: false,
       money: g.startingMoney, stock: this.emptyStock(), storageCap: g.startingStorage,
       marketing: BASE_MARKETING, workers: [],
       machines: [], buys: { increaseWorker: 0, increaseMarketting: 0, increaseStorage: 0 },
@@ -208,9 +215,9 @@ const Game = {
 
     // The level defines the exact bot lineup.
     const bots = this.levelCfg.bots.map((b) => ({
-      id: b.id, name: b.displayName, spriteId: b.spriteId, isPlayer: false, eliminated: false,
+      id: b.id, name: b.displayName, spriteId: b.spriteId, spriteFolder: "Characters", isPlayer: false, eliminated: false,
       money: b.startingMoney, stock: this.emptyStock(), storageCap: g.startingStorage,
-      marketing: BASE_MARKETING, def: b, behavior: b.behavior, upgradesBought: 0,
+      marketing: BASE_MARKETING + (b.buffs.marketing || 0), def: b, behaviorByRound: b.behaviorByRound, buffs: b.buffs, upgradesBought: 0,
       buys: { increaseWorker: 0, increaseMarketting: 0, increaseStorage: 0 }, salesThisRound: 0,
     }));
     this.competitors = [this.player, ...bots];
