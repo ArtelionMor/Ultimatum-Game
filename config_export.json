@@ -1,179 +1,184 @@
 {
-  "convert": [
+  "convert_profile": [
     {
-      "id": "tennisBall",
-      "tier": 1,
-      "quantity": 10,
-      "result_ressource": "tennisBall",
-      "result_tier": 2
+      "id": "convert_profile_complexity_0",
+      "tier_A": 1,
+      "number": 3,
+      "tier_B": 2
     },
     {
-      "id": "tennisBall",
-      "tier": 2,
-      "quantity": 7,
-      "result_ressource": "tennisBall",
-      "result_tier": 3
+      "id": "convert_profile_complexity_0",
+      "tier_A": 2,
+      "number": 3,
+      "tier_B": 3
     },
     {
-      "id": "tennisBall",
-      "tier": 3,
-      "quantity": 5,
-      "result_ressource": "tennisBall",
-      "result_tier": 4
+      "id": "convert_profile_complexity_0",
+      "tier_A": 3,
+      "number": 3,
+      "tier_B": 4
     },
     {
-      "id": "tennisBall",
-      "tier": 4,
-      "quantity": 3,
-      "result_ressource": "tennisBall",
-      "result_tier": 5
+      "id": "convert_profile_complexity_0",
+      "tier_A": 4,
+      "number": 3,
+      "tier_B": 5
     },
     {
-      "id": "tennisBall",
-      "tier": 5,
-      "quantity": 3,
-      "result_ressource": "tennisBall",
-      "result_tier": 6
+      "id": "convert_profile_complexity_0",
+      "tier_A": 5,
+      "number": 3,
+      "tier_B": 6
     },
     {
-      "id": "carrot",
-      "tier": 1,
-      "quantity": 10,
-      "result_ressource": "carrot",
-      "result_tier": 2
+      "id": "convert_profile_complexity_1",
+      "tier_A": 1,
+      "number": 4,
+      "tier_B": 2
     },
     {
-      "id": "carrot",
-      "tier": 2,
-      "quantity": 7,
-      "result_ressource": "carrot",
-      "result_tier": 3
+      "id": "convert_profile_complexity_1",
+      "tier_A": 2,
+      "number": 4,
+      "tier_B": 3
     },
     {
-      "id": "carrot",
-      "tier": 3,
-      "quantity": 5,
-      "result_ressource": "carrot",
-      "result_tier": 4
+      "id": "convert_profile_complexity_1",
+      "tier_A": 3,
+      "number": 4,
+      "tier_B": 4
     },
     {
-      "id": "carrot",
-      "tier": 4,
-      "quantity": 3,
-      "result_ressource": "carrot",
-      "result_tier": 5
+      "id": "convert_profile_complexity_1",
+      "tier_A": 4,
+      "number": 4,
+      "tier_B": 5
     },
     {
-      "id": "carrot",
-      "tier": 5,
-      "quantity": 3,
-      "result_ressource": "carrot",
-      "result_tier": 6
+      "id": "convert_profile_complexity_1",
+      "tier_A": 5,
+      "number": 4,
+      "tier_B": 6
     },
     {
-      "id": "nenufar",
-      "tier": 1,
-      "quantity": 10,
-      "result_ressource": "nenufar",
-      "result_tier": 2
+      "id": "convert_profile_complexity_2",
+      "tier_A": 1,
+      "number": 5,
+      "tier_B": 2
     },
     {
-      "id": "nenufar",
-      "tier": 2,
-      "quantity": 7,
-      "result_ressource": "nenufar",
-      "result_tier": 3
+      "id": "convert_profile_complexity_2",
+      "tier_A": 2,
+      "number": 5,
+      "tier_B": 3
     },
     {
-      "id": "nenufar",
-      "tier": 3,
-      "quantity": 5,
-      "result_ressource": "nenufar",
-      "result_tier": 4
+      "id": "convert_profile_complexity_2",
+      "tier_A": 3,
+      "number": 5,
+      "tier_B": 4
     },
     {
-      "id": "nenufar",
-      "tier": 4,
-      "quantity": 3,
-      "result_ressource": "nenufar",
-      "result_tier": 5
+      "id": "convert_profile_complexity_2",
+      "tier_A": 4,
+      "number": 5,
+      "tier_B": 5
     },
     {
-      "id": "nenufar",
-      "tier": 5,
-      "quantity": 3,
-      "result_ressource": "nenufar",
-      "result_tier": 6
+      "id": "convert_profile_complexity_2",
+      "tier_A": 5,
+      "number": 5,
+      "tier_B": 6
     },
     {
-      "id": "nest",
-      "tier": 1,
-      "quantity": 10,
-      "result_ressource": "nest",
-      "result_tier": 2
+      "id": "convert_profile_complexity_3",
+      "tier_A": 1,
+      "number": 8,
+      "tier_B": 2
     },
     {
-      "id": "nest",
-      "tier": 2,
-      "quantity": 7,
-      "result_ressource": "nest",
-      "result_tier": 3
+      "id": "convert_profile_complexity_3",
+      "tier_A": 2,
+      "number": 8,
+      "tier_B": 3
     },
     {
-      "id": "nest",
-      "tier": 3,
-      "quantity": 5,
-      "result_ressource": "nest",
-      "result_tier": 4
+      "id": "convert_profile_complexity_3",
+      "tier_A": 3,
+      "number": 8,
+      "tier_B": 4
     },
     {
-      "id": "nest",
-      "tier": 4,
-      "quantity": 3,
-      "result_ressource": "nest",
-      "result_tier": 5
+      "id": "convert_profile_complexity_3",
+      "tier_A": 4,
+      "number": 8,
+      "tier_B": 5
     },
     {
-      "id": "nest",
-      "tier": 5,
-      "quantity": 3,
-      "result_ressource": "nest",
-      "result_tier": 6
+      "id": "convert_profile_complexity_3",
+      "tier_A": 5,
+      "number": 8,
+      "tier_B": 6
     },
     {
-      "id": "candle",
-      "tier": 1,
-      "quantity": 10,
-      "result_ressource": "candle",
-      "result_tier": 2
+      "id": "convert_profile_complexity_4",
+      "tier_A": 1,
+      "number": 10,
+      "tier_B": 2
     },
     {
-      "id": "candle",
-      "tier": 2,
-      "quantity": 7,
-      "result_ressource": "candle",
-      "result_tier": 3
+      "id": "convert_profile_complexity_4",
+      "tier_A": 2,
+      "number": 10,
+      "tier_B": 3
     },
     {
-      "id": "candle",
-      "tier": 3,
-      "quantity": 5,
-      "result_ressource": "candle",
-      "result_tier": 4
+      "id": "convert_profile_complexity_4",
+      "tier_A": 3,
+      "number": 10,
+      "tier_B": 4
     },
     {
-      "id": "candle",
-      "tier": 4,
-      "quantity": 3,
-      "result_ressource": "candle",
-      "result_tier": 5
+      "id": "convert_profile_complexity_4",
+      "tier_A": 4,
+      "number": 10,
+      "tier_B": 5
     },
     {
-      "id": "candle",
-      "tier": 5,
-      "quantity": 3,
-      "result_ressource": "candle",
-      "result_tier": 6
+      "id": "convert_profile_complexity_4",
+      "tier_A": 5,
+      "number": 10,
+      "tier_B": 6
+    },
+    {
+      "id": "convert_profile_complexity_5",
+      "tier_A": 1,
+      "number": 10,
+      "tier_B": 2
+    },
+    {
+      "id": "convert_profile_complexity_5",
+      "tier_A": 2,
+      "number": 10,
+      "tier_B": 3
+    },
+    {
+      "id": "convert_profile_complexity_5",
+      "tier_A": 3,
+      "number": 10,
+      "tier_B": 4
+    },
+    {
+      "id": "convert_profile_complexity_5",
+      "tier_A": 4,
+      "number": 10,
+      "tier_B": 5
+    },
+    {
+      "id": "convert_profile_complexity_5",
+      "tier_A": 5,
+      "number": 10,
+      "tier_B": 6
     }
   ],
   "competitors": [
@@ -202,1307 +207,1955 @@
       "upgradeEffect": 50
     }
   ],
-  "competitors_behavior": [
-    {
-      "id": "bot_cat",
-      "ressources": "tennisBall",
-      "weights": 100
-    },
-    {
-      "id": "bot_cat",
-      "ressources": "carrot",
-      "weights": 10
-    },
-    {
-      "id": "bot_cat",
-      "ressources": "nenufar",
-      "weights": 60
-    },
-    {
-      "id": "bot_cat",
-      "ressources": "nest",
-      "weights": 40
-    },
-    {
-      "id": "bot_cat",
-      "ressources": "increaseWorker",
-      "weights": 5
-    },
-    {
-      "id": "bot_cat",
-      "ressources": "increaseMarketting",
-      "weights": 5
-    },
-    {
-      "id": "bot_cat",
-      "ressources": "increaseStorage",
-      "weights": 5
-    },
-    {
-      "id": "bot_octopus",
-      "ressources": "tennisBall",
-      "weights": 20
-    },
-    {
-      "id": "bot_octopus",
-      "ressources": "carrot",
-      "weights": 100
-    },
-    {
-      "id": "bot_octopus",
-      "ressources": "nenufar",
-      "weights": 10
-    },
-    {
-      "id": "bot_octopus",
-      "ressources": "nest",
-      "weights": 50
-    },
-    {
-      "id": "bot_octopus",
-      "ressources": "increaseWorker",
-      "weights": 5
-    },
-    {
-      "id": "bot_octopus",
-      "ressources": "increaseMarketting",
-      "weights": 5
-    },
-    {
-      "id": "bot_octopus",
-      "ressources": "increaseStorage",
-      "weights": 5
-    },
-    {
-      "id": "bot_sloth",
-      "ressources": "tennisBall",
-      "weights": 10
-    },
-    {
-      "id": "bot_sloth",
-      "ressources": "carrot",
-      "weights": 10
-    },
-    {
-      "id": "bot_sloth",
-      "ressources": "nenufar",
-      "weights": 20
-    },
-    {
-      "id": "bot_sloth",
-      "ressources": "nest",
-      "weights": 100
-    },
-    {
-      "id": "bot_sloth",
-      "ressources": "increaseWorker",
-      "weights": 5
-    },
-    {
-      "id": "bot_sloth",
-      "ressources": "increaseMarketting",
-      "weights": 5
-    },
-    {
-      "id": "bot_sloth",
-      "ressources": "increaseStorage",
-      "weights": 5
-    }
-  ],
   "characters": [
     {
-      "id": "Annie",
-      "upgrade_profile": "common_character",
-      "level": 1,
-      "speed_1": 0.05,
-      "condition_1": "tennisBallFactory",
-      "speed_2": 0.05,
-      "condition_2": "nestFactory",
-      "speed_3": 0.05,
-      "condition_3": "candleBabaYagaHut",
-      "2x proba": 0,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Annie",
-      "upgrade_profile": "common_character",
-      "level": 2,
-      "speed_1": 0.075,
-      "condition_1": "tennisBallFactory",
-      "speed_2": 0.075,
-      "condition_2": "nestFactory",
-      "speed_3": 0.075,
-      "condition_3": "candleBabaYagaHut",
-      "2x proba": 0,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Annie",
-      "upgrade_profile": "common_character",
-      "level": 3,
-      "speed_1": 0.1,
-      "condition_1": "tennisBallFactory",
-      "speed_2": 0.1,
-      "condition_2": "nestFactory",
-      "speed_3": 0.1,
-      "condition_3": "candleBabaYagaHut",
-      "2x proba": 0,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Annie",
-      "upgrade_profile": "common_character",
-      "level": 4,
-      "speed_1": 0.125,
-      "condition_1": "tennisBallFactory",
-      "speed_2": 0.125,
-      "condition_2": "nestFactory",
-      "speed_3": 0.125,
-      "condition_3": "candleBabaYagaHut",
-      "2x proba": 0,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Annie",
-      "upgrade_profile": "common_character",
-      "level": 5,
-      "speed_1": 0.15,
-      "condition_1": "tennisBallFactory",
-      "speed_2": 0.15,
-      "condition_2": "nestFactory",
-      "speed_3": 0.15,
-      "condition_3": "candleBabaYagaHut",
-      "2x proba": 0,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Annie",
-      "upgrade_profile": "common_character",
-      "level": 6,
-      "speed_1": 0.15,
-      "condition_1": "tennisBallFactory",
-      "speed_2": 0.15,
-      "condition_2": "nestFactory",
-      "speed_3": 0.15,
-      "condition_3": "candleBabaYagaHut",
-      "2x proba": 0.03,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Annie",
-      "upgrade_profile": "common_character",
-      "level": 7,
-      "speed_1": 0.15,
-      "condition_1": "tennisBallFactory",
-      "speed_2": 0.15,
-      "condition_2": "nestFactory",
-      "speed_3": 0.15,
-      "condition_3": "candleBabaYagaHut",
-      "2x proba": 0.05,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Annie",
-      "upgrade_profile": "common_character",
-      "level": 8,
-      "speed_1": 0.15,
-      "condition_1": "tennisBallFactory",
-      "speed_2": 0.15,
-      "condition_2": "nestFactory",
-      "speed_3": 0.15,
-      "condition_3": "candleBabaYagaHut",
-      "2x proba": 0.07,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Annie",
-      "upgrade_profile": "common_character",
-      "level": 9,
-      "speed_1": 0.15,
-      "condition_1": "tennisBallFactory",
-      "speed_2": 0.15,
-      "condition_2": "nestFactory",
-      "speed_3": 0.15,
-      "condition_3": "candleBabaYagaHut",
-      "2x proba": 0.09,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Annie",
-      "upgrade_profile": "common_character",
-      "level": 10,
-      "speed_1": 0.15,
-      "condition_1": "tennisBallFactory",
-      "speed_2": 0.15,
-      "condition_2": "nestFactory",
-      "speed_3": 0.15,
-      "condition_3": "candleBabaYagaHut",
-      "2x proba": 0.11,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Annie",
-      "upgrade_profile": "common_character",
-      "level": 11,
-      "speed_1": 0.175,
-      "condition_1": "tennisBallFactory",
-      "speed_2": 0.175,
-      "condition_2": "nestFactory",
-      "speed_3": 0.175,
-      "condition_3": "candleBabaYagaHut",
-      "2x proba": 0.11,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Annie",
-      "upgrade_profile": "common_character",
-      "level": 12,
-      "speed_1": 0.2,
-      "condition_1": "tennisBallFactory",
-      "speed_2": 0.2,
-      "condition_2": "nestFactory",
-      "speed_3": 0.2,
-      "condition_3": "candleBabaYagaHut",
-      "2x proba": 0.11,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Annie",
-      "upgrade_profile": "common_character",
-      "level": 13,
-      "speed_1": 0.225,
-      "condition_1": "tennisBallFactory",
-      "speed_2": 0.225,
-      "condition_2": "nestFactory",
-      "speed_3": 0.225,
-      "condition_3": "candleBabaYagaHut",
-      "2x proba": 0.11,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Annie",
-      "upgrade_profile": "common_character",
-      "level": 14,
-      "speed_1": 0.25,
-      "condition_1": "tennisBallFactory",
-      "speed_2": 0.25,
-      "condition_2": "nestFactory",
-      "speed_3": 0.25,
-      "condition_3": "candleBabaYagaHut",
-      "2x proba": 0.11,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Annie",
-      "upgrade_profile": "common_character",
-      "level": 15,
-      "speed_1": 0.275,
-      "condition_1": "tennisBallFactory",
-      "speed_2": 0.275,
-      "condition_2": "nestFactory",
-      "speed_3": 0.275,
-      "condition_3": "candleBabaYagaHut",
-      "2x proba": 0.11,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Annie",
-      "upgrade_profile": "common_character",
-      "level": 16,
-      "speed_1": 0.275,
-      "condition_1": "tennisBallFactory",
-      "speed_2": 0.275,
-      "condition_2": "nestFactory",
-      "speed_3": 0.275,
-      "condition_3": "candleBabaYagaHut",
-      "2x proba": 0.13,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Annie",
-      "upgrade_profile": "common_character",
-      "level": 17,
-      "speed_1": 0.275,
-      "condition_1": "tennisBallFactory",
-      "speed_2": 0.275,
-      "condition_2": "nestFactory",
-      "speed_3": 0.275,
-      "condition_3": "candleBabaYagaHut",
-      "2x proba": 0.15,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Annie",
-      "upgrade_profile": "common_character",
-      "level": 18,
-      "speed_1": 0.275,
-      "condition_1": "tennisBallFactory",
-      "speed_2": 0.275,
-      "condition_2": "nestFactory",
-      "speed_3": 0.275,
-      "condition_3": "candleBabaYagaHut",
-      "2x proba": 0.17,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Annie",
-      "upgrade_profile": "common_character",
-      "level": 19,
-      "speed_1": 0.275,
-      "condition_1": "tennisBallFactory",
-      "speed_2": 0.275,
-      "condition_2": "nestFactory",
-      "speed_3": 0.275,
-      "condition_3": "candleBabaYagaHut",
-      "2x proba": 0.19,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Annie",
-      "upgrade_profile": "common_character",
-      "level": 20,
-      "speed_1": 0.275,
-      "condition_1": "tennisBallFactory",
-      "speed_2": 0.275,
-      "condition_2": "nestFactory",
-      "speed_3": 0.275,
-      "condition_3": "candleBabaYagaHut",
-      "2x proba": 0.21,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Bertrant",
-      "upgrade_profile": "common_character",
-      "level": 1,
-      "speed_1": 0.05,
-      "condition_1": "carrotFarm",
-      "speed_2": 0.05,
-      "condition_2": "nestFactory",
-      "speed_3": 0.05,
-      "condition_3": "carrotFarm",
-      "2x proba": 0,
-      "condition": "tennisBallFactory"
-    },
-    {
-      "id": "Bertrant",
-      "upgrade_profile": "common_character",
-      "level": 2,
-      "speed_1": 0.075,
-      "condition_1": "carrotFarm",
-      "speed_2": 0.075,
-      "condition_2": "nestFactory",
-      "speed_3": 0.075,
-      "condition_3": "carrotFarm",
-      "2x proba": 0,
-      "condition": "tennisBallFactory"
-    },
-    {
-      "id": "Bertrant",
-      "upgrade_profile": "common_character",
-      "level": 3,
-      "speed_1": 0.1,
-      "condition_1": "carrotFarm",
-      "speed_2": 0.1,
-      "condition_2": "nestFactory",
-      "speed_3": 0.1,
-      "condition_3": "carrotFarm",
-      "2x proba": 0,
-      "condition": "tennisBallFactory"
-    },
-    {
-      "id": "Bertrant",
-      "upgrade_profile": "common_character",
-      "level": 4,
-      "speed_1": 0.125,
-      "condition_1": "carrotFarm",
-      "speed_2": 0.125,
-      "condition_2": "nestFactory",
-      "speed_3": 0.125,
-      "condition_3": "carrotFarm",
-      "2x proba": 0,
-      "condition": "tennisBallFactory"
-    },
-    {
-      "id": "Bertrant",
-      "upgrade_profile": "common_character",
-      "level": 5,
-      "speed_1": 0.15,
-      "condition_1": "carrotFarm",
-      "speed_2": 0.15,
-      "condition_2": "nestFactory",
-      "speed_3": 0.15,
-      "condition_3": "carrotFarm",
-      "2x proba": 0,
-      "condition": "tennisBallFactory"
-    },
-    {
-      "id": "Bertrant",
-      "upgrade_profile": "common_character",
-      "level": 6,
-      "speed_1": 0.15,
-      "condition_1": "carrotFarm",
-      "speed_2": 0.15,
-      "condition_2": "nestFactory",
-      "speed_3": 0.15,
-      "condition_3": "carrotFarm",
-      "2x proba": 0.03,
-      "condition": "tennisBallFactory"
-    },
-    {
-      "id": "Bertrant",
-      "upgrade_profile": "common_character",
-      "level": 7,
-      "speed_1": 0.15,
-      "condition_1": "carrotFarm",
-      "speed_2": 0.15,
-      "condition_2": "nestFactory",
-      "speed_3": 0.15,
-      "condition_3": "carrotFarm",
-      "2x proba": 0.05,
-      "condition": "tennisBallFactory"
-    },
-    {
-      "id": "Bertrant",
-      "upgrade_profile": "common_character",
-      "level": 8,
-      "speed_1": 0.15,
-      "condition_1": "carrotFarm",
-      "speed_2": 0.15,
-      "condition_2": "nestFactory",
-      "speed_3": 0.15,
-      "condition_3": "carrotFarm",
-      "2x proba": 0.07,
-      "condition": "tennisBallFactory"
-    },
-    {
-      "id": "Bertrant",
-      "upgrade_profile": "common_character",
-      "level": 9,
-      "speed_1": 0.15,
-      "condition_1": "carrotFarm",
-      "speed_2": 0.15,
-      "condition_2": "nestFactory",
-      "speed_3": 0.15,
-      "condition_3": "carrotFarm",
-      "2x proba": 0.09,
-      "condition": "tennisBallFactory"
-    },
-    {
-      "id": "Bertrant",
-      "upgrade_profile": "common_character",
-      "level": 10,
-      "speed_1": 0.15,
-      "condition_1": "carrotFarm",
-      "speed_2": 0.15,
-      "condition_2": "nestFactory",
-      "speed_3": 0.15,
-      "condition_3": "carrotFarm",
-      "2x proba": 0.11,
-      "condition": "tennisBallFactory"
-    },
-    {
-      "id": "Bertrant",
-      "upgrade_profile": "common_character",
-      "level": 11,
-      "speed_1": 0.175,
-      "condition_1": "carrotFarm",
-      "speed_2": 0.175,
-      "condition_2": "nestFactory",
-      "speed_3": 0.175,
-      "condition_3": "carrotFarm",
-      "2x proba": 0.11,
-      "condition": "tennisBallFactory"
-    },
-    {
-      "id": "Bertrant",
-      "upgrade_profile": "common_character",
-      "level": 12,
-      "speed_1": 0.2,
-      "condition_1": "carrotFarm",
-      "speed_2": 0.2,
-      "condition_2": "nestFactory",
-      "speed_3": 0.2,
-      "condition_3": "carrotFarm",
-      "2x proba": 0.11,
-      "condition": "tennisBallFactory"
-    },
-    {
-      "id": "Bertrant",
-      "upgrade_profile": "common_character",
-      "level": 13,
-      "speed_1": 0.225,
-      "condition_1": "carrotFarm",
-      "speed_2": 0.225,
-      "condition_2": "nestFactory",
-      "speed_3": 0.225,
-      "condition_3": "carrotFarm",
-      "2x proba": 0.11,
-      "condition": "tennisBallFactory"
-    },
-    {
-      "id": "Bertrant",
-      "upgrade_profile": "common_character",
-      "level": 14,
-      "speed_1": 0.25,
-      "condition_1": "carrotFarm",
-      "speed_2": 0.25,
-      "condition_2": "nestFactory",
-      "speed_3": 0.25,
-      "condition_3": "carrotFarm",
-      "2x proba": 0.11,
-      "condition": "tennisBallFactory"
-    },
-    {
-      "id": "Bertrant",
-      "upgrade_profile": "common_character",
-      "level": 15,
-      "speed_1": 0.275,
-      "condition_1": "carrotFarm",
-      "speed_2": 0.275,
-      "condition_2": "nestFactory",
-      "speed_3": 0.275,
-      "condition_3": "carrotFarm",
-      "2x proba": 0.11,
-      "condition": "tennisBallFactory"
-    },
-    {
-      "id": "Bertrant",
-      "upgrade_profile": "common_character",
-      "level": 16,
-      "speed_1": 0.275,
-      "condition_1": "carrotFarm",
-      "speed_2": 0.275,
-      "condition_2": "nestFactory",
-      "speed_3": 0.275,
-      "condition_3": "carrotFarm",
-      "2x proba": 0.13,
-      "condition": "tennisBallFactory"
-    },
-    {
-      "id": "Bertrant",
-      "upgrade_profile": "common_character",
-      "level": 17,
-      "speed_1": 0.275,
-      "condition_1": "carrotFarm",
-      "speed_2": 0.275,
-      "condition_2": "nestFactory",
-      "speed_3": 0.275,
-      "condition_3": "carrotFarm",
-      "2x proba": 0.15,
-      "condition": "tennisBallFactory"
-    },
-    {
-      "id": "Bertrant",
-      "upgrade_profile": "common_character",
-      "level": 18,
-      "speed_1": 0.275,
-      "condition_1": "carrotFarm",
-      "speed_2": 0.275,
-      "condition_2": "nestFactory",
-      "speed_3": 0.275,
-      "condition_3": "carrotFarm",
-      "2x proba": 0.17,
-      "condition": "tennisBallFactory"
-    },
-    {
-      "id": "Bertrant",
-      "upgrade_profile": "common_character",
-      "level": 19,
-      "speed_1": 0.275,
-      "condition_1": "carrotFarm",
-      "speed_2": 0.275,
-      "condition_2": "nestFactory",
-      "speed_3": 0.275,
-      "condition_3": "carrotFarm",
-      "2x proba": 0.19,
-      "condition": "tennisBallFactory"
-    },
-    {
-      "id": "Bertrant",
-      "upgrade_profile": "common_character",
-      "level": 20,
-      "speed_1": 0.275,
-      "condition_1": "carrotFarm",
-      "speed_2": 0.275,
-      "condition_2": "nestFactory",
-      "speed_3": 0.275,
-      "condition_3": "carrotFarm",
-      "2x proba": 0.21,
-      "condition": "tennisBallFactory"
-    },
-    {
-      "id": "Charline",
-      "upgrade_profile": "common_character",
-      "level": 1,
-      "speed_1": 0.05,
-      "condition_1": "nestFactory",
-      "speed_2": 0.05,
-      "speed_3": 0.05,
-      "2x proba": 0,
-      "condition": "nestFactory"
-    },
-    {
-      "id": "Charline",
-      "upgrade_profile": "common_character",
-      "level": 2,
-      "speed_1": 0.075,
-      "condition_1": "nestFactory",
-      "speed_2": 0.075,
-      "speed_3": 0.075,
-      "2x proba": 0,
-      "condition": "nestFactory"
-    },
-    {
-      "id": "Charline",
-      "upgrade_profile": "common_character",
-      "level": 3,
-      "speed_1": 0.1,
-      "condition_1": "nestFactory",
-      "speed_2": 0.1,
-      "speed_3": 0.1,
-      "2x proba": 0,
-      "condition": "nestFactory"
-    },
-    {
-      "id": "Charline",
-      "upgrade_profile": "common_character",
-      "level": 4,
-      "speed_1": 0.125,
-      "condition_1": "nestFactory",
-      "speed_2": 0.125,
-      "speed_3": 0.125,
-      "2x proba": 0,
-      "condition": "nestFactory"
-    },
-    {
-      "id": "Charline",
-      "upgrade_profile": "common_character",
-      "level": 5,
-      "speed_1": 0.15,
-      "condition_1": "nestFactory",
-      "speed_2": 0.15,
-      "speed_3": 0.15,
-      "2x proba": 0,
-      "condition": "nestFactory"
-    },
-    {
-      "id": "Charline",
-      "upgrade_profile": "common_character",
-      "level": 6,
-      "speed_1": 0.15,
-      "condition_1": "nestFactory",
-      "speed_2": 0.15,
-      "speed_3": 0.15,
-      "2x proba": 0.03,
-      "condition": "nestFactory"
-    },
-    {
-      "id": "Charline",
-      "upgrade_profile": "common_character",
-      "level": 7,
-      "speed_1": 0.15,
-      "condition_1": "nestFactory",
-      "speed_2": 0.15,
-      "speed_3": 0.15,
-      "2x proba": 0.05,
-      "condition": "nestFactory"
-    },
-    {
-      "id": "Charline",
-      "upgrade_profile": "common_character",
-      "level": 8,
-      "speed_1": 0.15,
-      "condition_1": "nestFactory",
-      "speed_2": 0.15,
-      "speed_3": 0.15,
-      "2x proba": 0.07,
-      "condition": "nestFactory"
-    },
-    {
-      "id": "Charline",
-      "upgrade_profile": "common_character",
-      "level": 9,
-      "speed_1": 0.15,
-      "condition_1": "nestFactory",
-      "speed_2": 0.15,
-      "speed_3": 0.15,
-      "2x proba": 0.09,
-      "condition": "nestFactory"
-    },
-    {
-      "id": "Charline",
-      "upgrade_profile": "common_character",
-      "level": 10,
-      "speed_1": 0.15,
-      "condition_1": "nestFactory",
-      "speed_2": 0.15,
-      "speed_3": 0.15,
-      "2x proba": 0.11,
-      "condition": "nestFactory"
-    },
-    {
-      "id": "Charline",
-      "upgrade_profile": "common_character",
-      "level": 11,
-      "speed_1": 0.175,
-      "condition_1": "nestFactory",
-      "speed_2": 0.175,
-      "speed_3": 0.175,
-      "2x proba": 0.11,
-      "condition": "nestFactory"
-    },
-    {
-      "id": "Charline",
-      "upgrade_profile": "common_character",
-      "level": 12,
-      "speed_1": 0.2,
-      "condition_1": "nestFactory",
-      "speed_2": 0.2,
-      "speed_3": 0.2,
-      "2x proba": 0.11,
-      "condition": "nestFactory"
-    },
-    {
-      "id": "Charline",
-      "upgrade_profile": "common_character",
-      "level": 13,
-      "speed_1": 0.225,
-      "condition_1": "nestFactory",
-      "speed_2": 0.225,
-      "speed_3": 0.225,
-      "2x proba": 0.11,
-      "condition": "nestFactory"
-    },
-    {
-      "id": "Charline",
-      "upgrade_profile": "common_character",
-      "level": 14,
-      "speed_1": 0.25,
-      "condition_1": "nestFactory",
-      "speed_2": 0.25,
-      "speed_3": 0.25,
-      "2x proba": 0.11,
-      "condition": "nestFactory"
-    },
-    {
-      "id": "Charline",
-      "upgrade_profile": "common_character",
-      "level": 15,
-      "speed_1": 0.275,
-      "condition_1": "nestFactory",
-      "speed_2": 0.275,
-      "speed_3": 0.275,
-      "2x proba": 0.11,
-      "condition": "nestFactory"
-    },
-    {
-      "id": "Charline",
-      "upgrade_profile": "common_character",
-      "level": 16,
-      "speed_1": 0.275,
-      "condition_1": "nestFactory",
-      "speed_2": 0.275,
-      "speed_3": 0.275,
-      "2x proba": 0.13,
-      "condition": "nestFactory"
-    },
-    {
-      "id": "Charline",
-      "upgrade_profile": "common_character",
-      "level": 17,
-      "speed_1": 0.275,
-      "condition_1": "nestFactory",
-      "speed_2": 0.275,
-      "speed_3": 0.275,
-      "2x proba": 0.15,
-      "condition": "nestFactory"
-    },
-    {
-      "id": "Charline",
-      "upgrade_profile": "common_character",
-      "level": 18,
-      "speed_1": 0.275,
-      "condition_1": "nestFactory",
-      "speed_2": 0.275,
-      "speed_3": 0.275,
-      "2x proba": 0.17,
-      "condition": "nestFactory"
-    },
-    {
-      "id": "Charline",
-      "upgrade_profile": "common_character",
-      "level": 19,
-      "speed_1": 0.275,
-      "condition_1": "nestFactory",
-      "speed_2": 0.275,
-      "speed_3": 0.275,
-      "2x proba": 0.19,
-      "condition": "nestFactory"
-    },
-    {
-      "id": "Charline",
-      "upgrade_profile": "common_character",
-      "level": 20,
-      "speed_1": 0.275,
-      "condition_1": "nestFactory",
-      "speed_2": 0.275,
-      "speed_3": 0.275,
-      "2x proba": 0.21,
-      "condition": "nestFactory"
-    },
-    {
-      "id": "Dominique",
-      "upgrade_profile": "common_character",
-      "level": 1,
-      "speed_1": 0.05,
-      "condition_1": "nenufarFarm",
-      "speed_2": 0.05,
-      "speed_3": 0.05,
-      "2x proba": 0,
-      "condition": "nenufarFarm"
-    },
-    {
-      "id": "Dominique",
-      "upgrade_profile": "common_character",
-      "level": 2,
-      "speed_1": 0.075,
-      "condition_1": "nenufarFarm",
-      "speed_2": 0.075,
-      "speed_3": 0.075,
-      "2x proba": 0,
-      "condition": "nenufarFarm"
-    },
-    {
-      "id": "Dominique",
-      "upgrade_profile": "common_character",
-      "level": 3,
-      "speed_1": 0.1,
-      "condition_1": "nenufarFarm",
-      "speed_2": 0.1,
-      "speed_3": 0.1,
-      "2x proba": 0,
-      "condition": "nenufarFarm"
-    },
-    {
-      "id": "Dominique",
-      "upgrade_profile": "common_character",
-      "level": 4,
-      "speed_1": 0.125,
-      "condition_1": "nenufarFarm",
-      "speed_2": 0.125,
-      "speed_3": 0.125,
-      "2x proba": 0,
-      "condition": "nenufarFarm"
-    },
-    {
-      "id": "Dominique",
-      "upgrade_profile": "common_character",
-      "level": 5,
-      "speed_1": 0.15,
-      "condition_1": "nenufarFarm",
-      "speed_2": 0.15,
-      "speed_3": 0.15,
-      "2x proba": 0,
-      "condition": "nenufarFarm"
-    },
-    {
-      "id": "Dominique",
-      "upgrade_profile": "common_character",
-      "level": 6,
-      "speed_1": 0.15,
-      "condition_1": "nenufarFarm",
-      "speed_2": 0.15,
-      "speed_3": 0.15,
-      "2x proba": 0.03,
-      "condition": "nenufarFarm"
-    },
-    {
-      "id": "Dominique",
-      "upgrade_profile": "common_character",
-      "level": 7,
-      "speed_1": 0.15,
-      "condition_1": "nenufarFarm",
-      "speed_2": 0.15,
-      "speed_3": 0.15,
-      "2x proba": 0.05,
-      "condition": "nenufarFarm"
-    },
-    {
-      "id": "Dominique",
-      "upgrade_profile": "common_character",
-      "level": 8,
-      "speed_1": 0.15,
-      "condition_1": "nenufarFarm",
-      "speed_2": 0.15,
-      "speed_3": 0.15,
-      "2x proba": 0.07,
-      "condition": "nenufarFarm"
-    },
-    {
-      "id": "Dominique",
-      "upgrade_profile": "common_character",
-      "level": 9,
-      "speed_1": 0.15,
-      "condition_1": "nenufarFarm",
-      "speed_2": 0.15,
-      "speed_3": 0.15,
-      "2x proba": 0.09,
-      "condition": "nenufarFarm"
-    },
-    {
-      "id": "Dominique",
-      "upgrade_profile": "common_character",
-      "level": 10,
-      "speed_1": 0.15,
-      "condition_1": "nenufarFarm",
-      "speed_2": 0.15,
-      "speed_3": 0.15,
-      "2x proba": 0.11,
-      "condition": "nenufarFarm"
-    },
-    {
-      "id": "Dominique",
-      "upgrade_profile": "common_character",
-      "level": 11,
-      "speed_1": 0.175,
-      "condition_1": "nenufarFarm",
-      "speed_2": 0.175,
-      "speed_3": 0.175,
-      "2x proba": 0.11,
-      "condition": "nenufarFarm"
-    },
-    {
-      "id": "Dominique",
-      "upgrade_profile": "common_character",
-      "level": 12,
-      "speed_1": 0.2,
-      "condition_1": "nenufarFarm",
-      "speed_2": 0.2,
-      "speed_3": 0.2,
-      "2x proba": 0.11,
-      "condition": "nenufarFarm"
-    },
-    {
-      "id": "Dominique",
-      "upgrade_profile": "common_character",
-      "level": 13,
-      "speed_1": 0.225,
-      "condition_1": "nenufarFarm",
-      "speed_2": 0.225,
-      "speed_3": 0.225,
-      "2x proba": 0.11,
-      "condition": "nenufarFarm"
-    },
-    {
-      "id": "Dominique",
-      "upgrade_profile": "common_character",
-      "level": 14,
-      "speed_1": 0.25,
-      "condition_1": "nenufarFarm",
-      "speed_2": 0.25,
-      "speed_3": 0.25,
-      "2x proba": 0.11,
-      "condition": "nenufarFarm"
-    },
-    {
-      "id": "Dominique",
-      "upgrade_profile": "common_character",
-      "level": 15,
-      "speed_1": 0.275,
-      "condition_1": "nenufarFarm",
-      "speed_2": 0.275,
-      "speed_3": 0.275,
-      "2x proba": 0.11,
-      "condition": "nenufarFarm"
-    },
-    {
-      "id": "Dominique",
-      "upgrade_profile": "common_character",
-      "level": 16,
-      "speed_1": 0.275,
-      "condition_1": "nenufarFarm",
-      "speed_2": 0.275,
-      "speed_3": 0.275,
-      "2x proba": 0.13,
-      "condition": "nenufarFarm"
-    },
-    {
-      "id": "Dominique",
-      "upgrade_profile": "common_character",
-      "level": 17,
-      "speed_1": 0.275,
-      "condition_1": "nenufarFarm",
-      "speed_2": 0.275,
-      "speed_3": 0.275,
-      "2x proba": 0.15,
-      "condition": "nenufarFarm"
-    },
-    {
-      "id": "Dominique",
-      "upgrade_profile": "common_character",
-      "level": 18,
-      "speed_1": 0.275,
-      "condition_1": "nenufarFarm",
-      "speed_2": 0.275,
-      "speed_3": 0.275,
-      "2x proba": 0.17,
-      "condition": "nenufarFarm"
-    },
-    {
-      "id": "Dominique",
-      "upgrade_profile": "common_character",
-      "level": 19,
-      "speed_1": 0.275,
-      "condition_1": "nenufarFarm",
-      "speed_2": 0.275,
-      "speed_3": 0.275,
-      "2x proba": 0.19,
-      "condition": "nenufarFarm"
-    },
-    {
-      "id": "Dominique",
-      "upgrade_profile": "common_character",
-      "level": 20,
-      "speed_1": 0.275,
-      "condition_1": "nenufarFarm",
-      "speed_2": 0.275,
-      "speed_3": 0.275,
-      "2x proba": 0.21,
-      "condition": "nenufarFarm"
-    },
-    {
-      "id": "Erix",
-      "upgrade_profile": "common_character",
-      "level": 1,
-      "speed_1": 0.05,
-      "condition_1": "candleBabaYagaHut",
-      "speed_2": 0.05,
-      "speed_3": 0.05,
-      "2x proba": 0,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Erix",
-      "upgrade_profile": "common_character",
-      "level": 2,
-      "speed_1": 0.075,
-      "condition_1": "candleBabaYagaHut",
-      "speed_2": 0.075,
-      "speed_3": 0.075,
-      "2x proba": 0,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Erix",
-      "upgrade_profile": "common_character",
-      "level": 3,
-      "speed_1": 0.1,
-      "condition_1": "candleBabaYagaHut",
-      "speed_2": 0.1,
-      "speed_3": 0.1,
-      "2x proba": 0,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Erix",
-      "upgrade_profile": "common_character",
-      "level": 4,
-      "speed_1": 0.125,
-      "condition_1": "candleBabaYagaHut",
-      "speed_2": 0.125,
-      "speed_3": 0.125,
-      "2x proba": 0,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Erix",
-      "upgrade_profile": "common_character",
-      "level": 5,
-      "speed_1": 0.15,
-      "condition_1": "candleBabaYagaHut",
-      "speed_2": 0.15,
-      "speed_3": 0.15,
-      "2x proba": 0,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Erix",
-      "upgrade_profile": "common_character",
-      "level": 6,
-      "speed_1": 0.15,
-      "condition_1": "candleBabaYagaHut",
-      "speed_2": 0.15,
-      "speed_3": 0.15,
-      "2x proba": 0.03,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Erix",
-      "upgrade_profile": "common_character",
-      "level": 7,
-      "speed_1": 0.15,
-      "condition_1": "candleBabaYagaHut",
-      "speed_2": 0.15,
-      "speed_3": 0.15,
-      "2x proba": 0.05,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Erix",
-      "upgrade_profile": "common_character",
-      "level": 8,
-      "speed_1": 0.15,
-      "condition_1": "candleBabaYagaHut",
-      "speed_2": 0.15,
-      "speed_3": 0.15,
-      "2x proba": 0.07,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Erix",
-      "upgrade_profile": "common_character",
-      "level": 9,
-      "speed_1": 0.15,
-      "condition_1": "candleBabaYagaHut",
-      "speed_2": 0.15,
-      "speed_3": 0.15,
-      "2x proba": 0.09,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Erix",
-      "upgrade_profile": "common_character",
-      "level": 10,
-      "speed_1": 0.15,
-      "condition_1": "candleBabaYagaHut",
-      "speed_2": 0.15,
-      "speed_3": 0.15,
-      "2x proba": 0.11,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Erix",
-      "upgrade_profile": "common_character",
-      "level": 11,
-      "speed_1": 0.175,
-      "condition_1": "candleBabaYagaHut",
-      "speed_2": 0.175,
-      "speed_3": 0.175,
-      "2x proba": 0.11,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Erix",
-      "upgrade_profile": "common_character",
-      "level": 12,
-      "speed_1": 0.2,
-      "condition_1": "candleBabaYagaHut",
-      "speed_2": 0.2,
-      "speed_3": 0.2,
-      "2x proba": 0.11,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Erix",
-      "upgrade_profile": "common_character",
-      "level": 13,
-      "speed_1": 0.225,
-      "condition_1": "candleBabaYagaHut",
-      "speed_2": 0.225,
-      "speed_3": 0.225,
-      "2x proba": 0.11,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Erix",
-      "upgrade_profile": "common_character",
-      "level": 14,
-      "speed_1": 0.25,
-      "condition_1": "candleBabaYagaHut",
-      "speed_2": 0.25,
-      "speed_3": 0.25,
-      "2x proba": 0.11,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Erix",
-      "upgrade_profile": "common_character",
-      "level": 15,
-      "speed_1": 0.275,
-      "condition_1": "candleBabaYagaHut",
-      "speed_2": 0.275,
-      "speed_3": 0.275,
-      "2x proba": 0.11,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Erix",
-      "upgrade_profile": "common_character",
-      "level": 16,
-      "speed_1": 0.275,
-      "condition_1": "candleBabaYagaHut",
-      "speed_2": 0.275,
-      "speed_3": 0.275,
-      "2x proba": 0.13,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Erix",
-      "upgrade_profile": "common_character",
-      "level": 17,
-      "speed_1": 0.275,
-      "condition_1": "candleBabaYagaHut",
-      "speed_2": 0.275,
-      "speed_3": 0.275,
-      "2x proba": 0.15,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Erix",
-      "upgrade_profile": "common_character",
-      "level": 18,
-      "speed_1": 0.275,
-      "condition_1": "candleBabaYagaHut",
-      "speed_2": 0.275,
-      "speed_3": 0.275,
-      "2x proba": 0.17,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Erix",
-      "upgrade_profile": "common_character",
-      "level": 19,
-      "speed_1": 0.275,
-      "condition_1": "candleBabaYagaHut",
-      "speed_2": 0.275,
-      "speed_3": 0.275,
-      "2x proba": 0.19,
-      "condition": "candleBabaYagaHut"
-    },
-    {
-      "id": "Erix",
-      "upgrade_profile": "common_character",
-      "level": 20,
-      "speed_1": 0.275,
-      "condition_1": "candleBabaYagaHut",
-      "speed_2": 0.275,
-      "speed_3": 0.275,
-      "2x proba": 0.21,
-      "condition": "candleBabaYagaHut"
+      "id": "dog",
+      "name": "Dog",
+      "upgrade_profile": "common_character",
+      "typeSlot": "Dog",
+      "spriteIngame": "Dog",
+      "progress_profile": "level_profile_1",
+      "multiplier": 1.1,
+      "machine_1": "tennisBallFactory"
+    },
+    {
+      "id": "dogGermanShepherd",
+      "name": "German Shepherd",
+      "upgrade_profile": "rare_character",
+      "typeSlot": "Dog",
+      "spriteIngame": "Dog German Shepherd",
+      "progress_profile": "level_profile_2",
+      "multiplier": 1.2,
+      "machine_1": "tennisBallFactory",
+      "machine_2": "bottleMaker"
+    },
+    {
+      "id": "dogCoker",
+      "name": "San",
+      "upgrade_profile": "epic_character",
+      "typeSlot": "Dog",
+      "spriteIngame": "Dog Cocker",
+      "progress_profile": "level_profile_3",
+      "multiplier": 1.3,
+      "machine_1": "tennisBallFactory",
+      "machine_2": "bottleMaker",
+      "machine_3": "nestFactory"
+    },
+    {
+      "id": "dogGniocci",
+      "name": "Gniocci",
+      "upgrade_profile": "legendary_character",
+      "typeSlot": "Dog",
+      "spriteIngame": "Dog Gniocci",
+      "progress_profile": "level_profile_4",
+      "multiplier": 1.5,
+      "machine_1": "tennisBallFactory",
+      "machine_2": "bottleMaker",
+      "machine_3": "nestFactory",
+      "machine_4": "pillowMaker"
+    },
+    {
+      "id": "cat",
+      "name": "Emy",
+      "upgrade_profile": "common_character",
+      "typeSlot": "Cat",
+      "spriteIngame": "Cat",
+      "progress_profile": "level_profile_1",
+      "multiplier": 1.1,
+      "machine_1": "coffeeShop"
+    },
+    {
+      "id": "catGinger",
+      "name": "Tigrou",
+      "upgrade_profile": "common_character",
+      "typeSlot": "Cat",
+      "spriteIngame": "Cat Ginger",
+      "progress_profile": "level_profile_1",
+      "multiplier": 1.1,
+      "machine_1": "coffeeShop"
+    },
+    {
+      "id": "catBug",
+      "name": "Linux",
+      "upgrade_profile": "rare_character",
+      "typeSlot": "Cat",
+      "spriteIngame": "Cat Bug",
+      "progress_profile": "level_profile_2",
+      "multiplier": 1.2,
+      "machine_1": "coffeeShop",
+      "machine_2": "candleBabaYagaHut"
+    },
+    {
+      "id": "catSiamese",
+      "name": "Altesse",
+      "upgrade_profile": "rare_character",
+      "typeSlot": "Cat",
+      "spriteIngame": "Cat Siamese",
+      "progress_profile": "level_profile_2",
+      "multiplier": 1.2,
+      "machine_1": "coffeeShop",
+      "machine_2": "candleBabaYagaHut"
+    },
+    {
+      "id": "catMenkoun",
+      "name": "Marley",
+      "upgrade_profile": "epic_character",
+      "typeSlot": "Cat",
+      "spriteIngame": "Cat Menkoun",
+      "progress_profile": "level_profile_3",
+      "multiplier": 1.3,
+      "machine_1": "coffeeShop",
+      "machine_2": "candleBabaYagaHut",
+      "machine_3": "pillowMaker"
+    },
+    {
+      "id": "catSphinx",
+      "name": "Bastet",
+      "upgrade_profile": "epic_character",
+      "typeSlot": "Cat",
+      "spriteIngame": "Cat Sphinx",
+      "progress_profile": "level_profile_3",
+      "multiplier": 1.3,
+      "machine_1": "coffeeShop",
+      "machine_2": "candleBabaYagaHut",
+      "machine_3": "pillowMaker"
+    },
+    {
+      "id": "catWitch",
+      "name": "Bowi",
+      "upgrade_profile": "legendary_character",
+      "typeSlot": "Cat",
+      "spriteIngame": "Cat Witch",
+      "progress_profile": "level_profile_4",
+      "multiplier": 1.5,
+      "machine_1": "coffeeShop",
+      "machine_2": "candleBabaYagaHut",
+      "machine_3": "pillowMaker",
+      "machine_4": "gameStore"
+    },
+    {
+      "id": "rabbit",
+      "name": "Rabbit",
+      "upgrade_profile": "common_character",
+      "typeSlot": "Rabbit",
+      "spriteIngame": "Rabbit",
+      "progress_profile": "level_profile_1",
+      "multiplier": 1.1,
+      "machine_1": "carrotFarm"
+    },
+    {
+      "id": "rabbitEnglishLop",
+      "name": "English Lop",
+      "upgrade_profile": "rare_character",
+      "typeSlot": "Rabbit",
+      "spriteIngame": "Rabbit English Lop",
+      "progress_profile": "level_profile_2",
+      "multiplier": 1.2,
+      "machine_1": "carrotFarm",
+      "machine_2": "sandwichStore"
+    },
+    {
+      "id": "rabbitMyxomatose",
+      "name": "Myxo Rabbit",
+      "upgrade_profile": "epic_character",
+      "typeSlot": "Rabbit",
+      "spriteIngame": "Rabbit Myxomatose",
+      "progress_profile": "level_profile_3",
+      "multiplier": 1.3,
+      "machine_1": "carrotFarm",
+      "machine_2": "sandwichStore",
+      "machine_3": "croissantMaker"
+    },
+    {
+      "id": "rabbitRobot",
+      "name": "Meca Rabbit",
+      "upgrade_profile": "legendary_character",
+      "typeSlot": "Rabbit",
+      "spriteIngame": "Rabbit Robot",
+      "progress_profile": "level_profile_3",
+      "multiplier": 1.5,
+      "machine_1": "carrotFarm",
+      "machine_2": "sandwichStore",
+      "machine_3": "croissantMaker"
+    },
+    {
+      "id": "sloth",
+      "name": "Sloth",
+      "upgrade_profile": "common_character",
+      "typeSlot": "Sloth",
+      "spriteIngame": "Sloth",
+      "progress_profile": "level_profile_1",
+      "multiplier": 1.1,
+      "machine_1": "pillowMaker"
+    },
+    {
+      "id": "slothVolcanosloth",
+      "name": "Volcanosloth",
+      "upgrade_profile": "rare_character",
+      "typeSlot": "Sloth",
+      "spriteIngame": "Sloth VolcanoSloth",
+      "progress_profile": "level_profile_2",
+      "multiplier": 1.2,
+      "machine_1": "pillowMaker",
+      "machine_2": "candleBabaYagaHut"
+    },
+    {
+      "id": "slothCosmosloth",
+      "name": "Cosmosloth",
+      "upgrade_profile": "legendary_character",
+      "typeSlot": "Sloth",
+      "spriteIngame": "Sloth CosmoSloth",
+      "progress_profile": "level_profile_4",
+      "multiplier": 1.5,
+      "machine_1": "pillowMaker",
+      "machine_2": "candleBabaYagaHut",
+      "machine_3": "gameStore",
+      "machine_4": "nenupharFarm"
+    },
+    {
+      "id": "octopus",
+      "name": "Octopus",
+      "upgrade_profile": "common_character",
+      "typeSlot": "Octopus",
+      "spriteIngame": "Octopus",
+      "progress_profile": "level_profile_1",
+      "multiplier": 1.1,
+      "machine_1": "bottleMaker"
+    },
+    {
+      "id": "octopusPirate",
+      "name": "Captain Octo",
+      "upgrade_profile": "rare_character",
+      "typeSlot": "Octopus",
+      "spriteIngame": "Octopus Pirate",
+      "progress_profile": "level_profile_2",
+      "multiplier": 1.2,
+      "machine_1": "bottleMaker",
+      "machine_2": "tennisBallFactory"
+    },
+    {
+      "id": "octopusRobot",
+      "name": "Roboctopus",
+      "upgrade_profile": "legendary_character",
+      "typeSlot": "Octopus",
+      "spriteIngame": "Octopus Robot",
+      "progress_profile": "level_profile_3",
+      "multiplier": 1.5,
+      "machine_1": "bottleMaker",
+      "machine_2": "tennisBallFactory",
+      "machine_3": "nestFactory"
+    },
+    {
+      "id": "frog",
+      "name": "Frog",
+      "upgrade_profile": "common_character",
+      "typeSlot": "Frog",
+      "spriteIngame": "Frog",
+      "progress_profile": "level_profile_1",
+      "multiplier": 1.1,
+      "machine_1": "nenupharFarm"
+    },
+    {
+      "id": "frogToad",
+      "name": "Toad",
+      "upgrade_profile": "rare_character",
+      "typeSlot": "Frog",
+      "spriteIngame": "Frog Toad",
+      "progress_profile": "level_profile_2",
+      "multiplier": 1.2,
+      "machine_1": "nenupharFarm",
+      "machine_2": "nestFactory"
+    },
+    {
+      "id": "frogVenomous",
+      "name": "Venomous Frog",
+      "upgrade_profile": "epic_character",
+      "typeSlot": "Frog",
+      "spriteIngame": "Frog Venomous",
+      "progress_profile": "level_profile_3",
+      "multiplier": 1.3,
+      "machine_1": "nenupharFarm",
+      "machine_2": "nestFactory",
+      "machine_3": "gameStore"
+    },
+    {
+      "id": "frogCaptain",
+      "name": "General Frog",
+      "upgrade_profile": "legendary_character",
+      "typeSlot": "Frog",
+      "spriteIngame": "Frog Captain",
+      "progress_profile": "level_profile_3",
+      "multiplier": 1.5,
+      "machine_1": "nenupharFarm",
+      "machine_2": "nestFactory",
+      "machine_3": "gameStore"
+    },
+    {
+      "id": "foxWild",
+      "name": "Wild Fox",
+      "upgrade_profile": "rare_character",
+      "typeSlot": "Fox",
+      "spriteIngame": "Fox Wild",
+      "progress_profile": "level_profile_3",
+      "multiplier": 1.2,
+      "machine_1": "sandwichStore",
+      "machine_2": "carrotFarm",
+      "machine_3": "croissantMaker"
+    },
+    {
+      "id": "foxSnow",
+      "name": "Snow Fox",
+      "upgrade_profile": "epic_character",
+      "typeSlot": "Fox",
+      "spriteIngame": "Fox Snow",
+      "progress_profile": "level_profile_3",
+      "multiplier": 1.3,
+      "machine_1": "sandwichStore",
+      "machine_2": "carrotFarm",
+      "machine_3": "croissantMaker"
+    },
+    {
+      "id": "foxRobinHood",
+      "name": "Robin Hood",
+      "upgrade_profile": "legendary_character",
+      "typeSlot": "Fox",
+      "spriteIngame": "Fox Robin Hood",
+      "progress_profile": "level_profile_3",
+      "multiplier": 1.5,
+      "machine_1": "sandwichStore",
+      "machine_2": "carrotFarm",
+      "machine_3": "croissantMaker"
+    },
+    {
+      "id": "owl",
+      "name": "Owl",
+      "upgrade_profile": "common_character",
+      "typeSlot": "Owl",
+      "spriteIngame": "Owl",
+      "progress_profile": "level_profile_1",
+      "multiplier": 1.1,
+      "machine_1": "nestFactory"
+    },
+    {
+      "id": "owlAcademic",
+      "name": "Professor Owl",
+      "upgrade_profile": "rare_character",
+      "typeSlot": "Owl",
+      "spriteIngame": "Owl Academic",
+      "progress_profile": "level_profile_2",
+      "multiplier": 1.2,
+      "machine_1": "nestFactory",
+      "machine_2": "bottleMaker"
+    },
+    {
+      "id": "owlSnow",
+      "name": "Snow Owl",
+      "upgrade_profile": "rare_character",
+      "typeSlot": "Owl",
+      "spriteIngame": "Owl Snow",
+      "progress_profile": "level_profile_2",
+      "multiplier": 1.2,
+      "machine_1": "nestFactory",
+      "machine_2": "bottleMaker"
+    },
+    {
+      "id": "owlGreatHornedOwl",
+      "name": "Great Horned Owl",
+      "upgrade_profile": "epic_character",
+      "typeSlot": "Owl",
+      "spriteIngame": "Owl Great Horned Owl",
+      "progress_profile": "level_profile_3",
+      "multiplier": 1.3,
+      "machine_1": "nestFactory",
+      "machine_2": "bottleMaker",
+      "machine_3": "nenupharFarm"
+    },
+    {
+      "id": "owlCosmonaute",
+      "name": "Cosmowl",
+      "upgrade_profile": "legendary_character",
+      "typeSlot": "Owl",
+      "spriteIngame": "Owl Cosmonaute",
+      "progress_profile": "level_profile_4",
+      "multiplier": 1.5,
+      "machine_1": "nestFactory",
+      "machine_2": "bottleMaker",
+      "machine_3": "nenupharFarm",
+      "machine_4": "tennisBallFactory"
+    },
+    {
+      "id": "crow",
+      "name": "Crow",
+      "upgrade_profile": "common_character",
+      "typeSlot": "Crow",
+      "spriteIngame": "Crow",
+      "progress_profile": "level_profile_1",
+      "multiplier": 1.1,
+      "machine_1": "gameStore"
+    },
+    {
+      "id": "crowThreeEyes",
+      "name": "Three Eyes Crow",
+      "upgrade_profile": "rare_character",
+      "typeSlot": "Crow",
+      "spriteIngame": "Crow Three Eyes",
+      "progress_profile": "level_profile_2",
+      "multiplier": 1.2,
+      "machine_1": "gameStore",
+      "machine_2": "candleBabaYagaHut"
+    },
+    {
+      "id": "crowWhite",
+      "name": "White Crow",
+      "upgrade_profile": "rare_character",
+      "typeSlot": "Crow",
+      "spriteIngame": "Crow White",
+      "progress_profile": "level_profile_2",
+      "multiplier": 1.2,
+      "machine_1": "gameStore",
+      "machine_2": "candleBabaYagaHut"
+    },
+    {
+      "id": "crowSkeleton",
+      "name": "Skeleton Crow",
+      "upgrade_profile": "epic_character",
+      "typeSlot": "Crow",
+      "spriteIngame": "Crow Skeleton",
+      "progress_profile": "level_profile_3",
+      "multiplier": 1.3,
+      "machine_1": "gameStore",
+      "machine_2": "candleBabaYagaHut",
+      "machine_3": "coffeeShop"
+    },
+    {
+      "id": "crowVolcanic",
+      "name": "Volcanic Crow",
+      "upgrade_profile": "legendary_character",
+      "typeSlot": "Crow",
+      "spriteIngame": "Crow Volcanic",
+      "progress_profile": "level_profile_4",
+      "multiplier": 1.5,
+      "machine_1": "gameStore",
+      "machine_2": "candleBabaYagaHut",
+      "machine_3": "coffeeShop",
+      "machine_4": "pillowMaker"
+    },
+    {
+      "id": "redPanda",
+      "name": "Red Panda",
+      "upgrade_profile": "epic_character",
+      "typeSlot": "Red Panda",
+      "spriteIngame": "Red Panda",
+      "progress_profile": "level_profile_3",
+      "multiplier": 1.3,
+      "machine_1": "nestFactory",
+      "machine_2": "croissantMaker",
+      "machine_3": "candleBabaYagaHut"
+    },
+    {
+      "id": "redPandaKitsune",
+      "name": "Kitsune Red Panda",
+      "upgrade_profile": "legendary_character",
+      "typeSlot": "Red Panda",
+      "spriteIngame": "Red Panda Kitsune",
+      "progress_profile": "level_profile_5",
+      "multiplier": 1.5,
+      "machine_1": "nestFactory",
+      "machine_2": "croissantMaker",
+      "machine_3": "candleBabaYagaHut",
+      "machine_4": "sandwichStore",
+      "machine_5": "bottleMaker"
+    },
+    {
+      "id": "goat",
+      "name": "Goat ",
+      "upgrade_profile": "common_character",
+      "typeSlot": "Goat",
+      "spriteIngame": "Goat",
+      "progress_profile": "level_profile_1",
+      "multiplier": 1.1,
+      "machine_1": "candleBabaYagaHut"
+    },
+    {
+      "id": "bigBadWolf",
+      "name": "The Big Bad Wolf",
+      "upgrade_profile": "epic_character",
+      "typeSlot": "Big Bad Wolf",
+      "spriteIngame": "Big Bad Wolf",
+      "progress_profile": "level_profile_4",
+      "multiplier": 1.3,
+      "machine_1": "candleBabaYagaHut",
+      "machine_2": "gameStore",
+      "machine_3": "nenupharFarm",
+      "machine_4": "pillowMaker"
+    },
+    {
+      "id": "bigBadWolfMythic",
+      "name": "Mythic Wolf",
+      "upgrade_profile": "legendary_character",
+      "typeSlot": "Big Bad Wolf",
+      "spriteIngame": "Big Bad Wolf Mythic",
+      "progress_profile": "level_profile_6",
+      "multiplier": 1.5,
+      "machine_1": "candleBabaYagaHut",
+      "machine_2": "gameStore",
+      "machine_3": "nenupharFarm",
+      "machine_4": "pillowMaker",
+      "machine_5": "bottleMaker",
+      "machine_6": "tennisBallFactory"
+    },
+    {
+      "id": "falcon",
+      "name": "Falcon",
+      "upgrade_profile": "rare_character",
+      "typeSlot": "Falcon",
+      "spriteIngame": "Falcon",
+      "progress_profile": "level_profile_4",
+      "multiplier": 1.2,
+      "machine_1": "nestFactory",
+      "machine_2": "sandwichStore",
+      "machine_3": "carrotFarm",
+      "machine_4": "bottleMaker"
+    },
+    {
+      "id": "robin",
+      "name": "Robin",
+      "upgrade_profile": "rare_character",
+      "typeSlot": "Robin",
+      "spriteIngame": "Robin",
+      "progress_profile": "level_profile_3",
+      "multiplier": 1.2,
+      "machine_1": "croissantMaker",
+      "machine_2": "sandwichStore",
+      "machine_3": "carrotFarm"
     }
   ],
-  "characters_upgrade": [
+  "character_slot": [
     {
-      "id": "common_character"
+      "id": "slot_tennisBall",
+      "order": 1,
+      "containment": "Dog"
     },
     {
-      "id": "rare_character"
+      "id": "slot_tennisBall",
+      "order": 1,
+      "containment": "Octopus"
     },
     {
-      "id": "epic_character"
+      "id": "slot_tennisBall",
+      "order": 1,
+      "containment": "Owl"
     },
     {
-      "id": "legendary_character"
+      "id": "slot_tennisBall",
+      "order": 1,
+      "containment": "Big Bad Wolf"
+    },
+    {
+      "id": "slot_coffee",
+      "order": 2,
+      "containment": "Cat"
+    },
+    {
+      "id": "slot_coffee",
+      "order": 2,
+      "containment": "Crow"
+    },
+    {
+      "id": "slot_carrot",
+      "order": 3,
+      "containment": "Rabbit"
+    },
+    {
+      "id": "slot_carrot",
+      "order": 3,
+      "containment": "Fox"
+    },
+    {
+      "id": "slot_carrot",
+      "order": 3,
+      "containment": "Falcon"
+    },
+    {
+      "id": "slot_carrot",
+      "order": 3,
+      "containment": "Robin"
+    },
+    {
+      "id": "slot_nenuphar",
+      "order": 4,
+      "containment": "Sloth"
+    },
+    {
+      "id": "slot_nenuphar",
+      "order": 4,
+      "containment": "Frog"
+    },
+    {
+      "id": "slot_nenuphar",
+      "order": 4,
+      "containment": "Owl"
+    },
+    {
+      "id": "slot_nenuphar",
+      "order": 4,
+      "containment": "Big Bad Wolf"
+    },
+    {
+      "id": "slot_pillow",
+      "order": 5,
+      "containment": "Dog"
+    },
+    {
+      "id": "slot_pillow",
+      "order": 5,
+      "containment": "Cat"
+    },
+    {
+      "id": "slot_pillow",
+      "order": 5,
+      "containment": "Sloth"
+    },
+    {
+      "id": "slot_pillow",
+      "order": 5,
+      "containment": "Crow"
+    },
+    {
+      "id": "slot_pillow",
+      "order": 5,
+      "containment": "Big Bad Wolf"
+    },
+    {
+      "id": "slot_bottle",
+      "order": 6,
+      "containment": "Dog"
+    },
+    {
+      "id": "slot_bottle",
+      "order": 6,
+      "containment": "Octopus"
+    },
+    {
+      "id": "slot_bottle",
+      "order": 6,
+      "containment": "Owl"
+    },
+    {
+      "id": "slot_bottle",
+      "order": 6,
+      "containment": "Red Panda"
+    },
+    {
+      "id": "slot_bottle",
+      "order": 6,
+      "containment": "Big Bad Wolf"
+    },
+    {
+      "id": "slot_bottle",
+      "order": 6,
+      "containment": "Falcon"
+    },
+    {
+      "id": "slot_sandwitch",
+      "order": 7,
+      "containment": "Rabbit"
+    },
+    {
+      "id": "slot_sandwitch",
+      "order": 7,
+      "containment": "Fox"
+    },
+    {
+      "id": "slot_sandwitch",
+      "order": 7,
+      "containment": "Red Panda"
+    },
+    {
+      "id": "slot_sandwitch",
+      "order": 7,
+      "containment": "Falcon"
+    },
+    {
+      "id": "slot_sandwitch",
+      "order": 7,
+      "containment": "Robin"
+    },
+    {
+      "id": "slot_nest",
+      "order": 8,
+      "containment": "Dog"
+    },
+    {
+      "id": "slot_nest",
+      "order": 8,
+      "containment": "Octopus"
+    },
+    {
+      "id": "slot_nest",
+      "order": 8,
+      "containment": "Frog"
+    },
+    {
+      "id": "slot_nest",
+      "order": 8,
+      "containment": "Owl"
+    },
+    {
+      "id": "slot_nest",
+      "order": 8,
+      "containment": "Red Panda"
+    },
+    {
+      "id": "slot_nest",
+      "order": 8,
+      "containment": "Falcon"
+    },
+    {
+      "id": "slot_croissant",
+      "order": 9,
+      "containment": "Rabbit"
+    },
+    {
+      "id": "slot_croissant",
+      "order": 9,
+      "containment": "Fox"
+    },
+    {
+      "id": "slot_croissant",
+      "order": 9,
+      "containment": "Red Panda"
+    },
+    {
+      "id": "slot_croissant",
+      "order": 9,
+      "containment": "Robin"
+    },
+    {
+      "id": "slot_candle",
+      "order": 10,
+      "containment": "Cat"
+    },
+    {
+      "id": "slot_candle",
+      "order": 10,
+      "containment": "Sloth"
+    },
+    {
+      "id": "slot_candle",
+      "order": 10,
+      "containment": "Crow"
+    },
+    {
+      "id": "slot_candle",
+      "order": 10,
+      "containment": "Red Panda"
+    },
+    {
+      "id": "slot_candle",
+      "order": 10,
+      "containment": "Goat"
+    },
+    {
+      "id": "slot_candle",
+      "order": 10,
+      "containment": "Big Bad Wolf"
+    },
+    {
+      "id": "slot_blackLotus",
+      "order": 11,
+      "containment": "Cat"
+    },
+    {
+      "id": "slot_blackLotus",
+      "order": 11,
+      "containment": "Sloth"
+    },
+    {
+      "id": "slot_blackLotus",
+      "order": 11,
+      "containment": "Frog"
+    },
+    {
+      "id": "slot_blackLotus",
+      "order": 11,
+      "containment": "Crow"
+    },
+    {
+      "id": "slot_blackLotus",
+      "order": 11,
+      "containment": "Big Bad Wolf"
+    }
+  ],
+  "character_progress_profile": [
+    {
+      "id": "multiplier_profile_1",
+      "machine1": 1.1
+    },
+    {
+      "id": "level_profile_1",
+      "level": 1,
+      "machine1": 0
+    },
+    {
+      "id": "level_profile_1",
+      "level": 2,
+      "machine1": 1.2100000000000002
+    },
+    {
+      "id": "level_profile_1",
+      "level": 3,
+      "machine1": 1.3310000000000004
+    },
+    {
+      "id": "level_profile_1",
+      "level": 4,
+      "machine1": 1.4641000000000004
+    },
+    {
+      "id": "level_profile_1",
+      "level": 5,
+      "machine1": 1.6105100000000006
+    },
+    {
+      "id": "level_profile_1",
+      "level": 6,
+      "machine1": 3.5431220000000017
+    },
+    {
+      "id": "level_profile_1",
+      "level": 7,
+      "machine1": 3.8974342000000024
+    },
+    {
+      "id": "level_profile_1",
+      "level": 8,
+      "machine1": 4.287177620000003
+    },
+    {
+      "id": "level_profile_1",
+      "level": 9,
+      "machine1": 4.715895382000004
+    },
+    {
+      "id": "level_profile_1",
+      "level": 10,
+      "machine1": 7.781227380300007
+    },
+    {
+      "id": "level_profile_1",
+      "level": 11,
+      "machine1": 8.559350118330007
+    },
+    {
+      "id": "level_profile_1",
+      "level": 12,
+      "machine1": 9.41528513016301
+    },
+    {
+      "id": "level_profile_1",
+      "level": 13,
+      "machine1": 10.356813643179311
+    },
+    {
+      "id": "level_profile_1",
+      "level": 14,
+      "machine1": 15.189993343329657
+    },
+    {
+      "id": "level_profile_1",
+      "level": 15,
+      "machine1": 16.708992677662625
+    },
+    {
+      "id": "level_profile_1",
+      "level": 16,
+      "machine1": 18.379891945428888
+    },
+    {
+      "id": "level_profile_1",
+      "level": 17,
+      "machine1": 20.21788113997178
+    },
+    {
+      "id": "level_profile_1",
+      "level": 18,
+      "machine1": 27.799586567461198
+    },
+    {
+      "id": "level_profile_1",
+      "level": 19,
+      "machine1": 30.579545224207322
+    },
+    {
+      "id": "level_profile_1",
+      "level": 20,
+      "machine1": 33.63749974662805
+    },
+    {
+      "id": "multiplier_profile_2",
+      "machine1": 1.05,
+      "machine2": 1.05
+    },
+    {
+      "id": "level_profile_2",
+      "level": 1,
+      "machine1": 0,
+      "machine2": 0
+    },
+    {
+      "id": "level_profile_2",
+      "level": 2,
+      "machine1": 1,
+      "machine2": 0
+    },
+    {
+      "id": "level_profile_2",
+      "level": 3,
+      "machine1": 1,
+      "machine2": 2
+    },
+    {
+      "id": "level_profile_2",
+      "level": 4,
+      "machine1": 2,
+      "machine2": 2
+    },
+    {
+      "id": "level_profile_2",
+      "level": 5,
+      "machine1": 2,
+      "machine2": 3
+    },
+    {
+      "id": "level_profile_2",
+      "level": 6,
+      "machine1": 4,
+      "machine2": 3
+    },
+    {
+      "id": "level_profile_2",
+      "level": 7,
+      "machine1": 4,
+      "machine2": 5
+    },
+    {
+      "id": "level_profile_2",
+      "level": 8,
+      "machine1": 6,
+      "machine2": 5
+    },
+    {
+      "id": "level_profile_2",
+      "level": 9,
+      "machine1": 6,
+      "machine2": 7
+    },
+    {
+      "id": "level_profile_2",
+      "level": 10,
+      "machine1": 8,
+      "machine2": 7
+    },
+    {
+      "id": "level_profile_2",
+      "level": 11,
+      "machine1": 8,
+      "machine2": 9
+    },
+    {
+      "id": "level_profile_2",
+      "level": 12,
+      "machine1": 11,
+      "machine2": 9
+    },
+    {
+      "id": "level_profile_2",
+      "level": 13,
+      "machine1": 11,
+      "machine2": 12
+    },
+    {
+      "id": "level_profile_2",
+      "level": 14,
+      "machine1": 14,
+      "machine2": 12
+    },
+    {
+      "id": "level_profile_2",
+      "level": 15,
+      "machine1": 14,
+      "machine2": 16
+    },
+    {
+      "id": "level_profile_2",
+      "level": 16,
+      "machine1": 17,
+      "machine2": 16
+    },
+    {
+      "id": "level_profile_2",
+      "level": 17,
+      "machine1": 17,
+      "machine2": 19
+    },
+    {
+      "id": "level_profile_2",
+      "level": 18,
+      "machine1": 22,
+      "machine2": 19
+    },
+    {
+      "id": "level_profile_2",
+      "level": 19,
+      "machine1": 22,
+      "machine2": 24
+    },
+    {
+      "id": "level_profile_2",
+      "level": 20,
+      "machine1": 27,
+      "machine2": 24
+    },
+    {
+      "id": "multiplier_profile_3",
+      "machine1": 1.04,
+      "machine2": 1.03,
+      "machine3": 1.02
+    },
+    {
+      "id": "level_profile_3",
+      "level": 1,
+      "machine1": 0,
+      "machine2": 0,
+      "machine3": 0
+    },
+    {
+      "id": "level_profile_3",
+      "level": 2,
+      "machine1": 0,
+      "machine2": 1,
+      "machine3": 0
+    },
+    {
+      "id": "level_profile_3",
+      "level": 3,
+      "machine1": 1,
+      "machine2": 1,
+      "machine3": 0
+    },
+    {
+      "id": "level_profile_3",
+      "level": 4,
+      "machine1": 1,
+      "machine2": 1,
+      "machine3": 1
+    },
+    {
+      "id": "level_profile_3",
+      "level": 5,
+      "machine1": 1,
+      "machine2": 2,
+      "machine3": 1
+    },
+    {
+      "id": "level_profile_3",
+      "level": 6,
+      "machine1": 3,
+      "machine2": 2,
+      "machine3": 1
+    },
+    {
+      "id": "level_profile_3",
+      "level": 7,
+      "machine1": 3,
+      "machine2": 2,
+      "machine3": 3
+    },
+    {
+      "id": "level_profile_3",
+      "level": 8,
+      "machine1": 3,
+      "machine2": 3,
+      "machine3": 3
+    },
+    {
+      "id": "level_profile_3",
+      "level": 9,
+      "machine1": 4,
+      "machine2": 3,
+      "machine3": 3
+    },
+    {
+      "id": "level_profile_3",
+      "level": 10,
+      "machine1": 4,
+      "machine2": 3,
+      "machine3": 4
+    },
+    {
+      "id": "level_profile_3",
+      "level": 11,
+      "machine1": 4,
+      "machine2": 5,
+      "machine3": 4
+    },
+    {
+      "id": "level_profile_3",
+      "level": 12,
+      "machine1": 6,
+      "machine2": 5,
+      "machine3": 4
+    },
+    {
+      "id": "level_profile_3",
+      "level": 13,
+      "machine1": 6,
+      "machine2": 5,
+      "machine3": 6
+    },
+    {
+      "id": "level_profile_3",
+      "level": 14,
+      "machine1": 6,
+      "machine2": 7,
+      "machine3": 6
+    },
+    {
+      "id": "level_profile_3",
+      "level": 15,
+      "machine1": 9,
+      "machine2": 7,
+      "machine3": 6
+    },
+    {
+      "id": "level_profile_3",
+      "level": 16,
+      "machine1": 9,
+      "machine2": 7,
+      "machine3": 7
+    },
+    {
+      "id": "level_profile_3",
+      "level": 17,
+      "machine1": 9,
+      "machine2": 9,
+      "machine3": 7
+    },
+    {
+      "id": "level_profile_3",
+      "level": 18,
+      "machine1": 12,
+      "machine2": 9,
+      "machine3": 7
+    },
+    {
+      "id": "level_profile_3",
+      "level": 19,
+      "machine1": 12,
+      "machine2": 9,
+      "machine3": 9
+    },
+    {
+      "id": "level_profile_3",
+      "level": 20,
+      "machine1": 12,
+      "machine2": 12,
+      "machine3": 9
+    },
+    {
+      "id": "multiplier_profile_4",
+      "machine1": 1.05,
+      "machine2": 1.03,
+      "machine3": 1.02,
+      "machine4": 1
+    },
+    {
+      "id": "level_profile_4",
+      "level": 1,
+      "machine1": 0,
+      "machine2": 0,
+      "machine3": 0,
+      "machine4": 0
+    },
+    {
+      "id": "level_profile_4",
+      "level": 2,
+      "machine1": 0,
+      "machine2": 0,
+      "machine3": 1,
+      "machine4": 0
+    },
+    {
+      "id": "level_profile_4",
+      "level": 3,
+      "machine1": 0,
+      "machine2": 1,
+      "machine3": 1,
+      "machine4": 0
+    },
+    {
+      "id": "level_profile_4",
+      "level": 4,
+      "machine1": 2,
+      "machine2": 1,
+      "machine3": 1,
+      "machine4": 0
+    },
+    {
+      "id": "level_profile_4",
+      "level": 5,
+      "machine1": 2,
+      "machine2": 1,
+      "machine3": 1,
+      "machine4": 2
+    },
+    {
+      "id": "level_profile_4",
+      "level": 6,
+      "machine1": 2,
+      "machine2": 1,
+      "machine3": 2,
+      "machine4": 2
+    },
+    {
+      "id": "level_profile_4",
+      "level": 7,
+      "machine1": 2,
+      "machine2": 3,
+      "machine3": 2,
+      "machine4": 2
+    },
+    {
+      "id": "level_profile_4",
+      "level": 8,
+      "machine1": 3,
+      "machine2": 3,
+      "machine3": 2,
+      "machine4": 2
+    },
+    {
+      "id": "level_profile_4",
+      "level": 9,
+      "machine1": 3,
+      "machine2": 3,
+      "machine3": 2,
+      "machine4": 3
+    },
+    {
+      "id": "level_profile_4",
+      "level": 10,
+      "machine1": 3,
+      "machine2": 3,
+      "machine3": 4,
+      "machine4": 3
+    },
+    {
+      "id": "level_profile_4",
+      "level": 11,
+      "machine1": 3,
+      "machine2": 4,
+      "machine3": 4,
+      "machine4": 3
+    },
+    {
+      "id": "level_profile_4",
+      "level": 12,
+      "machine1": 6,
+      "machine2": 4,
+      "machine3": 4,
+      "machine4": 3
+    },
+    {
+      "id": "level_profile_4",
+      "level": 13,
+      "machine1": 6,
+      "machine2": 4,
+      "machine3": 4,
+      "machine4": 4
+    },
+    {
+      "id": "level_profile_4",
+      "level": 14,
+      "machine1": 6,
+      "machine2": 4,
+      "machine3": 5,
+      "machine4": 4
+    },
+    {
+      "id": "level_profile_4",
+      "level": 15,
+      "machine1": 6,
+      "machine2": 6,
+      "machine3": 5,
+      "machine4": 4
+    },
+    {
+      "id": "level_profile_4",
+      "level": 16,
+      "machine1": 9,
+      "machine2": 6,
+      "machine3": 5,
+      "machine4": 4
+    },
+    {
+      "id": "level_profile_4",
+      "level": 17,
+      "machine1": 9,
+      "machine2": 6,
+      "machine3": 5,
+      "machine4": 5
+    },
+    {
+      "id": "level_profile_4",
+      "level": 18,
+      "machine1": 9,
+      "machine2": 6,
+      "machine3": 7,
+      "machine4": 5
+    },
+    {
+      "id": "level_profile_4",
+      "level": 19,
+      "machine1": 9,
+      "machine2": 9,
+      "machine3": 7,
+      "machine4": 5
+    },
+    {
+      "id": "level_profile_4",
+      "level": 20,
+      "machine1": 14,
+      "machine2": 9,
+      "machine3": 7,
+      "machine4": 5
+    },
+    {
+      "id": "multiplier_profile_5",
+      "machine1": 1.04,
+      "machine2": 1.03,
+      "machine3": 1.02,
+      "machine4": 1.01,
+      "machine5": 1.009
+    },
+    {
+      "id": "level_profile_5",
+      "level": 1,
+      "machine1": 0,
+      "machine2": 0,
+      "machine3": 0,
+      "machine4": 0,
+      "machine5": 0
+    },
+    {
+      "id": "level_profile_5",
+      "level": 2,
+      "machine1": 0,
+      "machine2": 0,
+      "machine3": 0,
+      "machine4": 1,
+      "machine5": 0
+    },
+    {
+      "id": "level_profile_5",
+      "level": 3,
+      "machine1": 0,
+      "machine2": 0,
+      "machine3": 1,
+      "machine4": 1,
+      "machine5": 0
+    },
+    {
+      "id": "level_profile_5",
+      "level": 4,
+      "machine1": 0,
+      "machine2": 1,
+      "machine3": 1,
+      "machine4": 1,
+      "machine5": 0
+    },
+    {
+      "id": "level_profile_5",
+      "level": 5,
+      "machine1": 2,
+      "machine2": 1,
+      "machine3": 1,
+      "machine4": 1,
+      "machine5": 0
+    },
+    {
+      "id": "level_profile_5",
+      "level": 6,
+      "machine1": 2,
+      "machine2": 1,
+      "machine3": 1,
+      "machine4": 1,
+      "machine5": 2
+    },
+    {
+      "id": "level_profile_5",
+      "level": 7,
+      "machine1": 2,
+      "machine2": 1,
+      "machine3": 1,
+      "machine4": 2,
+      "machine5": 2
+    },
+    {
+      "id": "level_profile_5",
+      "level": 8,
+      "machine1": 2,
+      "machine2": 1,
+      "machine3": 2,
+      "machine4": 2,
+      "machine5": 2
+    },
+    {
+      "id": "level_profile_5",
+      "level": 9,
+      "machine1": 2,
+      "machine2": 3,
+      "machine3": 2,
+      "machine4": 2,
+      "machine5": 2
+    },
+    {
+      "id": "level_profile_5",
+      "level": 10,
+      "machine1": 3,
+      "machine2": 3,
+      "machine3": 2,
+      "machine4": 2,
+      "machine5": 2
+    },
+    {
+      "id": "level_profile_5",
+      "level": 11,
+      "machine1": 3,
+      "machine2": 3,
+      "machine3": 2,
+      "machine4": 2,
+      "machine5": 3
+    },
+    {
+      "id": "level_profile_5",
+      "level": 12,
+      "machine1": 3,
+      "machine2": 3,
+      "machine3": 2,
+      "machine4": 3,
+      "machine5": 3
+    },
+    {
+      "id": "level_profile_5",
+      "level": 13,
+      "machine1": 3,
+      "machine2": 3,
+      "machine3": 4,
+      "machine4": 3,
+      "machine5": 3
+    },
+    {
+      "id": "level_profile_5",
+      "level": 14,
+      "machine1": 3,
+      "machine2": 4,
+      "machine3": 4,
+      "machine4": 3,
+      "machine5": 3
+    },
+    {
+      "id": "level_profile_5",
+      "level": 15,
+      "machine1": 5,
+      "machine2": 4,
+      "machine3": 4,
+      "machine4": 3,
+      "machine5": 3
+    },
+    {
+      "id": "level_profile_5",
+      "level": 16,
+      "machine1": 5,
+      "machine2": 4,
+      "machine3": 4,
+      "machine4": 3,
+      "machine5": 4
+    },
+    {
+      "id": "level_profile_5",
+      "level": 17,
+      "machine1": 5,
+      "machine2": 4,
+      "machine3": 4,
+      "machine4": 4,
+      "machine5": 4
+    },
+    {
+      "id": "level_profile_5",
+      "level": 18,
+      "machine1": 5,
+      "machine2": 4,
+      "machine3": 5,
+      "machine4": 4,
+      "machine5": 4
+    },
+    {
+      "id": "level_profile_5",
+      "level": 19,
+      "machine1": 5,
+      "machine2": 7,
+      "machine3": 5,
+      "machine4": 4,
+      "machine5": 4
+    },
+    {
+      "id": "level_profile_5",
+      "level": 20,
+      "machine1": 9,
+      "machine2": 7,
+      "machine3": 5,
+      "machine4": 4,
+      "machine5": 4
+    },
+    {
+      "id": "multiplier_profile_6",
+      "machine1": 1.04,
+      "machine2": 1.03,
+      "machine3": 1.02,
+      "machine4": 1.01,
+      "machine5": 1.009,
+      "machine6": 1.006
+    },
+    {
+      "id": "level_profile_6",
+      "level": 1,
+      "machine1": 0,
+      "machine2": 0,
+      "machine3": 0,
+      "machine4": 0,
+      "machine5": 0,
+      "machine6": 1
+    },
+    {
+      "id": "level_profile_6",
+      "level": 2,
+      "machine1": 0,
+      "machine2": 0,
+      "machine3": 0,
+      "machine4": 0,
+      "machine5": 1,
+      "machine6": 1
+    },
+    {
+      "id": "level_profile_6",
+      "level": 3,
+      "machine1": 0,
+      "machine2": 0,
+      "machine3": 0,
+      "machine4": 1,
+      "machine5": 1,
+      "machine6": 1
+    },
+    {
+      "id": "level_profile_6",
+      "level": 4,
+      "machine1": 0,
+      "machine2": 0,
+      "machine3": 1,
+      "machine4": 1,
+      "machine5": 1,
+      "machine6": 1
+    },
+    {
+      "id": "level_profile_6",
+      "level": 5,
+      "machine1": 0,
+      "machine2": 1,
+      "machine3": 1,
+      "machine4": 1,
+      "machine5": 1,
+      "machine6": 1
+    },
+    {
+      "id": "level_profile_6",
+      "level": 6,
+      "machine1": 2,
+      "machine2": 1,
+      "machine3": 1,
+      "machine4": 1,
+      "machine5": 1,
+      "machine6": 1
+    },
+    {
+      "id": "level_profile_6",
+      "level": 7,
+      "machine1": 2,
+      "machine2": 1,
+      "machine3": 1,
+      "machine4": 1,
+      "machine5": 1,
+      "machine6": 2
+    },
+    {
+      "id": "level_profile_6",
+      "level": 8,
+      "machine1": 2,
+      "machine2": 1,
+      "machine3": 1,
+      "machine4": 1,
+      "machine5": 2,
+      "machine6": 2
+    },
+    {
+      "id": "level_profile_6",
+      "level": 9,
+      "machine1": 2,
+      "machine2": 1,
+      "machine3": 1,
+      "machine4": 2,
+      "machine5": 2,
+      "machine6": 2
+    },
+    {
+      "id": "level_profile_6",
+      "level": 10,
+      "machine1": 2,
+      "machine2": 1,
+      "machine3": 3,
+      "machine4": 2,
+      "machine5": 2,
+      "machine6": 2
+    },
+    {
+      "id": "level_profile_6",
+      "level": 11,
+      "machine1": 2,
+      "machine2": 3,
+      "machine3": 3,
+      "machine4": 2,
+      "machine5": 2,
+      "machine6": 2
+    },
+    {
+      "id": "level_profile_6",
+      "level": 12,
+      "machine1": 4,
+      "machine2": 3,
+      "machine3": 3,
+      "machine4": 2,
+      "machine5": 2,
+      "machine6": 2
+    },
+    {
+      "id": "level_profile_6",
+      "level": 13,
+      "machine1": 4,
+      "machine2": 3,
+      "machine3": 3,
+      "machine4": 2,
+      "machine5": 2,
+      "machine6": 3
+    },
+    {
+      "id": "level_profile_6",
+      "level": 14,
+      "machine1": 4,
+      "machine2": 3,
+      "machine3": 3,
+      "machine4": 2,
+      "machine5": 3,
+      "machine6": 3
+    },
+    {
+      "id": "level_profile_6",
+      "level": 15,
+      "machine1": 4,
+      "machine2": 3,
+      "machine3": 3,
+      "machine4": 3,
+      "machine5": 3,
+      "machine6": 3
+    },
+    {
+      "id": "level_profile_6",
+      "level": 16,
+      "machine1": 4,
+      "machine2": 3,
+      "machine3": 4,
+      "machine4": 3,
+      "machine5": 3,
+      "machine6": 3
+    },
+    {
+      "id": "level_profile_6",
+      "level": 17,
+      "machine1": 4,
+      "machine2": 5,
+      "machine3": 4,
+      "machine4": 3,
+      "machine5": 3,
+      "machine6": 3
+    },
+    {
+      "id": "level_profile_6",
+      "level": 18,
+      "machine1": 7,
+      "machine2": 5,
+      "machine3": 4,
+      "machine4": 3,
+      "machine5": 3,
+      "machine6": 3
+    },
+    {
+      "id": "level_profile_6",
+      "level": 19,
+      "machine1": 7,
+      "machine2": 5,
+      "machine3": 4,
+      "machine4": 3,
+      "machine5": 3,
+      "machine6": 4
+    },
+    {
+      "id": "level_profile_6",
+      "level": 20,
+      "machine1": 7,
+      "machine2": 5,
+      "machine3": 4,
+      "machine4": 3,
+      "machine5": 4,
+      "machine6": 4
+    },
+    {
+      "id": "multiplier_profile_7",
+      "machine1": 1.04,
+      "machine2": 1.03,
+      "machine3": 1.02,
+      "machine4": 1.01,
+      "machine5": 1.009,
+      "machine6": 1.006,
+      "machine7": 1.009
+    },
+    {
+      "id": "level_profile_7",
+      "level": 1,
+      "machine1": 0,
+      "machine2": 0,
+      "machine3": 0,
+      "machine4": 0,
+      "machine5": 0,
+      "machine6": 0,
+      "machine7": 0
+    },
+    {
+      "id": "level_profile_7",
+      "level": 2,
+      "machine1": 0,
+      "machine2": 0,
+      "machine3": 0,
+      "machine4": 0,
+      "machine5": 0,
+      "machine6": 1,
+      "machine7": 0
+    },
+    {
+      "id": "level_profile_7",
+      "level": 3,
+      "machine1": 0,
+      "machine2": 0,
+      "machine3": 0,
+      "machine4": 0,
+      "machine5": 1,
+      "machine6": 1,
+      "machine7": 0
+    },
+    {
+      "id": "level_profile_7",
+      "level": 4,
+      "machine1": 0,
+      "machine2": 0,
+      "machine3": 0,
+      "machine4": 1,
+      "machine5": 1,
+      "machine6": 1,
+      "machine7": 0
+    },
+    {
+      "id": "level_profile_7",
+      "level": 5,
+      "machine1": 0,
+      "machine2": 0,
+      "machine3": 1,
+      "machine4": 1,
+      "machine5": 1,
+      "machine6": 1,
+      "machine7": 0
+    },
+    {
+      "id": "level_profile_7",
+      "level": 6,
+      "machine1": 0,
+      "machine2": 2,
+      "machine3": 1,
+      "machine4": 1,
+      "machine5": 1,
+      "machine6": 1,
+      "machine7": 0
+    },
+    {
+      "id": "level_profile_7",
+      "level": 7,
+      "machine1": 2,
+      "machine2": 2,
+      "machine3": 1,
+      "machine4": 1,
+      "machine5": 1,
+      "machine6": 1,
+      "machine7": 0
+    },
+    {
+      "id": "level_profile_7",
+      "level": 8,
+      "machine1": 2,
+      "machine2": 2,
+      "machine3": 1,
+      "machine4": 1,
+      "machine5": 1,
+      "machine6": 1,
+      "machine7": 2
+    },
+    {
+      "id": "level_profile_7",
+      "level": 9,
+      "machine1": 2,
+      "machine2": 2,
+      "machine3": 1,
+      "machine4": 1,
+      "machine5": 1,
+      "machine6": 2,
+      "machine7": 2
+    },
+    {
+      "id": "level_profile_7",
+      "level": 10,
+      "machine1": 2,
+      "machine2": 2,
+      "machine3": 1,
+      "machine4": 1,
+      "machine5": 2,
+      "machine6": 2,
+      "machine7": 2
+    },
+    {
+      "id": "level_profile_7",
+      "level": 11,
+      "machine1": 2,
+      "machine2": 2,
+      "machine3": 1,
+      "machine4": 2,
+      "machine5": 2,
+      "machine6": 2,
+      "machine7": 2
+    },
+    {
+      "id": "level_profile_7",
+      "level": 12,
+      "machine1": 2,
+      "machine2": 2,
+      "machine3": 3,
+      "machine4": 2,
+      "machine5": 2,
+      "machine6": 2,
+      "machine7": 2
+    },
+    {
+      "id": "level_profile_7",
+      "level": 13,
+      "machine1": 2,
+      "machine2": 3,
+      "machine3": 3,
+      "machine4": 2,
+      "machine5": 2,
+      "machine6": 2,
+      "machine7": 2
+    },
+    {
+      "id": "level_profile_7",
+      "level": 14,
+      "machine1": 4,
+      "machine2": 3,
+      "machine3": 3,
+      "machine4": 2,
+      "machine5": 2,
+      "machine6": 2,
+      "machine7": 2
+    },
+    {
+      "id": "level_profile_7",
+      "level": 15,
+      "machine1": 4,
+      "machine2": 3,
+      "machine3": 3,
+      "machine4": 2,
+      "machine5": 2,
+      "machine6": 2,
+      "machine7": 3
+    },
+    {
+      "id": "level_profile_7",
+      "level": 16,
+      "machine1": 4,
+      "machine2": 3,
+      "machine3": 3,
+      "machine4": 2,
+      "machine5": 2,
+      "machine6": 3,
+      "machine7": 3
+    },
+    {
+      "id": "level_profile_7",
+      "level": 17,
+      "machine1": 4,
+      "machine2": 3,
+      "machine3": 3,
+      "machine4": 2,
+      "machine5": 3,
+      "machine6": 3,
+      "machine7": 3
+    },
+    {
+      "id": "level_profile_7",
+      "level": 18,
+      "machine1": 4,
+      "machine2": 3,
+      "machine3": 3,
+      "machine4": 4,
+      "machine5": 3,
+      "machine6": 3,
+      "machine7": 3
+    },
+    {
+      "id": "level_profile_7",
+      "level": 19,
+      "machine1": 4,
+      "machine2": 3,
+      "machine3": 4,
+      "machine4": 4,
+      "machine5": 3,
+      "machine6": 3,
+      "machine7": 3
+    },
+    {
+      "id": "level_profile_7",
+      "level": 20,
+      "machine1": 4,
+      "machine2": 6,
+      "machine3": 4,
+      "machine4": 4,
+      "machine5": 3,
+      "machine6": 3,
+      "machine7": 3
     }
   ],
   "chest_config": [
@@ -1530,33 +2183,58 @@
   "customers": [
     {
       "id": "dog",
-      "Sprite": "Dog Tier 1",
+      "Sprite": "Dog",
       "Need": "tennisBall"
     },
     {
       "id": "rabbit",
-      "Sprite": "Rabbit Tier 1",
+      "Sprite": "Rabbit",
       "Need": "carrot"
     },
     {
       "id": "frog",
-      "Sprite": "Frog Tier 1",
+      "Sprite": "Frog",
       "Need": "nenufar"
     },
     {
       "id": "crow",
-      "Sprite": "Crow Tier 1",
-      "Need": "nest"
+      "Sprite": "Crow",
+      "Need": "blackLotus"
     },
     {
       "id": "goat",
-      "Sprite": "Goat Tier 1",
+      "Sprite": "Goat",
       "Need": "candle"
     },
     {
       "id": "sloth",
-      "Sprite": "Sloth Tier 1",
+      "Sprite": "Sloth",
       "Need": "pillow"
+    },
+    {
+      "id": "octopus",
+      "Sprite": "Octopus",
+      "Need": "bottle"
+    },
+    {
+      "id": "owl",
+      "Sprite": "Owl",
+      "Need": "nest"
+    },
+    {
+      "id": "cat",
+      "Sprite": "Cat",
+      "Need": "coffee"
+    },
+    {
+      "id": "robin",
+      "Sprite": "Robin",
+      "Need": "croissant"
+    },
+    {
+      "id": "fox",
+      "Sprite": "Fox Wild",
+      "Need": "sandwitch"
     }
   ],
   "gears": [
@@ -1829,29 +2507,49 @@
   ],
   "inputs": [
     {
-      "id": "nestFactory",
+      "id": "nest",
+      "quantity": 1,
+      "type": "bottle"
+    },
+    {
+      "id": "nest",
+      "quantity": 1,
+      "type": "nenufar"
+    },
+    {
+      "id": "bottle",
       "quantity": 1,
       "type": "tennisBall"
     },
     {
-      "id": "nenufarFarm",
+      "id": "candle",
+      "quantity": 1,
+      "type": "coffee"
+    },
+    {
+      "id": "candle",
+      "quantity": 1,
+      "type": "pillow"
+    },
+    {
+      "id": "blackLotus",
+      "quantity": 1,
+      "type": "candle"
+    },
+    {
+      "id": "blackLotus",
+      "quantity": 1,
+      "type": "nenufar"
+    },
+    {
+      "id": "sandwitch",
       "quantity": 1,
       "type": "carrot"
     },
     {
-      "id": "nenufarFarm",
+      "id": "croissant",
       "quantity": 1,
-      "type": "tennisBall"
-    },
-    {
-      "id": "candleBabaYagaHut",
-      "quantity": 1,
-      "type": "nest"
-    },
-    {
-      "id": "candleBabaYagaHut",
-      "quantity": 1,
-      "type": "nenufar"
+      "type": "sandwitch"
     }
   ],
   "machines": [
@@ -1860,1097 +2558,76 @@
       "displayName": "Pillow Fluffer",
       "spriteId": "Pillow Maker",
       "outputs": "pillow",
-      "unlockAtRound": 1,
-      "upgrades": "pillowMaker"
+      "upgrades": "upgrade_profile_complexity_0"
     },
     {
       "id": "tennisBallFactory",
-      "displayName": "Tenis Ball Factory",
+      "displayName": "Tennis Ball Factory",
       "spriteId": "Tennis ball Factory",
       "outputs": "tennisBall",
-      "unlockAtRound": 1,
-      "upgrades": "tennisBallFactory"
+      "upgrades": "upgrade_profile_complexity_0"
     },
     {
       "id": "carrotFarm",
       "displayName": "Carrot Farm",
       "spriteId": "Carrot Farm",
       "outputs": "carrot",
-      "unlockAtRound": 2,
-      "upgrades": "carrotFarm"
+      "upgrades": "upgrade_profile_complexity_0"
     },
     {
       "id": "nestFactory",
       "displayName": "Nest Factory",
       "spriteId": "Nest Factory",
-      "inputs": "nestFactory",
+      "inputs": "nest",
       "outputs": "nest",
-      "unlockAtRound": 2,
-      "upgrades": "nestFactory"
+      "upgrades": "upgrade_profile_complexity_2"
     },
     {
-      "id": "nenufarFarm",
-      "displayName": "Nenufar Farm",
-      "spriteId": "Nenufar Farm",
-      "inputs": "nenufarFarm",
+      "id": "nenupharFarm",
+      "displayName": "Nenuphar Farm",
+      "spriteId": "Nenuphar Farm",
       "outputs": "nenufar",
-      "unlockAtRound": 5,
-      "upgrades": "nenufarFarm"
+      "upgrades": "upgrade_profile_complexity_0"
     },
     {
       "id": "candleBabaYagaHut",
       "displayName": "Baba Yaga'Hut",
       "spriteId": "Candle Baba Yaga Hut",
-      "inputs": "candleBabaYagaHut",
+      "inputs": "candle",
       "outputs": "candle",
-      "unlockAtRound": 7,
-      "upgrades": "candleBabaYagaHut"
-    }
-  ],
-  "market_config": [
-    {
-      "id": "round_config_base",
-      "round": "round_1",
-      "customers": 20,
-      "average amount": 2,
-      "tennisBall": 3,
-      "carrot": 2,
-      "nenufar": 0,
-      "nest": 0,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_2",
-      "customers": 20,
-      "average amount": 3,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 0,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_3",
-      "customers": 20,
-      "average amount": 4,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 0,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_4",
-      "customers": 20,
-      "average amount": 5,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_5",
-      "customers": 20,
-      "average amount": 4,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_6",
-      "customers": 20,
-      "average amount": 3,
-      "tennisBall": 2,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_7",
-      "customers": 20,
-      "average amount": 2,
-      "tennisBall": 2,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_8",
-      "customers": 20,
-      "average amount": 3,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 2,
-      "nest": 1,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_9",
-      "customers": 20,
-      "average amount": 4,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 2,
-      "nest": 1,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_10",
-      "customers": 20,
-      "average amount": 5,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_11",
-      "customers": 40,
-      "average amount": 4,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_12",
-      "customers": 40,
-      "average amount": 3,
-      "tennisBall": 1,
-      "carrot": 2,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 1,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_13",
-      "customers": 40,
-      "average amount": 2,
-      "tennisBall": 1,
-      "carrot": 2,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 2,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_14",
-      "customers": 40,
-      "average amount": 3,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 3,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_15",
-      "customers": 40,
-      "average amount": 4,
-      "tennisBall": 2,
-      "carrot": 2,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 4,
-      "pillow": 1
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_16",
-      "customers": 60,
-      "average amount": 5,
-      "tennisBall": 3,
-      "carrot": 1,
-      "nenufar": 0,
-      "nest": 0,
-      "candle": 1,
-      "pillow": 2
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_17",
-      "customers": 60,
-      "average amount": 4,
-      "tennisBall": 3,
-      "carrot": 1,
-      "nenufar": 0,
-      "nest": 0,
-      "candle": 0,
-      "pillow": 3
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_18",
-      "customers": 60,
-      "average amount": 3,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 0,
-      "pillow": 4
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_19",
-      "customers": 60,
-      "average amount": 2,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 0,
-      "pillow": 1
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_20",
-      "customers": 60,
-      "average amount": 3,
-      "tennisBall": 0,
-      "carrot": 0,
-      "nenufar": 3,
-      "nest": 1,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_21",
-      "customers": 60,
-      "average amount": 4,
-      "tennisBall": 0,
-      "carrot": 0,
-      "nenufar": 3,
-      "nest": 1,
-      "candle": 2,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_22",
-      "customers": 60,
-      "average amount": 5,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 1,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_23",
-      "customers": 60,
-      "average amount": 4,
-      "tennisBall": 1,
-      "carrot": 2,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 3,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_24",
-      "customers": 60,
-      "average amount": 3,
-      "tennisBall": 1,
-      "carrot": 3,
-      "nenufar": 0,
-      "nest": 0,
-      "candle": 0,
-      "pillow": 2
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_25",
-      "customers": 60,
-      "average amount": 2,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 1,
-      "pillow": 1
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_26",
-      "customers": 80,
-      "average amount": 3,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 3,
-      "candle": 2,
-      "pillow": 3
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_27",
-      "customers": 80,
-      "average amount": 4,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 3,
-      "candle": 2,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_28",
-      "customers": 80,
-      "average amount": 5,
-      "tennisBall": 2,
-      "carrot": 2,
-      "nenufar": 2,
-      "nest": 2,
-      "candle": 1,
-      "pillow": 1
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_29",
-      "customers": 80,
-      "average amount": 4,
-      "tennisBall": 2,
-      "carrot": 2,
-      "nenufar": 2,
-      "nest": 2,
-      "candle": 0,
-      "pillow": 2
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_30",
-      "customers": 80,
-      "average amount": 3,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 0,
-      "pillow": 2
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_31",
-      "customers": 80,
-      "average amount": 2,
-      "tennisBall": 4,
-      "carrot": 1,
-      "nenufar": 0,
-      "nest": 0,
-      "candle": 1,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_32",
-      "customers": 80,
-      "average amount": 3,
-      "tennisBall": 4,
-      "carrot": 1,
-      "nenufar": 0,
-      "nest": 0,
-      "candle": 1,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_33",
-      "customers": 80,
-      "average amount": 4,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 1,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_34",
-      "customers": 80,
-      "average amount": 5,
-      "tennisBall": 1,
-      "carrot": 4,
-      "nenufar": 0,
-      "nest": 0,
-      "candle": 1,
-      "pillow": 1
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_35",
-      "customers": 80,
-      "average amount": 4,
-      "tennisBall": 1,
-      "carrot": 4,
-      "nenufar": 0,
-      "nest": 0,
-      "candle": 1,
-      "pillow": 2
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_36",
-      "customers": 80,
-      "average amount": 3,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 3,
-      "pillow": 3
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_37",
-      "customers": 80,
-      "average amount": 2,
-      "tennisBall": 0,
-      "carrot": 1,
-      "nenufar": 4,
-      "nest": 1,
-      "candle": 3,
-      "pillow": 4
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_38",
-      "customers": 80,
-      "average amount": 3,
-      "tennisBall": 0,
-      "carrot": 1,
-      "nenufar": 4,
-      "nest": 1,
-      "candle": 2,
-      "pillow": 1
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_39",
-      "customers": 80,
-      "average amount": 4,
-      "tennisBall": 2,
-      "carrot": 2,
-      "nenufar": 2,
-      "nest": 2,
-      "candle": 2,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_40",
-      "customers": 80,
-      "average amount": 5,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 4,
-      "candle": 2,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_41",
-      "customers": 100,
-      "average amount": 4,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 4,
-      "candle": 1,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_42",
-      "customers": 100,
-      "average amount": 3,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 2,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_43",
-      "customers": 100,
-      "average amount": 2,
-      "tennisBall": 3,
-      "carrot": 3,
-      "nenufar": 0,
-      "nest": 0,
-      "candle": 0,
-      "pillow": 2
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_44",
-      "customers": 100,
-      "average amount": 3,
-      "tennisBall": 0,
-      "carrot": 0,
-      "nenufar": 3,
-      "nest": 3,
-      "candle": 0,
-      "pillow": 1
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_45",
-      "customers": 100,
-      "average amount": 4,
-      "tennisBall": 2,
-      "carrot": 2,
-      "nenufar": 2,
-      "nest": 2,
-      "candle": 2,
-      "pillow": 3
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_46",
-      "customers": 100,
-      "average amount": 5,
-      "tennisBall": 5,
-      "carrot": 1,
-      "nenufar": 0,
-      "nest": 0,
-      "candle": 2,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_47",
-      "customers": 100,
-      "average amount": 4,
-      "tennisBall": 5,
-      "carrot": 1,
-      "nenufar": 0,
-      "nest": 0,
-      "candle": 3,
-      "pillow": 1
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_48",
-      "customers": 100,
-      "average amount": 3,
-      "tennisBall": 2,
-      "carrot": 2,
-      "nenufar": 2,
-      "nest": 2,
-      "candle": 3,
-      "pillow": 2
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_49",
-      "customers": 100,
-      "average amount": 2,
-      "tennisBall": 1,
-      "carrot": 5,
-      "nenufar": 0,
-      "nest": 0,
-      "candle": 3,
-      "pillow": 2
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_50",
-      "customers": 100,
-      "average amount": 3,
-      "tennisBall": 1,
-      "carrot": 5,
-      "nenufar": 0,
-      "nest": 0,
-      "candle": 3,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_51",
-      "customers": 100,
-      "average amount": 4,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 4,
-      "nest": 4,
-      "candle": 3,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_52",
-      "customers": 100,
-      "average amount": 5,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 3,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_53",
-      "customers": 100,
-      "average amount": 4,
-      "tennisBall": 0,
-      "carrot": 1,
-      "nenufar": 5,
-      "nest": 0,
-      "candle": 0,
-      "pillow": 1
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_54",
-      "customers": 100,
-      "average amount": 3,
-      "tennisBall": 0,
-      "carrot": 1,
-      "nenufar": 5,
-      "nest": 0,
-      "candle": 0,
-      "pillow": 2
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_55",
-      "customers": 100,
-      "average amount": 2,
-      "tennisBall": 2,
-      "carrot": 2,
-      "nenufar": 2,
-      "nest": 2,
-      "candle": 2,
-      "pillow": 3
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_56",
-      "customers": 100,
-      "average amount": 3,
-      "tennisBall": 0,
-      "carrot": 0,
-      "nenufar": 1,
-      "nest": 5,
-      "candle": 1,
-      "pillow": 4
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_57",
-      "customers": 100,
-      "average amount": 4,
-      "tennisBall": 0,
-      "carrot": 0,
-      "nenufar": 1,
-      "nest": 5,
-      "candle": 2,
-      "pillow": 1
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_58",
-      "customers": 100,
-      "average amount": 5,
-      "tennisBall": 4,
-      "carrot": 4,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 1,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_59",
-      "customers": 100,
-      "average amount": 4,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 4,
-      "nest": 4,
-      "candle": 3,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_60",
-      "customers": 100,
-      "average amount": 3,
-      "tennisBall": 3,
-      "carrot": 3,
-      "nenufar": 3,
-      "nest": 3,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_61",
-      "customers": 100,
-      "average amount": 2,
-      "tennisBall": 2,
-      "carrot": 2,
-      "nenufar": 2,
-      "nest": 2,
-      "candle": 2,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_62",
-      "customers": 100,
-      "average amount": 3,
-      "tennisBall": 5,
-      "carrot": 1,
-      "nenufar": 0,
-      "nest": 0,
-      "candle": 1,
-      "pillow": 2
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_63",
-      "customers": 100,
-      "average amount": 4,
-      "tennisBall": 5,
-      "carrot": 1,
-      "nenufar": 0,
-      "nest": 0,
-      "candle": 0,
-      "pillow": 1
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_64",
-      "customers": 100,
-      "average amount": 5,
-      "tennisBall": 2,
-      "carrot": 2,
-      "nenufar": 2,
-      "nest": 2,
-      "candle": 2,
-      "pillow": 3
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_65",
-      "customers": 100,
-      "average amount": 4,
-      "tennisBall": 1,
-      "carrot": 5,
-      "nenufar": 0,
-      "nest": 0,
-      "candle": 2,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_66",
-      "customers": 100,
-      "average amount": 3,
-      "tennisBall": 1,
-      "carrot": 5,
-      "nenufar": 0,
-      "nest": 0,
-      "candle": 3,
-      "pillow": 1
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_67",
-      "customers": 100,
-      "average amount": 2,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 4,
-      "nest": 4,
-      "candle": 3,
-      "pillow": 2
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_68",
-      "customers": 100,
-      "average amount": 3,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 1,
-      "pillow": 2
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_69",
-      "customers": 100,
-      "average amount": 4,
-      "tennisBall": 0,
-      "carrot": 1,
-      "nenufar": 5,
-      "nest": 0,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_70",
-      "customers": 100,
-      "average amount": 5,
-      "tennisBall": 0,
-      "carrot": 1,
-      "nenufar": 5,
-      "nest": 0,
-      "candle": 2,
-      "pillow": 2
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_71",
-      "customers": 100,
-      "average amount": 4,
-      "tennisBall": 2,
-      "carrot": 2,
-      "nenufar": 2,
-      "nest": 2,
-      "candle": 3,
-      "pillow": 3
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_72",
-      "customers": 100,
-      "average amount": 3,
-      "tennisBall": 0,
-      "carrot": 0,
-      "nenufar": 1,
-      "nest": 5,
-      "candle": 2,
-      "pillow": 2
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_73",
-      "customers": 100,
-      "average amount": 2,
-      "tennisBall": 0,
-      "carrot": 0,
-      "nenufar": 1,
-      "nest": 5,
-      "candle": 3,
-      "pillow": 3
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_74",
-      "customers": 100,
-      "average amount": 3,
-      "tennisBall": 4,
-      "carrot": 4,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "round_config_base",
-      "round": "round_75",
-      "customers": 100,
-      "average amount": 4,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 4,
-      "nest": 4,
-      "candle": 2,
-      "pillow": 2
-    },
-    {
-      "id": "tuto_round_config_0",
-      "round": "round_1",
-      "customers": 20,
-      "average amount": 2,
-      "tennisBall": 3,
-      "carrot": 2,
-      "nenufar": 0,
-      "nest": 0,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "tuto_round_config_0",
-      "round": "round_2",
-      "customers": 20,
-      "average amount": 3,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 0,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "tuto_round_config_0",
-      "round": "round_3",
-      "customers": 20,
-      "average amount": 4,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 0,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "tuto_round_config_0",
-      "round": "round_4",
-      "customers": 20,
-      "average amount": 5,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "tuto_round_config_0",
-      "round": "round_5",
-      "customers": 20,
-      "average amount": 4,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "tuto_round_config_1",
-      "round": "round_1",
-      "customers": 20,
-      "average amount": 2,
-      "tennisBall": 3,
-      "carrot": 2,
-      "nenufar": 0,
-      "nest": 0,
-      "candle": 0,
-      "pillow": 0
-    },
-    {
-      "id": "tuto_round_config_1",
-      "round": "round_2",
-      "customers": 20,
-      "average amount": 3,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 0,
-      "candle": 0,
-      "pillow": 0
+      "upgrades": "upgrade_profile_complexity_2"
     },
     {
-      "id": "tuto_round_config_1",
-      "round": "round_3",
-      "customers": 20,
-      "average amount": 4,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 0,
-      "candle": 0,
-      "pillow": 0
+      "id": "coffeeShop",
+      "displayName": "Coffee Shop",
+      "spriteId": "Coffee shop",
+      "upgrades": "upgrade_profile_complexity_0"
     },
     {
-      "id": "tuto_round_config_1",
-      "round": "round_4",
-      "customers": 20,
-      "average amount": 5,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 0,
-      "pillow": 0
+      "id": "gameStore",
+      "displayName": "Game Store",
+      "spriteId": "Game Store",
+      "upgrades": "upgrade_profile_complexity_3"
     },
     {
-      "id": "tuto_round_config_1",
-      "round": "round_5",
-      "customers": 20,
-      "average amount": 4,
-      "tennisBall": 1,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 0,
-      "pillow": 0
+      "id": "bottleMaker",
+      "displayName": "Bottle Maker",
+      "spriteId": "Bottle Maker",
+      "upgrades": "upgrade_profile_complexity_1"
     },
     {
-      "id": "tuto_round_config_1",
-      "round": "round_6",
-      "customers": 20,
-      "average amount": 3,
-      "tennisBall": 2,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 0,
-      "pillow": 0
+      "id": "sandwichStore",
+      "displayName": "Boulangerie",
+      "spriteId": "Sandwich Store",
+      "inputs": "sandwitch",
+      "upgrades": "upgrade_profile_complexity_1"
     },
     {
-      "id": "tuto_round_config_1",
-      "round": "round_7",
-      "customers": 20,
-      "average amount": 2,
-      "tennisBall": 2,
-      "carrot": 1,
-      "nenufar": 1,
-      "nest": 1,
-      "candle": 0,
-      "pillow": 0
+      "id": "croissantMaker",
+      "displayName": "Croissanterie",
+      "spriteId": "Sandwich Store",
+      "inputs": "croissant",
+      "upgrades": "upgrade_profile_complexity_2"
     }
   ],
   "purshases": [
@@ -3521,28 +3198,59 @@
   ],
   "outputs": [
     {
-      "id": "pillow",
-      "profil": "profil_complexity 0"
-    },
-    {
       "id": "tennisBall",
-      "profil": "profil_complexity 0"
+      "profil": "profil_complexity 0",
+      "convert": "convert_profile_complexity_0"
     },
     {
       "id": "carrot",
-      "profil": "profil_complexity 0"
+      "profil": "profil_complexity 0",
+      "convert": "convert_profile_complexity_0"
     },
     {
       "id": "nenufar",
-      "profil": "profil_complexity 0"
+      "profil": "profil_complexity 0",
+      "convert": "convert_profile_complexity_0"
     },
     {
       "id": "nest",
-      "profil": "profil_complexity 0"
+      "profil": "profil_complexity 0",
+      "convert": "convert_profile_complexity_2"
     },
     {
       "id": "candle",
-      "profil": "profil_complexity 0"
+      "profil": "profil_complexity 0",
+      "convert": "convert_profile_complexity_2"
+    },
+    {
+      "id": "pillow",
+      "profil": "profil_complexity 0",
+      "convert": "convert_profile_complexity_0"
+    },
+    {
+      "id": "blackLotus",
+      "profil": "profil_complexity 0",
+      "convert": "convert_profile_complexity_3"
+    },
+    {
+      "id": "bottle",
+      "profil": "profil_complexity 0",
+      "convert": "convert_profile_complexity_1"
+    },
+    {
+      "id": "coffee",
+      "profil": "profil_complexity 0",
+      "convert": "convert_profile_complexity_0"
+    },
+    {
+      "id": "sandwitch",
+      "profil": "profil_complexity 0",
+      "convert": "convert_profile_complexity_1"
+    },
+    {
+      "id": "croissant",
+      "profil": "profil_complexity 0",
+      "convert": "convert_profile_complexity_2"
     }
   ],
   "outputs_profiles": [
@@ -5041,6 +4749,276 @@
       "spriteId": "Pillow Tier 6",
       "baseSellPrice": 0,
       "influence": 6
+    },
+    {
+      "id": "blackLotus",
+      "tier": 1,
+      "displayName": "Black Lotus Tier 1",
+      "description": "Black Lotus Tier 1 description",
+      "spriteId": "Black Lotus Tier 1",
+      "baseSellPrice": 90,
+      "influence": 1
+    },
+    {
+      "id": "blackLotus",
+      "tier": 2,
+      "displayName": "Black Lotus Tier 2",
+      "description": "Black Lotus Tier 2 description",
+      "spriteId": "Black Lotus Tier 2",
+      "baseSellPrice": 528,
+      "influence": 2
+    },
+    {
+      "id": "blackLotus",
+      "tier": 3,
+      "displayName": "Black Lotus Tier 3",
+      "description": "Black Lotus Tier 3 description",
+      "spriteId": "Black Lotus Tier 3",
+      "baseSellPrice": 2875,
+      "influence": 3
+    },
+    {
+      "id": "blackLotus",
+      "tier": 4,
+      "displayName": "Black Lotus Tier 4",
+      "description": "Black Lotus Tier 4 description",
+      "spriteId": "Black Lotus Tier 4",
+      "baseSellPrice": 9944,
+      "influence": 4
+    },
+    {
+      "id": "blackLotus",
+      "tier": 5,
+      "displayName": "Black Lotus Tier 5",
+      "description": "Black Lotus Tier 5 description",
+      "spriteId": "Black Lotus Tier 5",
+      "baseSellPrice": 39752,
+      "influence": 5
+    },
+    {
+      "id": "blackLotus",
+      "tier": 6,
+      "displayName": "Black Lotus Tier 6",
+      "description": "Black Lotus Tier 6 description",
+      "spriteId": "Black Lotus Tier 6",
+      "baseSellPrice": 182834,
+      "influence": 6
+    },
+    {
+      "id": "bottle",
+      "tier": 1,
+      "displayName": "Bottle Tier 1",
+      "description": "Bottle Tier 1 description",
+      "spriteId": "Bottle Tier 1",
+      "baseSellPrice": 10,
+      "influence": 1
+    },
+    {
+      "id": "bottle",
+      "tier": 2,
+      "displayName": "Bottle Tier 2",
+      "description": "Bottle Tier 2 description",
+      "spriteId": "Bottle Tier 2",
+      "baseSellPrice": 30,
+      "influence": 2
+    },
+    {
+      "id": "bottle",
+      "tier": 3,
+      "displayName": "Bottle Tier 3",
+      "description": "Bottle Tier 3 description",
+      "spriteId": "Bottle Tier 3",
+      "baseSellPrice": 89,
+      "influence": 3
+    },
+    {
+      "id": "bottle",
+      "tier": 4,
+      "displayName": "Bottle Tier 4",
+      "description": "Bottle Tier 4 description",
+      "spriteId": "Bottle Tier 4",
+      "baseSellPrice": 173,
+      "influence": 4
+    },
+    {
+      "id": "bottle",
+      "tier": 5,
+      "displayName": "Bottle Tier 5",
+      "description": "Bottle Tier 5 description",
+      "spriteId": "Bottle Tier 5",
+      "baseSellPrice": 387,
+      "influence": 5
+    },
+    {
+      "id": "bottle",
+      "tier": 6,
+      "displayName": "Bottle Tier 6",
+      "description": "Bottle Tier 6 description",
+      "spriteId": "Bottle Tier 6",
+      "baseSellPrice": 1001,
+      "influence": 6
+    },
+    {
+      "id": "coffee",
+      "tier": 1,
+      "displayName": "Coffee Tier 1",
+      "description": "Coffee Tier 1 description",
+      "spriteId": "Coffee Tier 1",
+      "baseSellPrice": 5,
+      "influence": 1
+    },
+    {
+      "id": "coffee",
+      "tier": 2,
+      "displayName": "Coffee Tier 2",
+      "description": "Coffee Tier 2 description",
+      "spriteId": "Coffee Tier 2",
+      "baseSellPrice": 10,
+      "influence": 2
+    },
+    {
+      "id": "coffee",
+      "tier": 3,
+      "displayName": "Coffee Tier 3",
+      "description": "Coffee Tier 3 description",
+      "spriteId": "Coffee Tier 3",
+      "baseSellPrice": 20,
+      "influence": 3
+    },
+    {
+      "id": "coffee",
+      "tier": 4,
+      "displayName": "Coffee Tier 4",
+      "description": "Coffee Tier 4 description",
+      "spriteId": "Coffee Tier 4",
+      "baseSellPrice": 26,
+      "influence": 4
+    },
+    {
+      "id": "coffee",
+      "tier": 5,
+      "displayName": "Coffee Tier 5",
+      "description": "Coffee Tier 5 description",
+      "spriteId": "Coffee Tier 5",
+      "baseSellPrice": 37,
+      "influence": 5
+    },
+    {
+      "id": "coffee",
+      "tier": 6,
+      "displayName": "Coffee Tier 6",
+      "description": "Coffee Tier 6 description",
+      "spriteId": "Coffee Tier 6",
+      "baseSellPrice": 58,
+      "influence": 6
+    },
+    {
+      "id": "sandwitch",
+      "tier": 1,
+      "displayName": "Sandwitch Tier 1",
+      "description": "Sandwitch Tier 1 description",
+      "spriteId": "Sandwitch Tier 1",
+      "baseSellPrice": 14,
+      "influence": 1
+    },
+    {
+      "id": "sandwitch",
+      "tier": 2,
+      "displayName": "Sandwitch Tier 2",
+      "description": "Sandwitch Tier 2 description",
+      "spriteId": "Sandwitch Tier 2",
+      "baseSellPrice": 48,
+      "influence": 2
+    },
+    {
+      "id": "sandwitch",
+      "tier": 3,
+      "displayName": "Sandwitch Tier 3",
+      "description": "Sandwitch Tier 3 description",
+      "spriteId": "Sandwitch Tier 3",
+      "baseSellPrice": 161,
+      "influence": 3
+    },
+    {
+      "id": "sandwitch",
+      "tier": 4,
+      "displayName": "Sandwitch Tier 4",
+      "description": "Sandwitch Tier 4 description",
+      "spriteId": "Sandwitch Tier 4",
+      "baseSellPrice": 355,
+      "influence": 4
+    },
+    {
+      "id": "sandwitch",
+      "tier": 5,
+      "displayName": "Sandwitch Tier 5",
+      "description": "Sandwitch Tier 5 description",
+      "spriteId": "Sandwitch Tier 5",
+      "baseSellPrice": 905,
+      "influence": 5
+    },
+    {
+      "id": "sandwitch",
+      "tier": 6,
+      "displayName": "Sandwitch Tier 6",
+      "description": "Sandwitch Tier 6 description",
+      "spriteId": "Sandwitch Tier 6",
+      "baseSellPrice": 2676,
+      "influence": 6
+    },
+    {
+      "id": "croissant",
+      "tier": 1,
+      "displayName": "Croissant Tier 1",
+      "description": "Croissant Tier 1 description",
+      "spriteId": "Croissant Tier 1",
+      "baseSellPrice": 22,
+      "influence": 1
+    },
+    {
+      "id": "croissant",
+      "tier": 2,
+      "displayName": "Croissant Tier 2",
+      "description": "Croissant Tier 2 description",
+      "spriteId": "Croissant Tier 2",
+      "baseSellPrice": 89,
+      "influence": 2
+    },
+    {
+      "id": "croissant",
+      "tier": 3,
+      "displayName": "Croissant Tier 3",
+      "description": "Croissant Tier 3 description",
+      "spriteId": "Croissant Tier 3",
+      "baseSellPrice": 347,
+      "influence": 3
+    },
+    {
+      "id": "croissant",
+      "tier": 4,
+      "displayName": "Croissant Tier 4",
+      "description": "Croissant Tier 4 description",
+      "spriteId": "Croissant Tier 4",
+      "baseSellPrice": 881,
+      "influence": 4
+    },
+    {
+      "id": "croissant",
+      "tier": 5,
+      "displayName": "Croissant Tier 5",
+      "description": "Croissant Tier 5 description",
+      "spriteId": "Croissant Tier 5",
+      "baseSellPrice": 2595,
+      "influence": 5
+    },
+    {
+      "id": "croissant",
+      "tier": 6,
+      "displayName": "Croissant Tier 6",
+      "description": "Croissant Tier 6 description",
+      "spriteId": "Croissant Tier 6",
+      "baseSellPrice": 8860,
+      "influence": 6
     }
   ],
   "rewards": [
@@ -6362,819 +6340,819 @@
       "round 75": 0
     }
   ],
-  "upgrades": [
+  "upgrade_machines_profile": [
     {
-      "id": "tennisBallFactory",
+      "id": "upgrade_profile_complexity_0",
       "level": 1,
       "cost": 75,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.1,
+      "workerSpeedBonus": 0.5,
       "productionTime": 5
     },
     {
-      "id": "tennisBallFactory",
+      "id": "upgrade_profile_complexity_0",
       "level": 2,
-      "cost": 150,
+      "cost": 83,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.11,
+      "workerSpeedBonus": 0.525,
       "productionTime": 4.9
     },
     {
-      "id": "tennisBallFactory",
+      "id": "upgrade_profile_complexity_0",
       "level": 3,
-      "cost": 300,
+      "cost": 91,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.12,
+      "workerSpeedBonus": 0.55125,
       "productionTime": 4.8
     },
     {
-      "id": "tennisBallFactory",
+      "id": "upgrade_profile_complexity_0",
       "level": 4,
-      "cost": 600,
+      "cost": 100,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.13,
+      "workerSpeedBonus": 0.5788125000000001,
       "productionTime": 4.7
     },
     {
-      "id": "tennisBallFactory",
+      "id": "upgrade_profile_complexity_0",
       "level": 5,
-      "cost": 1200,
+      "cost": 110,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.14,
+      "workerSpeedBonus": 0.6077531250000001,
       "productionTime": 4.6
     },
     {
-      "id": "tennisBallFactory",
+      "id": "upgrade_profile_complexity_0",
       "level": 6,
-      "cost": 1800,
+      "cost": 121,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.15,
+      "workerSpeedBonus": 0.6381407812500002,
       "productionTime": 4.50000000000001
     },
     {
-      "id": "tennisBallFactory",
+      "id": "upgrade_profile_complexity_0",
       "level": 7,
-      "cost": 2200,
+      "cost": 133,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.16,
+      "workerSpeedBonus": 0.6700478203125002,
       "productionTime": 4.40000000000001
     },
     {
-      "id": "tennisBallFactory",
+      "id": "upgrade_profile_complexity_0",
       "level": 8,
-      "cost": 2600,
+      "cost": 146,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.17,
+      "workerSpeedBonus": 0.7035502113281252,
       "productionTime": 4.30000000000001
     },
     {
-      "id": "tennisBallFactory",
+      "id": "upgrade_profile_complexity_0",
       "level": 9,
-      "cost": 3200,
+      "cost": 161,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.18,
+      "workerSpeedBonus": 0.7387277218945315,
       "productionTime": 4.20000000000001
     },
     {
-      "id": "tennisBallFactory",
+      "id": "upgrade_profile_complexity_0",
       "level": 10,
-      "cost": 4000,
+      "cost": 177,
       "workersRequired": 1,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.19,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.7756641079892581,
       "productionTime": 4.10000000000001
     },
     {
-      "id": "tennisBallFactory",
+      "id": "upgrade_profile_complexity_0",
       "level": 11,
-      "cost": 5000,
+      "cost": 195,
       "workersRequired": 1,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.2,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.814447313388721,
       "productionTime": 4.00000000000001
     },
     {
-      "id": "tennisBallFactory",
+      "id": "upgrade_profile_complexity_0",
       "level": 12,
-      "cost": 6000,
+      "cost": 215,
       "workersRequired": 1,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.21,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.8551696790581571,
       "productionTime": 3.90000000000001
     },
     {
-      "id": "tennisBallFactory",
+      "id": "upgrade_profile_complexity_0",
       "level": 13,
-      "cost": 7000,
+      "cost": 237,
       "workersRequired": 1,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.22,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.897928163011065,
       "productionTime": 3.80000000000001
     },
     {
-      "id": "tennisBallFactory",
+      "id": "upgrade_profile_complexity_0",
       "level": 14,
-      "cost": 8000,
+      "cost": 261,
       "workersRequired": 1,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.23,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.9428245711616183,
       "productionTime": 3.70000000000001
     },
     {
-      "id": "tennisBallFactory",
+      "id": "upgrade_profile_complexity_0",
       "level": 15,
-      "cost": 9000,
+      "cost": 287,
       "workersRequired": 1,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.24,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.9899657997196993,
       "productionTime": 3.60000000000001
     },
     {
-      "id": "carrotFarm",
+      "id": "upgrade_profile_complexity_1",
+      "level": 1,
+      "cost": 300,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.5,
+      "productionTime": 20
+    },
+    {
+      "id": "upgrade_profile_complexity_1",
+      "level": 2,
+      "cost": 360,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.525,
+      "productionTime": 19
+    },
+    {
+      "id": "upgrade_profile_complexity_1",
+      "level": 3,
+      "cost": 432,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.55125,
+      "productionTime": 18
+    },
+    {
+      "id": "upgrade_profile_complexity_1",
+      "level": 4,
+      "cost": 518,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.5788125000000001,
+      "productionTime": 17
+    },
+    {
+      "id": "upgrade_profile_complexity_1",
+      "level": 5,
+      "cost": 622,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.6077531250000001,
+      "productionTime": 16
+    },
+    {
+      "id": "upgrade_profile_complexity_1",
+      "level": 6,
+      "cost": 746,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.6381407812500002,
+      "productionTime": 15
+    },
+    {
+      "id": "upgrade_profile_complexity_1",
+      "level": 7,
+      "cost": 895,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.6700478203125002,
+      "productionTime": 14
+    },
+    {
+      "id": "upgrade_profile_complexity_1",
+      "level": 8,
+      "cost": 1074,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.7035502113281252,
+      "productionTime": 13
+    },
+    {
+      "id": "upgrade_profile_complexity_1",
+      "level": 9,
+      "cost": 1289,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.7387277218945315,
+      "productionTime": 12
+    },
+    {
+      "id": "upgrade_profile_complexity_1",
+      "level": 10,
+      "cost": 1547,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.7756641079892581,
+      "productionTime": 11
+    },
+    {
+      "id": "upgrade_profile_complexity_1",
+      "level": 11,
+      "cost": 1856,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.814447313388721,
+      "productionTime": 10
+    },
+    {
+      "id": "upgrade_profile_complexity_1",
+      "level": 12,
+      "cost": 2227,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.8551696790581571,
+      "productionTime": 9
+    },
+    {
+      "id": "upgrade_profile_complexity_1",
+      "level": 13,
+      "cost": 2672,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.897928163011065,
+      "productionTime": 8
+    },
+    {
+      "id": "upgrade_profile_complexity_1",
+      "level": 14,
+      "cost": 3206,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.9428245711616183,
+      "productionTime": 7
+    },
+    {
+      "id": "upgrade_profile_complexity_1",
+      "level": 15,
+      "cost": 3847,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.9899657997196993,
+      "productionTime": 6
+    },
+    {
+      "id": "upgrade_profile_complexity_2",
+      "level": 1,
+      "cost": 500,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.5,
+      "productionTime": 50
+    },
+    {
+      "id": "upgrade_profile_complexity_2",
+      "level": 2,
+      "cost": 650,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.525,
+      "productionTime": 49
+    },
+    {
+      "id": "upgrade_profile_complexity_2",
+      "level": 3,
+      "cost": 845,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.55125,
+      "productionTime": 48
+    },
+    {
+      "id": "upgrade_profile_complexity_2",
+      "level": 4,
+      "cost": 1099,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.5788125000000001,
+      "productionTime": 47
+    },
+    {
+      "id": "upgrade_profile_complexity_2",
+      "level": 5,
+      "cost": 1429,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.6077531250000001,
+      "productionTime": 46
+    },
+    {
+      "id": "upgrade_profile_complexity_2",
+      "level": 6,
+      "cost": 1858,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.6381407812500002,
+      "productionTime": 45
+    },
+    {
+      "id": "upgrade_profile_complexity_2",
+      "level": 7,
+      "cost": 2415,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.6700478203125002,
+      "productionTime": 44
+    },
+    {
+      "id": "upgrade_profile_complexity_2",
+      "level": 8,
+      "cost": 3140,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.7035502113281252,
+      "productionTime": 43
+    },
+    {
+      "id": "upgrade_profile_complexity_2",
+      "level": 9,
+      "cost": 4082,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.7387277218945315,
+      "productionTime": 42
+    },
+    {
+      "id": "upgrade_profile_complexity_2",
+      "level": 10,
+      "cost": 5307,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.7756641079892581,
+      "productionTime": 41
+    },
+    {
+      "id": "upgrade_profile_complexity_2",
+      "level": 11,
+      "cost": 6899,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.814447313388721,
+      "productionTime": 40
+    },
+    {
+      "id": "upgrade_profile_complexity_2",
+      "level": 12,
+      "cost": 8969,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.8551696790581571,
+      "productionTime": 39
+    },
+    {
+      "id": "upgrade_profile_complexity_2",
+      "level": 13,
+      "cost": 11660,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.897928163011065,
+      "productionTime": 38
+    },
+    {
+      "id": "upgrade_profile_complexity_2",
+      "level": 14,
+      "cost": 15158,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.9428245711616183,
+      "productionTime": 37
+    },
+    {
+      "id": "upgrade_profile_complexity_2",
+      "level": 15,
+      "cost": 19705,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.9899657997196993,
+      "productionTime": 36
+    },
+    {
+      "id": "upgrade_profile_complexity_3",
+      "level": 1,
+      "cost": 1000,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.5,
+      "productionTime": 200
+    },
+    {
+      "id": "upgrade_profile_complexity_3",
+      "level": 2,
+      "cost": 1400,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.525,
+      "productionTime": 196
+    },
+    {
+      "id": "upgrade_profile_complexity_3",
+      "level": 3,
+      "cost": 1960,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.55125,
+      "productionTime": 192
+    },
+    {
+      "id": "upgrade_profile_complexity_3",
+      "level": 4,
+      "cost": 2744,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.5788125000000001,
+      "productionTime": 188
+    },
+    {
+      "id": "upgrade_profile_complexity_3",
+      "level": 5,
+      "cost": 3842,
+      "workersRequired": 1,
+      "maxWorkers": 2,
+      "workerSpeedBonus": 0.6077531250000001,
+      "productionTime": 184
+    },
+    {
+      "id": "upgrade_profile_complexity_3",
+      "level": 6,
+      "cost": 5379,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.6381407812500002,
+      "productionTime": 180
+    },
+    {
+      "id": "upgrade_profile_complexity_3",
+      "level": 7,
+      "cost": 7531,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.6700478203125002,
+      "productionTime": 176
+    },
+    {
+      "id": "upgrade_profile_complexity_3",
+      "level": 8,
+      "cost": 10543,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.7035502113281252,
+      "productionTime": 172
+    },
+    {
+      "id": "upgrade_profile_complexity_3",
+      "level": 9,
+      "cost": 14760,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.7387277218945315,
+      "productionTime": 169
+    },
+    {
+      "id": "upgrade_profile_complexity_3",
+      "level": 10,
+      "cost": 20664,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.7756641079892581,
+      "productionTime": 166
+    },
+    {
+      "id": "upgrade_profile_complexity_3",
+      "level": 11,
+      "cost": 28930,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.814447313388721,
+      "productionTime": 163
+    },
+    {
+      "id": "upgrade_profile_complexity_3",
+      "level": 12,
+      "cost": 40502,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.8551696790581571,
+      "productionTime": 160
+    },
+    {
+      "id": "upgrade_profile_complexity_3",
+      "level": 13,
+      "cost": 56703,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.897928163011065,
+      "productionTime": 157
+    },
+    {
+      "id": "upgrade_profile_complexity_3",
+      "level": 14,
+      "cost": 79384,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.9428245711616183,
+      "productionTime": 154
+    },
+    {
+      "id": "upgrade_profile_complexity_3",
+      "level": 15,
+      "cost": 111138,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.9899657997196993,
+      "productionTime": 151
+    },
+    {
+      "id": "upgrade_profile_complexity_4",
       "level": 1,
       "cost": 75,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.1,
-      "productionTime": 5
+      "workerSpeedBonus": 0.5,
+      "productionTime": 500
     },
     {
-      "id": "carrotFarm",
+      "id": "upgrade_profile_complexity_4",
       "level": 2,
-      "cost": 150,
+      "cost": 113,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.11,
-      "productionTime": 4.9
+      "workerSpeedBonus": 0.525,
+      "productionTime": 490
     },
     {
-      "id": "carrotFarm",
+      "id": "upgrade_profile_complexity_4",
       "level": 3,
-      "cost": 300,
+      "cost": 170,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.12,
-      "productionTime": 4.8
+      "workerSpeedBonus": 0.55125,
+      "productionTime": 480
     },
     {
-      "id": "carrotFarm",
+      "id": "upgrade_profile_complexity_4",
       "level": 4,
-      "cost": 600,
+      "cost": 255,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.13,
-      "productionTime": 4.7
+      "workerSpeedBonus": 0.5788125000000001,
+      "productionTime": 470
     },
     {
-      "id": "carrotFarm",
+      "id": "upgrade_profile_complexity_4",
       "level": 5,
-      "cost": 1200,
+      "cost": 383,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.14,
-      "productionTime": 4.6
+      "workerSpeedBonus": 0.6077531250000001,
+      "productionTime": 461
     },
     {
-      "id": "carrotFarm",
+      "id": "upgrade_profile_complexity_4",
       "level": 6,
-      "cost": 1800,
+      "cost": 575,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.15,
-      "productionTime": 4.50000000000001
+      "workerSpeedBonus": 0.6381407812500002,
+      "productionTime": 452
     },
     {
-      "id": "carrotFarm",
+      "id": "upgrade_profile_complexity_4",
       "level": 7,
-      "cost": 2200,
+      "cost": 863,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.16,
-      "productionTime": 4.40000000000001
+      "workerSpeedBonus": 0.6700478203125002,
+      "productionTime": 443
     },
     {
-      "id": "carrotFarm",
+      "id": "upgrade_profile_complexity_4",
       "level": 8,
-      "cost": 2600,
+      "cost": 1295,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.17,
-      "productionTime": 4.30000000000001
+      "workerSpeedBonus": 0.7035502113281252,
+      "productionTime": 434
     },
     {
-      "id": "carrotFarm",
+      "id": "upgrade_profile_complexity_4",
       "level": 9,
-      "cost": 3200,
+      "cost": 1943,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.18,
-      "productionTime": 4.20000000000001
+      "workerSpeedBonus": 0.7387277218945315,
+      "productionTime": 425
     },
     {
-      "id": "carrotFarm",
+      "id": "upgrade_profile_complexity_4",
       "level": 10,
-      "cost": 4000,
+      "cost": 2915,
       "workersRequired": 1,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.19,
-      "productionTime": 4.10000000000001
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.7756641079892581,
+      "productionTime": 417
     },
     {
-      "id": "carrotFarm",
+      "id": "upgrade_profile_complexity_4",
       "level": 11,
-      "cost": 5000,
+      "cost": 4373,
       "workersRequired": 1,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.2,
-      "productionTime": 4.00000000000001
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.814447313388721,
+      "productionTime": 409
     },
     {
-      "id": "carrotFarm",
+      "id": "upgrade_profile_complexity_4",
       "level": 12,
-      "cost": 6000,
+      "cost": 6560,
       "workersRequired": 1,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.21,
-      "productionTime": 3.90000000000001
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.8551696790581571,
+      "productionTime": 401
     },
     {
-      "id": "carrotFarm",
+      "id": "upgrade_profile_complexity_4",
       "level": 13,
-      "cost": 7000,
+      "cost": 9840,
       "workersRequired": 1,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.22,
-      "productionTime": 3.80000000000001
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.897928163011065,
+      "productionTime": 393
     },
     {
-      "id": "carrotFarm",
+      "id": "upgrade_profile_complexity_4",
       "level": 14,
-      "cost": 8000,
+      "cost": 14760,
       "workersRequired": 1,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.23,
-      "productionTime": 3.70000000000001
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.9428245711616183,
+      "productionTime": 385
     },
     {
-      "id": "carrotFarm",
+      "id": "upgrade_profile_complexity_4",
       "level": 15,
-      "cost": 9000,
+      "cost": 22140,
       "workersRequired": 1,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.24,
-      "productionTime": 3.60000000000001
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.9899657997196993,
+      "productionTime": 377
     },
     {
-      "id": "nestFactory",
+      "id": "upgrade_profile_complexity_5",
       "level": 1,
       "cost": 75,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.1,
-      "productionTime": 5
+      "workerSpeedBonus": 0.5,
+      "productionTime": 1000
     },
     {
-      "id": "nestFactory",
+      "id": "upgrade_profile_complexity_5",
       "level": 2,
-      "cost": 150,
+      "cost": 120,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.11,
-      "productionTime": 4.9
+      "workerSpeedBonus": 0.525,
+      "productionTime": 980
     },
     {
-      "id": "nestFactory",
+      "id": "upgrade_profile_complexity_5",
       "level": 3,
-      "cost": 300,
+      "cost": 192,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.12,
-      "productionTime": 4.8
+      "workerSpeedBonus": 0.55125,
+      "productionTime": 960
     },
     {
-      "id": "nestFactory",
+      "id": "upgrade_profile_complexity_5",
       "level": 4,
-      "cost": 600,
+      "cost": 307,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.13,
-      "productionTime": 4.7
+      "workerSpeedBonus": 0.5788125000000001,
+      "productionTime": 941
     },
     {
-      "id": "nestFactory",
+      "id": "upgrade_profile_complexity_5",
       "level": 5,
-      "cost": 1200,
+      "cost": 491,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.14,
-      "productionTime": 4.6
+      "workerSpeedBonus": 0.6077531250000001,
+      "productionTime": 922
     },
     {
-      "id": "nestFactory",
+      "id": "upgrade_profile_complexity_5",
       "level": 6,
-      "cost": 1800,
+      "cost": 786,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.15,
-      "productionTime": 4.50000000000001
+      "workerSpeedBonus": 0.6381407812500002,
+      "productionTime": 904
     },
     {
-      "id": "nestFactory",
+      "id": "upgrade_profile_complexity_5",
       "level": 7,
-      "cost": 2200,
+      "cost": 1258,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.16,
-      "productionTime": 4.40000000000001
+      "workerSpeedBonus": 0.6700478203125002,
+      "productionTime": 886
     },
     {
-      "id": "nestFactory",
+      "id": "upgrade_profile_complexity_5",
       "level": 8,
-      "cost": 2600,
-      "workersRequired": 2,
+      "cost": 2013,
+      "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.17,
-      "productionTime": 4.30000000000001
+      "workerSpeedBonus": 0.7035502113281252,
+      "productionTime": 868
     },
     {
-      "id": "nestFactory",
+      "id": "upgrade_profile_complexity_5",
       "level": 9,
-      "cost": 3200,
-      "workersRequired": 2,
+      "cost": 3221,
+      "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.18,
-      "productionTime": 4.20000000000001
+      "workerSpeedBonus": 0.7387277218945315,
+      "productionTime": 851
     },
     {
-      "id": "nestFactory",
+      "id": "upgrade_profile_complexity_5",
       "level": 10,
-      "cost": 4000,
-      "workersRequired": 2,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.19,
-      "productionTime": 4.10000000000001
+      "cost": 5154,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.7756641079892581,
+      "productionTime": 834
     },
     {
-      "id": "nestFactory",
+      "id": "upgrade_profile_complexity_5",
       "level": 11,
-      "cost": 5000,
-      "workersRequired": 2,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.2,
-      "productionTime": 4.00000000000001
+      "cost": 8246,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.814447313388721,
+      "productionTime": 817
     },
     {
-      "id": "nestFactory",
+      "id": "upgrade_profile_complexity_5",
       "level": 12,
-      "cost": 6000,
-      "workersRequired": 2,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.21,
-      "productionTime": 3.90000000000001
+      "cost": 13194,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.8551696790581571,
+      "productionTime": 801
     },
     {
-      "id": "nestFactory",
+      "id": "upgrade_profile_complexity_5",
       "level": 13,
-      "cost": 7000,
-      "workersRequired": 3,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.22,
-      "productionTime": 3.80000000000001
+      "cost": 21110,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.897928163011065,
+      "productionTime": 785
     },
     {
-      "id": "nestFactory",
+      "id": "upgrade_profile_complexity_5",
       "level": 14,
-      "cost": 8000,
-      "workersRequired": 3,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.23,
-      "productionTime": 3.70000000000001
+      "cost": 33776,
+      "workersRequired": 1,
+      "maxWorkers": 3,
+      "workerSpeedBonus": 0.9428245711616183,
+      "productionTime": 769
     },
     {
-      "id": "nestFactory",
+      "id": "upgrade_profile_complexity_5",
       "level": 15,
-      "cost": 9000,
-      "workersRequired": 3,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.24,
-      "productionTime": 3.60000000000001
-    },
-    {
-      "id": "nenufarFarm",
-      "level": 1,
-      "cost": 75,
-      "workersRequired": 1,
-      "maxWorkers": 2,
-      "workerSpeedBonus": 0.1,
-      "productionTime": 5
-    },
-    {
-      "id": "nenufarFarm",
-      "level": 2,
-      "cost": 150,
-      "workersRequired": 1,
-      "maxWorkers": 2,
-      "workerSpeedBonus": 0.11,
-      "productionTime": 4.9
-    },
-    {
-      "id": "nenufarFarm",
-      "level": 3,
-      "cost": 300,
-      "workersRequired": 1,
-      "maxWorkers": 2,
-      "workerSpeedBonus": 0.12,
-      "productionTime": 4.8
-    },
-    {
-      "id": "nenufarFarm",
-      "level": 4,
-      "cost": 600,
-      "workersRequired": 1,
-      "maxWorkers": 2,
-      "workerSpeedBonus": 0.13,
-      "productionTime": 4.7
-    },
-    {
-      "id": "nenufarFarm",
-      "level": 5,
-      "cost": 1200,
-      "workersRequired": 1,
-      "maxWorkers": 2,
-      "workerSpeedBonus": 0.14,
-      "productionTime": 4.6
-    },
-    {
-      "id": "nenufarFarm",
-      "level": 6,
-      "cost": 1800,
+      "cost": 54042,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.15,
-      "productionTime": 4.50000000000001
-    },
-    {
-      "id": "nenufarFarm",
-      "level": 7,
-      "cost": 2200,
-      "workersRequired": 1,
-      "maxWorkers": 3,
-      "workerSpeedBonus": 0.16,
-      "productionTime": 4.40000000000001
-    },
-    {
-      "id": "nenufarFarm",
-      "level": 8,
-      "cost": 2600,
-      "workersRequired": 2,
-      "maxWorkers": 3,
-      "workerSpeedBonus": 0.17,
-      "productionTime": 4.30000000000001
-    },
-    {
-      "id": "nenufarFarm",
-      "level": 9,
-      "cost": 3200,
-      "workersRequired": 2,
-      "maxWorkers": 3,
-      "workerSpeedBonus": 0.18,
-      "productionTime": 4.20000000000001
-    },
-    {
-      "id": "nenufarFarm",
-      "level": 10,
-      "cost": 4000,
-      "workersRequired": 2,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.19,
-      "productionTime": 4.10000000000001
-    },
-    {
-      "id": "nenufarFarm",
-      "level": 11,
-      "cost": 5000,
-      "workersRequired": 2,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.2,
-      "productionTime": 4.00000000000001
-    },
-    {
-      "id": "nenufarFarm",
-      "level": 12,
-      "cost": 6000,
-      "workersRequired": 2,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.21,
-      "productionTime": 3.90000000000001
-    },
-    {
-      "id": "nenufarFarm",
-      "level": 13,
-      "cost": 7000,
-      "workersRequired": 3,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.22,
-      "productionTime": 3.80000000000001
-    },
-    {
-      "id": "nenufarFarm",
-      "level": 14,
-      "cost": 8000,
-      "workersRequired": 3,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.23,
-      "productionTime": 3.70000000000001
-    },
-    {
-      "id": "nenufarFarm",
-      "level": 15,
-      "cost": 9000,
-      "workersRequired": 3,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.24,
-      "productionTime": 3.60000000000001
-    },
-    {
-      "id": "candleBabaYagaHut",
-      "level": 1,
-      "cost": 75,
-      "workersRequired": 1,
-      "maxWorkers": 2,
-      "workerSpeedBonus": 0.1,
-      "productionTime": 5
-    },
-    {
-      "id": "candleBabaYagaHut",
-      "level": 2,
-      "cost": 150,
-      "workersRequired": 1,
-      "maxWorkers": 2,
-      "workerSpeedBonus": 0.11,
-      "productionTime": 4.9
-    },
-    {
-      "id": "candleBabaYagaHut",
-      "level": 3,
-      "cost": 300,
-      "workersRequired": 1,
-      "maxWorkers": 2,
-      "workerSpeedBonus": 0.12,
-      "productionTime": 4.8
-    },
-    {
-      "id": "candleBabaYagaHut",
-      "level": 4,
-      "cost": 600,
-      "workersRequired": 1,
-      "maxWorkers": 2,
-      "workerSpeedBonus": 0.13,
-      "productionTime": 4.7
-    },
-    {
-      "id": "candleBabaYagaHut",
-      "level": 5,
-      "cost": 1200,
-      "workersRequired": 1,
-      "maxWorkers": 2,
-      "workerSpeedBonus": 0.14,
-      "productionTime": 4.6
-    },
-    {
-      "id": "candleBabaYagaHut",
-      "level": 6,
-      "cost": 1800,
-      "workersRequired": 1,
-      "maxWorkers": 3,
-      "workerSpeedBonus": 0.15,
-      "productionTime": 4.50000000000001
-    },
-    {
-      "id": "candleBabaYagaHut",
-      "level": 7,
-      "cost": 2200,
-      "workersRequired": 1,
-      "maxWorkers": 3,
-      "workerSpeedBonus": 0.16,
-      "productionTime": 4.40000000000001
-    },
-    {
-      "id": "candleBabaYagaHut",
-      "level": 8,
-      "cost": 2600,
-      "workersRequired": 2,
-      "maxWorkers": 3,
-      "workerSpeedBonus": 0.17,
-      "productionTime": 4.30000000000001
-    },
-    {
-      "id": "candleBabaYagaHut",
-      "level": 9,
-      "cost": 3200,
-      "workersRequired": 2,
-      "maxWorkers": 3,
-      "workerSpeedBonus": 0.18,
-      "productionTime": 4.20000000000001
-    },
-    {
-      "id": "candleBabaYagaHut",
-      "level": 10,
-      "cost": 4000,
-      "workersRequired": 2,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.19,
-      "productionTime": 4.10000000000001
-    },
-    {
-      "id": "candleBabaYagaHut",
-      "level": 11,
-      "cost": 5000,
-      "workersRequired": 2,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.2,
-      "productionTime": 4.00000000000001
-    },
-    {
-      "id": "candleBabaYagaHut",
-      "level": 12,
-      "cost": 6000,
-      "workersRequired": 2,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.21,
-      "productionTime": 3.90000000000001
-    },
-    {
-      "id": "candleBabaYagaHut",
-      "level": 13,
-      "cost": 7000,
-      "workersRequired": 3,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.22,
-      "productionTime": 3.80000000000001
-    },
-    {
-      "id": "candleBabaYagaHut",
-      "level": 14,
-      "cost": 8000,
-      "workersRequired": 3,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.23,
-      "productionTime": 3.70000000000001
-    },
-    {
-      "id": "candleBabaYagaHut",
-      "level": 15,
-      "cost": 9000,
-      "workersRequired": 3,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.24,
-      "productionTime": 3.60000000000001
-    },
-    {
-      "id": "pillowMaker",
-      "level": 1,
-      "cost": 75,
-      "workersRequired": 1,
-      "maxWorkers": 2,
-      "workerSpeedBonus": 0.1,
-      "productionTime": 5
-    },
-    {
-      "id": "pillowMaker",
-      "level": 2,
-      "cost": 150,
-      "workersRequired": 1,
-      "maxWorkers": 2,
-      "workerSpeedBonus": 0.11,
-      "productionTime": 4.9
-    },
-    {
-      "id": "pillowMaker",
-      "level": 3,
-      "cost": 300,
-      "workersRequired": 1,
-      "maxWorkers": 2,
-      "workerSpeedBonus": 0.12,
-      "productionTime": 4.8
-    },
-    {
-      "id": "pillowMaker",
-      "level": 4,
-      "cost": 600,
-      "workersRequired": 1,
-      "maxWorkers": 2,
-      "workerSpeedBonus": 0.13,
-      "productionTime": 4.7
-    },
-    {
-      "id": "pillowMaker",
-      "level": 5,
-      "cost": 1200,
-      "workersRequired": 1,
-      "maxWorkers": 2,
-      "workerSpeedBonus": 0.14,
-      "productionTime": 4.6
-    },
-    {
-      "id": "pillowMaker",
-      "level": 6,
-      "cost": 1800,
-      "workersRequired": 1,
-      "maxWorkers": 3,
-      "workerSpeedBonus": 0.15,
-      "productionTime": 4.50000000000001
-    },
-    {
-      "id": "pillowMaker",
-      "level": 7,
-      "cost": 2200,
-      "workersRequired": 1,
-      "maxWorkers": 3,
-      "workerSpeedBonus": 0.16,
-      "productionTime": 4.40000000000001
-    },
-    {
-      "id": "pillowMaker",
-      "level": 8,
-      "cost": 2600,
-      "workersRequired": 2,
-      "maxWorkers": 3,
-      "workerSpeedBonus": 0.17,
-      "productionTime": 4.30000000000001
-    },
-    {
-      "id": "pillowMaker",
-      "level": 9,
-      "cost": 3200,
-      "workersRequired": 2,
-      "maxWorkers": 3,
-      "workerSpeedBonus": 0.18,
-      "productionTime": 4.20000000000001
-    },
-    {
-      "id": "pillowMaker",
-      "level": 10,
-      "cost": 4000,
-      "workersRequired": 2,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.19,
-      "productionTime": 4.10000000000001
-    },
-    {
-      "id": "pillowMaker",
-      "level": 11,
-      "cost": 5000,
-      "workersRequired": 2,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.2,
-      "productionTime": 4.00000000000001
-    },
-    {
-      "id": "pillowMaker",
-      "level": 12,
-      "cost": 6000,
-      "workersRequired": 2,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.21,
-      "productionTime": 3.90000000000001
-    },
-    {
-      "id": "pillowMaker",
-      "level": 13,
-      "cost": 7000,
-      "workersRequired": 3,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.22,
-      "productionTime": 3.80000000000001
-    },
-    {
-      "id": "pillowMaker",
-      "level": 14,
-      "cost": 8000,
-      "workersRequired": 3,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.23,
-      "productionTime": 3.70000000000001
-    },
-    {
-      "id": "pillowMaker",
-      "level": 15,
-      "cost": 9000,
-      "workersRequired": 3,
-      "maxWorkers": 4,
-      "workerSpeedBonus": 0.24,
-      "productionTime": 3.60000000000001
+      "workerSpeedBonus": 0.9899657997196993,
+      "productionTime": 754
     }
   ],
-  "upgrade_profile": [
+  "upgrade_character_profile": [
     {
       "id": "common_character",
       "level": 1,
@@ -7684,7 +7662,7 @@
     },
     {
       "id": "tuto_level_1_unlock_config",
-      "machine": "nenufarFarm",
+      "machine": "nenupharFarm",
       "unlock": 4
     },
     {
@@ -7704,7 +7682,7 @@
     },
     {
       "id": "tuto_level_2_unlock_config",
-      "machine": "nenufarFarm",
+      "machine": "nenupharFarm",
       "unlock": 4
     },
     {
@@ -7729,358 +7707,138 @@
     },
     {
       "id": "base",
-      "machine": "nenufarFarm",
+      "machine": "nenupharFarm",
       "unlock": 4
     },
     {
       "id": "base",
       "machine": "candleBabaYagaHut",
       "unlock": 4
+    },
+    {
+      "id": "base",
+      "machine": "coffeeShop"
+    },
+    {
+      "id": "base",
+      "machine": "bottleMaker"
+    },
+    {
+      "id": "base",
+      "machine": "sandwichStore"
+    },
+    {
+      "id": "base",
+      "machine": "croissantMaker"
+    },
+    {
+      "id": "base",
+      "machine": "gameStore",
+      "unlock": 15
     }
   ],
   "world_config": [
     {
-      "id": "level1_world_config",
-      "competitors": "bot_cat",
-      "nbOfRounds": 5,
+      "id": "Tutorial_1",
       "taxConfig": "tax_config_0",
-      "marketConfig": "tuto_round_config_0",
       "unlockConfig": "tuto_level_0_unlock_config"
     },
     {
-      "id": "level2_world_config",
-      "competitors": "bot_cat",
-      "nbOfRounds": 5,
+      "id": "Tutorial_2",
       "taxConfig": "tax_config_0",
-      "marketConfig": "tuto_round_config_0",
       "unlockConfig": "tuto_level_0_unlock_config"
     },
     {
-      "id": "level3_world_config",
-      "competitors": "bot_cat",
-      "nbOfRounds": 7,
+      "id": "Tutorial_3",
       "taxConfig": "tax_config_1",
-      "marketConfig": "tuto_round_config_1",
       "unlockConfig": "tuto_level_1_unlock_config"
     },
     {
-      "id": "level3_world_config",
-      "competitors": "bot_octopus",
-      "nbOfRounds": 7,
-      "taxConfig": "tax_config_1",
-      "marketConfig": "tuto_round_config_1",
-      "unlockConfig": "tuto_level_1_unlock_config"
-    },
-    {
-      "id": "level4_world_config",
-      "competitors": "bot_cat",
-      "nbOfRounds": 10,
+      "id": "Bottle_Intro",
       "taxConfig": "tax_config_2",
-      "marketConfig": "round_config_base",
       "unlockConfig": "tuto_level_2_unlock_config"
     },
     {
-      "id": "level4_world_config",
-      "competitors": "bot_octopus",
-      "nbOfRounds": 10,
+      "id": "Bottle_2_Intense",
       "taxConfig": "tax_config_2",
-      "marketConfig": "round_config_base",
       "unlockConfig": "tuto_level_2_unlock_config"
     },
     {
-      "id": "level4_world_config",
-      "competitors": "bot_sloth",
-      "nbOfRounds": 10,
+      "id": "Bottle_3_Slow",
       "taxConfig": "tax_config_2",
-      "marketConfig": "round_config_base",
       "unlockConfig": "tuto_level_2_unlock_config"
     },
     {
-      "id": "level5_world_config",
-      "competitors": "bot_cat",
-      "nbOfRounds": 10,
+      "id": "Bottle_4_Intense",
       "taxConfig": "tax_config_2",
-      "marketConfig": "round_config_base",
       "unlockConfig": "tuto_level_2_unlock_config"
     },
     {
-      "id": "level5_world_config",
-      "competitors": "bot_octopus",
-      "nbOfRounds": 10,
+      "id": "Nenuphar_Intro",
       "taxConfig": "tax_config_2",
-      "marketConfig": "round_config_base",
       "unlockConfig": "tuto_level_2_unlock_config"
     },
     {
-      "id": "level5_world_config",
-      "competitors": "bot_sloth",
-      "nbOfRounds": 10,
+      "id": "Nest_Intro",
       "taxConfig": "tax_config_2",
-      "marketConfig": "round_config_base",
       "unlockConfig": "tuto_level_2_unlock_config"
     },
     {
-      "id": "level6_world_config",
-      "competitors": "bot_cat",
-      "nbOfRounds": 12,
+      "id": "Nest_1_Normal",
       "taxConfig": "tax_config_2",
-      "marketConfig": "round_config_base",
-      "unlockConfig": "base"
-    },
-    {
-      "id": "level6_world_config",
-      "competitors": "bot_octopus",
-      "nbOfRounds": 12,
-      "taxConfig": "tax_config_2",
-      "marketConfig": "round_config_base",
-      "unlockConfig": "base"
-    },
-    {
-      "id": "level6_world_config",
-      "competitors": "bot_sloth",
-      "nbOfRounds": 12,
-      "taxConfig": "tax_config_2",
-      "marketConfig": "round_config_base",
-      "unlockConfig": "base"
-    },
-    {
-      "id": "level7_world_config",
-      "competitors": "bot_cat",
-      "nbOfRounds": 15,
-      "taxConfig": "tax_config_2",
-      "marketConfig": "round_config_base",
-      "unlockConfig": "base"
-    },
-    {
-      "id": "level7_world_config",
-      "competitors": "bot_octopus",
-      "nbOfRounds": 15,
-      "taxConfig": "tax_config_2",
-      "marketConfig": "round_config_base",
-      "unlockConfig": "base"
-    },
-    {
-      "id": "level7_world_config",
-      "competitors": "bot_sloth",
-      "nbOfRounds": 15,
-      "taxConfig": "tax_config_2",
-      "marketConfig": "round_config_base",
-      "unlockConfig": "base"
-    },
-    {
-      "id": "level8_world_config",
-      "competitors": "bot_cat",
-      "nbOfRounds": 20,
-      "taxConfig": "tax_config_2",
-      "marketConfig": "round_config_base",
-      "unlockConfig": "base"
-    },
-    {
-      "id": "level8_world_config",
-      "competitors": "bot_octopus",
-      "nbOfRounds": 20,
-      "taxConfig": "tax_config_2",
-      "marketConfig": "round_config_base",
-      "unlockConfig": "base"
-    },
-    {
-      "id": "level8_world_config",
-      "competitors": "bot_sloth",
-      "nbOfRounds": 20,
-      "taxConfig": "tax_config_2",
-      "marketConfig": "round_config_base",
-      "unlockConfig": "base"
-    },
-    {
-      "id": "levelbase_world_config",
-      "competitors": "bot_cat",
-      "nbOfRounds": 75,
-      "taxConfig": "tax_config_2",
-      "marketConfig": "round_config_base",
-      "unlockConfig": "base"
-    },
-    {
-      "id": "levelbase_world_config",
-      "competitors": "bot_octopus",
-      "nbOfRounds": 75,
-      "taxConfig": "tax_config_2",
-      "marketConfig": "round_config_base",
-      "unlockConfig": "base"
-    },
-    {
-      "id": "levelbase_world_config",
-      "competitors": "bot_sloth",
-      "nbOfRounds": 75,
-      "taxConfig": "tax_config_2",
-      "marketConfig": "round_config_base",
       "unlockConfig": "base"
     }
   ],
   "world_level": [
     {
       "id": "level1",
-      "config": "level1_world_config",
+      "config": "Tutorial_1",
       "reward": "1_common_chest"
     },
     {
       "id": "level2",
-      "config": "level2_world_config",
+      "config": "Tutorial_2",
       "reward": "2_common_chest"
     },
     {
       "id": "level3",
-      "config": "level3_world_config",
+      "config": "Tutorial_3",
       "reward": "3_rare_chest"
     },
     {
       "id": "level4",
-      "config": "level4_world_config",
+      "config": "Bottle_Intro",
       "reward": "4_epic_chest"
     },
     {
       "id": "level5",
-      "config": "level5_world_config",
+      "config": "Bottle_2_Intense",
       "reward": "1_legendary_chest"
     },
     {
       "id": "level6",
-      "config": "level6_world_config",
+      "config": "Bottle_3_Slow",
       "reward": "1_legendary_chest"
     },
     {
       "id": "level7",
-      "config": "level7_world_config",
+      "config": "Bottle_4_Intense",
       "reward": "1_legendary_chest"
     },
     {
       "id": "level8",
-      "config": "level8_world_config",
+      "config": "Nenuphar_Intro",
       "reward": "1_legendary_chest"
     },
     {
       "id": "level9",
-      "config": "level8_world_config",
+      "config": "Nest_Intro",
       "reward": "1_legendary_chest"
     },
     {
       "id": "level10",
-      "config": "level8_world_config",
+      "config": "Nest_1_Normal",
       "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level11",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level12",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level13",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level14",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level15",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level16",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level17",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level18",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level19",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level20",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level21",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level22",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level23",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level24",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level25",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level26",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level27",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level28",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level29",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level30",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level31",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "level32",
-      "config": "level8_world_config",
-      "reward": "1_legendary_chest"
-    },
-    {
-      "id": "levelbase",
-      "config": "levelbase_world_config",
-      "reward": "5_legendary_chest"
     }
   ]
 }

@@ -53,8 +53,9 @@ export function spawnCustomer(game) {
   const lane = $("#customer-lane");
   const cust = el("div", "customer");
   cust.style.left = randInt(12, 88) + "%";
-  const custSprite = game.cfg.customerSprites[need.resId] || "Customer"; // sprite chosen by demanded resource
-  cust.innerHTML = `<div class="bubble"><span>${need.qty}×</span><img src="${game.tierSrc(need.resId, 1)}"></div><img class="cust-sprite" src="${sprite(custSprite)}">`;
+  const custSprite = game.cfg.customerSprites[need.resId]; // sprite chosen by demanded resource
+  const custSrc = custSprite ? sprite(custSprite, "Characters") : sprite("Customer", "UI"); // else generic UI customer
+  cust.innerHTML = `<div class="bubble"><span>${need.qty}×</span><img src="${game.tierSrc(need.resId, 1)}"></div><img class="cust-sprite" src="${custSrc}">`;
   const fall = FALL_TIME / (game.cfg.g.customerSpeed || 1); // customerSpeed: higher = faster
   cust.style.setProperty("--fall", fall + "s");
   // tap the bubble to inspect the wanted resource, the sprite to inspect the client

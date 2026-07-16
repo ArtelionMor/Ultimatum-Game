@@ -52,7 +52,7 @@ function renderCustomerGrid(body) {
   Game.cfg.customerOrder.forEach((cid) => {
     const c = cust(cid);
     const card = el("button", "codex-card");
-    card.innerHTML = `<img src="${sprite(c.spriteId)}"><span>${cap(cid)}</span>`;
+    card.innerHTML = `<img src="${sprite(c.spriteId, "Characters")}"><span>${cap(cid)}</span>`;
     card.onclick = () => { selected = cid; renderCodex(); };
     grid.appendChild(card);
   });
@@ -64,7 +64,7 @@ function renderResourceGrid(body) {
   Game.cfg.resourceOrder.forEach((rid) => {
     const r = res(rid);
     const card = el("button", "codex-card");
-    card.innerHTML = `<img src="${sprite(resIcon(r))}"><span>${r.displayName}</span>`;
+    card.innerHTML = `<img src="${sprite(resIcon(r), "Ressources")}"><span>${r.displayName}</span>`;
     card.onclick = () => openResource(rid);
     grid.appendChild(card);
   });
@@ -76,13 +76,13 @@ function renderCustomer(body, cid) {
   const c = cust(cid); if (!c) { selected = null; renderCodex(); return; }
   body.appendChild(backLink("Tous les clients"));
   body.appendChild(el("div", "codex-head",
-    `<img src="${sprite(c.spriteId)}"><div class="codex-name">${cap(cid)}</div>`));
+    `<img src="${sprite(c.spriteId, "Characters")}"><div class="codex-name">${cap(cid)}</div>`));
   body.appendChild(el("div", "cp-section", "Veut acheter"));
   if (!c.needs.length) body.appendChild(el("div", "menu-muted", "Ne demande rien pour l'instant."));
   c.needs.forEach((rid) => {
     const r = res(rid);
     const row = el("button", "codex-row");
-    row.innerHTML = `<img src="${sprite(resIcon(r))}"><span>${r.displayName}</span><span class="codex-go">›</span>`;
+    row.innerHTML = `<img src="${sprite(resIcon(r), "Ressources")}"><span>${r.displayName}</span><span class="codex-go">›</span>`;
     row.onclick = () => openResource(rid);
     body.appendChild(row);
   });

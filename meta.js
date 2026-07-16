@@ -241,21 +241,26 @@ export const Meta = {
   },
 
   // ---------- In-game bonuses ----------
-  // Production-speed bonus a character adds on a given machine (character affinity
-  // at its current level + the speed of every gear worn).
+  // Speed a character contributes on one of ITS machines: the progress-profile
+  // percent at its current level × its rarity multiplier, plus worn gear.
+  // Fraction (0.05 = +5%), like machine workerSpeedBonus.
+  charSpeed(charId) {
+    const ch = this.cfg.characters[charId];
+    if (!ch) return 0;
+    const pct = (this.cfg.progressProfiles[ch.progressProfile] || {})[this.charLevel(charId)] || 0;
+    return (pct / 100) * (ch.multiplier || 1);
+  },
   speedBonus(charId, machineId) {
     const ch = this.cfg.characters[charId];
-    const data = ch && ch.levels[this.charLevel(charId)];
-    let v = data ? (data.speeds[machineId] || 0) : 0;
+    let v = ch && ch.machines.includes(machineId) ? this.charSpeed(charId) : 0;
     const eq = this.state.equipment[charId] || {};
     for (const slot in eq) { const inst = eq[slot] && this.gearInst(eq[slot]); if (inst) v += this.gearSpeed(inst); }
     return v;
   },
   // Chance (0..1) that this character's machine doubles its production spawn.
+  // Characters no longer carry a 2x stat (2026-07 rework) — gear only.
   proba2x(charId) {
-    const ch = this.cfg.characters[charId];
-    const data = ch && ch.levels[this.charLevel(charId)];
-    let v = data ? data.proba2x : 0;
+    let v = 0;
     const eq = this.state.equipment[charId] || {};
     for (const slot in eq) { const inst = eq[slot] && this.gearInst(eq[slot]); if (inst) v += this.gearProba(inst); }
     return v;
