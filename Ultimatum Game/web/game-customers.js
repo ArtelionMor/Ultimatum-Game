@@ -17,7 +17,11 @@ function pickNeed(marketDef, order) {
   const tot = order.reduce((s, r) => s + (w[r] || 0), 0);
   let r = Math.random() * tot; let res = order.find((x) => w[x] > 0) || order[0];
   for (const x of order) { if (!w[x]) continue; r -= w[x]; if (r <= 0) { res = x; break; } }
-  const avg = marketDef.avg; const qty = Math.max(1, [avg - 1, avg, avg + 1][randInt(0, 2)]);
+  // La quantité RESPECTE la valeur configurée : « moyenne 1 » = chaque client
+  // demande 1. Le tirage ±1 historique ne revient que si le round l'a demandé
+  // (case « ±1 aléatoire » du bloc dans l'outil → colonne qty_spread).
+  const avg = marketDef.avg;
+  const qty = marketDef.spread ? Math.max(1, [avg - 1, avg, avg + 1][randInt(0, 2)]) : Math.max(1, avg);
   return { resId: res, qty };
 }
 
@@ -39,10 +43,12 @@ function chooseShop(game, eligible, resId) {
 
 function sellTo(game, c, resId, qty) {
   let gain = 0;
+  const asked = qty;
   const m = c.stock[resId];
   const tiers = Object.keys(m).map(Number).sort((a, b) => b - a); // highest tier first
   for (const t of tiers) { while (qty > 0 && m[t] > 0) { m[t]--; qty--; gain += game.tierInfo(resId, t).price; } }
   c.money += gain; c.salesThisRound += gain;
+  c.unitsThisRound = (c.unitsThisRound || 0) + (asked - qty); // parts de marché en volume (camembert de fin de round)
   if (c === game.player) game._invDirty = true;
   return gain;
 }
@@ -79,6 +85,11 @@ export function spawnCustomer(game) {
       cust.classList.add("nobody"); // turns red
       const x = parseFloat(cust.style.left) || 50;
       cust.style.left = (x < 50 ? -25 : 125) + "%"; // slide off to the nearest edge
+      // Demande non servie = part de marché PERDUE (camembert de fin de round).
+      // Valorisée au prix T1 : on ignore quel tier aurait été vendu, c'est le
+      // minimum que ce client aurait payé.
+      m.lostUnits = (m.lostUnits || 0) + need.qty;
+      m.lostValue = (m.lostValue || 0) + need.qty * game.tierInfo(need.resId, 1).price;
     }
     setTimeout(() => cust.remove(), 750);
     m.served++; m.active--;

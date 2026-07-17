@@ -48,6 +48,9 @@ export function normalize(raw) {
     if (!round) return;
     (marketProfiles[m.id] = marketProfiles[m.id] || {})[round] = {
       customers: m.customers, avg: m["average amount"],
+      // qty_spread (tool checkbox, 1/0): opt back IN to the ±1 random quantity.
+      // Absent or 0, every customer asks EXACTLY `avg` — "average 1" means 1.
+      spread: !!m.qty_spread,
       // data-driven: one weight per known resource id (column named like the resource)
       weights: Object.fromEntries(resourceOrder.map((rid) => [rid, m[rid] || 0])),
     };

@@ -3,9 +3,11 @@
  *
  * The economics here mirror the engine exactly (see web/game-customers.js
  * pickNeed + web/game-bots.js target): a customer picks resource r with
- * probability w[r]/totalW, then buys a quantity drawn from {avg-1, avg, avg+1}
- * (floored at 1), so the expected demand for r in a round is
+ * probability w[r]/totalW, then buys EXACTLY `avg` units — unless the block
+ * re-enables the ±1 spread (qtySpread → qty drawn from {avg-1, avg, avg+1},
+ * floored at 1). Either way the expected demand for r in a round is
  *     customers * (w[r] / totalW) * avg
+ * (spread only adds variance — except at avg=1 where the floor skews E to ~4/3).
  * Any change to the engine's demand rule must be mirrored in expectedUnits().
  */
 
@@ -34,6 +36,9 @@ export function makeBlock(id, name) {
     roles: ["focus", "second"],
     customers: curveConst(20),
     avg: curveConst(3),
+    // false = chaque client demande EXACTEMENT `avg` (le moteur ne tire plus le
+    // ±1) ; true réactive le tirage {avg-1, avg, avg+1} historique.
+    qtySpread: false,
     mix: [{ role: "focus", weight: curveConst(3) }, { role: "second", weight: curveConst(1) }],
     defaultBind: {},
   };
@@ -81,6 +86,7 @@ export function compileLevel(level, blocks) {
         blockId: b.id, blockName: b.name, instIdx, localIndex: i, blockRounds: n,
         customers: Math.max(0, Math.round(ov.customers != null ? ov.customers : curveAt(b.customers, i, n))),
         avg: Math.max(1, Math.round(ov.avg != null ? ov.avg : curveAt(b.avg, i, n))),
+        spread: !!b.qtySpread,
         weights,
       });
     }
@@ -202,7 +208,7 @@ export const BOT_BUFFS = [
 // anything else is silently read as zero by the engine.
 export function toMarketConfigRows(level, blocks, cfg) {
   return compileLevel(level, blocks).map((row) => {
-    const o = { id: level.id, round: "round_" + row.round, customers: row.customers, "average amount": row.avg };
+    const o = { id: level.id, round: "round_" + row.round, customers: row.customers, "average amount": row.avg, qty_spread: row.spread ? 1 : 0 };
     cfg.resourceOrder.forEach((r) => (o[r] = row.weights[r] || 0));
     return o;
   });
@@ -230,6 +236,9 @@ export function toCompetitorRows(level, blocks, cfg, tier) {
 }
 
 // competitors_buffs: one row per non-zero buff, scoped like the behavior rows.
+// `autoMerge` is the exception to the skip-zero rule: it is ALWAYS emitted (1/0),
+// because its absence means "default" (the engine merges) — an explicit 0 is the
+// only way to opt a bot out.
 export function toCompetitorBuffRows(level) {
   const out = [];
   (level.competitors || []).forEach((c) => {
@@ -237,6 +246,7 @@ export function toCompetitorBuffRows(level) {
       const v = (c.buffs || {})[k];
       if (v) out.push({ config: level.id, id: c.id, buff: k, value: v });
     });
+    out.push({ config: level.id, id: c.id, buff: "autoMerge", value: c.autoMerge === false ? 0 : 1 });
   });
   return out;
 }
@@ -256,7 +266,7 @@ export function toConfigLevels(doc, cfg, tier) {
 // Columns the engine will read as zero, and resources with no column at all.
 export function diagnoseColumns(rawMarketRows, cfg) {
   const ids = new Set(cfg.resourceOrder);
-  const known = new Set(["id", "round", "customers", "average amount"]);
+  const known = new Set(["id", "round", "customers", "average amount", "qty_spread"]);
   const stale = new Set(); const seen = new Set();
   (rawMarketRows || []).forEach((r) => {
     Object.keys(r).forEach((k) => {

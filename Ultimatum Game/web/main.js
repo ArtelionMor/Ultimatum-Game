@@ -153,6 +153,18 @@ const Game = {
     this.refreshInventory();
     return true;
   },
+  // Auto-merge (opt-in, tickbox in the merge sheet): fold every doable merge,
+  // lowest tier first so fresh T2s can cascade into T3+ in the same pass.
+  autoMergeTick() {
+    if (!this.autoMerge || !this.player) return; // pas de partie en cours (menu) → rien à replier
+    let guard = 200;
+    this.cfg.resourceOrder.forEach((rid) => {
+      const rules = this.cfg.convert[rid]; if (!rules) return;
+      Object.keys(rules).map(Number).sort((a, b) => a - b).forEach((t) => {
+        while (guard-- > 0 && this.canConvert(this.player, rid, t)) this.doConvert(rid, t);
+      });
+    });
+  },
 
   // Build an <img> for a given resource tier, with a fallback chain so it works
   // whatever naming the tier art ends up using (and falls back to the base sprite
@@ -203,6 +215,7 @@ const Game = {
     const g = this.cfg.g;
     this.round = 0;
     this.selectedWorker = null;
+    this._taxVictory = false;   // victoire par dernier impôt réglé (game-tax.js)
     this.player = {
       id: "player", name: "Toi", spriteId: "Worker", spriteFolder: "UI", isPlayer: true, eliminated: false,
       money: g.startingMoney, stock: this.emptyStock(), storageCap: g.startingStorage,
@@ -296,6 +309,8 @@ const Game = {
       this.competitors.forEach((c) => { if (!c.isPlayer && !c.eliminated) staffBot(this, c); });
       this._botStaffTimer = 1;
     }
+    this._amTimer = (this._amTimer || 0) - dt;
+    if (this._amTimer <= 0) { this.autoMergeTick(); this._amTimer = 0.5; }
     // Live-refresh the tax/waves screen while it is open (money + projection move in real time).
     if (this._taxOpen) { this._taxTimer -= dt; if (this._taxTimer <= 0) { renderTaxInfo(this); this._taxTimer = 0.3; } }
 
@@ -317,9 +332,9 @@ const Game = {
   // A wave arrives: bots stock up, customers start falling. Production keeps running.
   startWave() {
     this.waveActive = true;
-    this.competitors.forEach((c) => { c.salesThisRound = 0; });
+    this.competitors.forEach((c) => { c.salesThisRound = 0; c.unitsThisRound = 0; });
     const m = this.marketFor(this.round);
-    this.market = { def: m, remaining: m.customers, total: m.customers, served: 0, spawnTimer: 0, active: 0 };
+    this.market = { def: m, remaining: m.customers, total: m.customers, served: 0, spawnTimer: 0, active: 0, lostUnits: 0, lostValue: 0 };
     $("#customer-lane").innerHTML = "";
     $("#phase-banner").textContent = `Vague ${this.round} — les clients arrivent !`;
     this.renderSuppliers(); this.renderWavePreview(); this.refreshHud();
@@ -385,11 +400,15 @@ const Game = {
 
   enterGameOver() {
     const ranked = [...this.competitors].sort((a, b) => (a.eliminated !== b.eliminated ? (a.eliminated ? 1 : -1) : b.money - a.money));
-    const won = !this.player.eliminated && ranked[0] === this.player;
+    // Deux chemins de victoire : régler le DERNIER impôt du niveau (game-tax.js —
+    // la vraie condition, les impôts sont les boss), ou finir premier au classement.
+    const won = !this.player.eliminated && (this._taxVictory || ranked[0] === this.player);
     $("#gameover-title").textContent = won ? "Victoire !" : "Défaite";
     $("#gameover-title").style.color = won ? "var(--ok)" : "var(--danger)";
     $("#final-score").textContent = this.player.money;
-    $("#gameover-rank").textContent = won ? "Tu domines le marché 👑" : `${ranked.indexOf(this.player) + 1}ᵉ sur ${this.competitors.length}`;
+    $("#gameover-rank").textContent = won
+      ? (this._taxVictory ? "Dernier impôt réglé — le marché est à toi 👑" : "Tu domines le marché 👑")
+      : `${ranked.indexOf(this.player) + 1}ᵉ sur ${this.competitors.length}`;
 
     // Victory rewards (once per one-shot level, every time in endless).
     const rewards = $("#gameover-rewards"); rewards.innerHTML = "";
@@ -421,8 +440,15 @@ $("#hud-home")?.addEventListener("click", () => {
 });
 $("#quit-confirm")?.addEventListener("click", () => Game.toMenu());
 $("#quit-cancel")?.addEventListener("click", () => $("#quit-overlay").classList.add("hidden"));
-$("#convert-close").addEventListener("click", () => Game.closeConvert());
-$("#convert-overlay").addEventListener("click", (e) => { if (e.target.id === "convert-overlay") Game.closeConvert(); });
+$("#merge-overlay")?.addEventListener("click", (e) => { if (e.target.id === "merge-overlay") Game.closeMerge(); });
+// L'auto-merge est un RÉGLAGE, pas un état de partie : il survit à la fermeture
+// de l'app (même modèle que la meta, clé localStorage à part).
+try { Game.autoMerge = localStorage.getItem("mu_automerge") === "1"; } catch (e) { /* storage bloqué → off */ }
+$("#automerge-box")?.addEventListener("change", (e) => {
+  Game.autoMerge = e.target.checked;
+  try { localStorage.setItem("mu_automerge", e.target.checked ? "1" : "0"); } catch (e2) { /* ignore */ }
+  Game.autoMergeTick();
+});
 $("#competitor-close").addEventListener("click", () => Game.closeCompetitor());
 $("#competitor-overlay").addEventListener("click", (e) => { if (e.target.id === "competitor-overlay") Game.closeCompetitor(); });
 $("#wave-preview")?.addEventListener("click", (e) => { const chip = e.target.closest(".wp-chip[data-res]"); if (chip) openResource(chip.dataset.res); });

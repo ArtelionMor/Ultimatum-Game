@@ -44,6 +44,10 @@ l'économie sur des graphiques, et l'outil génère les lignes exactes que le je
    vagues (fixe/rampe/liste — ex. rampe descendante = investit tôt, récolte
    tard). Chaque bot porte des **buffs** — les personnages équipés,
    rationalisés : `speed` (vitesse prod %), `proba2x` (%), `marketing` (+plat).
+   La case **Auto-merge** (cochée par défaut) contrôle si le bot plie son stock
+   (3×Tn → Tn+1) comme le joueur ; elle s'exporte en ligne `competitors_buffs`
+   `autoMerge` (1/0) — toujours émise, un 0 explicite est le seul opt-out (une
+   ligne absente = vieux export = le moteur merge).
 5. **Onglet Export : sortir les données.** Lignes `market_config` (id = l'id du
    niveau — un niveau n'a qu'un seul id, voir plus bas) ;
    `competitors_behavior` **v2** : une ligne par (bot × vague), colonnes
@@ -123,5 +127,7 @@ Câblage des ids — **une seule colonne dans la sheet** :
   référence son profil (`upgrade_profile_complexity_N`).
 - Si « un bouton ne fait rien » : lire d'abord la barre de statut — un boot
   raté affiche désormais une bannière pleine page.
-- `avg` = quantité moyenne par client (tirage `avg±1`, min 1) ; la colonne
-  s'appelle `average amount` dans market_config.
+- `avg` = quantité par client — **exacte par défaut** (`avg` = 1 veut dire 1).
+  La case « ±1 aléatoire » du bloc réactive le tirage historique
+  `{avg-1, avg, avg+1}` (min 1) et s'exporte en colonne `qty_spread` (1/0) ;
+  la colonne s'appelle `average amount` dans market_config.

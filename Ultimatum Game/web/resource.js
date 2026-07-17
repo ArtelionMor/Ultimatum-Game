@@ -103,8 +103,8 @@ function renderResourcePanel() {
 
   // --- refine action (in-game only) ---
   if (context.allowRefine && Game.cfg.convert[rid]) {
-    const btn = el("button", "cv-btn", "🔁 Raffiner");
-    btn.onclick = () => { closeResource(); Game.openConvert(rid); };
+    const btn = el("button", "cv-btn", "🔁 Merge");
+    btn.onclick = () => { closeResource(); Game.openMerge(); };
     body.appendChild(btn);
   }
 }

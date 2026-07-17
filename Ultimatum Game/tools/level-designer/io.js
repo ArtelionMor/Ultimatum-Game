@@ -67,6 +67,7 @@ export function migrate(doc) {
       if (typeof c.purchaseWeight === "number" && !c.purchase) { c.purchase = { mode: "const", value: c.purchaseWeight }; delete c.purchaseWeight; }
       c.purchase = c.purchase || { mode: "const", value: 5 };
       c.buffs = c.buffs || {};
+      c.autoMerge = c.autoMerge !== false; // pre-merge docs: bots merge by default
     });
   });
   return d;

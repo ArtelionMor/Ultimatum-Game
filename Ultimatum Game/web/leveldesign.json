@@ -13,12 +13,8 @@
         "value": 6
       },
       "avg": {
-        "mode": "list",
-        "values": [
-          2,
-          3,
-          4
-        ]
+        "mode": "const",
+        "value": 1
       },
       "mix": [
         {
@@ -30,7 +26,8 @@
         }
       ],
       "defaultBind": {},
-      "category": "Mono"
+      "category": "Mono",
+      "qtySpread": false
     },
     {
       "id": "blk_duo",
@@ -281,7 +278,6 @@
   "levels": [
     {
       "id": "Tutorial_1",
-      "marketConfigId": "Tutorial_1",
       "instances": [
         {
           "blockId": "blk_intro",
@@ -343,14 +339,14 @@
             "mode": "const",
             "value": 5
           },
-          "buffs": {}
+          "buffs": {},
+          "autoMerge": true
         }
       ],
       "biomeId": "biome_1"
     },
     {
       "id": "Tutorial_2",
-      "marketConfigId": "Tutorial_2",
       "instances": [
         {
           "blockId": "blk_intro",
@@ -417,7 +413,8 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         },
         {
           "id": "bot_octopus",
@@ -429,7 +426,8 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         }
       ],
       "biomeId": "biome_1"
@@ -437,7 +435,6 @@
     {
       "id": "Tutorial_3",
       "biomeId": "biome_1",
-      "marketConfigId": "Tutorial_3",
       "instances": [
         {
           "blockId": "blk_intro",
@@ -520,7 +517,8 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         },
         {
           "id": "bot_octopus",
@@ -532,14 +530,14 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         }
       ]
     },
     {
       "id": "Bottle_Intro",
       "biomeId": "biome_1",
-      "marketConfigId": "Bottle_Intro",
       "instances": [
         {
           "blockId": "blk_intro",
@@ -608,7 +606,8 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         },
         {
           "id": "bot_octopus",
@@ -620,14 +619,14 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         }
       ]
     },
     {
       "id": "Bottle_2_Intense",
       "biomeId": "biome_1",
-      "marketConfigId": "Bottle_2_Intense",
       "instances": [
         {
           "blockId": "blk_intro",
@@ -721,7 +720,8 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         },
         {
           "id": "bot_octopus",
@@ -733,7 +733,8 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         },
         {
           "id": "bot_sloth",
@@ -745,14 +746,14 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         }
       ]
     },
     {
       "id": "Bottle_3_Slow",
       "biomeId": "biome_1",
-      "marketConfigId": "Bottle_3_Slow",
       "instances": [
         {
           "blockId": "blk_mrmh8ook",
@@ -826,7 +827,8 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         },
         {
           "id": "bot_octopus",
@@ -838,7 +840,8 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         },
         {
           "id": "bot_sloth",
@@ -850,14 +853,14 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         }
       ]
     },
     {
       "id": "Bottle_4_Intense",
       "biomeId": "biome_1",
-      "marketConfigId": "Bottle_4_Intense",
       "instances": [
         {
           "blockId": "blk_duo",
@@ -975,7 +978,8 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         },
         {
           "id": "bot_octopus",
@@ -987,7 +991,8 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         },
         {
           "id": "bot_sloth",
@@ -999,14 +1004,14 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         }
       ]
     },
     {
       "id": "Nenuphar_Intro",
       "biomeId": "biome_1",
-      "marketConfigId": "Nenuphar_Intro",
       "instances": [
         {
           "blockId": "blk_intro",
@@ -1082,7 +1087,8 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         },
         {
           "id": "bot_octopus",
@@ -1094,7 +1100,8 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         },
         {
           "id": "bot_sloth",
@@ -1106,14 +1113,14 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         }
       ]
     },
     {
       "id": "Nest_Intro",
       "biomeId": "biome_1",
-      "marketConfigId": "Nest_Intro",
       "instances": [
         {
           "blockId": "blk_mrmh8ook",
@@ -1212,7 +1219,8 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         },
         {
           "id": "bot_cat",
@@ -1224,7 +1232,8 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         },
         {
           "id": "bot_octopus",
@@ -1236,14 +1245,14 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         }
       ]
     },
     {
       "id": "Nest_1_Normal",
       "biomeId": "biome_1",
-      "marketConfigId": "Nest_1_Normal",
       "instances": [
         {
           "blockId": "blk_mrmh8ook",
@@ -1342,7 +1351,8 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         },
         {
           "id": "bot_octopus",
@@ -1354,7 +1364,8 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         },
         {
           "id": "bot_sloth",
@@ -1366,7 +1377,8 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         }
       ]
     }

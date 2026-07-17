@@ -165,6 +165,11 @@ function blockCard(b) {
   g.append(lab("Catégorie"), cat);
   g.append(lab("Clients"), curveEditor(b.customers, (c) => { b.customers = c; }, changed));
   g.append(lab("Quantité moy."), curveEditor(b.avg, (c) => { b.avg = c; }, changed));
+  // Décochée (défaut) : chaque client demande exactement `avg`. Cochée : le
+  // moteur retrouve son tirage {avg-1, avg, avg+1} → colonne qty_spread.
+  const qs = document.createElement("input"); qs.type = "checkbox"; qs.checked = !!b.qtySpread;
+  qs.onchange = () => { b.qtySpread = qs.checked; changed(); };
+  g.append(lab("±1 aléatoire"), wrapLabel(qs, "quantité variable"));
   body.appendChild(g);
 
   const mix = document.createElement("div"); mix.className = "mix";
@@ -268,7 +273,7 @@ function previewText(b) {
   const n = Math.max(1, b.rounds | 0);
   return Array.from({ length: n }, (_, i) => {
     const mixTxt = b.mix.map((m) => `${m.role}:${curveAt(m.weight, i, n)}`).join(" ");
-    return `[${curveAt(b.customers, i, n)}c ×${curveAt(b.avg, i, n)} ${mixTxt}]`;
+    return `[${curveAt(b.customers, i, n)}c ×${curveAt(b.avg, i, n)}${b.qtySpread ? "±1" : ""} ${mixTxt}]`;
   }).join(" ");
 }
 
@@ -649,9 +654,14 @@ function botCard(c, idx, l, e) {
 
   const head = document.createElement("div"); head.className = "row";
   head.innerHTML = `<h3 style="margin:0">${c.id}</h3>`;
+  // Auto-merge : le bot plie son stock (3×Tn → Tn+1) comme le joueur. Coché par
+  // défaut ; décoché, l'export émet autoMerge:0 et le moteur ne merge pas ce bot
+  // — le knob "bot facile" des premiers niveaux.
+  const am = document.createElement("input"); am.type = "checkbox"; am.checked = c.autoMerge !== false;
+  am.onchange = () => { c.autoMerge = am.checked; mark(); renderExport(); };
   const rm = document.createElement("button"); rm.className = "icon"; rm.textContent = "✕";
   rm.onclick = () => { l.competitors.splice(idx, 1); mark(); renderBots(); renderExport(); };
-  head.append(spacer(), rm);
+  head.append(spacer(), wrapLabel(am, "Auto-merge"), rm);
   card.appendChild(head);
 
   const ctl = document.createElement("div"); ctl.className = "row"; ctl.style.margin = "8px 0";
