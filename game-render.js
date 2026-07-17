@@ -65,7 +65,12 @@ export const renderMethods = {
 
     const top = el("div", "inv-top");
     const cap = el("span", "inv-cap", ""); cap.id = "inv-cap";
-    top.append(el("span", "inv-top-label", "Inventaire"), cap);
+    // One Merge entry point for the whole inventory (the old per-row 🔁 badge was
+    // absolutely positioned outside its row and clipped on mobile). It glows via
+    // refreshInventory() whenever at least one merge is currently possible.
+    const merge = el("button", "inv-merge-btn", "🔁 Merge"); merge.id = "inv-merge";
+    merge.onclick = () => this.openMerge();
+    top.append(el("span", "inv-top-label", "Inventaire"), merge, cap);
     bar.appendChild(top);
 
     const head = el("div", "inv-grid-head");
@@ -81,9 +86,9 @@ export const renderMethods = {
       const row = el("div", "inv-row");
       const rowHead = el("div", "inv-row-head");
       const icon = this.tierImg(rid, this.bestTier(this.player, rid) || 1); icon.className = "inv-row-icon"; icon.title = this.res(rid).displayName;
-      rowHead.append(icon, el("span", "inv-refine", "🔁"));
+      rowHead.appendChild(icon);
       rowHead.classList.add("clickable"); rowHead.title = this.res(rid).displayName;
-      rowHead.onclick = () => openResource(rid, { player: this.player, allowRefine: true }); // resource widget (refine lives inside it)
+      rowHead.onclick = () => openResource(rid, { player: this.player, allowRefine: true }); // resource widget (merge entry lives inside it)
       row.appendChild(rowHead);
       this._invCells[rid] = {};
       for (let t = 1; t <= maxT; t++) {
@@ -112,7 +117,6 @@ export const renderMethods = {
         }
       }
       if (this._invRow[rid]) {
-        this._invRow[rid].classList.toggle("can-refine", this.anyConvert(rid));
         // Show a row when the player holds stock OR a staffed machine produces it (so assigning
         // workers reveals the row right away). Vacant rows collapse (display:none); the reflow is
         // confined to the capped-height .inv-scroll box, so the machine list below never bumps.
@@ -122,56 +126,60 @@ export const renderMethods = {
     });
     const tot = this.stockTotal(this.player), cap = this.player.storageCap;
     const c = $("#inv-cap"); if (c) { c.textContent = `${tot}/${cap}`; c.classList.toggle("full", tot >= cap); }
-    if (this._convertResId && !$("#convert-overlay").classList.contains("hidden")) this.updateConvertList();
+    const mb = $("#inv-merge"); if (mb) mb.classList.toggle("glow", this.cfg.resourceOrder.some((rid) => this.anyConvert(rid)));
+    const mo = $("#merge-overlay"); // ?.-style guard: a stale cached index.html must not break the inventory loop
+    if (mo && !mo.classList.contains("hidden")) this.renderMergeList();
     this._invDirty = false; // DOM now matches the model
   },
 
-  // --- refining overlay (convert table) ---
+  // --- merge sheet (slides from the bottom edge) ---
   anyConvert(resId) { const r = this.cfg.convert[resId]; if (!r) return false; for (const t in r) if (this.canConvert(this.player, resId, +t)) return true; return false; },
-  openConvert(resId) {
-    this._convertResId = resId;
-    $("#convert-title").textContent = `Raffiner — ${this.res(resId).displayName}`;
-    this.renderConvertList();
-    openOverlay("convert-overlay");
+  openMerge() {
+    $("#automerge-box").checked = !!this.autoMerge;
+    this._mergeSig = null;
+    this.renderMergeList();
+    openOverlay("merge-overlay");
+    // .hidden is display:none — the slide transition needs one painted frame at
+    // translateY(100%) before .open lands, or the sheet just pops in place.
+    requestAnimationFrame(() => requestAnimationFrame(() => $("#merge-overlay").classList.add("open")));
   },
-  closeConvert() { this._convertResId = null; $("#convert-overlay").classList.add("hidden"); },
-  // Build the refine list once (stable button elements so clicks register).
-  renderConvertList() {
-    const resId = this._convertResId; if (!resId) return;
-    const list = $("#convert-list"); list.innerHTML = "";
-    const rules = this.cfg.convert[resId];
-    this._cvRows = [];
-    Object.keys(rules).map(Number).sort((a, b) => a - b).forEach((tier) => {
-      const rule = rules[tier];
+  closeMerge() {
+    const o = $("#merge-overlay");
+    o.classList.remove("open");                              // slide out…
+    setTimeout(() => o.classList.add("hidden"), 240);        // …then release the backdrop
+  },
+  // Only the merges the player can DO right now — an empty list means nothing to
+  // merge, not a wall of locked rows. Rebuilt only when its content actually
+  // changes (signature), so buttons stay stable under the live 0.2s refresh and
+  // a tap can never land on a freshly rebuilt row.
+  renderMergeList() {
+    const rows = [];
+    this.cfg.resourceOrder.forEach((rid) => {
+      const rules = this.cfg.convert[rid]; if (!rules) return;
+      Object.keys(rules).map(Number).sort((a, b) => a - b).forEach((tier) => {
+        if (this.canConvert(this.player, rid, tier)) rows.push({ rid, tier, rule: rules[tier], have: this.tierCount(this.player, rid, tier) });
+      });
+    });
+    const sig = rows.map((r) => `${r.rid}_${r.tier}_${r.have}`).join("|");
+    if (sig === this._mergeSig) return;
+    this._mergeSig = sig;
+    const list = $("#merge-list"); list.innerHTML = "";
+    if (!rows.length) { list.appendChild(el("div", "merge-empty", "Rien à merger pour l'instant")); return; }
+    rows.forEach(({ rid, tier, rule, have }) => {
       const row = el("div", "convert-row");
       const from = el("div", "cv-side");
-      const fromImg = this.tierImg(resId, tier); fromImg.classList.add("clickable");
-      fromImg.onclick = () => openResource(resId, { player: this.player, allowRefine: true });
+      const fromImg = this.tierImg(rid, tier); fromImg.classList.add("clickable");
+      fromImg.onclick = () => openResource(rid, { player: this.player, allowRefine: true });
       from.append(fromImg, el("span", "cv-q", `${rule.quantity}× T${tier}`));
-      const arrow = el("span", "cv-arrow", "→");
       const to = el("div", "cv-side");
       const toImg = this.tierImg(rule.resultRes, rule.resultTier); toImg.classList.add("clickable");
       toImg.onclick = () => openResource(rule.resultRes, { player: this.player, allowRefine: true });
       to.append(toImg, el("span", "cv-q", `${rule.resultQty}× T${rule.resultTier}`));
-      const haveEl = el("span", "cv-have", "");
-      const btn = el("button", "cv-btn", "Raffiner");
-      btn.onclick = () => { if (this.doConvert(resId, tier)) this.updateConvertList(); };
-      row.append(from, arrow, to, haveEl, btn);
+      const haveEl = el("span", "cv-have", `tu as ${have}`);
+      const btn = el("button", "cv-btn", "Merge");
+      btn.onclick = () => { if (this.doConvert(rid, tier)) this.renderMergeList(); };
+      row.append(from, el("span", "cv-arrow", "→"), to, haveEl, btn);
       list.appendChild(row);
-      this._cvRows.push({ tier, rule, row, haveEl, btn });
-    });
-    this.updateConvertList();
-  },
-  // Lightweight per-frame refresh: update counts/disabled in place, never rebuild.
-  updateConvertList() {
-    if (!this._cvRows || !this._convertResId) return;
-    const resId = this._convertResId;
-    this._cvRows.forEach((r) => {
-      const have = this.tierCount(this.player, resId, r.tier);
-      const ok = have >= r.rule.quantity;
-      r.haveEl.textContent = `tu as ${have}`;
-      r.btn.disabled = !ok;
-      r.row.classList.toggle("locked", !ok);
     });
   },
 
@@ -402,7 +410,6 @@ export const renderMethods = {
         <span>👷 Ouvriers : <b>${c.buys.increaseWorker}</b></span>
         <span>📣 Marketing : <b>${c.buys.increaseMarketting}</b></span>
         <span>📦 Stockage : <b>${c.buys.increaseStorage}</b></span>
-        ${c.isPlayer ? "" : `<span>⭐ Total : <b>${c.upgradesBought}</b></span>`}
       </div>
       <div class="cp-section">Inventaire</div>
       <div class="cp-inv"></div>`;
@@ -473,7 +480,69 @@ export const renderMethods = {
     }
   },
 
+  // --- market-share donut (end-of-round results) ---
+  // Colors are FIXED per competitor (lineup order), validated for CVD + contrast
+  // against the dark panel (dataviz six-checks). "Perdu" is the unserved demand —
+  // deliberately a neutral gray (it is nobody's share), relieved by the legend
+  // label + hatched chip since it sits below 3:1 on this surface.
+  renderMarketPie() {
+    const wrap = $("#results-market"); if (!wrap) return;
+    wrap.innerHTML = "";
+    const mkt = this.market || {};
+    const money = this._pieMode === "money"; // le booléen : volume (ventes) ou argent
+    const val = (c) => (money ? c.salesThisRound : c.unitsThisRound) || 0;
+    const lost = (money ? mkt.lostValue : mkt.lostUnits) || 0;
+
+    const PIE_COLORS = ["#b8841f", "#279a86", "#8a6fe3", "#bf5f96"];
+    const segs = [];
+    this.competitors.forEach((c, i) => {
+      const v = val(c);
+      if (v > 0 || c.isPlayer) segs.push({ name: c.name, v, color: PIE_COLORS[i % PIE_COLORS.length] });
+    });
+    // Toujours listé, même à 0 : « Perdu ×0 » dit explicitement qu'aucun client
+    // n'est reparti bredouille — l'absence de ligne ressemblait à un oubli.
+    segs.push({ name: "Perdu", v: lost, color: "#6b7387", lost: true });
+    const total = segs.reduce((s, x) => s + x.v, 0);
+
+    // segmented toggle Ventes | Argent
+    const seg = el("div", "pie-toggle");
+    [["sales", "Ventes"], ["money", "Argent"]].forEach(([mode, label]) => {
+      const b = el("button", "pie-mode" + ((this._pieMode === "money") === (mode === "money") ? " on" : ""), label);
+      b.onclick = () => { this._pieMode = mode; this.renderMarketPie(); };
+      seg.appendChild(b);
+    });
+    wrap.appendChild(seg);
+    if (!total) { wrap.appendChild(el("div", "pie-empty", "Aucun client servi ce round")); return; }
+
+    // donut: conic-gradient with a 2px-equivalent surface gap between slices
+    const GAP = segs.length > 1 ? 0.8 : 0;
+    let stops = [], acc = 0;
+    segs.forEach((s) => {
+      const pct = (s.v / total) * 100, span = Math.max(0, pct - GAP);
+      stops.push(`${s.color} ${acc.toFixed(2)}% ${(acc + span).toFixed(2)}%`);
+      if (GAP) stops.push(`var(--bg-panel) ${(acc + span).toFixed(2)}% ${(acc + pct).toFixed(2)}%`);
+      acc += pct;
+    });
+    const box = el("div", "pie-box");
+    const pie = el("div", "pie-donut");
+    pie.style.background = `conic-gradient(${stops.join(",")})`;
+    pie.appendChild(el("div", "pie-hole", money ? total + "$" : "×" + total));
+    const legend = el("div", "pie-legend");
+    segs.forEach((s) => {
+      const row = el("div", "pie-leg-row");
+      const chip = el("span", "pie-chip" + (s.lost ? " lost" : ""));
+      if (!s.lost) chip.style.background = s.color;
+      row.append(chip, el("span", "pie-leg-name", s.name),
+        el("b", "pie-leg-val", money ? s.v + "$" : "×" + s.v),
+        el("span", "pie-leg-pct", Math.round((s.v / total) * 100) + "%"));
+      legend.appendChild(row);
+    });
+    box.append(pie, legend);
+    wrap.appendChild(box);
+  },
+
   renderResults(ranked, elimNow) {
+    this.renderMarketPie();
     const list = $("#results-list"); list.innerHTML = "";
     ranked.forEach((c, i) => {
       const row = el("div", "result-row" + (c.isPlayer ? " me" : "") + (elimNow.includes(c) ? " eliminated" : ""));

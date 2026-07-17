@@ -144,10 +144,33 @@ function pickWeighted(pool) {
   return pool[0];
 }
 
+// The bot folds its stock exactly like the player's auto-merge: every doable
+// conversion, lowest tier first so fresh T2s cascade into T3+. Same upside
+// (value compression: sell few expensive units into a unit-capped market, and
+// bestTier feeds attractiveness) and same risk (fewer units — a 3× customer may
+// find the shelf too short). Opt-out comes from the LEVEL TOOL: the per-bot
+// "Auto-merge" checkbox exports a competitors_buffs row `autoMerge` (1/0);
+// absent (older exports) means merge.
+function mergeBotStock(game, b) {
+  if (b.buffs.autoMerge === 0 || (b.def && b.def.autoMerge === false)) return;
+  let guard = 200;
+  game.cfg.resourceOrder.forEach((rid) => {
+    const rules = game.cfg.convert[rid]; if (!rules) return;
+    Object.keys(rules).map(Number).sort((a, z) => a - z).forEach((t) => {
+      const rule = rules[t];
+      while (guard-- > 0 && (b.stock[rid][t] || 0) >= rule.quantity) {
+        b.stock[rid][t] -= rule.quantity;
+        game.addStock(b, rule.resultRes, rule.resultTier, rule.resultQty);
+      }
+    });
+  });
+}
+
 // Decide the crew, then move only the workers that differ. Called once per round
 // AND periodically during it (main.js updatePlay): a production chain only flows if
 // the bot can hand a worker over the moment an input buffer fills or runs dry.
 export function staffBot(game, b) {
+  mergeBotStock(game, b); // fold before staffing: merged stock changes what machineReady sees
   const want = wantedChain(game, b, botBehavior(b, game.round));
   const entries = [...want.entries()];
 

@@ -23,6 +23,15 @@ export function nextTaxInfo(levelCfg, round) {
   return r0 === Infinity ? null : { round: r0, cost };
 }
 
+// The level's FINAL tax round (within the playable rounds), or null if the level
+// has no tax at all. Settling this one is the level's finish line: the taxes are
+// the bosses, and there is nothing left to survive after the last of them.
+export function lastTaxRound(levelCfg) {
+  let last = 0;
+  for (const r in levelCfg.tax) { const rn = +r; if (rn <= levelCfg.totalRounds && levelCfg.tax[r] > 0 && rn > last) last = rn; }
+  return last || null;
+}
+
 // Round income guaranteed to land before a given tax is charged: rounds after the
 // current one up to and including the tax round (that round's income arrives at its
 // prep, before its wave-end tax). Sales are excluded (unpredictable).
@@ -81,6 +90,10 @@ export function enterTax(game) {
   });
   game._elimNow = elimNow;
   if (prepaid) p.prepaidTaxRound = null;
+  // Settling the level's LAST tax is the win condition — the remaining waves have
+  // nothing left to threaten the player with, so the level ends here in victory.
+  const finalSettled = cost > 0 && !p.eliminated && game.round === lastTaxRound(game.levelCfg);
+  if (finalSettled) game._taxVictory = true;
   const charged = cost > 0 && !p.eliminated && !prepaid ? cost : 0;
   $("#tax-before").textContent = p.money + charged;
   $("#tax-amount").textContent = prepaid && cost > 0 ? "réglé d'avance ✅" : "-" + cost;
@@ -89,7 +102,7 @@ export function enterTax(game) {
     ? (prepaid ? `Impôt réglé d'avance — Round ${game.round}` : `Impôt — Round ${game.round}`)
     : "Pas d'impôt ce round";
   $("#tax-overlay").classList.remove("hidden");
-  setTimeout(() => { $("#tax-overlay").classList.add("hidden"); game.transitionTo(S.Results); }, cost > 0 ? 1900 : 800);
+  setTimeout(() => { $("#tax-overlay").classList.add("hidden"); game.transitionTo(game._taxVictory ? S.GameOver : S.Results); }, cost > 0 ? 1900 : 800);
 }
 
 export function openTaxInfo(game) { game._taxOpen = true; game._taxTimer = 0.3; renderTaxInfo(game); $("#taxinfo-overlay").classList.remove("hidden"); }
@@ -103,6 +116,16 @@ export function prepayTax(game) {
   if (game.player.money < amount) return;
   game.player.money -= amount;
   game.player.prepaidTaxRound = info.round;
+  // Prepaying the level's FINAL tax settles it on the spot → instant victory,
+  // however many waves remain. The discount makes finishing early a real bet:
+  // pay less now with today's money, or grind the remaining waves for rank.
+  if (info.round === lastTaxRound(game.levelCfg)) {
+    game._taxVictory = true;
+    closeTaxInfo(game);
+    game.waveActive = false;
+    game.transitionTo(S.GameOver);
+    return;
+  }
   renderTaxInfo(game); game.refreshHud();
 }
 
@@ -145,13 +168,15 @@ export function renderTaxInfo(game) {
       `<div class="tx-row"><span>Revenu garanti d'ici là</span><b class="ok">+${income}$</b></div>` +
       `<div class="tx-row tx-proj"><span>Solde projeté après impôt</span><b class="${projected < 0 ? "danger" : "ok"}">${projected}$</b></div>`;
 
+    const isLast = info.round === lastTaxRound(game.levelCfg);
     let prepay;
     if (prepaid) {
       prepay = `<div class="tx-paid">✅ Impôt du Round ${info.round} déjà réglé d'avance</div>`;
     } else {
       prepay =
+        (isLast ? `<div class="tx-last">🏁 Dernier impôt du niveau — le régler termine le niveau en victoire</div>` : "") +
         `<div class="tx-prepay-line">Payer maintenant : <b>${amount}$</b><span class="tx-save">−${pct}%${breakdown} · tu économises ${saved}$</span></div>` +
-        `<button id="tx-prepay-btn"${afford ? "" : " disabled"}>Payer l'impôt d'avance</button>` +
+        `<button id="tx-prepay-btn"${afford ? "" : " disabled"}>${isLast ? "Payer et gagner le niveau" : "Payer l'impôt d'avance"}</button>` +
         (afford ? "" : `<div class="tx-warn">Solde insuffisant</div>`);
     }
 

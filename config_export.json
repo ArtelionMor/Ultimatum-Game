@@ -5712,362 +5712,362 @@
     },
     {
       "round": 4,
-      "coins": 50,
+      "coins": 25,
       "ressource_tier": 2
     },
     {
       "round": 5,
-      "coins": 50,
+      "coins": 25,
       "ressource_tier": 2
     },
     {
       "round": 6,
-      "coins": 50,
+      "coins": 25,
       "ressource_tier": 2
     },
     {
       "round": 7,
-      "coins": 50,
+      "coins": 0,
       "ressource_tier": 2
     },
     {
       "round": 8,
-      "coins": 50,
+      "coins": 0,
       "ressource_tier": 2
     },
     {
       "round": 9,
-      "coins": 50,
+      "coins": 0,
       "ressource_tier": 2
     },
     {
       "round": 10,
-      "coins": 50,
+      "coins": 0,
       "ressource_tier": 2
     },
     {
       "round": 11,
-      "coins": 100,
+      "coins": 0,
       "ressource_tier": 2
     },
     {
       "round": 12,
-      "coins": 100,
+      "coins": 0,
       "ressource_tier": 3
     },
     {
       "round": 13,
-      "coins": 100,
+      "coins": 0,
       "ressource_tier": 3
     },
     {
       "round": 14,
-      "coins": 100,
+      "coins": 0,
       "ressource_tier": 3
     },
     {
       "round": 15,
-      "coins": 100,
+      "coins": 0,
       "ressource_tier": 3
     },
     {
       "round": 16,
-      "coins": 300,
+      "coins": 0,
       "ressource_tier": 3
     },
     {
       "round": 17,
-      "coins": 300,
+      "coins": 0,
       "ressource_tier": 3
     },
     {
       "round": 18,
-      "coins": 300,
+      "coins": 0,
       "ressource_tier": 3
     },
     {
       "round": 19,
-      "coins": 300,
+      "coins": 0,
       "ressource_tier": 3
     },
     {
       "round": 20,
-      "coins": 300,
+      "coins": 0,
       "ressource_tier": 3
     },
     {
       "round": 21,
-      "coins": 300,
+      "coins": 0,
       "ressource_tier": 3
     },
     {
       "round": 22,
-      "coins": 300,
+      "coins": 0,
       "ressource_tier": 4
     },
     {
       "round": 23,
-      "coins": 300,
+      "coins": 0,
       "ressource_tier": 4
     },
     {
       "round": 24,
-      "coins": 300,
+      "coins": 0,
       "ressource_tier": 4
     },
     {
       "round": 25,
-      "coins": 300,
+      "coins": 0,
       "ressource_tier": 4
     },
     {
       "round": 26,
-      "coins": 500,
+      "coins": 0,
       "ressource_tier": 4
     },
     {
       "round": 27,
-      "coins": 500,
+      "coins": 0,
       "ressource_tier": 4
     },
     {
       "round": 28,
-      "coins": 500,
+      "coins": 0,
       "ressource_tier": 4
     },
     {
       "round": 29,
-      "coins": 500,
+      "coins": 0,
       "ressource_tier": 4
     },
     {
       "round": 30,
-      "coins": 500,
+      "coins": 0,
       "ressource_tier": 4
     },
     {
       "round": 31,
-      "coins": 750,
+      "coins": 0,
       "ressource_tier": 4
     },
     {
       "round": 32,
-      "coins": 750,
+      "coins": 0,
       "ressource_tier": 5
     },
     {
       "round": 33,
-      "coins": 750,
+      "coins": 0,
       "ressource_tier": 5
     },
     {
       "round": 34,
-      "coins": 750,
+      "coins": 0,
       "ressource_tier": 5
     },
     {
       "round": 35,
-      "coins": 750,
+      "coins": 0,
       "ressource_tier": 5
     },
     {
       "round": 36,
-      "coins": 750,
+      "coins": 0,
       "ressource_tier": 5
     },
     {
       "round": 37,
-      "coins": 750,
+      "coins": 0,
       "ressource_tier": 5
     },
     {
       "round": 38,
-      "coins": 750,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 39,
-      "coins": 750,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 40,
-      "coins": 1000,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 41,
-      "coins": 1000,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 42,
-      "coins": 1000,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 43,
-      "coins": 1000,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 44,
-      "coins": 1000,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 45,
-      "coins": 1000,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 46,
-      "coins": 1000,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 47,
-      "coins": 1000,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 48,
-      "coins": 1000,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 49,
-      "coins": 1000,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 50,
-      "coins": 1000,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 51,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 52,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 53,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 54,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 55,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 56,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 57,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 58,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 59,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 60,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 61,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 62,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 63,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 64,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 65,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 66,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 67,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 68,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 69,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 70,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 71,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 72,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 73,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 74,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     },
     {
       "round": 75,
-      "coins": 1250,
+      "coins": 0,
       "ressource_tier": 6
     }
   ],
@@ -7664,19 +7664,34 @@
       "unlock": 4
     },
     {
-      "id": "Bottle_2_3",
+      "id": "Bottle_2",
       "machine": "tennisBallFactory",
       "unlock": 1
     },
     {
-      "id": "Bottle_2_3",
+      "id": "Bottle_2",
       "machine": "carrotFarm",
       "unlock": 2
     },
     {
-      "id": "Bottle_2_3",
+      "id": "Bottle_2",
       "machine": "bottleMaker",
       "unlock": 3
+    },
+    {
+      "id": "Bottle_3",
+      "machine": "tennisBallFactory",
+      "unlock": 1
+    },
+    {
+      "id": "Bottle_3",
+      "machine": "carrotFarm",
+      "unlock": 1
+    },
+    {
+      "id": "Bottle_3",
+      "machine": "bottleMaker",
+      "unlock": 2
     },
     {
       "id": "Bottle_4",
@@ -7834,12 +7849,12 @@
     {
       "id": "Bottle_2_Intense",
       "taxConfig": "tax_config_2",
-      "unlockConfig": "Bottle_2_3"
+      "unlockConfig": "Bottle_2"
     },
     {
       "id": "Bottle_3_Slow",
       "taxConfig": "tax_config_2",
-      "unlockConfig": "Bottle_2_3"
+      "unlockConfig": "Bottle_3"
     },
     {
       "id": "Bottle_4_Intense",

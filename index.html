@@ -87,17 +87,21 @@
   <div id="results-overlay" class="overlay hidden">
     <div class="panel wide">
       <h2 id="results-title">Classement</h2>
+      <div id="results-market"></div>
       <div id="results-list"></div>
       <button id="results-continue">Round suivant</button>
     </div>
   </div>
 
-  <!-- Refining (convert) overlay -->
-  <div id="convert-overlay" class="overlay hidden">
-    <div class="panel wide">
-      <h2 id="convert-title">Raffinage</h2>
-      <div id="convert-list"></div>
-      <button id="convert-close">Fermer</button>
+  <!-- Merge sheet (slides in from the bottom edge; lists only doable merges) -->
+  <div id="merge-overlay" class="overlay hidden">
+    <div id="merge-sheet">
+      <div class="sheet-grip"></div>
+      <div class="sheet-head">
+        <h2>Merge</h2>
+        <label class="automerge"><input type="checkbox" id="automerge-box"> Auto-merge</label>
+      </div>
+      <div id="merge-list"></div>
     </div>
   </div>
 
