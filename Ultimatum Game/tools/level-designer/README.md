@@ -44,8 +44,8 @@ l'économie sur des graphiques, et l'outil génère les lignes exactes que le je
    vagues (fixe/rampe/liste — ex. rampe descendante = investit tôt, récolte
    tard). Chaque bot porte des **buffs** — les personnages équipés,
    rationalisés : `speed` (vitesse prod %), `proba2x` (%), `marketing` (+plat).
-5. **Onglet Export : sortir les données.** Lignes `market_config` (id = champ
-   market_config du niveau, caché derrière ⚙ tant qu'il égale l'id du niveau) ;
+5. **Onglet Export : sortir les données.** Lignes `market_config` (id = l'id du
+   niveau — un niveau n'a qu'un seul id, voir plus bas) ;
    `competitors_behavior` **v2** : une ligne par (bot × vague), colonnes
    `config` (id du niveau), `id`, `round`, une colonne par ressource + les 3
    achats — le scope `config` élimine les collisions entre niveaux qui règlent
@@ -88,8 +88,13 @@ Câblage des ids — **une seule colonne dans la sheet** :
 - `world_config.marketConfig` = l'id du niveau dans l'outil (`Tutorial_1`…).
   Le moteur cherche les bots par id `world_level`, puis `marketConfig`, puis
   l'id `world_config` lui-même — marché + bots + buffs suivent donc la colonne
-  qui porte l'id outil (tant que le champ ⚙ market_config du niveau garde sa
-  valeur par défaut = l'id du niveau).
+  qui porte l'id outil.
+- **Un niveau n'a qu'UN id**, qui nomme à la fois son `market_config` et le scope
+  `config` de ses bots. Le champ `market_config` séparé (derrière un ⚙) a été
+  supprimé le 2026-07-17 : renommer un niveau laissait son marché sous l'ancien
+  nom, le moteur le cherchait sous le nouveau, ne le trouvait pas, et le niveau
+  se lançait avec **0 round** — silencieusement. Deux niveaux pouvaient même
+  entrer en collision sur le même id de marché. Ne réintroduis pas ce champ.
 - Plus besoin de renseigner : `nbOfRounds` (déduit des rounds du marché) ni la
   colonne `competitors` (le lineup = les bots exportés par l'outil ; la colonne
   ne sert qu'aux niveaux non designés ici).

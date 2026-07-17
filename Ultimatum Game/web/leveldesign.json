@@ -539,7 +539,7 @@
     {
       "id": "Bottle_Intro",
       "biomeId": "biome_1",
-      "marketConfigId": "world_config_3",
+      "marketConfigId": "Bottle_Intro",
       "instances": [
         {
           "blockId": "blk_intro",
@@ -627,7 +627,7 @@
     {
       "id": "Bottle_2_Intense",
       "biomeId": "biome_1",
-      "marketConfigId": "world_config_3",
+      "marketConfigId": "Bottle_2_Intense",
       "instances": [
         {
           "blockId": "blk_intro",
@@ -1243,7 +1243,7 @@
     {
       "id": "Nest_1_Normal",
       "biomeId": "biome_1",
-      "marketConfigId": "world_config_9",
+      "marketConfigId": "Nest_1_Normal",
       "instances": [
         {
           "blockId": "blk_mrmh8ook",

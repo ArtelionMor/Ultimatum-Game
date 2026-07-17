@@ -379,7 +379,9 @@ export const renderMethods = {
     const c = this._infoC; if (!c) return;
     const body = $("#competitor-body");
     const tag = (c.def && c.def.tag) || c.id;
-    const income = c.isPlayer ? null : (c.def.increaseByRound + c.def.upgradeEffect * c.upgradesBought);
+    // Le bot tourne sur ton économie : ce qui le décrit, ce sont ses ouvriers et
+    // ses machines staffées, comme toi. Voir game-bots.js.
+    const crew = c.isPlayer ? null : c.workers.filter((w) => w.machineId).length + "/" + c.workers.length;
     const spec = c.isPlayer ? "" : this.botSpecialty(c);
     body.innerHTML =
       `<div class="cp-head">
@@ -393,7 +395,7 @@ export const renderMethods = {
         <div class="cp-stat"><span>Argent</span><b>${c.money}</b></div>
         <div class="cp-stat"><span>Marketing</span><b>${c.marketing.toFixed(1)}</b></div>
         <div class="cp-stat"><span>Stockage</span><b>${this.stockTotal(c)}/${c.storageCap}</b></div>
-        ${income != null ? `<div class="cp-stat"><span>Revenu/tour</span><b>+${income}</b></div>` : ""}
+        ${crew != null ? `<div class="cp-stat"><span>Ouvriers postés</span><b>${crew}</b></div>` : ""}
       </div>
       <div class="cp-section">Améliorations</div>
       <div class="cp-upg">

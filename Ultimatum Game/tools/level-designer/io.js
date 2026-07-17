@@ -6,7 +6,11 @@ import { normalize } from "../../web/config.js";
 import { emptyDoc } from "./model.js";
 
 export const CONFIG_URL = "/web/config_export.json";
-export const DOC_URL = "/tools/level-designer/leveldesign.json";
+// The doc lives next to the game config, not beside the tool: both are fetched
+// from the repo root (serve.py 8790). Pointing this at tools/level-designer/
+// silently 404'd, so the boot-time auto-load never worked and only the file
+// picker did.
+export const DOC_URL = "/web/leveldesign.json";
 
 export const spriteUrl = (id, folder = "Ressources") => (id ? `/web/sprites/${folder}/${id}.png` : "");
 
@@ -54,6 +58,10 @@ export function migrate(doc) {
   const known = new Set(d.biomes.map((b) => b.id));
   d.levels.forEach((l) => {
     if (!l.biomeId || !known.has(l.biomeId)) l.biomeId = d.biomes[0].id;
+    // A level's market used to carry its own id, free to drift from the level's on
+    // rename — which silently shipped the market under a dead name and loaded the
+    // level with 0 rounds. One id now; drop the old field so it can't come back.
+    delete l.marketConfigId;
     // pre-per-wave bots stored a flat purchaseWeight and no buffs
     (l.competitors || []).forEach((c) => {
       if (typeof c.purchaseWeight === "number" && !c.purchase) { c.purchase = { mode: "const", value: c.purchaseWeight }; delete c.purchaseWeight; }

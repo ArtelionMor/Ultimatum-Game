@@ -71,9 +71,7 @@ function seedDoc() {
   b2.avg = { mode: "ramp", from: 3, to: 5 };
   b2.mix = [{ role: "focus", weight: { mode: "const", value: 4 } }, { role: "second", weight: { mode: "const", value: 1 } }];
   d.blocks = [b, b2];
-  const l = makeLevel("world_config_1", d.biomes[0].id);
-  l.marketConfigId = "round_config_base";
-  d.levels = [l];
+  d.levels = [makeLevel("world_config_1", d.biomes[0].id)];
   return d;
 }
 
@@ -327,24 +325,12 @@ function levelRow(l, idx) {
   row.onclick = () => selectLevel(idx);
 
   const head = document.createElement("div"); head.className = "level-head";
+  // Un seul id par niveau : il nomme le world_config, le market_config ET le scope
+  // des bots. Le champ market_config séparé a été supprimé — voir makeLevel().
   const idIn = document.createElement("input"); idIn.type = "text"; idIn.value = l.id; idIn.className = "level-id";
-  idIn.title = "Id du niveau (world_config)";
-  const mkLab = lab("market_config");
-  const mkIn = document.createElement("input"); mkIn.type = "text"; mkIn.value = l.marketConfigId || ""; mkIn.style.width = "150px";
-  mkIn.oninput = () => { l.marketConfigId = mkIn.value; mark(); renderExport(); };
-  // market_config usually mirrors the level id — hide the duplicate behind ⚙
-  // until it actually diverges. While hidden, it follows level-id renames, so
-  // hiding can't silently desync the two.
-  const gear = document.createElement("button"); gear.className = "icon"; gear.textContent = "⚙";
-  gear.title = "id market_config (avancé : partager un marché entre niveaux ou suivre une convention de nommage)";
-  const mirrored = !l.marketConfigId || l.marketConfigId === l.id;
-  mkLab.hidden = mkIn.hidden = mirrored; gear.hidden = !mirrored;
-  gear.onclick = () => { mkLab.hidden = mkIn.hidden = false; gear.hidden = true; mkIn.focus(); };
-  idIn.oninput = () => {
-    if (mkIn.hidden) { l.marketConfigId = idIn.value; mkIn.value = idIn.value; }
-    l.id = idIn.value; mark(); renderLevelSel(); renderExport();
-  };
-  head.append(idIn, gear, mkLab, mkIn);
+  idIn.title = "Id du niveau — nomme aussi son market_config et le scope de ses bots";
+  idIn.oninput = () => { l.id = idIn.value; mark(); renderLevelSel(); renderExport(); };
+  head.append(idIn);
 
   if (st.doc.biomes.length > 1) {
     const bio = document.createElement("select"); bio.title = "Déplacer vers un autre biome";
@@ -808,7 +794,7 @@ function claudeBrief() {
   const l = level();
   const e = econ(compileLevel(l, st.doc.blocks), st.cfg, st.tier);
   return [
-    `Niveau "${l.id}" (market_config id: ${l.marketConfigId}) — ${e.rounds} rounds.`,
+    `Niveau "${l.id}" — ${e.rounds} rounds.`,
     `Fichier: tools/level-designer/leveldesign.json`,
     `Ressources actives: ${e.order.map((r) => `${resName(r)} ${(e.byRes[r].shareUnits * 100).toFixed(1)}%`).join(", ")}`,
     `Unités totales ${fmt(e.totalUnits)} · valeur totale ${fmt(e.totalValue)} (tier ${st.tier}).`,

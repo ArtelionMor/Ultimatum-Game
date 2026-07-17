@@ -127,7 +127,12 @@ export const cheatMethods = {
     this.waveActive = false;
     this.market = null;
     const lane = $("#customer-lane"); if (lane) lane.innerHTML = "";
-    this.cfg.machines.forEach((m) => { const r = this.machineUnlockRound(m.id); if (r != null && r <= n) this.giveMachine(this.player, m.id); });
+    // Rattrape les déblocages pour TOUT LE MONDE : les bots ont les mêmes machines
+    // que le joueur, en sauter un round les laisserait sans usine (game-bots.js).
+    this.competitors.forEach((c) => {
+      if (c.eliminated) return;
+      this.cfg.machines.forEach((m) => { const r = this.machineUnlockRound(m.id); if (r != null && r <= n) this.giveMachine(c, m.id); });
+    });
     this.round = n - 1;      // startPrep() increments to n
     this.state = S.Play;
     this.startPrep();

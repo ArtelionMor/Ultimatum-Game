@@ -11,7 +11,7 @@ export function buyWorker(game) {
   const n = nextWorker(game);
   if (!n || game.player.workers.length >= game.cfg.g.maxWorkersTotal || game.player.money < n.price) return;
   game.player.money -= n.price; game.player.buys.increaseWorker++;
-  for (let i = 0; i < n.effect; i++) addWorker(game);
+  for (let i = 0; i < n.effect; i++) addWorker(game, game.player);
   game.renderShop(); game.renderWorkers(); game.refreshHud();
 }
 

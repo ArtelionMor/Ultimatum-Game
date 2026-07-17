@@ -39,8 +39,13 @@ export function makeBlock(id, name) {
   };
 }
 
+// A level has ONE id. It keys its market rows and its bot rows alike — they used
+// to be able to diverge (a separate `marketConfigId`, editable behind a ⚙), and
+// renaming a level silently left the market under the old name: the game then
+// looked it up by the new one, found nothing, and the level loaded with 0 rounds.
+// Two levels could even collide on the same market id. Not worth the flexibility.
 export function makeLevel(id, biomeId) {
-  return { id, biomeId, marketConfigId: id, instances: [], competitors: [] };
+  return { id, biomeId, instances: [], competitors: [] };
 }
 
 // Biomes are display clusters ("Meadow", "Town"…): they group levels in the
@@ -197,7 +202,7 @@ export const BOT_BUFFS = [
 // anything else is silently read as zero by the engine.
 export function toMarketConfigRows(level, blocks, cfg) {
   return compileLevel(level, blocks).map((row) => {
-    const o = { id: level.marketConfigId, round: "round_" + row.round, customers: row.customers, "average amount": row.avg };
+    const o = { id: level.id, round: "round_" + row.round, customers: row.customers, "average amount": row.avg };
     cfg.resourceOrder.forEach((r) => (o[r] = row.weights[r] || 0));
     return o;
   });

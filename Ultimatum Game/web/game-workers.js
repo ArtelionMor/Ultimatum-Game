@@ -28,10 +28,15 @@ export function crewProba2x(m) {
 
 // Workers are individuals: the player's unlocked characters staff the pool first
 // (they carry affinity + gear bonuses), then anonymous hires fill the rest.
-export function addWorker(game) {
-  const w = game.player.workers;
-  const usedChars = new Set(w.map((x) => x.charId).filter(Boolean));
-  const nextChar = Meta.ownedCharacters().find((id) => !usedChars.has(id)) || null;
+// A bot hires anonymously — its rationalized character loadout is a flat buff
+// (competitors_buffs, applied in game-production.js), not real characters.
+export function addWorker(game, p) {
+  const w = p.workers;
+  let nextChar = null;
+  if (p.isPlayer) {
+    const usedChars = new Set(w.map((x) => x.charId).filter(Boolean));
+    nextChar = Meta.ownedCharacters().find((id) => !usedChars.has(id)) || null;
+  }
   w.push({ uid: (game._wuid = (game._wuid || 0) + 1), charId: nextChar, machineId: null });
 }
 
