@@ -2490,11 +2490,7 @@
     },
     {
       "id": "customerRate",
-      "value": 1
-    },
-    {
-      "id": "numberOfCompetitors",
-      "value": 3
+      "value": 0.1
     },
     {
       "id": "earlyTaxDiscount",
@@ -2601,18 +2597,23 @@
       "id": "coffeeShop",
       "displayName": "Coffee Shop",
       "spriteId": "Coffee shop",
+      "outputs": "coffee",
       "upgrades": "upgrade_profile_complexity_0"
     },
     {
       "id": "gameStore",
       "displayName": "Game Store",
       "spriteId": "Game Store",
+      "inputs": "blackLotus",
+      "outputs": "blackLotus",
       "upgrades": "upgrade_profile_complexity_3"
     },
     {
       "id": "bottleMaker",
       "displayName": "Bottle Maker",
       "spriteId": "Bottle Maker",
+      "inputs": "bottle",
+      "outputs": "bottle",
       "upgrades": "upgrade_profile_complexity_1"
     },
     {
@@ -2620,6 +2621,7 @@
       "displayName": "Boulangerie",
       "spriteId": "Sandwich Store",
       "inputs": "sandwitch",
+      "outputs": "sandwitch",
       "upgrades": "upgrade_profile_complexity_1"
     },
     {
@@ -2627,6 +2629,7 @@
       "displayName": "Croissanterie",
       "spriteId": "Sandwich Store",
       "inputs": "croissant",
+      "outputs": "croissant",
       "upgrades": "upgrade_profile_complexity_2"
     }
   ],
@@ -4442,7 +4445,7 @@
       "description": "Tennis Ball Tier 2 description",
       "spriteId": "Tennis Ball Tier 2",
       "baseSellPrice": 14,
-      "influence": 2
+      "influence": 1.1
     },
     {
       "id": "tennisBall",
@@ -4451,7 +4454,7 @@
       "description": "Tennis Ball Tier 3 description",
       "spriteId": "Tennis Ball Tier 3",
       "baseSellPrice": 32,
-      "influence": 3
+      "influence": 1.2
     },
     {
       "id": "tennisBall",
@@ -4460,7 +4463,7 @@
       "description": "Tennis Ball Tier 4 description",
       "spriteId": "Tennis Ball Tier 4",
       "baseSellPrice": 48,
-      "influence": 4
+      "influence": 1.3
     },
     {
       "id": "tennisBall",
@@ -4469,7 +4472,7 @@
       "description": "Tennis Ball Tier 5 description",
       "spriteId": "Tennis Ball Tier 5",
       "baseSellPrice": 81,
-      "influence": 5
+      "influence": 1.4
     },
     {
       "id": "tennisBall",
@@ -4478,7 +4481,7 @@
       "description": "Tennis Ball Tier 6 description",
       "spriteId": "Tennis Ball Tier 6",
       "baseSellPrice": 155,
-      "influence": 6
+      "influence": 1.5
     },
     {
       "id": "carrot",
@@ -4496,7 +4499,7 @@
       "description": "Carrot Tier 2 description",
       "spriteId": "Carrot Tier 2",
       "baseSellPrice": 22,
-      "influence": 2
+      "influence": 1.1
     },
     {
       "id": "carrot",
@@ -4505,7 +4508,7 @@
       "description": "Carrot Tier 3 description",
       "spriteId": "Carrot Tier 3",
       "baseSellPrice": 59,
-      "influence": 3
+      "influence": 1.2
     },
     {
       "id": "carrot",
@@ -4514,7 +4517,7 @@
       "description": "Carrot Tier 4 description",
       "spriteId": "Carrot Tier 4",
       "baseSellPrice": 104,
-      "influence": 4
+      "influence": 1.3
     },
     {
       "id": "carrot",
@@ -4523,7 +4526,7 @@
       "description": "Carrot Tier 5 description",
       "spriteId": "Carrot Tier 5",
       "baseSellPrice": 210,
-      "influence": 5
+      "influence": 1.4
     },
     {
       "id": "carrot",
@@ -4532,7 +4535,7 @@
       "description": "Carrot Tier 6 description",
       "spriteId": "Carrot Tier 6",
       "baseSellPrice": 488,
-      "influence": 6
+      "influence": 1.5
     },
     {
       "id": "nenufar",
@@ -4550,7 +4553,7 @@
       "description": "Nenufar Tier 2 description",
       "spriteId": "Nenufar Tier 2",
       "baseSellPrice": 26,
-      "influence": 2
+      "influence": 1.1
     },
     {
       "id": "nenufar",
@@ -4559,7 +4562,7 @@
       "description": "Nenufar Tier 3 description",
       "spriteId": "Nenufar Tier 3",
       "baseSellPrice": 74,
-      "influence": 3
+      "influence": 1.2
     },
     {
       "id": "nenufar",
@@ -4568,7 +4571,7 @@
       "description": "Nenufar Tier 4 description",
       "spriteId": "Nenufar Tier 4",
       "baseSellPrice": 138,
-      "influence": 4
+      "influence": 1.3
     },
     {
       "id": "nenufar",
@@ -4577,7 +4580,7 @@
       "description": "Nenufar Tier 5 description",
       "spriteId": "Nenufar Tier 5",
       "baseSellPrice": 295,
-      "influence": 5
+      "influence": 1.4
     },
     {
       "id": "nenufar",
@@ -4586,7 +4589,7 @@
       "description": "Nenufar Tier 6 description",
       "spriteId": "Nenufar Tier 6",
       "baseSellPrice": 729,
-      "influence": 6
+      "influence": 1.5
     },
     {
       "id": "nest",
@@ -4604,7 +4607,7 @@
       "description": "Nest Tier 2 description",
       "spriteId": "Nest Tier 2",
       "baseSellPrice": 68,
-      "influence": 2
+      "influence": 1.1
     },
     {
       "id": "nest",
@@ -4613,7 +4616,7 @@
       "description": "Nest Tier 3 description",
       "spriteId": "Nest Tier 3",
       "baseSellPrice": 249,
-      "influence": 3
+      "influence": 1.2
     },
     {
       "id": "nest",
@@ -4622,7 +4625,7 @@
       "description": "Nest Tier 4 description",
       "spriteId": "Nest Tier 4",
       "baseSellPrice": 597,
-      "influence": 4
+      "influence": 1.3
     },
     {
       "id": "nest",
@@ -4631,7 +4634,7 @@
       "description": "Nest Tier 5 description",
       "spriteId": "Nest Tier 5",
       "baseSellPrice": 1657,
-      "influence": 5
+      "influence": 1.4
     },
     {
       "id": "nest",
@@ -4640,7 +4643,7 @@
       "description": "Nest Tier 6 description",
       "spriteId": "Nest Tier 6",
       "baseSellPrice": 5334,
-      "influence": 6
+      "influence": 1.5
     },
     {
       "id": "candle",
@@ -4658,7 +4661,7 @@
       "description": "Candle Tier 2 description",
       "spriteId": "Candle Tier 2",
       "baseSellPrice": 18,
-      "influence": 2
+      "influence": 1.1
     },
     {
       "id": "candle",
@@ -4667,7 +4670,7 @@
       "description": "Candle Tier 3 description",
       "spriteId": "Candle Tier 3",
       "baseSellPrice": 45,
-      "influence": 3
+      "influence": 1.2
     },
     {
       "id": "candle",
@@ -4676,7 +4679,7 @@
       "description": "Candle Tier 4 description",
       "spriteId": "Candle Tier 4",
       "baseSellPrice": 74,
-      "influence": 4
+      "influence": 1.3
     },
     {
       "id": "candle",
@@ -4685,7 +4688,7 @@
       "description": "Candle Tier 5 description",
       "spriteId": "Candle Tier 5",
       "baseSellPrice": 138,
-      "influence": 5
+      "influence": 1.4
     },
     {
       "id": "candle",
@@ -4694,7 +4697,7 @@
       "description": "Candle Tier 6 description",
       "spriteId": "Candle Tier 6",
       "baseSellPrice": 295,
-      "influence": 6
+      "influence": 1.5
     },
     {
       "id": "pillow",
@@ -4712,7 +4715,7 @@
       "description": "Pillow Tier 2 description",
       "spriteId": "Pillow Tier 2",
       "baseSellPrice": 0,
-      "influence": 2
+      "influence": 1.1
     },
     {
       "id": "pillow",
@@ -4721,7 +4724,7 @@
       "description": "Pillow Tier 3 description",
       "spriteId": "Pillow Tier 3",
       "baseSellPrice": 0,
-      "influence": 3
+      "influence": 1.2
     },
     {
       "id": "pillow",
@@ -4730,7 +4733,7 @@
       "description": "Pillow Tier 4 description",
       "spriteId": "Pillow Tier 4",
       "baseSellPrice": 0,
-      "influence": 4
+      "influence": 1.3
     },
     {
       "id": "pillow",
@@ -4739,7 +4742,7 @@
       "description": "Pillow Tier 5 description",
       "spriteId": "Pillow Tier 5",
       "baseSellPrice": 0,
-      "influence": 5
+      "influence": 1.4
     },
     {
       "id": "pillow",
@@ -4748,7 +4751,7 @@
       "description": "Pillow Tier 6 description",
       "spriteId": "Pillow Tier 6",
       "baseSellPrice": 0,
-      "influence": 6
+      "influence": 1.5
     },
     {
       "id": "blackLotus",
@@ -4766,7 +4769,7 @@
       "description": "Black Lotus Tier 2 description",
       "spriteId": "Black Lotus Tier 2",
       "baseSellPrice": 528,
-      "influence": 2
+      "influence": 1.1
     },
     {
       "id": "blackLotus",
@@ -4775,7 +4778,7 @@
       "description": "Black Lotus Tier 3 description",
       "spriteId": "Black Lotus Tier 3",
       "baseSellPrice": 2875,
-      "influence": 3
+      "influence": 1.2
     },
     {
       "id": "blackLotus",
@@ -4784,7 +4787,7 @@
       "description": "Black Lotus Tier 4 description",
       "spriteId": "Black Lotus Tier 4",
       "baseSellPrice": 9944,
-      "influence": 4
+      "influence": 1.3
     },
     {
       "id": "blackLotus",
@@ -4793,7 +4796,7 @@
       "description": "Black Lotus Tier 5 description",
       "spriteId": "Black Lotus Tier 5",
       "baseSellPrice": 39752,
-      "influence": 5
+      "influence": 1.4
     },
     {
       "id": "blackLotus",
@@ -4802,7 +4805,7 @@
       "description": "Black Lotus Tier 6 description",
       "spriteId": "Black Lotus Tier 6",
       "baseSellPrice": 182834,
-      "influence": 6
+      "influence": 1.5
     },
     {
       "id": "bottle",
@@ -4820,7 +4823,7 @@
       "description": "Bottle Tier 2 description",
       "spriteId": "Bottle Tier 2",
       "baseSellPrice": 30,
-      "influence": 2
+      "influence": 1.1
     },
     {
       "id": "bottle",
@@ -4829,7 +4832,7 @@
       "description": "Bottle Tier 3 description",
       "spriteId": "Bottle Tier 3",
       "baseSellPrice": 89,
-      "influence": 3
+      "influence": 1.2
     },
     {
       "id": "bottle",
@@ -4838,7 +4841,7 @@
       "description": "Bottle Tier 4 description",
       "spriteId": "Bottle Tier 4",
       "baseSellPrice": 173,
-      "influence": 4
+      "influence": 1.3
     },
     {
       "id": "bottle",
@@ -4847,7 +4850,7 @@
       "description": "Bottle Tier 5 description",
       "spriteId": "Bottle Tier 5",
       "baseSellPrice": 387,
-      "influence": 5
+      "influence": 1.4
     },
     {
       "id": "bottle",
@@ -4856,7 +4859,7 @@
       "description": "Bottle Tier 6 description",
       "spriteId": "Bottle Tier 6",
       "baseSellPrice": 1001,
-      "influence": 6
+      "influence": 1.5
     },
     {
       "id": "coffee",
@@ -4874,7 +4877,7 @@
       "description": "Coffee Tier 2 description",
       "spriteId": "Coffee Tier 2",
       "baseSellPrice": 10,
-      "influence": 2
+      "influence": 1.1
     },
     {
       "id": "coffee",
@@ -4883,7 +4886,7 @@
       "description": "Coffee Tier 3 description",
       "spriteId": "Coffee Tier 3",
       "baseSellPrice": 20,
-      "influence": 3
+      "influence": 1.2
     },
     {
       "id": "coffee",
@@ -4892,7 +4895,7 @@
       "description": "Coffee Tier 4 description",
       "spriteId": "Coffee Tier 4",
       "baseSellPrice": 26,
-      "influence": 4
+      "influence": 1.3
     },
     {
       "id": "coffee",
@@ -4901,7 +4904,7 @@
       "description": "Coffee Tier 5 description",
       "spriteId": "Coffee Tier 5",
       "baseSellPrice": 37,
-      "influence": 5
+      "influence": 1.4
     },
     {
       "id": "coffee",
@@ -4910,7 +4913,7 @@
       "description": "Coffee Tier 6 description",
       "spriteId": "Coffee Tier 6",
       "baseSellPrice": 58,
-      "influence": 6
+      "influence": 1.5
     },
     {
       "id": "sandwitch",
@@ -4928,7 +4931,7 @@
       "description": "Sandwitch Tier 2 description",
       "spriteId": "Sandwitch Tier 2",
       "baseSellPrice": 48,
-      "influence": 2
+      "influence": 1.1
     },
     {
       "id": "sandwitch",
@@ -4937,7 +4940,7 @@
       "description": "Sandwitch Tier 3 description",
       "spriteId": "Sandwitch Tier 3",
       "baseSellPrice": 161,
-      "influence": 3
+      "influence": 1.2
     },
     {
       "id": "sandwitch",
@@ -4946,7 +4949,7 @@
       "description": "Sandwitch Tier 4 description",
       "spriteId": "Sandwitch Tier 4",
       "baseSellPrice": 355,
-      "influence": 4
+      "influence": 1.3
     },
     {
       "id": "sandwitch",
@@ -4955,7 +4958,7 @@
       "description": "Sandwitch Tier 5 description",
       "spriteId": "Sandwitch Tier 5",
       "baseSellPrice": 905,
-      "influence": 5
+      "influence": 1.4
     },
     {
       "id": "sandwitch",
@@ -4964,7 +4967,7 @@
       "description": "Sandwitch Tier 6 description",
       "spriteId": "Sandwitch Tier 6",
       "baseSellPrice": 2676,
-      "influence": 6
+      "influence": 1.5
     },
     {
       "id": "croissant",
@@ -4982,7 +4985,7 @@
       "description": "Croissant Tier 2 description",
       "spriteId": "Croissant Tier 2",
       "baseSellPrice": 89,
-      "influence": 2
+      "influence": 1.1
     },
     {
       "id": "croissant",
@@ -4991,7 +4994,7 @@
       "description": "Croissant Tier 3 description",
       "spriteId": "Croissant Tier 3",
       "baseSellPrice": 347,
-      "influence": 3
+      "influence": 1.2
     },
     {
       "id": "croissant",
@@ -5000,7 +5003,7 @@
       "description": "Croissant Tier 4 description",
       "spriteId": "Croissant Tier 4",
       "baseSellPrice": 881,
-      "influence": 4
+      "influence": 1.3
     },
     {
       "id": "croissant",
@@ -5009,7 +5012,7 @@
       "description": "Croissant Tier 5 description",
       "spriteId": "Croissant Tier 5",
       "baseSellPrice": 2595,
-      "influence": 5
+      "influence": 1.4
     },
     {
       "id": "croissant",
@@ -5018,7 +5021,7 @@
       "description": "Croissant Tier 6 description",
       "spriteId": "Croissant Tier 6",
       "baseSellPrice": 8860,
-      "influence": 6
+      "influence": 1.5
     }
   ],
   "rewards": [
@@ -6111,9 +6114,9 @@
       "round 2": 0,
       "round 3": 0,
       "round 4": 0,
-      "round 5": 500,
+      "round 5": 100,
       "round 6": 0,
-      "round 7": 0,
+      "round 7": 100,
       "round 8": 0,
       "round 9": 0,
       "round 10": 0,
@@ -6189,9 +6192,9 @@
       "round 2": 0,
       "round 3": 0,
       "round 4": 0,
-      "round 5": 500,
+      "round 5": 100,
       "round 6": 0,
-      "round 7": 1000,
+      "round 7": 100,
       "round 8": 0,
       "round 9": 0,
       "round 10": 0,
@@ -6267,15 +6270,15 @@
       "round 2": 0,
       "round 3": 0,
       "round 4": 0,
-      "round 5": 500,
+      "round 5": 100,
       "round 6": 0,
-      "round 7": 1000,
+      "round 7": 100,
       "round 8": 0,
-      "round 9": 1000,
+      "round 9": 500,
       "round 10": 0,
-      "round 11": 1000,
+      "round 11": 500,
       "round 12": 0,
-      "round 13": 1100,
+      "round 13": 750,
       "round 14": 0,
       "round 15": 1100,
       "round 16": 0,
@@ -6347,8 +6350,8 @@
       "cost": 75,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.5,
-      "productionTime": 5
+      "workerSpeedBonus": 0.05,
+      "productionTime": 10
     },
     {
       "id": "upgrade_profile_complexity_0",
@@ -6356,8 +6359,8 @@
       "cost": 83,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.525,
-      "productionTime": 4.9
+      "workerSpeedBonus": 0.052500000000000005,
+      "productionTime": 9.5
     },
     {
       "id": "upgrade_profile_complexity_0",
@@ -6365,8 +6368,8 @@
       "cost": 91,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.55125,
-      "productionTime": 4.8
+      "workerSpeedBonus": 0.05512500000000001,
+      "productionTime": 9
     },
     {
       "id": "upgrade_profile_complexity_0",
@@ -6374,8 +6377,8 @@
       "cost": 100,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.5788125000000001,
-      "productionTime": 4.7
+      "workerSpeedBonus": 0.05788125000000001,
+      "productionTime": 8.5
     },
     {
       "id": "upgrade_profile_complexity_0",
@@ -6383,8 +6386,8 @@
       "cost": 110,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.6077531250000001,
-      "productionTime": 4.6
+      "workerSpeedBonus": 0.06077531250000001,
+      "productionTime": 8
     },
     {
       "id": "upgrade_profile_complexity_0",
@@ -6392,8 +6395,8 @@
       "cost": 121,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.6381407812500002,
-      "productionTime": 4.50000000000001
+      "workerSpeedBonus": 0.06381407812500002,
+      "productionTime": 7.5
     },
     {
       "id": "upgrade_profile_complexity_0",
@@ -6401,8 +6404,8 @@
       "cost": 133,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.6700478203125002,
-      "productionTime": 4.40000000000001
+      "workerSpeedBonus": 0.06700478203125003,
+      "productionTime": 7
     },
     {
       "id": "upgrade_profile_complexity_0",
@@ -6410,8 +6413,8 @@
       "cost": 146,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.7035502113281252,
-      "productionTime": 4.30000000000001
+      "workerSpeedBonus": 0.07035502113281253,
+      "productionTime": 6.5
     },
     {
       "id": "upgrade_profile_complexity_0",
@@ -6419,8 +6422,8 @@
       "cost": 161,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.7387277218945315,
-      "productionTime": 4.20000000000001
+      "workerSpeedBonus": 0.07387277218945316,
+      "productionTime": 6
     },
     {
       "id": "upgrade_profile_complexity_0",
@@ -6428,8 +6431,8 @@
       "cost": 177,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.7756641079892581,
-      "productionTime": 4.10000000000001
+      "workerSpeedBonus": 0.07756641079892583,
+      "productionTime": 5.5
     },
     {
       "id": "upgrade_profile_complexity_0",
@@ -6437,8 +6440,8 @@
       "cost": 195,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.814447313388721,
-      "productionTime": 4.00000000000001
+      "workerSpeedBonus": 0.08144473133887213,
+      "productionTime": 5
     },
     {
       "id": "upgrade_profile_complexity_0",
@@ -6446,8 +6449,8 @@
       "cost": 215,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.8551696790581571,
-      "productionTime": 3.90000000000001
+      "workerSpeedBonus": 0.08551696790581574,
+      "productionTime": 4.5
     },
     {
       "id": "upgrade_profile_complexity_0",
@@ -6455,8 +6458,8 @@
       "cost": 237,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.897928163011065,
-      "productionTime": 3.80000000000001
+      "workerSpeedBonus": 0.08979281630110653,
+      "productionTime": 4
     },
     {
       "id": "upgrade_profile_complexity_0",
@@ -6464,8 +6467,8 @@
       "cost": 261,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.9428245711616183,
-      "productionTime": 3.70000000000001
+      "workerSpeedBonus": 0.09428245711616186,
+      "productionTime": 3
     },
     {
       "id": "upgrade_profile_complexity_0",
@@ -6473,8 +6476,8 @@
       "cost": 287,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.9899657997196993,
-      "productionTime": 3.60000000000001
+      "workerSpeedBonus": 0.09899657997196995,
+      "productionTime": 2
     },
     {
       "id": "upgrade_profile_complexity_1",
@@ -6482,7 +6485,7 @@
       "cost": 300,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.5,
+      "workerSpeedBonus": 0.05,
       "productionTime": 20
     },
     {
@@ -6491,7 +6494,7 @@
       "cost": 360,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.525,
+      "workerSpeedBonus": 0.052500000000000005,
       "productionTime": 19
     },
     {
@@ -6500,7 +6503,7 @@
       "cost": 432,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.55125,
+      "workerSpeedBonus": 0.05512500000000001,
       "productionTime": 18
     },
     {
@@ -6509,7 +6512,7 @@
       "cost": 518,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.5788125000000001,
+      "workerSpeedBonus": 0.05788125000000001,
       "productionTime": 17
     },
     {
@@ -6518,7 +6521,7 @@
       "cost": 622,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.6077531250000001,
+      "workerSpeedBonus": 0.06077531250000001,
       "productionTime": 16
     },
     {
@@ -6527,7 +6530,7 @@
       "cost": 746,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.6381407812500002,
+      "workerSpeedBonus": 0.06381407812500002,
       "productionTime": 15
     },
     {
@@ -6536,7 +6539,7 @@
       "cost": 895,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.6700478203125002,
+      "workerSpeedBonus": 0.06700478203125003,
       "productionTime": 14
     },
     {
@@ -6545,7 +6548,7 @@
       "cost": 1074,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.7035502113281252,
+      "workerSpeedBonus": 0.07035502113281253,
       "productionTime": 13
     },
     {
@@ -6554,7 +6557,7 @@
       "cost": 1289,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.7387277218945315,
+      "workerSpeedBonus": 0.07387277218945316,
       "productionTime": 12
     },
     {
@@ -6563,7 +6566,7 @@
       "cost": 1547,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.7756641079892581,
+      "workerSpeedBonus": 0.07756641079892583,
       "productionTime": 11
     },
     {
@@ -6572,7 +6575,7 @@
       "cost": 1856,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.814447313388721,
+      "workerSpeedBonus": 0.08144473133887213,
       "productionTime": 10
     },
     {
@@ -6581,7 +6584,7 @@
       "cost": 2227,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.8551696790581571,
+      "workerSpeedBonus": 0.08551696790581574,
       "productionTime": 9
     },
     {
@@ -6590,7 +6593,7 @@
       "cost": 2672,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.897928163011065,
+      "workerSpeedBonus": 0.08979281630110653,
       "productionTime": 8
     },
     {
@@ -6599,7 +6602,7 @@
       "cost": 3206,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.9428245711616183,
+      "workerSpeedBonus": 0.09428245711616186,
       "productionTime": 7
     },
     {
@@ -6608,7 +6611,7 @@
       "cost": 3847,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.9899657997196993,
+      "workerSpeedBonus": 0.09899657997196995,
       "productionTime": 6
     },
     {
@@ -6617,7 +6620,7 @@
       "cost": 500,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.5,
+      "workerSpeedBonus": 0.05,
       "productionTime": 50
     },
     {
@@ -6626,7 +6629,7 @@
       "cost": 650,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.525,
+      "workerSpeedBonus": 0.052500000000000005,
       "productionTime": 49
     },
     {
@@ -6635,7 +6638,7 @@
       "cost": 845,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.55125,
+      "workerSpeedBonus": 0.05512500000000001,
       "productionTime": 48
     },
     {
@@ -6644,7 +6647,7 @@
       "cost": 1099,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.5788125000000001,
+      "workerSpeedBonus": 0.05788125000000001,
       "productionTime": 47
     },
     {
@@ -6653,7 +6656,7 @@
       "cost": 1429,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.6077531250000001,
+      "workerSpeedBonus": 0.06077531250000001,
       "productionTime": 46
     },
     {
@@ -6662,7 +6665,7 @@
       "cost": 1858,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.6381407812500002,
+      "workerSpeedBonus": 0.06381407812500002,
       "productionTime": 45
     },
     {
@@ -6671,7 +6674,7 @@
       "cost": 2415,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.6700478203125002,
+      "workerSpeedBonus": 0.06700478203125003,
       "productionTime": 44
     },
     {
@@ -6680,7 +6683,7 @@
       "cost": 3140,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.7035502113281252,
+      "workerSpeedBonus": 0.07035502113281253,
       "productionTime": 43
     },
     {
@@ -6689,7 +6692,7 @@
       "cost": 4082,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.7387277218945315,
+      "workerSpeedBonus": 0.07387277218945316,
       "productionTime": 42
     },
     {
@@ -6698,7 +6701,7 @@
       "cost": 5307,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.7756641079892581,
+      "workerSpeedBonus": 0.07756641079892583,
       "productionTime": 41
     },
     {
@@ -6707,7 +6710,7 @@
       "cost": 6899,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.814447313388721,
+      "workerSpeedBonus": 0.08144473133887213,
       "productionTime": 40
     },
     {
@@ -6716,7 +6719,7 @@
       "cost": 8969,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.8551696790581571,
+      "workerSpeedBonus": 0.08551696790581574,
       "productionTime": 39
     },
     {
@@ -6725,7 +6728,7 @@
       "cost": 11660,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.897928163011065,
+      "workerSpeedBonus": 0.08979281630110653,
       "productionTime": 38
     },
     {
@@ -6734,7 +6737,7 @@
       "cost": 15158,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.9428245711616183,
+      "workerSpeedBonus": 0.09428245711616186,
       "productionTime": 37
     },
     {
@@ -6743,7 +6746,7 @@
       "cost": 19705,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.9899657997196993,
+      "workerSpeedBonus": 0.09899657997196995,
       "productionTime": 36
     },
     {
@@ -6752,7 +6755,7 @@
       "cost": 1000,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.5,
+      "workerSpeedBonus": 0.05,
       "productionTime": 200
     },
     {
@@ -6761,7 +6764,7 @@
       "cost": 1400,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.525,
+      "workerSpeedBonus": 0.052500000000000005,
       "productionTime": 196
     },
     {
@@ -6770,7 +6773,7 @@
       "cost": 1960,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.55125,
+      "workerSpeedBonus": 0.05512500000000001,
       "productionTime": 192
     },
     {
@@ -6779,7 +6782,7 @@
       "cost": 2744,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.5788125000000001,
+      "workerSpeedBonus": 0.05788125000000001,
       "productionTime": 188
     },
     {
@@ -6788,7 +6791,7 @@
       "cost": 3842,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.6077531250000001,
+      "workerSpeedBonus": 0.06077531250000001,
       "productionTime": 184
     },
     {
@@ -6797,7 +6800,7 @@
       "cost": 5379,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.6381407812500002,
+      "workerSpeedBonus": 0.06381407812500002,
       "productionTime": 180
     },
     {
@@ -6806,7 +6809,7 @@
       "cost": 7531,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.6700478203125002,
+      "workerSpeedBonus": 0.06700478203125003,
       "productionTime": 176
     },
     {
@@ -6815,7 +6818,7 @@
       "cost": 10543,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.7035502113281252,
+      "workerSpeedBonus": 0.07035502113281253,
       "productionTime": 172
     },
     {
@@ -6824,7 +6827,7 @@
       "cost": 14760,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.7387277218945315,
+      "workerSpeedBonus": 0.07387277218945316,
       "productionTime": 169
     },
     {
@@ -6833,7 +6836,7 @@
       "cost": 20664,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.7756641079892581,
+      "workerSpeedBonus": 0.07756641079892583,
       "productionTime": 166
     },
     {
@@ -6842,7 +6845,7 @@
       "cost": 28930,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.814447313388721,
+      "workerSpeedBonus": 0.08144473133887213,
       "productionTime": 163
     },
     {
@@ -6851,7 +6854,7 @@
       "cost": 40502,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.8551696790581571,
+      "workerSpeedBonus": 0.08551696790581574,
       "productionTime": 160
     },
     {
@@ -6860,7 +6863,7 @@
       "cost": 56703,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.897928163011065,
+      "workerSpeedBonus": 0.08979281630110653,
       "productionTime": 157
     },
     {
@@ -6869,7 +6872,7 @@
       "cost": 79384,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.9428245711616183,
+      "workerSpeedBonus": 0.09428245711616186,
       "productionTime": 154
     },
     {
@@ -6878,7 +6881,7 @@
       "cost": 111138,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.9899657997196993,
+      "workerSpeedBonus": 0.09899657997196995,
       "productionTime": 151
     },
     {
@@ -6887,7 +6890,7 @@
       "cost": 75,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.5,
+      "workerSpeedBonus": 0.05,
       "productionTime": 500
     },
     {
@@ -6896,7 +6899,7 @@
       "cost": 113,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.525,
+      "workerSpeedBonus": 0.052500000000000005,
       "productionTime": 490
     },
     {
@@ -6905,7 +6908,7 @@
       "cost": 170,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.55125,
+      "workerSpeedBonus": 0.05512500000000001,
       "productionTime": 480
     },
     {
@@ -6914,7 +6917,7 @@
       "cost": 255,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.5788125000000001,
+      "workerSpeedBonus": 0.05788125000000001,
       "productionTime": 470
     },
     {
@@ -6923,7 +6926,7 @@
       "cost": 383,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.6077531250000001,
+      "workerSpeedBonus": 0.06077531250000001,
       "productionTime": 461
     },
     {
@@ -6932,7 +6935,7 @@
       "cost": 575,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.6381407812500002,
+      "workerSpeedBonus": 0.06381407812500002,
       "productionTime": 452
     },
     {
@@ -6941,7 +6944,7 @@
       "cost": 863,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.6700478203125002,
+      "workerSpeedBonus": 0.06700478203125003,
       "productionTime": 443
     },
     {
@@ -6950,7 +6953,7 @@
       "cost": 1295,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.7035502113281252,
+      "workerSpeedBonus": 0.07035502113281253,
       "productionTime": 434
     },
     {
@@ -6959,7 +6962,7 @@
       "cost": 1943,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.7387277218945315,
+      "workerSpeedBonus": 0.07387277218945316,
       "productionTime": 425
     },
     {
@@ -6968,7 +6971,7 @@
       "cost": 2915,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.7756641079892581,
+      "workerSpeedBonus": 0.07756641079892583,
       "productionTime": 417
     },
     {
@@ -6977,7 +6980,7 @@
       "cost": 4373,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.814447313388721,
+      "workerSpeedBonus": 0.08144473133887213,
       "productionTime": 409
     },
     {
@@ -6986,7 +6989,7 @@
       "cost": 6560,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.8551696790581571,
+      "workerSpeedBonus": 0.08551696790581574,
       "productionTime": 401
     },
     {
@@ -6995,7 +6998,7 @@
       "cost": 9840,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.897928163011065,
+      "workerSpeedBonus": 0.08979281630110653,
       "productionTime": 393
     },
     {
@@ -7004,7 +7007,7 @@
       "cost": 14760,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.9428245711616183,
+      "workerSpeedBonus": 0.09428245711616186,
       "productionTime": 385
     },
     {
@@ -7013,7 +7016,7 @@
       "cost": 22140,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.9899657997196993,
+      "workerSpeedBonus": 0.09899657997196995,
       "productionTime": 377
     },
     {
@@ -7022,7 +7025,7 @@
       "cost": 75,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.5,
+      "workerSpeedBonus": 0.05,
       "productionTime": 1000
     },
     {
@@ -7031,7 +7034,7 @@
       "cost": 120,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.525,
+      "workerSpeedBonus": 0.052500000000000005,
       "productionTime": 980
     },
     {
@@ -7040,7 +7043,7 @@
       "cost": 192,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.55125,
+      "workerSpeedBonus": 0.05512500000000001,
       "productionTime": 960
     },
     {
@@ -7049,7 +7052,7 @@
       "cost": 307,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.5788125000000001,
+      "workerSpeedBonus": 0.05788125000000001,
       "productionTime": 941
     },
     {
@@ -7058,7 +7061,7 @@
       "cost": 491,
       "workersRequired": 1,
       "maxWorkers": 2,
-      "workerSpeedBonus": 0.6077531250000001,
+      "workerSpeedBonus": 0.06077531250000001,
       "productionTime": 922
     },
     {
@@ -7067,7 +7070,7 @@
       "cost": 786,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.6381407812500002,
+      "workerSpeedBonus": 0.06381407812500002,
       "productionTime": 904
     },
     {
@@ -7076,7 +7079,7 @@
       "cost": 1258,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.6700478203125002,
+      "workerSpeedBonus": 0.06700478203125003,
       "productionTime": 886
     },
     {
@@ -7085,7 +7088,7 @@
       "cost": 2013,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.7035502113281252,
+      "workerSpeedBonus": 0.07035502113281253,
       "productionTime": 868
     },
     {
@@ -7094,7 +7097,7 @@
       "cost": 3221,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.7387277218945315,
+      "workerSpeedBonus": 0.07387277218945316,
       "productionTime": 851
     },
     {
@@ -7103,7 +7106,7 @@
       "cost": 5154,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.7756641079892581,
+      "workerSpeedBonus": 0.07756641079892583,
       "productionTime": 834
     },
     {
@@ -7112,7 +7115,7 @@
       "cost": 8246,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.814447313388721,
+      "workerSpeedBonus": 0.08144473133887213,
       "productionTime": 817
     },
     {
@@ -7121,7 +7124,7 @@
       "cost": 13194,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.8551696790581571,
+      "workerSpeedBonus": 0.08551696790581574,
       "productionTime": 801
     },
     {
@@ -7130,7 +7133,7 @@
       "cost": 21110,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.897928163011065,
+      "workerSpeedBonus": 0.08979281630110653,
       "productionTime": 785
     },
     {
@@ -7139,7 +7142,7 @@
       "cost": 33776,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.9428245711616183,
+      "workerSpeedBonus": 0.09428245711616186,
       "productionTime": 769
     },
     {
@@ -7148,7 +7151,7 @@
       "cost": 54042,
       "workersRequired": 1,
       "maxWorkers": 3,
-      "workerSpeedBonus": 0.9899657997196993,
+      "workerSpeedBonus": 0.09899657997196995,
       "productionTime": 754
     }
   ],
@@ -7636,59 +7639,129 @@
   ],
   "unlock_config": [
     {
-      "id": "tuto_level_0_unlock_config",
+      "id": "Tutorial_1-3",
       "machine": "tennisBallFactory",
       "unlock": 1
     },
     {
-      "id": "tuto_level_0_unlock_config",
+      "id": "Tutorial_1-3",
       "machine": "carrotFarm",
       "unlock": 2
     },
     {
-      "id": "tuto_level_1_unlock_config",
+      "id": "Bottle_Intro",
       "machine": "tennisBallFactory",
       "unlock": 1
     },
     {
-      "id": "tuto_level_1_unlock_config",
+      "id": "Bottle_Intro",
       "machine": "carrotFarm",
       "unlock": 2
     },
     {
-      "id": "tuto_level_1_unlock_config",
-      "machine": "nestFactory",
+      "id": "Bottle_Intro",
+      "machine": "bottleMaker",
+      "unlock": 4
+    },
+    {
+      "id": "Bottle_2_3",
+      "machine": "tennisBallFactory",
+      "unlock": 1
+    },
+    {
+      "id": "Bottle_2_3",
+      "machine": "carrotFarm",
+      "unlock": 2
+    },
+    {
+      "id": "Bottle_2_3",
+      "machine": "bottleMaker",
       "unlock": 3
     },
     {
-      "id": "tuto_level_1_unlock_config",
-      "machine": "nenupharFarm",
-      "unlock": 4
-    },
-    {
-      "id": "tuto_level_2_unlock_config",
+      "id": "Bottle_4",
       "machine": "tennisBallFactory",
       "unlock": 1
     },
     {
-      "id": "tuto_level_2_unlock_config",
+      "id": "Bottle_4",
+      "machine": "carrotFarm",
+      "unlock": 1
+    },
+    {
+      "id": "Bottle_4",
+      "machine": "bottleMaker",
+      "unlock": 2
+    },
+    {
+      "id": "Nenuphar_Intro",
+      "machine": "tennisBallFactory",
+      "unlock": 2
+    },
+    {
+      "id": "Nenuphar_Intro",
       "machine": "carrotFarm",
       "unlock": 2
     },
     {
-      "id": "tuto_level_2_unlock_config",
-      "machine": "nestFactory",
+      "id": "Nenuphar_Intro",
+      "machine": "bottleMaker",
+      "unlock": 5
+    },
+    {
+      "id": "Nenuphar_Intro",
+      "machine": "nenupharFarm",
+      "unlock": 1
+    },
+    {
+      "id": "Nest_Intro",
+      "machine": "tennisBallFactory",
+      "unlock": 1
+    },
+    {
+      "id": "Nest_Intro",
+      "machine": "carrotFarm",
+      "unlock": 2
+    },
+    {
+      "id": "Nest_Intro",
+      "machine": "bottleMaker",
       "unlock": 3
     },
     {
-      "id": "tuto_level_2_unlock_config",
+      "id": "Nest_Intro",
       "machine": "nenupharFarm",
-      "unlock": 4
+      "unlock": 1
     },
     {
-      "id": "tuto_level_2_unlock_config",
-      "machine": "candleBabaYagaHut",
-      "unlock": 4
+      "id": "Nest_Intro",
+      "machine": "nestFactory",
+      "unlock": 5
+    },
+    {
+      "id": "Nest_1_Normal",
+      "machine": "tennisBallFactory",
+      "unlock": 1
+    },
+    {
+      "id": "Nest_1_Normal",
+      "machine": "carrotFarm",
+      "unlock": 1
+    },
+    {
+      "id": "Nest_1_Normal",
+      "machine": "bottleMaker",
+      "unlock": 2
+    },
+    {
+      "id": "Nest_1_Normal",
+      "machine": "nenupharFarm",
+      "unlock": 2
+    },
+    {
+      "id": "Nest_1_Normal",
+      "machine": "nestFactory",
+      "unlock": 5
     },
     {
       "id": "base",
@@ -7741,52 +7814,52 @@
     {
       "id": "Tutorial_1",
       "taxConfig": "tax_config_0",
-      "unlockConfig": "tuto_level_0_unlock_config"
+      "unlockConfig": "Tutorial_1-3"
     },
     {
       "id": "Tutorial_2",
       "taxConfig": "tax_config_0",
-      "unlockConfig": "tuto_level_0_unlock_config"
+      "unlockConfig": "Tutorial_1-3"
     },
     {
       "id": "Tutorial_3",
       "taxConfig": "tax_config_1",
-      "unlockConfig": "tuto_level_1_unlock_config"
+      "unlockConfig": "Tutorial_1-3"
     },
     {
       "id": "Bottle_Intro",
       "taxConfig": "tax_config_2",
-      "unlockConfig": "tuto_level_2_unlock_config"
+      "unlockConfig": "Bottle_Intro"
     },
     {
       "id": "Bottle_2_Intense",
       "taxConfig": "tax_config_2",
-      "unlockConfig": "tuto_level_2_unlock_config"
+      "unlockConfig": "Bottle_2_3"
     },
     {
       "id": "Bottle_3_Slow",
       "taxConfig": "tax_config_2",
-      "unlockConfig": "tuto_level_2_unlock_config"
+      "unlockConfig": "Bottle_2_3"
     },
     {
       "id": "Bottle_4_Intense",
       "taxConfig": "tax_config_2",
-      "unlockConfig": "tuto_level_2_unlock_config"
+      "unlockConfig": "Bottle_4"
     },
     {
       "id": "Nenuphar_Intro",
       "taxConfig": "tax_config_2",
-      "unlockConfig": "tuto_level_2_unlock_config"
+      "unlockConfig": "Nenuphar_Intro"
     },
     {
       "id": "Nest_Intro",
       "taxConfig": "tax_config_2",
-      "unlockConfig": "tuto_level_2_unlock_config"
+      "unlockConfig": "Nest_Intro"
     },
     {
       "id": "Nest_1_Normal",
       "taxConfig": "tax_config_2",
-      "unlockConfig": "base"
+      "unlockConfig": "Nest_1_Normal"
     }
   ],
   "world_level": [

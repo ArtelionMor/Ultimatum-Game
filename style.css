@@ -102,17 +102,30 @@ img { image-rendering: pixelated; }
 .tx-none { color: var(--ok); font-weight: bold; padding: 8px; text-align: center; }
 #taxinfo-close { margin-top: 16px; }
 
-/* ---------- Next-wave preview menu ---------- */
+/* ---------- Wave banner ---------- */
+/* Un seul bandeau, deux états : la vague À VENIR (prep, doré) et la vague EN COURS
+   (teal). Tout ce qui est teinté suit --wp-accent, donc le bandeau entier bascule
+   d'un coup : c'est le swap de couleur qui porte la lecture, pas le texte seul. */
 #wave-preview {
   flex: 0 0 auto;
   background: linear-gradient(180deg, #2b3142 0%, #242a39 100%);
   border-bottom: 2px solid var(--border);
   padding: 7px 14px 9px;
+  --wp-accent: var(--accent);
+  transition: border-bottom-color .25s ease;
 }
+#wave-preview.wp-incoming { --wp-accent: var(--accent); }
+#wave-preview.wp-current { --wp-accent: var(--accent-2); border-bottom-color: var(--accent-2); }
 .wp-head { display: flex; align-items: center; gap: 8px; font-size: 12px; }
-.wp-title { font-weight: bold; color: var(--accent); text-transform: uppercase; letter-spacing: .5px; }
+.wp-title { font-weight: bold; color: var(--wp-accent); text-transform: uppercase; letter-spacing: .5px; }
+.wp-state {
+  font-weight: bold; font-size: 10px; text-transform: uppercase; letter-spacing: .5px;
+  color: var(--wp-accent); border: 1px solid var(--wp-accent);
+  border-radius: 999px; padding: 1px 7px;
+}
+#wave-preview.wp-current .wp-state { background: color-mix(in srgb, var(--accent-2) 18%, transparent); }
 .wp-meta { color: var(--text-dim); }
-.wp-countdown { margin-left: auto; font-weight: bold; color: var(--accent-2); }
+.wp-countdown { margin-left: auto; font-weight: bold; color: var(--wp-accent); }
 .wp-countdown.imminent { color: var(--danger); animation: wpPulse .7s ease-in-out infinite; }
 @keyframes wpPulse { 0%,100%{ opacity: 1; } 50%{ opacity: .4; } }
 .wp-chips { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }

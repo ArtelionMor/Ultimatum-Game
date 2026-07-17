@@ -13,7 +13,7 @@ import { openResource } from "./resource.js";
 import { enterTax, openTaxInfo, closeTaxInfo, prepayTax, renderTaxInfo, nextTaxInfo } from "./game-tax.js";
 import { freeWorkers, crewSpeedBonus, crewProba2x, addWorker, selectWorker, assignWorker, removeWorker, unassignWorker } from "./game-workers.js";
 import { nextWorker, buyWorker, nextMkt, buyMkt, nextStorage, buyStorage, nextMachineLevel, upgradeMachine } from "./game-shop.js";
-import { planBot, releaseBotStock } from "./game-bots.js";
+import { botPlanRound, staffBot } from "./game-bots.js";
 import { spawnCustomer, restackCustomers } from "./game-customers.js";
 import { tickProduction } from "./game-production.js";
 import { renderMethods } from "./game-render.js";
@@ -210,7 +210,7 @@ const Game = {
       machines: [], buys: { increaseWorker: 0, increaseMarketting: 0, increaseStorage: 0 },
       salesThisRound: 0, prepaidTaxRound: null,
     };
-    for (let i = 0; i < g.startingWorkers; i++) addWorker(this);
+    for (let i = 0; i < g.startingWorkers; i++) addWorker(this, this.player);
     this.cfg.machines.forEach((m) => { const r = this.machineUnlockRound(m.id); if (r != null && r <= 1) this.giveMachine(this.player, m.id); });
 
     // The level defines the exact bot lineup.
@@ -218,8 +218,15 @@ const Game = {
       id: b.id, name: b.displayName, spriteId: b.spriteId, spriteFolder: "Characters", isPlayer: false, eliminated: false,
       money: b.startingMoney, stock: this.emptyStock(), storageCap: g.startingStorage,
       marketing: BASE_MARKETING + (b.buffs.marketing || 0), def: b, behaviorByRound: b.behaviorByRound, buffs: b.buffs, upgradesBought: 0,
+      workers: [], machines: [],
       buys: { increaseWorker: 0, increaseMarketting: 0, increaseStorage: 0 }, salesThisRound: 0,
     }));
+    // Les bots jouent TON économie : mêmes ouvriers de départ, mêmes machines
+    // débloquées, même horloge de production (game-production.js tickProduction).
+    bots.forEach((b) => {
+      for (let i = 0; i < g.startingWorkers; i++) addWorker(this, b);
+      this.cfg.machines.forEach((m) => { const r = this.machineUnlockRound(m.id); if (r != null && r <= 1) this.giveMachine(b, m.id); });
+    });
     this.competitors = [this.player, ...bots];
     this._screenReady = false;
     this.transitionTo(S.Play);
@@ -248,7 +255,6 @@ const Game = {
     const g = this.cfg.g;
     this.waveActive = false;
     this.prepTimer = g.tycoonPhaseDuration;
-    this._prepDuration = g.tycoonPhaseDuration;
     this.market = null;
     this.selectedWorker = null;
 
@@ -256,12 +262,17 @@ const Game = {
     const inc = this.cfg.roundIncome[this.round];
     if (inc) this.competitors.forEach((c) => { if (!c.eliminated) c.money += inc.coins; });
 
-    // bots plan their whole round now; their stock is revealed gradually during prep
-    this.competitors.forEach((c) => { if (!c.isPlayer && !c.eliminated) planBot(this, c); });
-
-    // unlock machines (per-level schedule), keep worker assignments
-    this.cfg.machines.forEach((m) => { if (this.machineUnlockRound(m.id) === this.round) this.giveMachine(this.player, m.id); });
+    // unlock machines (per-level schedule) pour tout le monde, keep worker assignments.
+    // Avant le plan des bots : une machine débloquée ce round doit pouvoir être staffée.
+    this.competitors.forEach((c) => {
+      if (c.eliminated) return;
+      this.cfg.machines.forEach((m) => { if (this.machineUnlockRound(m.id) === this.round) this.giveMachine(c, m.id); });
+    });
     this.player.machines.forEach((m) => { m.elapsed = 0; });
+
+    // Les bots décident leur round ici : acheter, puis staffer. Ils ne fabriquent
+    // rien eux-mêmes — leurs machines tournent dans tickProduction comme les tiennes.
+    this.competitors.forEach((c) => { if (!c.isPlayer && !c.eliminated) botPlanRound(this, c); });
 
     $("#phase-banner").textContent = `Round ${this.round} — Revenu +${inc ? inc.coins : 0}$ · prépare-toi`;
     this.renderInventory(); this.renderShop(); this.renderMachines(); this.renderWorkers();
@@ -277,6 +288,14 @@ const Game = {
     this.maybeRefreshInventory();
     this._supTimer = (this._supTimer || 0) - dt;
     if (this._supTimer <= 0) { this.refreshSuppliers(); this.refreshAffordability(); this._supTimer = 0.2; }
+    // Les bots redéploient leurs ouvriers en cours de round, comme tu le fais à la main :
+    // une chaîne de conversion ne coule que si on passe l'ouvrier au convertisseur dès que
+    // son stock d'intrants est prêt, puis qu'on le rend au fournisseur quand il est à sec.
+    this._botStaffTimer = (this._botStaffTimer || 0) - dt;
+    if (this._botStaffTimer <= 0) {
+      this.competitors.forEach((c) => { if (!c.isPlayer && !c.eliminated) staffBot(this, c); });
+      this._botStaffTimer = 1;
+    }
     // Live-refresh the tax/waves screen while it is open (money + projection move in real time).
     if (this._taxOpen) { this._taxTimer -= dt; if (this._taxTimer <= 0) { renderTaxInfo(this); this._taxTimer = 0.3; } }
 
@@ -289,8 +308,6 @@ const Game = {
       if (m.remaining <= 0 && m.served >= m.total) this.endWave();
     } else {
       this.prepTimer -= dt;
-      const progress = this._prepDuration ? Math.max(0, Math.min(1, 1 - this.prepTimer / this._prepDuration)) : 1;
-      this.competitors.forEach((c) => { if (!c.isPlayer && !c.eliminated) releaseBotStock(this, c, progress); });
       this.updateWavePreviewTimer();
       if (this.prepTimer <= 0) this.startWave();
     }
@@ -300,8 +317,7 @@ const Game = {
   // A wave arrives: bots stock up, customers start falling. Production keeps running.
   startWave() {
     this.waveActive = true;
-    // flush any not-yet-revealed bot stock so they reach exactly the planned target
-    this.competitors.forEach((c) => { if (!c.isPlayer && !c.eliminated) releaseBotStock(this, c, 1); c.salesThisRound = 0; });
+    this.competitors.forEach((c) => { c.salesThisRound = 0; });
     const m = this.marketFor(this.round);
     this.market = { def: m, remaining: m.customers, total: m.customers, served: 0, spawnTimer: 0, active: 0 };
     $("#customer-lane").innerHTML = "";
@@ -318,16 +334,19 @@ const Game = {
 
   lvl(machine) { return this.machineDef(machine.id).levels[machine.level - 1]; },
 
-  // ---------- Next-wave preview (top menu) ----------
-  // The wave whose demand to advertise: during a wave, the next one; during prep, the
-  // one about to arrive. Returns null when there is no further wave.
+  // ---------- Wave banner (top menu) ----------
+  // Toujours la vague du round COURANT : pendant la prep c'est celle qui arrive,
+  // pendant la vague c'est celle qu'on sert. Afficher la suivante en pleine vague
+  // embrouillait (le bandeau disait "Vague 4" pendant la vague 3). Les deux états
+  // se distinguent par la couleur — voir .wp-incoming / .wp-current dans style.css.
   previewWave() {
-    const pr = this.waveActive ? this.round + 1 : this.round;
-    return pr > this.levelCfg.totalRounds ? null : pr;
+    return this.round > this.levelCfg.totalRounds ? null : this.round;
   },
   renderWavePreview() {
     const wrap = $("#wave-preview"); if (!wrap) return;
     const pr = this.previewWave();
+    wrap.classList.toggle("wp-current", !!this.waveActive);
+    wrap.classList.toggle("wp-incoming", !this.waveActive);
     if (pr == null) { wrap.innerHTML = `<div class="wp-head"><span class="wp-title">Dernière vague</span></div>`; return; }
     const mk = this.marketFor(pr);
     const order = this.cfg.resourceOrder;
@@ -338,6 +357,7 @@ const Game = {
       .join("");
     wrap.innerHTML =
       `<div class="wp-head"><span class="wp-title">Vague ${pr}</span>` +
+      `<span class="wp-state">${this.waveActive ? "en cours" : "à venir"}</span>` +
       `<span class="wp-meta">👥 ${mk.customers} · ~${mk.avg}/client</span>` +
       `<span id="wp-countdown" class="wp-countdown"></span></div>` +
       `<div class="wp-chips">${chips}</div>`;
@@ -345,16 +365,20 @@ const Game = {
   },
   updateWavePreviewTimer() {
     const c = $("#wp-countdown"); if (!c) return;
-    c.textContent = this.waveActive ? "en cours" : "↓ " + Math.max(0, Math.ceil(this.prepTimer)) + "s";
+    c.textContent = this.waveActive ? "" : "↓ " + Math.max(0, Math.ceil(this.prepTimer)) + "s"; // l'état est dans .wp-state
     c.classList.toggle("imminent", !this.waveActive && this.prepTimer <= 5);
   },
 
   // ---------- Results (standings) ----------
   enterResults() {
-    const ranked = [...this.competitors].sort((a, b) => b.money - a.money); // copie: ne pas réordonner this.competitors
-    this.renderResults(ranked, []);
+    const elimNow = this._elimNow || []; this._elimNow = [];   // qui vient de tomber sur la taxe (game-tax.js enterTax)
+    // copie: ne pas réordonner this.competitors — les éliminés tombent en bas du classement
+    const ranked = [...this.competitors].sort((a, b) => (a.eliminated !== b.eliminated ? (a.eliminated ? 1 : -1) : b.money - a.money));
+    this.renderResults(ranked, elimNow);
 
-    const end = this.round >= this.levelCfg.totalRounds;
+    // Le niveau s'arrête aussi dès que le joueur est éliminé, ou qu'il ne reste plus personne à battre.
+    const alive = this.competitors.filter((c) => !c.eliminated);
+    const end = this.round >= this.levelCfg.totalRounds || this.player.eliminated || alive.length <= 1;
     $("#results-continue").textContent = end ? "Voir le résultat" : "Round suivant";
     $("#results-continue").onclick = () => { $("#results-overlay").classList.add("hidden"); this.transitionTo(end ? S.GameOver : S.Play); };
   },

@@ -16,8 +16,14 @@ export function normalize(raw) {
   });
   const maxTier = Math.max(...raw.resources.map((r) => r.tier));
 
-  const inputsByMachine = {};
-  raw.inputs.forEach((i) => { (inputsByMachine[i.id] = inputsByMachine[i.id] || []).push({ type: i.type, quantity: i.quantity }); });
+  // `inputs` is a RECIPE table keyed by recipe name (which reads like the produced
+  // resource: "nest", "bottle"…), and each machine names its recipe in its own
+  // `inputs` column — the same profile indirection as outputs_profiles / upgrade
+  // profiles / convert_profile. Looking recipes up by MACHINE id (nestFactory)
+  // silently handed every machine an empty recipe, so no converter ever existed.
+  // Fall back to the machine id for the old flat format.
+  const inputsByRecipe = {};
+  raw.inputs.forEach((i) => { (inputsByRecipe[i.id] = inputsByRecipe[i.id] || []).push({ type: i.type, quantity: i.quantity }); });
 
   // the exporter renames sections over time: read the new name, fall back to the old
   const rawUpgrades = raw.upgrade_machines_profile || raw.upgrades || [];
@@ -25,7 +31,7 @@ export function normalize(raw) {
   const machines = raw.machines.map((m) => ({
     id: m.id, displayName: m.displayName, spriteId: m.spriteId, outputs: m.outputs,
     unlockAtRound: m.unlockAtRound,
-    inputs: inputsByMachine[m.id] || [],
+    inputs: inputsByRecipe[m.inputs] || inputsByRecipe[m.id] || [],
     // new schema: the machine's `upgrades` column names its profile; old flat format keyed rows by machine id
     levels: rawUpgrades.filter((u) => u.id === (m.upgrades || m.id)).sort((a, b) => a.level - b.level)
       .map((u) => ({ level: u.level, cost: u.cost, workersRequired: u.workersRequired, maxWorkers: u.maxWorkers, workerSpeedBonus: u.workerSpeedBonus, productionTime: u.productionTime })),
@@ -138,11 +144,30 @@ export function normalize(raw) {
     characters[id].maxLevel = lv.length ? Math.max(...lv) : 1;
   }
 
-  // convert: N units of (id, tier) -> result_quantity (default 1) of (result_ressource, result_tier)
+  // convert (refining): N units of a resource at one tier -> 1 unit at the next.
+  // `convert_profile` became a PROFILE table (same indirection as `profil` ->
+  // outputs_profiles): its `id` names the PROFILE, and each resource picks its
+  // profile through the `convert` column of the `outputs` table. Resolve that here,
+  // or cfg.convert[resourceId] never exists and the Raffiner button never shows
+  // (resource.js) — which is exactly what happened when the sheet was reshaped.
+  // Columns also moved: tier -> tier_A, quantity -> number, result_tier -> tier_B,
+  // and there is no result_ressource any more (refining stays within one resource).
   const convert = {};
-  (raw.convert_profile || raw.convert || []).forEach((c) => {
-    (convert[c.id] = convert[c.id] || {})[c.tier] = { quantity: c.quantity, resultRes: c.result_ressource, resultTier: c.result_tier, resultQty: c.result_quantity || 1 };
-  });
+  const convertRows = raw.convert_profile || raw.convert || [];
+  if (convertRows.length && convertRows[0].tier_A != null) {
+    const profiles = {};
+    convertRows.forEach((c) => { (profiles[c.id] = profiles[c.id] || {})[c.tier_A] = { quantity: c.number, resultTier: c.tier_B }; });
+    (raw.outputs || []).forEach((o) => {
+      const prof = profiles[o.convert]; if (!prof) return;
+      const rules = (convert[o.id] = convert[o.id] || {});
+      for (const t in prof) rules[t] = { quantity: prof[t].quantity, resultRes: o.id, resultTier: prof[t].resultTier, resultQty: 1 };
+    });
+  } else {
+    // old flat shape: one row per resource, already keyed by resource id
+    convertRows.forEach((c) => {
+      (convert[c.id] = convert[c.id] || {})[c.tier] = { quantity: c.quantity, resultRes: c.result_ressource, resultTier: c.result_tier, resultQty: c.result_quantity || 1 };
+    });
+  }
 
   // slots: rarity/luck styling for a produced output, keyed by its output `group` (A..F)
   const slots = {};

@@ -69,10 +69,17 @@ export function enterTax(game) {
   const p = game.player;
   const prepaid = p.prepaidTaxRound === game.round; // player already settled this tax in advance
   // Charge every alive competitor; the player is skipped when they've prepaid.
+  // Failing the tax is FATAL. That is what turns an exponential tax curve into a
+  // clock: the market only carries a shrinking number of companies, and each
+  // death hands its share of the demand to the survivors — which is the only
+  // reason anyone can pay the next one.
+  const elimNow = [];
   if (cost > 0) game.competitors.forEach((c) => {
     if (c.eliminated || (c === p && prepaid)) return;
-    c.money = Math.max(0, c.money - cost);
+    if (c.money < cost) { c.money = 0; c.eliminated = true; elimNow.push(c); return; }
+    c.money -= cost;
   });
+  game._elimNow = elimNow;
   if (prepaid) p.prepaidTaxRound = null;
   const charged = cost > 0 && !p.eliminated && !prepaid ? cost : 0;
   $("#tax-before").textContent = p.money + charged;

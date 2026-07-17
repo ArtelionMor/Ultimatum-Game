@@ -1,22 +1,50 @@
 /* Market Ultimatum — game-bots.js
- * Competitor (bot) AI extracted from main.js.
- *  - taxReserve: pure (config + bot math).
- *  - simulate/plan/release + botUseful/botDo: take game (use game stock/market helpers).
+ * Competitor (bot) AI.
+ *
+ * A bot runs the PLAYER'S economy, not a parallel one: same machines, same
+ * workers, same drop tables, same production clock (game-production.js), same
+ * shop prices, same storage. It gets no allocation and no free units — every
+ * unit it owns, it produced; every coin it holds, it sold for. Its tier access
+ * comes from upgrading its machines, exactly like the player's.
+ *
+ * All it does differently is DECIDE, once per round (botPlanRound):
+ *   1. what to buy, out of whatever sits above its tax reserve;
+ *   2. which machines to staff.
+ * Step 2 is its whole downside: staffing the wrong machine wastes the round, the
+ * same way the player misreads the demand.
+ *
+ * Its per-wave weights (competitors_behavior v2, tool-generated) are read as that
+ * staffing mix: weight per resource -> share of its workers on the machine that
+ * makes it. The 3 purchase columns drive its appetite for buying.
  */
 "use strict";
 
-// Reserve for the next upcoming tax, minus the guaranteed income the bot will still
-// collect before that tax is charged (round income + passive per-round gain, for every
-// round from the next one up to and including the tax round — that round's income lands
-// before its tax). Lets bots invest early instead of hoarding the full tax from round 1.
-export function taxReserve(cfg, levelCfg, b, round) {
-  let taxRound = Infinity, cost = 0;
-  for (const r in levelCfg.tax) { const rn = +r; if (rn >= round && rn < taxRound) { taxRound = rn; cost = levelCfg.tax[r]; } }
+import { nextMachineLevel } from "./game-shop.js";
+import { addWorker } from "./game-workers.js";
+
+const PURCHASES = ["increaseWorker", "increaseMarketting", "increaseStorage"];
+
+// 1 = reaches the tax holding exactly its cost · 0.6 = arrives 40% short and
+// gambles on covering it with that wave's sales. Per-bot personality, meant to
+// come from the level tool.
+const RISK_APPETITE = 1.0;
+const riskAppetite = (b) => b.def.riskAppetite ?? RISK_APPETITE;
+
+// Cash held back for the next tax, as a LINEAR RAMP from the previous tax to the
+// next. The original rule counted every future round's income as already earned,
+// which made the reserve ~0 on round 1 (the bot blew its whole bankroll) and
+// ~full one round before the tax (it froze). A ramp keeps it investing every
+// round instead — more or less, never all-or-nothing.
+export function taxReserve(levelCfg, b, round) {
+  let next = Infinity, cost = 0, prev = 0;
+  for (const r in levelCfg.tax) {
+    const rn = +r;
+    if (rn >= round && rn < next) { next = rn; cost = levelCfg.tax[r]; }
+    if (rn < round && rn > prev) prev = rn;
+  }
   if (!cost) return 0;
-  const passive = b.def.increaseByRound + b.def.upgradeEffect * b.upgradesBought;
-  let future = 0;
-  for (let k = round + 1; k <= taxRound; k++) { const ri = cfg.roundIncome[k]; future += (ri ? ri.coins : 0) + passive; }
-  return Math.max(0, cost - future);
+  const span = next - prev;
+  return Math.max(0, cost * riskAppetite(b) * (span > 0 ? (round - prev) / span : 1));
 }
 
 // Weights driving the bot for a given wave (competitors_behavior v2). Falls
@@ -29,74 +57,138 @@ export function botBehavior(b, round) {
   return byRound[best] || {};
 }
 
-// speed buff (%): the bot produces cheaper — the economic analog of "produces
-// faster" for bots, which buy units instead of running machines.
-function unitCost(b, ti) { return Math.ceil(ti.price / (1 + (b.buffs.speed || 0) / 100)); }
+// Every machine the bot needs RUNNING to serve this wave's mix: the machine whose
+// output is demanded, plus — recursively — whatever feeds it. Selling a converted
+// resource means making its inputs too, so the whole chain is wanted.
+// Weight decays upstream, so the machine whose output actually SELLS outranks its
+// suppliers when workers are scarce.
+const DEPTH_DECAY = 0.9;
+const MAX_CHAIN = 8;    // guard: a recipe cycle in config must not hang the round
 
-export function simulateBot(game, b) {
-  const inc = game.cfg.roundIncome[game.round];
-  b.money += b.def.increaseByRound + b.def.upgradeEffect * b.upgradesBought;
-  b.salesThisRound = 0;
-  b.stock = game.emptyStock();
-  const tier = inc ? inc.tier : 1;
+function wantedChain(game, b, behavior) {
+  const byOutput = {};
+  b.machines.forEach((m) => { const def = game.machineDef(m.id); if (def) byOutput[def.outputs] = m; });
+  const want = new Map();                      // machine -> inherited weight
+  const visit = (resId, w, depth) => {
+    const m = byOutput[resId]; if (!m || depth > MAX_CHAIN) return;
+    if ((want.get(m) || 0) >= w) return;       // already wanted at least this much
+    want.set(m, w);
+    game.machineDef(m.id).inputs.forEach((i) => visit(i.type, w * DEPTH_DECAY, depth + 1));
+  };
+  game.cfg.resourceOrder.forEach((r) => { if (behavior[r] > 0) visit(r, behavior[r], 0); });
+  return want;
+}
 
-  // Keep enough to survive the upcoming tax, net of income still to come before it.
-  const reserve = taxReserve(game.cfg, game.levelCfg, b, game.round);
+// A converter with nothing to convert produces strictly nothing, so it is not worth
+// a worker yet — its supplier is. Handing the worker back and forth IS the bot
+// playing the chain: fill the input buffer, then switch over. What you do by hand.
+function machineReady(game, b, m) {
+  return game.machineDef(m.id).inputs.every((i) => game.stockOf(b, i.type) >= i.quantity);
+}
 
-  // "Will I sell it?" — estimate how many units of each resource are worth making
-  // this round, so the bot doesn't overproduce stock it can't move.
-  const mk = game.marketFor(game.round);
-  const order = game.cfg.resourceOrder;
-  const totalW = order.reduce((s, r) => s + (mk.weights[r] || 0), 0) || 1;
-  const numAlive = game.competitors.filter((c) => !c.eliminated).length || 1;
-  const target = {};
-  order.forEach((r) => { const demand = mk.customers * ((mk.weights[r] || 0) / totalW) * mk.avg; target[r] = Math.ceil(demand / numAlive * 1.3); });
+// Machine upgrades have no column of their own — the tool writes one appetite
+// into the three purchase columns, so we reuse it.
+const upgradeAppetite = (behavior) => Math.max(...PURCHASES.map((a) => behavior[a] || 0), 0);
 
+// One decision per round: spend, then staff. Producing is left to
+// game-production.js, on the same clock as the player's.
+export function botPlanRound(game, b) {
+  botInvest(game, b);
+  staffBot(game, b);
+}
+
+// Everything the bot could buy right now, each with its pick weight.
+function affordable(game, b, behavior, reserve) {
+  const out = [];
+  PURCHASES.forEach((a) => {
+    const n = game.cfg.purchases[a][b.buys[a]];
+    if (!n || !(behavior[a] > 0) || b.money - n.price < reserve) return;
+    if (a === "increaseWorker" && b.workers.length >= game.cfg.g.maxWorkersTotal) return; // même plafond que le joueur
+    out.push({ w: behavior[a], buy: () => buyShop(game, b, a, n) });
+  });
+  const uw = upgradeAppetite(behavior);
+  // The whole chain is upgradable, not just the machine that sells: a starved
+  // converter is fixed by a faster supplier as much as by itself.
+  if (uw > 0) [...wantedChain(game, b, behavior).keys()].forEach((m) => {
+    const nx = nextMachineLevel(game, m);
+    // Upgrading is how a bot buys better drop odds — the player's exact deal.
+    if (nx && b.money - nx.cost >= reserve) out.push({ w: uw, buy: () => { b.money -= nx.cost; m.level++; } });
+  });
+  return out;
+}
+
+function botInvest(game, b) {
   const behavior = botBehavior(b, game.round);
-  const actions = Object.keys(behavior).filter((k) => behavior[k] > 0);
-  let guard = 600;
+  const reserve = taxReserve(game.levelCfg, b, game.round);
+  let guard = 100;
   while (guard-- > 0) {
-    const pool = actions.filter((a) => botUseful(game, b, a, tier, reserve, target));
+    const pool = affordable(game, b, behavior, reserve);
     if (!pool.length) break;
-    const tot = pool.reduce((s, a) => s + behavior[a], 0);
-    let r = Math.random() * tot; let pick = pool[0];
-    for (const a of pool) { r -= behavior[a]; if (r <= 0) { pick = a; break; } }
-    botDo(game, b, pick, tier);
+    pickWeighted(pool).buy();
   }
 }
 
-export function botUseful(game, b, a, tier, reserve, target) {
-  if (a === "increaseWorker") { const n = game.cfg.purchases.increaseWorker[b.buys.increaseWorker]; return n && b.money - n.price >= reserve; }
-  if (a === "increaseMarketting") { const n = game.cfg.purchases.increaseMarketting[b.buys.increaseMarketting]; return n && b.money - n.price >= reserve; }
-  if (a === "increaseStorage") { const n = game.cfg.purchases.increaseStorage[b.buys.increaseStorage]; return n && b.money - n.price >= reserve; }
-  // produce only above the tax reserve, with storage room, and not past the sellable target
-  const ti = game.tierInfo(a, tier);
-  return ti && b.money - unitCost(b, ti) >= reserve && game.stockTotal(b) < b.storageCap && game.stockOf(b, a) < target[a];
+function buyShop(game, b, a, n) {
+  b.money -= n.price; b.buys[a]++; b.upgradesBought++;
+  if (a === "increaseWorker") for (let i = 0; i < n.effect; i++) addWorker(game, b);
+  // keep the character buff on top: `n.effect` is the shop level's flat value,
+  // not the bot's total (the old code overwrote the buff on the first purchase).
+  if (a === "increaseMarketting") b.marketing = n.effect + (b.buffs.marketing || 0);
+  if (a === "increaseStorage") b.storageCap += n.effect;
 }
 
-export function botDo(game, b, a, tier) {
-  if (a === "increaseWorker") { const n = game.cfg.purchases.increaseWorker[b.buys.increaseWorker]; b.money -= n.price; b.buys.increaseWorker++; b.upgradesBought++; return; }
-  if (a === "increaseMarketting") { const n = game.cfg.purchases.increaseMarketting[b.buys.increaseMarketting]; b.money -= n.price; b.buys.increaseMarketting++; b.marketing = n.effect; b.upgradesBought++; return; }
-  if (a === "increaseStorage") { const n = game.cfg.purchases.increaseStorage[b.buys.increaseStorage]; b.money -= n.price; b.buys.increaseStorage++; b.storageCap += n.effect; b.upgradesBought++; return; }
-  const ti = game.tierInfo(a, tier); b.money -= unitCost(b, ti);
-  // proba2x buff (%): chance to double the unit, like the characters' 2x
-  game.addStock(b, a, tier, Math.random() * 100 < (b.buffs.proba2x || 0) ? 2 : 1);
+function pickWeighted(pool) {
+  const tot = pool.reduce((s, o) => s + o.w, 0);
+  let r = Math.random() * tot;
+  for (const o of pool) { r -= o.w; if (r <= 0) return o; }
+  return pool[0];
 }
 
-// Plan a bot's whole round (money/upgrades resolved now), then queue its target
-// stock to be revealed unit-by-unit over the prep so the counter fills gradually.
-export function planBot(game, b) {
-  simulateBot(game, b);                    // produces the round's target into b.stock, spends money
-  const queue = [];
-  for (const rid in b.stock) for (const t in b.stock[rid]) for (let i = 0; i < b.stock[rid][t]; i++) queue.push({ resId: rid, tier: +t });
-  for (let i = queue.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [queue[i], queue[j]] = [queue[j], queue[i]]; } // shuffle for a mixed reveal
-  b._queue = queue; b._queueTotal = queue.length; b._released = 0;
-  b.stock = game.emptyStock();            // start the round empty; reveal over time
-}
+// Decide the crew, then move only the workers that differ. Called once per round
+// AND periodically during it (main.js updatePlay): a production chain only flows if
+// the bot can hand a worker over the moment an input buffer fills or runs dry.
+export function staffBot(game, b) {
+  const want = wantedChain(game, b, botBehavior(b, game.round));
+  const entries = [...want.entries()];
 
-// Reveal queued units up to `progress` (0..1) of the prep.
-export function releaseBotStock(game, b, progress) {
-  if (!b._queue) return;
-  const target = Math.min(b._queueTotal, Math.floor(progress * b._queueTotal));
-  while (b._released < target) { const u = b._queue[b._released++]; game.addStock(b, u.resId, u.tier, 1); }
+  // Rank by STOCK DEFICIT, not by raw weight. Sorting on weight alone broke ties
+  // by Map insertion order — i.e. by resourceOrder — which buried late-listed
+  // resources (bottle is 8th): with equal 33/33/33 demand a bot needed enough
+  // workers to staff every OTHER wanted machine before its converter ever got
+  // one. Instead, produce what is missing relative to the wanted mix, the way
+  // the player does: a machine whose output is under-represented in stock beats
+  // one whose output is already piled up. Uses only the bot's own stock — no
+  // omniscience — and self-regulates the chain: the converter outranks its
+  // supplier while inputs are stocked, drops out when they run dry (ready
+  // filter), and the worker flows back upstream.
+  let totW = 0, totS = 0;
+  entries.forEach(([m, w]) => { totW += w; totS += game.stockOf(b, game.machineDef(m.id).outputs); });
+  const score = ([m, w]) => {
+    const deficit = Math.max(0, (totW ? w / totW : 0) - (totS ? game.stockOf(b, game.machineDef(m.id).outputs) / totS : 0));
+    return w * (0.15 + deficit); // 0.15 baseline: balanced stock still ranks by demand weight
+  };
+  const ready = entries.filter(([m]) => machineReady(game, b, m)).sort((a, z) => score(z) - score(a));
+
+  const target = new Map();
+  let pool = b.workers.length;
+  // 1. Get as many wanted machines RUNNING as possible: fill each one's minimum,
+  //    heaviest first. Below workersRequired a machine produces strictly nothing,
+  //    so a half-staffed crew is worth less than no crew at all.
+  ready.forEach(([m]) => { const need = game.lvl(m).workersRequired; if (pool >= need) { target.set(m, need); pool -= need; } });
+  // 2. Pile the leftovers onto the heaviest running machines — crew size buys speed
+  //    (crewSpeedBonus), not just eligibility.
+  ready.forEach(([m]) => {
+    if (!target.has(m)) return;
+    const max = game.lvl(m).maxWorkers;
+    while (target.get(m) < max && pool > 0) { target.set(m, target.get(m) + 1); pool--; }
+  });
+
+  // Release the excess first (that is what frees workers), then fill. A machine that
+  // keeps its crew keeps its progress — tickProduction wipes `elapsed` the instant a
+  // machine drops below its required crew, so never re-seat someone who was fine.
+  b.machines.forEach((m) => { const n = target.get(m) || 0; while (m.crew.length > n) { const w = m.crew.pop(); w.machineId = null; } });
+  b.machines.forEach((m) => {
+    const n = target.get(m) || 0;
+    while (m.crew.length < n) { const w = b.workers.find((x) => !x.machineId); if (!w) break; w.machineId = m.id; m.crew.push(w); }
+  });
 }
