@@ -38,6 +38,8 @@ export function initMenu(game) {
   });
   $("#character-close").addEventListener("click", closeCharacterPanel);
   $("#character-overlay").addEventListener("click", (e) => { if (e.target.id === "character-overlay") closeCharacterPanel(); });
+  $("#slot-close").addEventListener("click", closeSlotPicker);
+  $("#slot-overlay").addEventListener("click", (e) => { if (e.target.id === "slot-overlay") closeSlotPicker(); });
   $("#chest-close").addEventListener("click", () => { $("#chest-overlay").classList.add("hidden"); renderMenu(); });
 }
 
@@ -153,47 +155,92 @@ function dropLabel(content) {
   return CHEST_LABEL[content] || SHARD_LABEL[content] || content.replace(/_/g, " ");
 }
 
-// ---------- Characters tab ----------
+// ---------- Characters tab: resource slots ----------
+// One slot per resource (cfg.characterSlots). An empty slot is a ghost "+";
+// tapping it opens the two-step attribution widget (race, then character).
+// A filled slot shows its character — tap for the detail panel (gear), ✕ to free it.
+const charRarity = (ch) => (ch.profile || "").split("_")[0] || "common";
+const rarityIdx = (ch) => Math.max(0, RARITIES.indexOf(charRarity(ch)));
+const charAvatar = (ch, cls = "char-avatar") =>
+  `<img class="${cls}" src="${ch.spriteId ? sprite(ch.spriteId, "Characters") : sprite("Worker", "UI")}" onerror="this.onerror=null;this.src='${sprite("Worker", "UI")}'" draggable="false">`;
+const slotResIcon = (slot) =>
+  Game.cfg.resources[slot.resource] ? `<img class="slot-res" src="${Game.tierSrc(slot.resource, 1)}">` : "";
+
 function renderCharacters(body) {
-  const grid = el("div", "char-grid");
-  Game.cfg.characterOrder.forEach((id) => {
-    const ch = Game.cfg.characters[id];
-    const owned = Meta.isOwned(id);
-    const lvl = Meta.charLevel(id);
-    const card = el("div", "char-card" + (owned ? "" : " locked"));
-    card.innerHTML =
-      `<img class="char-avatar" src="${ch.spriteId ? sprite(ch.spriteId, "Characters") : sprite("Worker", "UI")}" onerror="this.onerror=null;this.src='${sprite("Worker", "UI")}'">` +
-      `<div class="char-name">${ch.displayName}</div>` +
-      `<div class="char-lvl">${owned ? "Nv. " + lvl : "🔒 Verrouillé"}</div>`;
-    card.appendChild(upgradeButton(id));
-    card.onclick = () => openCharacterPanel(id);
+  const grid = el("div", "slot-grid");
+  Game.cfg.characterSlots.forEach((slot) => {
+    const charId = Meta.slotChar(slot.id);
+    const ch = charId && Game.cfg.characters[charId];
+    const card = el("div", "slot-card" + (ch ? " filled " + charRarity(ch) : " empty"));
+    if (ch) {
+      card.innerHTML = slotResIcon(slot) + charAvatar(ch) +
+        `<div class="char-name">${ch.displayName}</div>` +
+        `<div class="char-lvl">Nv. ${Meta.charLevel(charId)}</div>` +
+        `<div class="char-gears">${gearBadges(charId)}</div>` +
+        `<button class="slot-remove">✕</button>`;
+      card.querySelector(".slot-remove").onclick = (e) => { e.stopPropagation(); Meta.unassignSlot(slot.id); renderMenu(); };
+      card.onclick = () => openCharacterPanel(charId);
+    } else {
+      card.innerHTML = slotResIcon(slot) + `<div class="slot-plus">+</div>`;
+      card.onclick = () => openSlotPicker(slot.id);
+    }
     grid.appendChild(card);
   });
   body.appendChild(grid);
 }
 
-// Upgrade / unlock button shown on each character card.
-// Enabled when the player can afford the next level; greyed out otherwise.
-function upgradeButton(charId) {
-  const owned = Meta.isOwned(charId);
-  const cost = Meta.upgradeCost(charId);
-  const canUp = Meta.canUpgrade(charId);
-  const btn = el("button", "char-upgrade" + (canUp ? "" : " off"));
-  if (owned && !cost) {
-    btn.classList.add("maxed");
-    btn.innerHTML = `<span class="cu-label">Max ✨</span>`;
-    btn.disabled = true;
+// ---------- Slot attribution widget ----------
+// Step 1: pick a race among the slot's containments that isn't already holding
+// a slot (each race serves at most once), shown via its lowest-rarity character.
+// Step 2: pick the character — owned first (rarity desc), then locked greyed
+// (rarity asc; tap opens the detail panel to see the unlock cost).
+let pickerSlotId = null, pickerRace = null;
+
+function openSlotPicker(slotId) { pickerSlotId = slotId; pickerRace = null; renderSlotPicker(); openOverlay("slot-overlay"); }
+function closeSlotPicker() { pickerSlotId = null; pickerRace = null; $("#slot-overlay").classList.add("hidden"); }
+
+function renderSlotPicker() {
+  const slot = Game.cfg.characterSlots.find((s) => s.id === pickerSlotId); if (!slot) return;
+  const body = $("#slot-body"); body.innerHTML = "";
+  const head = el("div", "sp-head");
+  head.innerHTML = (pickerRace ? `<button id="sp-back" class="ghost">←</button>` : "") + slotResIcon(slot) + `<b>${pickerRace || "Choisis une race"}</b>`;
+  body.appendChild(head);
+  if (pickerRace) { const b = head.querySelector("#sp-back"); if (b) b.onclick = () => { pickerRace = null; renderSlotPicker(); }; }
+  const grid = el("div", "sp-grid");
+  body.appendChild(grid);
+
+  const byRace = (race) => Game.cfg.characterOrder.map((id) => Game.cfg.characters[id]).filter((c) => c.typeSlot === race);
+
+  if (!pickerRace) {
+    const used = Meta.assignedRaces(slot.id);
+    slot.containments.forEach((race) => {
+      const chars = byRace(race);
+      if (!chars.length) return;
+      const rep = chars.reduce((a, b) => (rarityIdx(b) < rarityIdx(a) ? b : a));
+      const taken = used.includes(race);
+      const card = el("div", "sp-card" + (taken ? " off" : ""));
+      card.innerHTML = charAvatar(rep) + `<div class="char-name">${race}</div>` + (taken ? `<div class="char-lvl">déjà en poste</div>` : "");
+      if (!taken) card.onclick = () => { pickerRace = race; renderSlotPicker(); };
+      grid.appendChild(card);
+    });
   } else {
-    const have = Meta.charShards(charId);
-    const hint = cost ? `<span class="cu-cost">${have}/${cost.amount} 🔷</span>` : "";
-    btn.innerHTML = `<span class="cu-label">${owned ? "Upgrade" : "Débloquer"}</span>${hint}`;
-    btn.disabled = !canUp;
-    btn.onclick = (e) => {
-      e.stopPropagation();               // don't open the detail panel
-      if (Meta.upgradeCharacter(charId)) { renderMenu(); if (Game.onMetaChanged) Game.onMetaChanged(); }
-    };
+    const chars = byRace(pickerRace);
+    const owned = chars.filter((c) => Meta.isOwned(c.id)).sort((a, b) => rarityIdx(b) - rarityIdx(a));
+    const locked = chars.filter((c) => !Meta.isOwned(c.id)).sort((a, b) => rarityIdx(a) - rarityIdx(b));
+    owned.concat(locked).forEach((c) => {
+      const has = Meta.isOwned(c.id);
+      const card = el("div", "sp-card " + charRarity(c) + (has ? "" : " off"));
+      card.innerHTML = charAvatar(c) +
+        `<div class="char-name">${c.displayName}</div>` +
+        `<div class="char-lvl">${has ? "Nv. " + Meta.charLevel(c.id) : "🔒"}</div>`;
+      card.onclick = () => {
+        if (has) {
+          if (Meta.assignSlot(pickerSlotId, c.id)) { closeSlotPicker(); renderMenu(); if (Game.onMetaChanged) Game.onMetaChanged(); }
+        } else openCharacterPanel(c.id); // detail panel: unlock cost, shards
+      };
+      grid.appendChild(card);
+    });
   }
-  return btn;
 }
 
 // Small colored slot emojis showing what a character is wearing.

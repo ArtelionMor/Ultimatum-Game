@@ -185,7 +185,7 @@
     {
       "id": "bot_cat",
       "displayName": "Mew Corp",
-      "spriteId": "Cat Tier 1",
+      "spriteId": "Cat",
       "startingMoney": 50,
       "increaseByRound": 50,
       "upgradeEffect": 50
@@ -193,7 +193,7 @@
     {
       "id": "bot_octopus",
       "displayName": "8 Helps",
-      "spriteId": "Octopus Tier 1",
+      "spriteId": "Octopus",
       "startingMoney": 50,
       "increaseByRound": 50,
       "upgradeEffect": 50
@@ -201,7 +201,7 @@
     {
       "id": "bot_sloth",
       "displayName": "Sleepy Inc",
-      "spriteId": "Sloth Tier 1",
+      "spriteId": "Sloth",
       "startingMoney": 50,
       "increaseByRound": 50,
       "upgradeEffect": 50
@@ -2194,7 +2194,7 @@
     {
       "id": "frog",
       "Sprite": "Frog",
-      "Need": "nenufar"
+      "Need": "nenuphar"
     },
     {
       "id": "crow",
@@ -2510,7 +2510,7 @@
     {
       "id": "nest",
       "quantity": 1,
-      "type": "nenufar"
+      "type": "nenuphar"
     },
     {
       "id": "bottle",
@@ -2535,7 +2535,7 @@
     {
       "id": "blackLotus",
       "quantity": 1,
-      "type": "nenufar"
+      "type": "nenuphar"
     },
     {
       "id": "sandwitch",
@@ -2582,7 +2582,7 @@
       "id": "nenupharFarm",
       "displayName": "Nenuphar Farm",
       "spriteId": "Nenuphar Farm",
-      "outputs": "nenufar",
+      "outputs": "nenuphar",
       "upgrades": "upgrade_profile_complexity_0"
     },
     {
@@ -3211,7 +3211,7 @@
       "convert": "convert_profile_complexity_0"
     },
     {
-      "id": "nenufar",
+      "id": "nenuphar",
       "profil": "profil_complexity 0",
       "convert": "convert_profile_complexity_0"
     },
@@ -4538,56 +4538,56 @@
       "influence": 1.5
     },
     {
-      "id": "nenufar",
+      "id": "nenuphar",
       "tier": 1,
-      "displayName": "Nenufar Tier 1",
-      "description": "Nenufar Tier 1 description",
-      "spriteId": "Nenufar Tier 1",
+      "displayName": "Nenuphar Tier 1",
+      "description": "Nenuphar Tier 1 description",
+      "spriteId": "Nenuphar Tier 1",
       "baseSellPrice": 9,
       "influence": 1
     },
     {
-      "id": "nenufar",
+      "id": "nenuphar",
       "tier": 2,
-      "displayName": "Nenufar Tier 2",
-      "description": "Nenufar Tier 2 description",
-      "spriteId": "Nenufar Tier 2",
+      "displayName": "Nenuphar Tier 2",
+      "description": "Nenuphar Tier 2 description",
+      "spriteId": "Nenuphar Tier 2",
       "baseSellPrice": 26,
       "influence": 1.1
     },
     {
-      "id": "nenufar",
+      "id": "nenuphar",
       "tier": 3,
-      "displayName": "Nenufar Tier 3",
-      "description": "Nenufar Tier 3 description",
-      "spriteId": "Nenufar Tier 3",
+      "displayName": "Nenuphar Tier 3",
+      "description": "Nenuphar Tier 3 description",
+      "spriteId": "Nenuphar Tier 3",
       "baseSellPrice": 74,
       "influence": 1.2
     },
     {
-      "id": "nenufar",
+      "id": "nenuphar",
       "tier": 4,
-      "displayName": "Nenufar Tier 4",
-      "description": "Nenufar Tier 4 description",
-      "spriteId": "Nenufar Tier 4",
+      "displayName": "Nenuphar Tier 4",
+      "description": "Nenuphar Tier 4 description",
+      "spriteId": "Nenuphar Tier 4",
       "baseSellPrice": 138,
       "influence": 1.3
     },
     {
-      "id": "nenufar",
+      "id": "nenuphar",
       "tier": 5,
-      "displayName": "Nenufar Tier 5",
-      "description": "Nenufar Tier 5 description",
-      "spriteId": "Nenufar Tier 5",
+      "displayName": "Nenuphar Tier 5",
+      "description": "Nenuphar Tier 5 description",
+      "spriteId": "Nenuphar Tier 5",
       "baseSellPrice": 295,
       "influence": 1.4
     },
     {
-      "id": "nenufar",
+      "id": "nenuphar",
       "tier": 6,
-      "displayName": "Nenufar Tier 6",
-      "description": "Nenufar Tier 6 description",
-      "spriteId": "Nenufar Tier 6",
+      "displayName": "Nenuphar Tier 6",
+      "description": "Nenuphar Tier 6 description",
+      "spriteId": "Nenuphar Tier 6",
       "baseSellPrice": 729,
       "influence": 1.5
     },
