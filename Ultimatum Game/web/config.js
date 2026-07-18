@@ -133,10 +133,17 @@ export function normalize(raw) {
     (progressProfiles[p.id] = progressProfiles[p.id] || {})[p.level] = (valueKey && p[valueKey]) || 0;
   });
 
-  // character slots: one per resource; `containment` = the race (typeSlot) it accepts
-  const characterSlots = (raw.character_slot || [])
-    .map((s) => ({ id: s.id, order: s.order || 0, containment: s.containment }))
-    .sort((a, b) => a.order - b.order);
+  // character slots: one per resource, MULTIPLE rows per slot — each row adds one
+  // accepted race to `containments`. Group them here; `resource` is the id minus
+  // the "slot_" prefix (slot_tennisBall -> tennisBall).
+  const characterSlots = [];
+  (raw.character_slot || []).forEach((s) => {
+    if (!s.id) return;
+    let slot = characterSlots.find((x) => x.id === s.id);
+    if (!slot) characterSlots.push(slot = { id: s.id, resource: String(s.id).replace(/^slot_/, ""), order: s.order || 0, containments: [] });
+    if (s.containment && !slot.containments.includes(s.containment)) slot.containments.push(s.containment);
+  });
+  characterSlots.sort((a, b) => a.order - b.order);
 
   // upgrade profiles: shard cost to reach each level (level 1 = unlock cost)
   const upgradeProfiles = {};

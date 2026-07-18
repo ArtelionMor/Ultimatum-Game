@@ -22,8 +22,8 @@
     </header>
     <div id="menu-body"></div>
     <nav id="menu-tabs">
-      <button data-tab="levels" class="active"><span class="tab-ico">🗺️</span><span class="tab-lbl">Niveaux</span></button>
       <button data-tab="characters"><span class="tab-ico">🧑‍🤝‍🧑</span><span class="tab-lbl">Personnages</span></button>
+      <button data-tab="levels" class="active"><span class="tab-ico">🗺️</span><span class="tab-lbl">Niveaux</span></button>
       <button data-tab="chests"><span class="tab-ico">🎁</span><span class="tab-lbl">Coffres</span></button>
     </nav>
   </div>
@@ -207,6 +207,14 @@
       <div id="gameover-rewards"></div>
       <button id="replay-btn">Rejouer</button>
       <button id="gameover-menu-btn" class="ghost">Menu principal</button>
+    </div>
+  </div>
+
+  <!-- Slot attribution overlay (characters tab: race -> character) -->
+  <div id="slot-overlay" class="overlay hidden">
+    <div class="panel wide">
+      <div id="slot-body"></div>
+      <button id="slot-close" class="ghost">Fermer</button>
     </div>
   </div>
 

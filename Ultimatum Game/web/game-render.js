@@ -281,9 +281,11 @@ export const renderMethods = {
   // assigned -> back to the pool. Drag & drop works for every chip.
   workerChip(w) {
     const isChar = !!w.charId;
+    const ch = isChar ? this.cfg.characters[w.charId] : null;
+    const src = ch && ch.spriteId ? sprite(ch.spriteId, "Characters") : sprite("Worker", "UI");
     const chip = el("div", "wchip" + (isChar ? " char" : "") + (this.selectedWorker === w ? " selected" : "") + (w.machineId ? " onmachine" : ""));
     chip.innerHTML =
-      `<span class="wava"><img src="${sprite("Worker", "UI")}" draggable="false">` +
+      `<span class="wava"><img src="${src}" onerror="this.onerror=null;this.src='${sprite("Worker", "UI")}'" draggable="false">` +
       (isChar ? `<span class="wgears">${gearBadges(w.charId)}</span>` : "") + `</span>` +
       (isChar ? `<span class="wname">${w.charId}<span class="wlvl">${Meta.charLevel(w.charId)}</span></span>` : "");
     this.makeDraggable(chip, w);

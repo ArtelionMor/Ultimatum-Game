@@ -36,6 +36,10 @@ export const Meta = {
     // The player always starts with the first character of the roster.
     const first = cfg.characterOrder[0];
     if (first && this.state.characters[first].level < 1) this.state.characters[first].level = 1;
+    // Drop slot assignments whose slot or character left the config.
+    for (const s in this.state.slotAssignments) {
+      if (!cfg.characterSlots.find((x) => x.id === s) || !cfg.characters[this.state.slotAssignments[s]]) delete this.state.slotAssignments[s];
+    }
     this.save();
   },
 
@@ -49,6 +53,7 @@ export const Meta = {
       nextGearUid: 1,                // instance id counter
       characters: {},                // charId -> { level } (0 = locked)
       equipment: {},                 // charId -> { hat, suit, shoes } (gear uid or null)
+      slotAssignments: {},           // slotId -> charId (one character per slot, one RACE globally)
     };
   },
 
@@ -179,6 +184,40 @@ export const Meta = {
     this.save();
     return true;
   },
+
+  // ---------- Character slots ----------
+  // slotAssignments: slotId -> charId. Rules: the character must be owned, its
+  // race (typeSlot) must be in the slot's containments, and a race can hold at
+  // most ONE slot across the board.
+  slotChar(slotId) { return this.state.slotAssignments[slotId] || null; },
+  charSlot(charId) {
+    for (const s in this.state.slotAssignments) if (this.state.slotAssignments[s] === charId) return s;
+    return null;
+  },
+  // Races currently occupying a slot (optionally ignoring one slot, for reassign).
+  assignedRaces(exceptSlotId) {
+    const races = [];
+    for (const s in this.state.slotAssignments) {
+      if (s === exceptSlotId) continue;
+      const ch = this.cfg.characters[this.state.slotAssignments[s]];
+      if (ch && ch.typeSlot) races.push(ch.typeSlot);
+    }
+    return races;
+  },
+  canAssignSlot(slotId, charId) {
+    const slot = this.cfg.characterSlots.find((s) => s.id === slotId);
+    const ch = this.cfg.characters[charId];
+    if (!slot || !ch || !this.isOwned(charId)) return false;
+    if (!slot.containments.includes(ch.typeSlot)) return false;
+    return !this.assignedRaces(slotId).includes(ch.typeSlot);
+  },
+  assignSlot(slotId, charId) {
+    if (!this.canAssignSlot(slotId, charId)) return false;
+    this.state.slotAssignments[slotId] = charId;
+    this.save();
+    return true;
+  },
+  unassignSlot(slotId) { delete this.state.slotAssignments[slotId]; this.save(); },
 
   // ---------- Gear (item instances) ----------
   gearInst(uid) { return this.state.gears.find((g) => g.uid === uid) || null; },

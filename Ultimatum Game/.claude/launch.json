@@ -24,6 +24,12 @@
       "runtimeExecutable": "python",
       "runtimeArgs": ["tools/level-designer/serve.py", "8790"],
       "port": 8790
+    },
+    {
+      "name": "raiders",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8001", "--directory", "C:/Users/Teliau/Documents/Raiders"],
+      "port": 8001
     }
   ]
 }
