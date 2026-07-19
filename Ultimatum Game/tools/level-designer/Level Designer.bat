@@ -62,10 +62,17 @@ set "CHROME=%ProgramFiles%\Google\Chrome\Application\chrome.exe"
 if not exist "!CHROME!" set "CHROME=%ProgramFiles(x86)%\Google\Chrome\Application\chrome.exe"
 if not exist "!CHROME!" set "CHROME=%LocalAppData%\Google\Chrome\Application\chrome.exe"
 
+set "EDGE=%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe"
+if not exist "!EDGE!" set "EDGE=%ProgramFiles%\Microsoft\Edge\Application\msedge.exe"
+
 if exist "!CHROME!" (
   start "" "!CHROME!" "%URL%"
+) else if exist "!EDGE!" (
+  start "" "!EDGE!" "%URL%"
 ) else (
-  start "" msedge "%URL%"
+  echo [i] Chrome/Edge introuvables : ouverture dans le navigateur par defaut.
+  echo     Sans eux, "Sauver" telecharge le fichier au lieu d'ecrire leveldesign.json.
+  start "" "%URL%"
 )
 echo [OK] Level Designer ouvert : %URL%
 exit /b 0
