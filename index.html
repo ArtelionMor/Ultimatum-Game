@@ -18,6 +18,7 @@
   <!-- Main menu -->
   <div id="menu-screen" class="hidden">
     <header id="menu-head">
+      <button id="profile-btn"><img alt=""></button>
       <div id="menu-currencies"></div>
     </header>
     <div id="menu-body"></div>
@@ -218,6 +219,14 @@
     </div>
   </div>
 
+  <!-- Profile picture overlay: pick an unlocked character sprite as avatar -->
+  <div id="profile-overlay" class="overlay hidden">
+    <div class="panel wide">
+      <div id="profile-body"></div>
+      <button id="profile-close" class="ghost">Fermer</button>
+    </div>
+  </div>
+
   <!-- Character detail overlay (menu collection + in-game worker tap) -->
   <div id="character-overlay" class="overlay hidden">
     <div class="panel wide">
@@ -253,6 +262,10 @@
       <div id="chest-anim"></div>
       <div id="chest-drops"></div>
       <button id="chest-close" class="hidden">Récupérer</button>
+      <div id="chest-again" class="hidden">
+        <button id="chest-one-more" class="ghost">Ouvrir un autre</button>
+        <button id="chest-open-all" class="ghost">Ouvrir tous</button>
+      </div>
     </div>
   </div>
 

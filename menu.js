@@ -27,6 +27,19 @@ const gearName = (slot, rarity, owner) => `${SLOT_LABEL[slot] || slot} ${(RARITY
 // Same, from an instance (always carries its owner).
 const gearInstName = (inst) => gearName(inst.slot, inst.rarity, inst.owner);
 
+// Group identical gear instances (same slot/rarity/owner/progress) so lists
+// show one "Chapeau commun de dog ×3" row instead of three duplicates.
+function stackGears(insts) {
+  const groups = [];
+  insts.forEach((inst) => {
+    const key = [inst.slot, inst.rarity, inst.owner || "", inst.progress || 0].join("|");
+    let g = groups.find((x) => x.key === key);
+    if (!g) groups.push(g = { key, inst, uids: [] });
+    g.uids.push(inst.uid);
+  });
+  return groups;
+}
+
 export function initMenu(game) {
   Game = game;
   initBuildingPanel(game);
@@ -40,7 +53,12 @@ export function initMenu(game) {
   $("#character-overlay").addEventListener("click", (e) => { if (e.target.id === "character-overlay") closeCharacterPanel(); });
   $("#slot-close").addEventListener("click", closeSlotPicker);
   $("#slot-overlay").addEventListener("click", (e) => { if (e.target.id === "slot-overlay") closeSlotPicker(); });
+  $("#profile-btn").addEventListener("click", openProfilePicker);
+  $("#profile-close").addEventListener("click", closeProfilePicker);
+  $("#profile-overlay").addEventListener("click", (e) => { if (e.target.id === "profile-overlay") closeProfilePicker(); });
   $("#chest-close").addEventListener("click", () => { $("#chest-overlay").classList.add("hidden"); renderMenu(); });
+  $("#chest-one-more").addEventListener("click", () => { if (chestOpenId) openChestUI(chestOpenId); });
+  $("#chest-open-all").addEventListener("click", () => { if (chestOpenId) openChestUI(chestOpenId, true); });
 }
 
 export function showMenu() {
@@ -51,6 +69,8 @@ export function hideMenu() { $("#menu-screen").classList.add("hidden"); }
 
 export function renderMenu() {
   if ($("#menu-screen").classList.contains("hidden")) return;
+  const av = Meta.profileSprite();
+  $("#profile-btn img").src = sprite(av.spriteId, av.folder);
   renderCurrencies();
   $("#menu-tabs").querySelectorAll("button[data-tab]").forEach((b) => b.classList.toggle("active", b.dataset.tab === tab));
   const body = $("#menu-body"); body.innerHTML = "";
@@ -167,6 +187,11 @@ const slotResIcon = (slot) =>
   Game.cfg.resources[slot.resource] ? `<img class="slot-res" src="${Game.tierSrc(slot.resource, 1)}">` : "";
 
 function renderCharacters(body) {
+  // Fill the empty slots with the best available characters (recruit order:
+  // rarest -> best equipped -> highest level), same rules as in-game hiring.
+  const autoBtn = el("button", "slot-autofill", "Auto-équiper ⚡");
+  autoBtn.onclick = () => { Meta.autoFillSlots(); renderMenu(); if (Game.onMetaChanged) Game.onMetaChanged(); };
+  body.appendChild(autoBtn);
   const grid = el("div", "slot-grid");
   Game.cfg.characterSlots.forEach((slot) => {
     const charId = Meta.slotChar(slot.id);
@@ -187,7 +212,70 @@ function renderCharacters(body) {
     grid.appendChild(card);
   });
   body.appendChild(grid);
+
+  // Collection under the slots: owned characters (in hire order), then the
+  // ones left to unlock (rarity asc, with shard progress). Tap -> detail panel.
+  const collGrid = (title) => {
+    body.appendChild(el("div", "menu-section", title));
+    const g = el("div", "sp-grid");
+    body.appendChild(g);
+    return g;
+  };
+  const ownedIds = Meta.recruitOrder();
+  if (ownedIds.length) {
+    const g = collGrid("Possédés");
+    ownedIds.forEach((id) => {
+      const ch = Game.cfg.characters[id];
+      const c = el("div", "sp-card " + charRarity(ch));
+      c.innerHTML = charAvatar(ch) +
+        `<div class="char-name">${ch.displayName}</div>` +
+        `<div class="char-lvl">Nv. ${Meta.charLevel(id)}</div>` +
+        `<div class="char-gears">${gearBadges(id)}</div>`;
+      c.onclick = () => openCharacterPanel(id);
+      g.appendChild(c);
+    });
+  }
+  // Only the UNLOCKABLE ones: enough shards to pay the unlock right now.
+  const lockedIds = Game.cfg.characterOrder.filter((id) => !Meta.isOwned(id) && Meta.canUpgrade(id))
+    .sort((a, b) => rarityIdx(Game.cfg.characters[a]) - rarityIdx(Game.cfg.characters[b]));
+  if (lockedIds.length) {
+    const g = collGrid("À débloquer");
+    lockedIds.forEach((id) => {
+      const ch = Game.cfg.characters[id];
+      const cost = Meta.upgradeCost(id);   // level 1 = unlock cost
+      const c = el("div", "sp-card off " + charRarity(ch));
+      c.innerHTML = charAvatar(ch) +
+        `<div class="char-name">${ch.displayName}</div>` +
+        `<div class="char-lvl">🔒${cost ? ` ${Meta.charShards(id)}/${cost.amount} 🔷` : ""}</div>`;
+      c.onclick = () => openCharacterPanel(id);
+      g.appendChild(c);
+    });
+  }
 }
+
+// ---------- Profile picture picker ----------
+// Any unlocked character's sprite can be the player's avatar; the generic
+// Worker stays available as the default option. The choice follows the player
+// in-game (shop counter, competitor panel, end-of-round ranking).
+function openProfilePicker() {
+  const body = $("#profile-body"); body.innerHTML = "";
+  const grid = el("div", "sp-grid");
+  const current = Meta.state.profileChar;
+  const pick = (charId, cls, html) => {
+    const card = el("div", "sp-card " + cls + ((current || null) === charId ? " selected" : ""));
+    card.innerHTML = html;
+    card.onclick = () => { Meta.setProfileChar(charId); closeProfilePicker(); renderMenu(); };
+    grid.appendChild(card);
+  };
+  pick(null, "", `<img class="char-avatar" src="${sprite("Worker", "UI")}" draggable="false"><div class="char-name">Ouvrier</div>`);
+  Meta.ownedCharacters().forEach((id) => {
+    const ch = Game.cfg.characters[id];
+    if (ch.spriteId) pick(id, charRarity(ch), charAvatar(ch) + `<div class="char-name">${ch.displayName}</div>`);
+  });
+  body.appendChild(grid);
+  openOverlay("profile-overlay");
+}
+function closeProfilePicker() { $("#profile-overlay").classList.add("hidden"); }
 
 // ---------- Slot attribution widget ----------
 // Step 1: pick a race among the slot's containments that isn't already holding
@@ -327,10 +415,18 @@ function renderCharacterPanel() {
     <div class="cd-affs">${aff || '<span class="menu-muted">Aucune</span>'}</div>
     <div class="cd-proba">🎲 Production ×2 : <b>${Math.round(p2 * 100)}%</b></div>
     <div class="cp-section">Équipement</div>
+    ${owned ? `<div class="auto-row">
+      <button id="cd-automerge">Auto-merge 🔥</button>
+      <button id="cd-autoequip">Auto-équiper ⚡</button>
+    </div>` : ""}
     <div class="cd-slots">${slots}</div>
     <div id="cd-gearpick"></div>
     ${upg}`;
 
+  const amBtn = body.querySelector("#cd-automerge");
+  if (amBtn) amBtn.onclick = () => { Meta.autoMergeGears(id); renderCharacterPanel(); renderMenu(); if (Game.onMetaChanged) Game.onMetaChanged(); };
+  const aeBtn = body.querySelector("#cd-autoequip");
+  if (aeBtn) aeBtn.onclick = () => { Meta.autoEquipChar(id); renderCharacterPanel(); renderMenu(); if (Game.onMetaChanged) Game.onMetaChanged(); };
   const btn = body.querySelector("#cd-upgrade-btn");
   if (btn) btn.onclick = () => { if (Meta.upgradeCharacter(id)) { renderCharacterPanel(); renderMenu(); if (Game.onMetaChanged) Game.onMetaChanged(); } };
   if (owned) body.querySelectorAll(".cd-slot").forEach((n) => { n.onclick = () => showGearEditor(id, n.dataset.slot); });
@@ -355,11 +451,12 @@ function renderGearEditor(charId, slot) {
     // --- equip view: hero's orphan gears for this slot ---
     box.appendChild(el("div", "menu-section", `${SLOT_LABEL[slot]} — équiper`));
     const orphans = Meta.orphanGears(charId, slot);
-    orphans.forEach((inst) => {
-      const def = Meta.gearDef(inst);
-      const it = el("button", `gp-item ${inst.rarity}`,
-        `${SLOT_EMOJI[slot]} ${gearInstName(inst)} — ⚡${Math.round(def.speed * 100)}% 🎲${Math.round(def.proba2x * 100)}%`);
-      it.onclick = () => { Meta.equip(charId, inst.uid); renderCharacterPanel(); showGearEditor(charId, slot); renderMenu(); if (Game.onMetaChanged) Game.onMetaChanged(); };
+    stackGears(orphans).forEach((g) => {
+      const def = Meta.gearDef(g.inst);
+      const n = g.uids.length;
+      const it = el("button", `gp-item ${g.inst.rarity}`,
+        `${SLOT_EMOJI[slot]} ${gearInstName(g.inst)}${n > 1 ? ` ×${n}` : ""} — ⚡${Math.round(def.speed * 100)}% 🎲${Math.round(def.proba2x * 100)}%`);
+      it.onclick = () => { Meta.equip(charId, g.uids[0]); renderCharacterPanel(); showGearEditor(charId, slot); renderMenu(); if (Game.onMetaChanged) Game.onMetaChanged(); };
       box.appendChild(it);
     });
     if (!orphans.length) box.appendChild(el("div", "menu-muted", "Aucun équipement libre de ce type — ouvre des coffres !"));
@@ -380,17 +477,25 @@ function renderGearEditor(charId, slot) {
          <div class="fuse-bar-label">${total} / ${threshold}${total >= threshold ? " ✅" : ""}</div>`;
       box.appendChild(panel);
 
-      const fuel = Meta.orphanGears(charId);   // any of the hero's free gears
+      const fuel = Meta.orphanGears(charId, slot);   // same slot type only (fuse rule)
       if (fuel.length) {
         box.appendChild(el("div", "menu-muted", "Carburant (équipements libres) :"));
         const grid = el("div", "fuse-grid");
-        fuel.forEach((inst) => {
-          const tile = el("div", `fuse-tile ${inst.rarity}` + (editorFuel.has(inst.uid) ? " fuel" : ""));
+        // Identical pieces share one tile: each tap feeds one more from the
+        // stack, and a tap on a fully selected stack clears it.
+        stackGears(fuel).forEach((g) => {
+          const n = g.uids.length;
+          const sel = g.uids.filter((u) => editorFuel.has(u)).length;
+          const tile = el("div", `fuse-tile ${g.inst.rarity}` + (sel > 0 ? " fuel" : ""));
           tile.innerHTML =
-            `<span class="ft-ico">${SLOT_EMOJI[inst.slot]}</span>` +
-            `<span class="ft-name">${gearInstName(inst)}</span>` +
-            `<span class="ft-fuel">🔥${Meta.gearFuel(inst)}</span>`;
-          tile.onclick = () => { if (editorFuel.has(inst.uid)) editorFuel.delete(inst.uid); else editorFuel.add(inst.uid); renderGearEditor(charId, slot); };
+            `<span class="ft-ico">${SLOT_EMOJI[g.inst.slot]}</span>` +
+            `<span class="ft-name">${gearInstName(g.inst)}${n > 1 ? ` ×${n}` : ""}</span>` +
+            `<span class="ft-fuel">🔥${Meta.gearFuel(g.inst)}${n > 1 ? ` · ${sel}/${n}` : ""}</span>`;
+          tile.onclick = () => {
+            const next = g.uids.find((u) => !editorFuel.has(u));
+            if (next) editorFuel.add(next); else g.uids.forEach((u) => editorFuel.delete(u));
+            renderGearEditor(charId, slot);
+          };
           grid.appendChild(tile);
         });
         box.appendChild(grid);
@@ -434,16 +539,40 @@ function renderChests(body) {
 }
 
 // Chest opening: shake the chest, then reveal each drop with a stagger.
-export function openChestUI(chestId) {
-  const drops = Meta.openChest(chestId);
-  if (!drops) return;
+// Identical drops merge into one line ("+3 Chapeau commun de dog").
+function stackDrops(drops) {
+  const out = [];
+  drops.forEach((d) => {
+    const key = [d.type, d.id || "", d.charId || "", d.slot || "", d.rarity || "", d.owner || ""].join("|");
+    const g = out.find((x) => x._key === key);
+    if (g) g.amount += d.amount; else out.push(Object.assign({ _key: key }, d));
+  });
+  return out;
+}
+let chestOpenId = null;   // chest type currently on screen ("ouvrir un autre" reuses it)
+export function openChestUI(chestId, all) {
+  let raw = Meta.openChest(chestId);
+  if (!raw) return;
+  // "Ouvrir tous": drain the remaining chests of this type into one reveal.
+  if (all) { let more; while ((Meta.state.chests[chestId] || 0) > 0 && (more = Meta.openChest(chestId))) raw = raw.concat(more); }
+  chestOpenId = chestId;
+  const drops = stackDrops(raw);
   const rarity = rarityOf(chestId);
   $("#chest-title").textContent = CHEST_LABEL[chestId] || chestId;
   const anim = $("#chest-anim");
   anim.innerHTML = `<div class="chest-big ${rarity}">🎁</div>`;
   const dr = $("#chest-drops"); dr.innerHTML = "";
   $("#chest-close").classList.add("hidden");
+  $("#chest-again").classList.add("hidden");
   $("#chest-overlay").classList.remove("hidden");
+  const done = () => {
+    $("#chest-close").classList.remove("hidden");
+    const left = Meta.state.chests[chestId] || 0;
+    if (left > 0) {
+      $("#chest-open-all").textContent = `Ouvrir tous (${left})`;
+      $("#chest-again").classList.remove("hidden");
+    }
+  };
   setTimeout(() => {
     anim.querySelector(".chest-big").classList.add("open");
     drops.forEach((d, i) => {
@@ -451,10 +580,10 @@ export function openChestUI(chestId) {
         const node = el("div", "drop-item " + dropRarity(d));
         node.innerHTML = dropHtml(d);
         dr.appendChild(node);
-        if (i === drops.length - 1) $("#chest-close").classList.remove("hidden");
+        if (i === drops.length - 1) done();
       }, 350 + i * 280);
     });
-    if (!drops.length) { dr.appendChild(el("div", "menu-muted", "Rien cette fois…")); $("#chest-close").classList.remove("hidden"); }
+    if (!drops.length) { dr.appendChild(el("div", "menu-muted", "Rien cette fois…")); done(); }
   }, 600);
 }
 function dropRarity(d) {

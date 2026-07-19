@@ -54,6 +54,7 @@ export const Meta = {
       characters: {},                // charId -> { level } (0 = locked)
       equipment: {},                 // charId -> { hat, suit, shoes } (gear uid or null)
       slotAssignments: {},           // slotId -> charId (one character per slot, one RACE globally)
+      profileChar: null,             // charId whose sprite is the player's avatar (null = generic Worker)
     };
   },
 
@@ -219,6 +220,102 @@ export const Meta = {
   },
   unassignSlot(slotId) { delete this.state.slotAssignments[slotId]; this.save(); },
 
+  // ---------- Recruit order ----------
+  // Owned characters join a run in this order: rarest first, then most gear
+  // pieces worn, then best gear (summed gear rarities), then highest level.
+  // Each rule only breaks ties left by the previous one; roster order settles
+  // whatever remains.
+  charRarity(charId) {
+    const ch = this.cfg.characters[charId];
+    return (((ch && ch.profile) || "").split("_")[0]) || "common";
+  },
+  recruitKeys(charId) {
+    const worn = Object.values(this.state.equipment[charId] || {})
+      .filter(Boolean).map((uid) => this.gearInst(uid)).filter(Boolean);
+    return [
+      RARITIES.indexOf(this.charRarity(charId)),
+      worn.length,
+      worn.reduce((s, g) => s + RARITIES.indexOf(g.rarity), 0),
+      this.charLevel(charId),
+    ];
+  },
+  recruitOrder() {
+    return this.ownedCharacters()
+      .map((id, i) => ({ id, i, k: this.recruitKeys(id) }))
+      .sort((a, b) => b.k[0] - a.k[0] || b.k[1] - a.k[1] || b.k[2] - a.k[2] || b.k[3] - a.k[3] || a.i - b.i)
+      .map((x) => x.id);
+  },
+  // Next character to hire, given the charIds already staffing the run.
+  // Only characters ASSIGNED TO A SLOT enter a run — the rest of the roster
+  // stays home and hires fall back to anonymous workers.
+  nextRecruit(usedIds) {
+    const used = new Set(usedIds);
+    return this.recruitOrder().find((id) => !used.has(id) && this.charSlot(id)) || null;
+  },
+
+  // ---------- Automation (characters tab & panel) ----------
+  // Fill empty slots with the best available characters: walk recruitOrder and
+  // drop each unplaced character into the first empty slot accepting its race
+  // (a race still serves at most one slot). Existing assignments are kept.
+  autoFillSlots() {
+    let changed = false;
+    this.recruitOrder().forEach((id) => {
+      if (this.charSlot(id)) return;
+      const race = this.cfg.characters[id].typeSlot;
+      if (!race || this.assignedRaces().includes(race)) return;
+      const slot = this.cfg.characterSlots.find((s) => !this.slotChar(s.id) && s.containments.includes(race));
+      if (slot) { this.state.slotAssignments[slot.id] = id; changed = true; }
+    });
+    if (changed) this.save();
+    return changed;
+  },
+  // Fuse all of a character's duplicate gears, per slot type, into its highest
+  // one (rarity, then equipped, then progress picks the base; free pieces are
+  // the fuel). Maxed-rarity bases are left alone — feeding them wastes gear.
+  autoMergeGears(charId) {
+    let changed = false;
+    ["hat", "suit", "shoes"].forEach((slot) => {
+      const all = this.state.gears.filter((g) => g.owner === charId && g.slot === slot);
+      if (all.length < 2) return;
+      const score = (g) => [RARITIES.indexOf(g.rarity), this.isEquipped(g.uid) ? 1 : 0, g.progress || 0];
+      const base = all.reduce((a, b) => { const ka = score(a), kb = score(b); return (kb[0] - ka[0] || kb[1] - ka[1] || kb[2] - ka[2]) > 0 ? b : a; });
+      const fuel = all.filter((g) => g !== base && !this.isEquipped(g.uid)).map((g) => g.uid);
+      if (fuel.length && this.fuse(base.uid, fuel)) changed = true;
+    });
+    return changed;
+  },
+  // Wear the best gear the character owns in each slot (rarity, then progress).
+  autoEquipChar(charId) {
+    if (!this.isOwned(charId)) return false;
+    let changed = false;
+    ["hat", "suit", "shoes"].forEach((slot) => {
+      const all = this.state.gears.filter((g) => g.owner === charId && g.slot === slot);
+      if (!all.length) return;
+      const best = all.reduce((a, b) =>
+        (RARITIES.indexOf(b.rarity) - RARITIES.indexOf(a.rarity) || (b.progress || 0) - (a.progress || 0)) > 0 ? b : a);
+      const worn = this.gearWornAt(best.uid);
+      if (worn && worn.charId !== charId) return; // shouldn't happen (nominative gear)
+      if (this.state.equipment[charId][slot] !== best.uid) { this.state.equipment[charId][slot] = best.uid; changed = true; }
+    });
+    if (changed) this.save();
+    return changed;
+  },
+
+  // ---------- Profile picture ----------
+  // The avatar is an owned character's sprite; falls back to the generic Worker
+  // if none is chosen (or the choice went stale — character removed/not owned).
+  profileSprite() {
+    const ch = this.state.profileChar && this.cfg.characters[this.state.profileChar];
+    if (ch && ch.spriteId && this.isOwned(ch.id)) return { spriteId: ch.spriteId, folder: "Characters" };
+    return { spriteId: "Worker", folder: "UI" };
+  },
+  setProfileChar(charId) {
+    if (charId && !this.isOwned(charId)) return false;
+    this.state.profileChar = charId || null;
+    this.save();
+    return true;
+  },
+
   // ---------- Gear (item instances) ----------
   gearInst(uid) { return this.state.gears.find((g) => g.uid === uid) || null; },
   // Config row backing an instance at its current rarity.
@@ -259,10 +356,11 @@ export const Meta = {
   fuse(baseUid, fuelUids) {
     const base = this.gearInst(baseUid);
     if (!base || !this.canUpgradeGear(base)) return false;
-    // valid fuel = same owner, not the base, not equipped
+    // valid fuel = same owner AND same slot type as the base (dog shoes only
+    // feed dog shoes), not the base itself, not equipped
     const consume = new Set((fuelUids || []).filter((u) => {
       const f = this.gearInst(u);
-      return f && u !== baseUid && f.owner === base.owner && !this.isEquipped(u);
+      return f && u !== baseUid && f.owner === base.owner && f.slot === base.slot && !this.isEquipped(u);
     }));
     let added = 0;
     consume.forEach((u) => { added += this.gearFuel(this.gearInst(u)); });
