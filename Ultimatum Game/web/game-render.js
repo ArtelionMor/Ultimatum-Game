@@ -317,10 +317,11 @@ export const renderMethods = {
     const ch = isChar ? this.cfg.characters[w.charId] : null;
     const src = ch && ch.spriteId ? sprite(ch.spriteId, "Characters") : sprite("Worker", "UI");
     const chip = el("div", "wchip" + (isChar ? " char" : "") + (this.selectedWorker === w ? " selected" : "") + (w.machineId ? " onmachine" : ""));
+    // No name/level on the chip (they clipped on mobile): avatar + gear row,
+    // details live in the character panel (tap).
     chip.innerHTML =
-      `<span class="wava"><img src="${src}" onerror="this.onerror=null;this.src='${sprite("Worker", "UI")}'" draggable="false">` +
-      (isChar ? `<span class="wgears">${gearBadges(w.charId)}</span>` : "") + `</span>` +
-      (isChar ? `<span class="wname">${w.charId}<span class="wlvl">${Meta.charLevel(w.charId)}</span></span>` : "");
+      `<span class="wava"><img src="${src}" onerror="this.onerror=null;this.src='${sprite("Worker", "UI")}'" draggable="false"></span>` +
+      (isChar ? `<span class="wgears">${gearBadges(w.charId)}</span>` : "");
     this.makeDraggable(chip, w);
     return chip;
   },
