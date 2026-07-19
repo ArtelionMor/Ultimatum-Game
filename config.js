@@ -16,6 +16,14 @@ export function normalize(raw) {
   });
   const maxTier = Math.max(...raw.resources.map((r) => r.tier));
 
+  // per-tier background colors (sheet tab `ressources_tier`: {id:"Tier2", color:"ACFF47"});
+  // tolerant of older exports without the tab (tierColor() falls back to neutral grey)
+  const tierColors = {};
+  (raw.ressources_tier || []).forEach((t) => {
+    const m = /^tier\s*(\d+)$/i.exec(t.id || "");
+    if (m && t.color) tierColors[+m[1]] = "#" + String(t.color).replace(/^#/, "");
+  });
+
   // `inputs` is a RECIPE table keyed by recipe name (which reads like the produced
   // resource: "nest", "bottle"…), and each machine names its recipe in its own
   // `inputs` column — the same profile indirection as outputs_profiles / upgrade
@@ -219,7 +227,7 @@ export function normalize(raw) {
   const competitors = raw.competitors.map((c) => ({ ...c }));
 
   return {
-    g, resources, resourceOrder, maxTier, machines, purchases, roundIncome, competitors, convert, slots, customerSprites, customerDefs, customerOrder,
+    g, resources, resourceOrder, maxTier, tierColors, machines, purchases, roundIncome, competitors, convert, slots, customerSprites, customerDefs, customerOrder,
     marketProfiles, unlockProfiles, worldConfigs, worldLevels, rewards, gears, characters, characterOrder, upgradeProfiles,
     behaviorProfiles, buffProfiles, progressProfiles, characterSlots, featureUnlocks,
   };

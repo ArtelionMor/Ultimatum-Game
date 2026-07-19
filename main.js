@@ -147,6 +147,7 @@ const Game = {
   playerRank() { return 1 + this.competitors.filter((c) => c.revenue > this.player.revenue).length; },
   res(id) { return this.cfg.resources[id]; },
   tierInfo(id, tier) { return this.cfg.resources[id].tiers[tier]; },
+  tierColor(tier) { return this.cfg.tierColors[tier] || "#EFEFEF"; }, // fond des tuiles d'inventaire (tab ressources_tier)
   machineDef(id) { return this.cfg.machines.find((m) => m.id === id); },
   // First customer whose needs include this resource (codex navigation helper).
   customerForResource(resId) { return (this.cfg.customerOrder || []).find((cid) => this.cfg.customerDefs[cid].needs.includes(resId)) || null; },
@@ -207,11 +208,11 @@ const Game = {
     return img;
   },
 
-  // Fly a freshly produced unit from its machine card into its inventory chip.
+  // Fly a freshly produced unit from its machine card into the inventory tiles.
   flyToInventory(m, resId, tier) {
-    const node = m._node, ref = this._invRefs && this._invRefs[resId];
-    if (!node || !ref) return;
-    const from = node.getBoundingClientRect(), to = ref.chip.getBoundingClientRect();
+    const node = m._node, box = this._invTiles;
+    if (!node || !box || !box.isConnected || !this._invVisible) return;
+    const from = node.getBoundingClientRect(), to = box.getBoundingClientRect();
     const fly = this.tierImg(resId, tier); fly.className = "fly-res";
     document.body.appendChild(fly);
     const x0 = from.left + from.width / 2 - 14, y0 = from.top + 18;
