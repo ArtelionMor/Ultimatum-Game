@@ -844,6 +844,7 @@ button.codex-row:active { border-color: var(--accent); }
 /* Bottom navigation bar (mobile-friendly: thumb reaches it easily) */
 #menu-tabs {
   flex: 0 0 auto; display: flex;
+  position: relative; z-index: 5;   /* above the trophy road (nodes/cards) so the raised Niveaux circle never clips */
   background: var(--bg-panel); border-top: 2px solid var(--border);
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -1196,13 +1197,10 @@ button.codex-row:active { border-color: var(--accent); }
 .wchip .wava { position: relative; width: 38px; height: 38px; }
 .wchip .wava img { width: 100%; height: 100%; pointer-events: none; }
 .wchip.char { border-color: var(--accent-2); }
-.wchip .wname {
-  font-size: 9px; font-weight: bold; color: var(--accent-2);
-  max-width: 56px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.wchip .wlvl { color: var(--text-dim); font-weight: normal; margin-left: 2px; }
-.wchip .wlvl::before { content: "Nv"; font-size: 8px; }
-.wchip .wgears { position: absolute; bottom: -3px; right: -6px; display: flex; gap: 1px; }
+/* gear badges sit in a compact row under the avatar (name/level removed —
+ * they clipped on mobile; tap the chip for details) */
+.wchip .wgears { display: flex; gap: 1px; justify-content: center; min-height: 11px; max-width: 100%; }
+.wchip .wgears .gear-badge { font-size: 8px; padding: 0 1px; border-radius: 4px; }
 .wchip.selected { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 6px 12px rgba(244,185,66,.3); }
 .wchip.onmachine { min-width: 44px; padding: 2px 3px 1px; }
 .wchip.onmachine .wava { width: 30px; height: 30px; }
