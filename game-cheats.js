@@ -40,21 +40,21 @@ export const cheatMethods = {
     this.player.money = Math.max(0, this.player.money + v);
     this.refreshHud(); this.renderShop(); this.refreshAffordability(); this.refreshSuppliers();
   },
-  // Instantly end the current run as a win (richest) or a loss (eliminated).
+  // Instantly end the current run as a win (top revenue) or a loss (bottom revenue).
   cheatWinLevel() {
     if (!this.cheatsEnabled() || !this.levelCfg || !this.player || this.state === S.Menu) return;
-    ["#tax-overlay", "#results-overlay", "#cheat-overlay", "#taxinfo-overlay"].forEach((id) => $(id)?.classList.add("hidden"));
+    ["#results-overlay", "#cheat-overlay", "#rankinfo-overlay"].forEach((id) => $(id)?.classList.add("hidden"));
     this.waveActive = false;
     this.round = this.levelCfg.totalRounds;
-    this.player.eliminated = false;
-    this.player.money = Math.max(this.player.money, ...this.competitors.map((c) => c.money)) + 1000;
+    this.player.revenue = Math.max(...this.competitors.map((c) => c.revenue)) + 1000;
     this.transitionTo(S.GameOver);
   },
   cheatLoseLevel() {
     if (!this.cheatsEnabled() || !this.levelCfg || !this.player || this.state === S.Menu) return;
-    ["#tax-overlay", "#results-overlay", "#cheat-overlay", "#taxinfo-overlay"].forEach((id) => $(id)?.classList.add("hidden"));
+    ["#results-overlay", "#cheat-overlay", "#rankinfo-overlay"].forEach((id) => $(id)?.classList.add("hidden"));
     this.waveActive = false;
-    this.player.eliminated = true;
+    this.round = this.levelCfg.totalRounds;
+    this.player.revenue = Math.min(...this.competitors.map((c) => c.revenue)) - 1000;
     this.transitionTo(S.GameOver);
   },
 
@@ -123,7 +123,7 @@ export const cheatMethods = {
   cheatGoToWave(n) {
     if (!this.cheatsEnabled() || !this.cfg || !this.player || !this.levelCfg) return;
     n = Math.max(1, Math.floor(n || 1));
-    ["#tax-overlay", "#results-overlay", "#gameover-overlay", "#cheat-overlay"].forEach((id) => $(id)?.classList.add("hidden"));
+    ["#results-overlay", "#gameover-overlay", "#cheat-overlay", "#rankinfo-overlay"].forEach((id) => $(id)?.classList.add("hidden"));
     if (!this._screenReady) this.setupScreen();
     this.waveActive = false;
     this.market = null;
@@ -131,7 +131,6 @@ export const cheatMethods = {
     // Rattrape les déblocages pour TOUT LE MONDE : les bots ont les mêmes machines
     // que le joueur, en sauter un round les laisserait sans usine (game-bots.js).
     this.competitors.forEach((c) => {
-      if (c.eliminated) return;
       this.cfg.machines.forEach((m) => { const r = this.machineUnlockRound(m.id); if (r != null && r <= n) this.giveMachine(c, m.id); });
     });
     this.round = n - 1;      // startPrep() increments to n

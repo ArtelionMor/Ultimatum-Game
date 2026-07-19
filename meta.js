@@ -116,7 +116,11 @@ export const Meta = {
     if (!table) return [];
     const drops = [];
     Object.keys(table).sort().forEach((group) => {
-      const row = this.weightedPick(table[group]);
+      // Gears still locked (feature_unlock): draw as if the group's _gear lines
+      // didn't exist — chests hand out characters/currency instead.
+      let rows = table[group];
+      if (!this.featureUnlocked("gears")) rows = rows.filter((r) => !(r.content || "").endsWith("_gear"));
+      const row = this.weightedPick(rows);
       if (!row || !row.content) return;
       drops.push(...this.applyDrop(row.content, row.amount));
     });

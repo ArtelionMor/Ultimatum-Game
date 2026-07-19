@@ -72,7 +72,13 @@ export function renderMenu() {
   const av = Meta.profileSprite();
   $("#profile-btn img").src = sprite(av.spriteId, av.folder);
   renderCurrencies();
-  $("#menu-tabs").querySelectorAll("button[data-tab]").forEach((b) => b.classList.toggle("active", b.dataset.tab === tab));
+  // Locked meta features hide their whole tab (feature_unlock: character, chest).
+  const tabOpen = { levels: true, characters: Meta.featureUnlocked("character"), chests: Meta.featureUnlocked("chest") };
+  if (!tabOpen[tab]) tab = "levels";
+  $("#menu-tabs").querySelectorAll("button[data-tab]").forEach((b) => {
+    b.classList.toggle("hidden", !tabOpen[b.dataset.tab]);
+    b.classList.toggle("active", b.dataset.tab === tab);
+  });
   const body = $("#menu-body"); body.innerHTML = "";
   if (tab === "levels") renderLevels(body);
   else if (tab === "characters") renderCharacters(body);
@@ -333,6 +339,7 @@ function renderSlotPicker() {
 
 // Small colored slot emojis showing what a character is wearing.
 export function gearBadges(charId) {
+  if (!Meta.featureUnlocked("gears")) return "";
   const eq = Meta.state.equipment[charId] || {};
   return ["hat", "suit", "shoes"].map((slot) => {
     const inst = eq[slot] && Meta.gearInst(eq[slot]);
@@ -414,13 +421,13 @@ function renderCharacterPanel() {
     <div class="cp-section">Affinités machines${owned ? "" : " (au Nv.1)"}</div>
     <div class="cd-affs">${aff || '<span class="menu-muted">Aucune</span>'}</div>
     <div class="cd-proba">🎲 Production ×2 : <b>${Math.round(p2 * 100)}%</b></div>
-    <div class="cp-section">Équipement</div>
+    ${!Meta.featureUnlocked("gears") ? "" : `<div class="cp-section">Équipement</div>
     ${owned ? `<div class="auto-row">
       <button id="cd-automerge">Auto-merge 🔥</button>
       <button id="cd-autoequip">Auto-équiper ⚡</button>
     </div>` : ""}
     <div class="cd-slots">${slots}</div>
-    <div id="cd-gearpick"></div>
+    <div id="cd-gearpick"></div>`}
     ${upg}`;
 
   const amBtn = body.querySelector("#cd-automerge");

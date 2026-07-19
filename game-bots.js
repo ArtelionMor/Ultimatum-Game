@@ -8,7 +8,7 @@
  * comes from upgrading its machines, exactly like the player's.
  *
  * All it does differently is DECIDE, once per round (botPlanRound):
- *   1. what to buy, out of whatever sits above its tax reserve;
+ *   1. what to buy;
  *   2. which machines to staff.
  * Step 2 is its whole downside: staffing the wrong machine wastes the round, the
  * same way the player misreads the demand.
@@ -21,31 +21,11 @@
 
 import { nextMachineLevel } from "./game-shop.js";
 import { addWorker } from "./game-workers.js";
+import { Meta } from "./meta.js";
 
 const PURCHASES = ["increaseWorker", "increaseMarketting", "increaseStorage"];
-
-// 1 = reaches the tax holding exactly its cost · 0.6 = arrives 40% short and
-// gambles on covering it with that wave's sales. Per-bot personality, meant to
-// come from the level tool.
-const RISK_APPETITE = 1.0;
-const riskAppetite = (b) => b.def.riskAppetite ?? RISK_APPETITE;
-
-// Cash held back for the next tax, as a LINEAR RAMP from the previous tax to the
-// next. The original rule counted every future round's income as already earned,
-// which made the reserve ~0 on round 1 (the bot blew its whole bankroll) and
-// ~full one round before the tax (it froze). A ramp keeps it investing every
-// round instead — more or less, never all-or-nothing.
-export function taxReserve(levelCfg, b, round) {
-  let next = Infinity, cost = 0, prev = 0;
-  for (const r in levelCfg.tax) {
-    const rn = +r;
-    if (rn >= round && rn < next) { next = rn; cost = levelCfg.tax[r]; }
-    if (rn < round && rn > prev) prev = rn;
-  }
-  if (!cost) return 0;
-  const span = next - prev;
-  return Math.max(0, cost * riskAppetite(b) * (span > 0 ? (round - prev) / span : 1));
-}
+// Bots obey the player's feature_unlock locks — same economy, same handicaps.
+const PURCHASE_FEATURE = { increaseMarketting: "marketting", increaseStorage: "storage" };
 
 // Weights driving the bot for a given wave (competitors_behavior v2). Falls
 // back to the nearest earlier wave so a shorter table still drives late rounds.
@@ -101,12 +81,13 @@ export function botPlanRound(game, b) {
 function affordable(game, b, behavior, reserve) {
   const out = [];
   PURCHASES.forEach((a) => {
+    if (PURCHASE_FEATURE[a] && !Meta.featureUnlocked(PURCHASE_FEATURE[a])) return;
     const n = game.cfg.purchases[a][b.buys[a]];
     if (!n || !(behavior[a] > 0) || b.money - n.price < reserve) return;
     if (a === "increaseWorker" && b.workers.length >= game.cfg.g.maxWorkersTotal) return; // même plafond que le joueur
     out.push({ w: behavior[a], buy: () => buyShop(game, b, a, n) });
   });
-  const uw = upgradeAppetite(behavior);
+  const uw = Meta.featureUnlocked("upgrade_machine") ? upgradeAppetite(behavior) : 0;
   // The whole chain is upgradable, not just the machine that sells: a starved
   // converter is fixed by a faster supplier as much as by itself.
   if (uw > 0) [...wantedChain(game, b, behavior).keys()].forEach((m) => {
@@ -119,7 +100,7 @@ function affordable(game, b, behavior, reserve) {
 
 function botInvest(game, b) {
   const behavior = botBehavior(b, game.round);
-  const reserve = taxReserve(game.levelCfg, b, game.round);
+  const reserve = 0; // plus d'impôts (rework 2026-07) : tout est investissable
   let guard = 100;
   while (guard-- > 0) {
     const pool = affordable(game, b, behavior, reserve);
@@ -152,12 +133,14 @@ function pickWeighted(pool) {
 // "Auto-merge" checkbox exports a competitors_buffs row `autoMerge` (1/0);
 // absent (older exports) means merge.
 function mergeBotStock(game, b) {
+  if (!Meta.featureUnlocked("merge")) return; // same lock as the player's merge sheet
   if (b.buffs.autoMerge === 0 || (b.def && b.def.autoMerge === false)) return;
   let guard = 200;
   game.cfg.resourceOrder.forEach((rid) => {
     const rules = game.cfg.convert[rid]; if (!rules) return;
     Object.keys(rules).map(Number).sort((a, z) => a - z).forEach((t) => {
       const rule = rules[t];
+      if (rule.resultTier > game.maxUnlockedTier()) return; // locked tier: no folding into it
       while (guard-- > 0 && (b.stock[rid][t] || 0) >= rule.quantity) {
         b.stock[rid][t] -= rule.quantity;
         game.addStock(b, rule.resultRes, rule.resultTier, rule.resultQty);

@@ -10,7 +10,6 @@ import { Meta } from "./meta.js";
 import { initMenu, showMenu, hideMenu, renderMenu, openCharacterPanel, gearBadges, renderDropList } from "./menu.js";
 import { openBuildingPanel } from "./building.js";
 import { openResource } from "./resource.js";
-import { enterTax, openTaxInfo, closeTaxInfo, prepayTax, renderTaxInfo, nextTaxInfo } from "./game-tax.js";
 import { freeWorkers, crewSpeedBonus, crewProba2x, addWorker, selectWorker, assignWorker, removeWorker, unassignWorker } from "./game-workers.js";
 import { nextWorker, buyWorker, nextMkt, buyMkt, nextStorage, buyStorage, nextMachineLevel, upgradeMachine } from "./game-shop.js";
 import { botPlanRound, staffBot } from "./game-bots.js";
@@ -20,7 +19,19 @@ import { renderMethods } from "./game-render.js";
 import { cheatMethods } from "./game-cheats.js";
 
 // Player-facing names of feature_unlock ids (victory screen announcement).
-const FEATURE_LABEL = { x2_button: "Vitesse ×2 débloquée !", x4_button: "Vitesse ×4 débloquée !" };
+const FEATURE_LABEL = {
+  x2_button: "Vitesse ×2 débloquée !", x4_button: "Vitesse ×4 débloquée !",
+  tier2: "Tier 2 débloqué !", tier3: "Tier 3 débloqué !", tier4: "Tier 4 débloqué !",
+  tier5: "Tier 5 débloqué !", tier6: "Tier 6 débloqué !",
+  upgrade_machine: "Amélioration des machines débloquée !",
+  storage: "Stockage améliorable débloqué !",
+  marketting: "Marketing débloqué !",
+  merge: "Merge débloqué !",
+  chest: "Coffres débloqués !",
+  character: "Personnages débloqués !",
+  gears: "Équipements débloqués !",
+  end_of_round_summary: "Résumé de fin de round débloqué !",
+};
 
 // ============================================================
 // Game
@@ -79,12 +90,11 @@ const Game = {
     this.levelCfg = this.resolveLevel(levelId);
     hideMenu();
     $("#app").classList.remove("hidden");
-    $("#total-rounds").textContent = this.levelCfg.totalRounds;
     this.transitionTo(S.Setup);
   },
   // Abandon or finish -> back to the menu (game loop idles in S.Menu).
   toMenu() {
-    ["#tax-overlay", "#results-overlay", "#gameover-overlay", "#quit-overlay", "#taxinfo-overlay"].forEach((id) => $(id)?.classList.add("hidden"));
+    ["#results-overlay", "#gameover-overlay", "#quit-overlay", "#rankinfo-overlay"].forEach((id) => $(id)?.classList.add("hidden"));
     this.waveActive = false; this.market = null;
     const lane = $("#customer-lane"); if (lane) lane.innerHTML = "";
     this.transitionTo(S.Menu);
@@ -119,7 +129,7 @@ const Game = {
   },
 
   transitionTo(n) { this.exitState(this.state); this.state = n; this.enterState(n); },
-  enterState(s) { ({ [S.Menu]: () => this.enterMenu(), [S.Setup]: () => this.enterSetup(), [S.Play]: () => this.enterPlay(), [S.Tax]: () => enterTax(this), [S.Results]: () => this.enterResults(), [S.GameOver]: () => this.enterGameOver() }[s] || (() => {}))(); },
+  enterState(s) { ({ [S.Menu]: () => this.enterMenu(), [S.Setup]: () => this.enterSetup(), [S.Play]: () => this.enterPlay(), [S.Results]: () => this.enterResults(), [S.GameOver]: () => this.enterGameOver() }[s] || (() => {}))(); },
   exitState(s) { void s; },
 
   // ---------- helpers ----------
@@ -131,8 +141,10 @@ const Game = {
     const keys = Object.keys(m).map(Number);
     return m[Math.max(...keys)];
   },
-  taxFor(round) { return this.levelCfg.tax[round] || 0; },
   machineUnlockRound(id) { const u = this.levelCfg.unlocks; return u[id] != null ? u[id] : null; },
+  // Classement live aux revenus cumulés (le camembert et le HUD s'en servent).
+  rankedByRevenue() { return [...this.competitors].sort((a, b) => b.revenue - a.revenue); },
+  playerRank() { return 1 + this.competitors.filter((c) => c.revenue > this.player.revenue).length; },
   res(id) { return this.cfg.resources[id]; },
   tierInfo(id, tier) { return this.cfg.resources[id].tiers[tier]; },
   machineDef(id) { return this.cfg.machines.find((m) => m.id === id); },
@@ -144,13 +156,24 @@ const Game = {
   bestTier(c, resId) { const m = c.stock[resId] || {}; let best = 0; for (const t in m) if (m[t] > 0 && +t > best) best = +t; return best; },
   addStock(c, resId, tier, qty) { c.stock[resId][tier] = (c.stock[resId][tier] || 0) + qty; if (c === this.player) this._invDirty = true; },
   tierCount(c, resId, tier) { return (c.stock[resId] && c.stock[resId][tier]) || 0; },
+  // Highest tier the player has unlocked (feature_unlock rows tier2..tier6).
+  // Applies to BOTS TOO: they play the player's economy, locks included.
+  maxUnlockedTier() {
+    let t = 1;
+    while (t < this.cfg.maxTier && Meta.featureUnlocked("tier" + (t + 1))) t++;
+    return t;
+  },
 
   // ---------- Refining (convert table: N of tier n -> result of tier n+1) ----------
   convertRule(resId, tier) { const r = this.cfg.convert[resId]; return (r && r[tier]) || null; },
-  canConvert(c, resId, tier) { const rule = this.convertRule(resId, tier); return !!rule && this.tierCount(c, resId, tier) >= rule.quantity; },
+  canConvert(c, resId, tier) {
+    if (!Meta.featureUnlocked("merge")) return false;
+    const rule = this.convertRule(resId, tier);
+    return !!rule && rule.resultTier <= this.maxUnlockedTier() && this.tierCount(c, resId, tier) >= rule.quantity;
+  },
   doConvert(resId, tier) {
     const p = this.player, rule = this.convertRule(resId, tier);
-    if (!rule || this.tierCount(p, resId, tier) < rule.quantity) return false;
+    if (!this.canConvert(p, resId, tier)) return false;
     p.stock[resId][tier] -= rule.quantity;
     this.addStock(p, rule.resultRes, rule.resultTier, rule.resultQty);
     this.refreshInventory();
@@ -220,25 +243,24 @@ const Game = {
     this.selectedWorker = null;
     this.timeScale = 1;           // each run starts at normal speed
     this.refreshSpeedBtn();
-    this._taxVictory = false;   // victoire par dernier impôt réglé (game-tax.js)
     const pav = Meta.profileSprite();
     this.player = {
-      id: "player", name: "Toi", spriteId: pav.spriteId, spriteFolder: pav.folder, isPlayer: true, eliminated: false,
+      id: "player", name: "Toi", spriteId: pav.spriteId, spriteFolder: pav.folder, isPlayer: true,
       money: g.startingMoney, stock: this.emptyStock(), storageCap: g.startingStorage,
       marketing: BASE_MARKETING, workers: [],
       machines: [], buys: { increaseWorker: 0, increaseMarketting: 0, increaseStorage: 0 },
-      salesThisRound: 0, prepaidTaxRound: null,
+      salesThisRound: 0, revenue: 0,
     };
     for (let i = 0; i < g.startingWorkers; i++) addWorker(this, this.player);
     this.cfg.machines.forEach((m) => { const r = this.machineUnlockRound(m.id); if (r != null && r <= 1) this.giveMachine(this.player, m.id); });
 
     // The level defines the exact bot lineup.
     const bots = this.levelCfg.bots.map((b) => ({
-      id: b.id, name: b.displayName, spriteId: b.spriteId, spriteFolder: "Characters", isPlayer: false, eliminated: false,
+      id: b.id, name: b.displayName, spriteId: b.spriteId, spriteFolder: "Characters", isPlayer: false,
       money: b.startingMoney, stock: this.emptyStock(), storageCap: g.startingStorage,
       marketing: BASE_MARKETING + (b.buffs.marketing || 0), def: b, behaviorByRound: b.behaviorByRound, buffs: b.buffs, upgradesBought: 0,
       workers: [], machines: [],
-      buys: { increaseWorker: 0, increaseMarketting: 0, increaseStorage: 0 }, salesThisRound: 0,
+      buys: { increaseWorker: 0, increaseMarketting: 0, increaseStorage: 0 }, salesThisRound: 0, revenue: 0,
     }));
     // Les bots jouent TON économie : mêmes ouvriers de départ, mêmes machines
     // débloquées, même horloge de production (game-production.js tickProduction).
@@ -277,23 +299,21 @@ const Game = {
     this.market = null;
     this.selectedWorker = null;
 
-    // round income (scheduled) to every alive competitor
+    // round income (scheduled) to every competitor — counts as earned revenue
     const inc = this.cfg.roundIncome[this.round];
-    if (inc) this.competitors.forEach((c) => { if (!c.eliminated) c.money += inc.coins; });
+    if (inc) this.competitors.forEach((c) => { c.money += inc.coins; c.revenue += inc.coins; });
 
     // unlock machines (per-level schedule) pour tout le monde, keep worker assignments.
     // Avant le plan des bots : une machine débloquée ce round doit pouvoir être staffée.
     this.competitors.forEach((c) => {
-      if (c.eliminated) return;
       this.cfg.machines.forEach((m) => { if (this.machineUnlockRound(m.id) === this.round) this.giveMachine(c, m.id); });
     });
     this.player.machines.forEach((m) => { m.elapsed = 0; });
 
     // Les bots décident leur round ici : acheter, puis staffer. Ils ne fabriquent
     // rien eux-mêmes — leurs machines tournent dans tickProduction comme les tiennes.
-    this.competitors.forEach((c) => { if (!c.isPlayer && !c.eliminated) botPlanRound(this, c); });
+    this.competitors.forEach((c) => { if (!c.isPlayer) botPlanRound(this, c); });
 
-    $("#phase-banner").textContent = `Round ${this.round} — Revenu +${inc ? inc.coins : 0}$ · prépare-toi`;
     this.renderInventory(); this.renderShop(); this.renderMachines(); this.renderWorkers();
     this.renderSuppliers(); this.renderWavePreview(); this.refreshHud();
   },
@@ -312,13 +332,13 @@ const Game = {
     // son stock d'intrants est prêt, puis qu'on le rend au fournisseur quand il est à sec.
     this._botStaffTimer = (this._botStaffTimer || 0) - dt;
     if (this._botStaffTimer <= 0) {
-      this.competitors.forEach((c) => { if (!c.isPlayer && !c.eliminated) staffBot(this, c); });
+      this.competitors.forEach((c) => { if (!c.isPlayer) staffBot(this, c); });
       this._botStaffTimer = 1;
     }
     this._amTimer = (this._amTimer || 0) - dt;
     if (this._amTimer <= 0) { this.autoMergeTick(); this._amTimer = 0.5; }
-    // Live-refresh the tax/waves screen while it is open (money + projection move in real time).
-    if (this._taxOpen) { this._taxTimer -= dt; if (this._taxTimer <= 0) { renderTaxInfo(this); this._taxTimer = 0.3; } }
+    // Live-refresh the standings screen while it is open (revenues move in real time).
+    if (this._rankOpen) { this._rankTimer -= dt; if (this._rankTimer <= 0) { this.renderRankInfo(); this._rankTimer = 0.3; } }
 
     if (this.waveActive) {
       const m = this.market;
@@ -342,15 +362,14 @@ const Game = {
     const m = this.marketFor(this.round);
     this.market = { def: m, remaining: m.customers, total: m.customers, served: 0, spawnTimer: 0, active: 0, lostUnits: 0, lostValue: 0 };
     $("#customer-lane").innerHTML = "";
-    $("#phase-banner").textContent = `Vague ${this.round} — les clients arrivent !`;
     this.renderSuppliers(); this.renderWavePreview(); this.refreshHud();
     const content = $("#content"); if (content) content.scrollTo({ top: 0, behavior: "smooth" });
   },
 
-  // Wave fully served -> tax / elimination (overlays), then back to prep for the next one.
+  // Wave fully served -> standings, then back to prep for the next one.
   endWave() {
     this.waveActive = false;
-    this.transitionTo(S.Tax);
+    this.transitionTo(S.Results);
   },
 
   lvl(machine) { return this.machineDef(machine.id).levels[machine.level - 1]; },
@@ -379,7 +398,6 @@ const Game = {
     wrap.innerHTML =
       `<div class="wp-head"><span class="wp-title">Vague ${pr}</span>` +
       `<span class="wp-state">${this.waveActive ? "en cours" : "à venir"}</span>` +
-      `<span class="wp-meta">👥 ${mk.customers} · ~${mk.avg}/client</span>` +
       `<span id="wp-countdown" class="wp-countdown"></span></div>` +
       `<div class="wp-chips">${chips}</div>`;
     this.updateWavePreviewTimer();
@@ -392,29 +410,22 @@ const Game = {
 
   // ---------- Results (standings) ----------
   enterResults() {
-    const elimNow = this._elimNow || []; this._elimNow = [];   // qui vient de tomber sur la taxe (game-tax.js enterTax)
-    // copie: ne pas réordonner this.competitors — les éliminés tombent en bas du classement
-    const ranked = [...this.competitors].sort((a, b) => (a.eliminated !== b.eliminated ? (a.eliminated ? 1 : -1) : b.money - a.money));
-    this.renderResults(ranked, elimNow);
-
-    // Le niveau s'arrête aussi dès que le joueur est éliminé, ou qu'il ne reste plus personne à battre.
-    const alive = this.competitors.filter((c) => !c.eliminated);
-    const end = this.round >= this.levelCfg.totalRounds || this.player.eliminated || alive.length <= 1;
+    this.renderResults(this.rankedByRevenue());
+    const end = this.round >= this.levelCfg.totalRounds;
     $("#results-continue").textContent = end ? "Voir le résultat" : "Round suivant";
     $("#results-continue").onclick = () => { $("#results-overlay").classList.add("hidden"); this.transitionTo(end ? S.GameOver : S.Play); };
   },
 
   enterGameOver() {
-    const ranked = [...this.competitors].sort((a, b) => (a.eliminated !== b.eliminated ? (a.eliminated ? 1 : -1) : b.money - a.money));
-    // Deux chemins de victoire : régler le DERNIER impôt du niveau (game-tax.js —
-    // la vraie condition, les impôts sont les boss), ou finir premier au classement.
-    const won = !this.player.eliminated && (this._taxVictory || ranked[0] === this.player);
+    // Victoire au topX (world_level) : finir dans les X premiers en revenus cumulés.
+    const rank = this.playerRank(), topX = this.levelCfg.topX || 1;
+    const won = rank <= topX;
     $("#gameover-title").textContent = won ? "Victoire !" : "Défaite";
     $("#gameover-title").style.color = won ? "var(--ok)" : "var(--danger)";
-    $("#final-score").textContent = this.player.money;
+    $("#final-score").textContent = this.player.revenue;
     $("#gameover-rank").textContent = won
-      ? (this._taxVictory ? "Dernier impôt réglé — le marché est à toi 👑" : "Tu domines le marché 👑")
-      : `${ranked.indexOf(this.player) + 1}ᵉ sur ${this.competitors.length}`;
+      ? (rank === 1 ? "Tu domines le marché 👑" : `${rank}ᵉ sur ${this.competitors.length} — objectif top ${topX} atteint 👑`)
+      : `${rank}ᵉ sur ${this.competitors.length} — il fallait finir top ${topX}`;
 
     // Victory rewards (once per one-shot level, every time in endless).
     const rewards = $("#gameover-rewards"); rewards.innerHTML = "";
@@ -457,7 +468,7 @@ $("#speed-sel").addEventListener("click", (e) => { const b = e.target.closest("b
 $("#gameover-menu-btn")?.addEventListener("click", () => Game.toMenu());
 // Home button: confirm before abandoning a running level.
 $("#hud-home")?.addEventListener("click", () => {
-  if (Game.state === S.Play || Game.state === S.Tax || Game.state === S.Results) $("#quit-overlay").classList.remove("hidden");
+  if (Game.state === S.Play || Game.state === S.Results) $("#quit-overlay").classList.remove("hidden");
   else Game.toMenu();
 });
 $("#quit-confirm")?.addEventListener("click", () => Game.toMenu());
@@ -475,10 +486,10 @@ $("#competitor-close").addEventListener("click", () => Game.closeCompetitor());
 $("#competitor-overlay").addEventListener("click", (e) => { if (e.target.id === "competitor-overlay") Game.closeCompetitor(); });
 $("#wave-preview")?.addEventListener("click", (e) => { const chip = e.target.closest(".wp-chip[data-res]"); if (chip) openResource(chip.dataset.res); });
 // Guarded with ?.: if a stale/cached index.html lacks these nodes, the bootstrap must
-// not throw here — otherwise Game.start() below never runs and the game hangs at R 0/0.
-$("#hud-tax")?.addEventListener("click", () => openTaxInfo(Game));
-$("#taxinfo-close")?.addEventListener("click", () => closeTaxInfo(Game));
-$("#taxinfo-overlay")?.addEventListener("click", (e) => { if (e.target.id === "taxinfo-overlay") closeTaxInfo(Game); });
+// not throw here — otherwise Game.start() below never runs and the game hangs.
+$("#hud-rank")?.addEventListener("click", () => Game.openRankInfo());
+$("#rankinfo-close")?.addEventListener("click", () => Game.closeRankInfo());
+$("#rankinfo-overlay")?.addEventListener("click", (e) => { if (e.target.id === "rankinfo-overlay") Game.closeRankInfo(); });
 
 // ---------- Cheat console ----------
 $("#cheat-toggle")?.addEventListener("click", () => { if (Game.cheatsEnabled()) $("#cheat-overlay").classList.toggle("hidden"); });

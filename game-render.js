@@ -11,7 +11,6 @@ import { Meta } from "./meta.js";
 import { openCharacterPanel, gearBadges } from "./menu.js";
 import { openBuildingPanel } from "./building.js";
 import { openResource } from "./resource.js";
-import { nextTaxInfo } from "./game-tax.js";
 import { freeWorkers, selectWorker, assignWorker, removeWorker, unassignWorker } from "./game-workers.js";
 import { nextWorker, buyWorker, nextMkt, buyMkt, nextStorage, buyStorage, nextMachineLevel, upgradeMachine } from "./game-shop.js";
 import { botBehavior } from "./game-bots.js";
@@ -19,8 +18,6 @@ import { botBehavior } from "./game-bots.js";
 export const renderMethods = {
   refreshHud() {
     this.player; $("#money").textContent = this.player.money;
-    $("#round").textContent = this.round;
-    $("#phase-label").textContent = this.state === S.Play ? (this.waveActive ? "Vague" : "Prépa") : "";
     if (this.state === S.Play && this.waveActive) {
       $("#timer").textContent = "👥 " + (this.market ? this.market.remaining + this.market.active : 0);
       $("#hud-timer").classList.remove("urgent");
@@ -28,17 +25,38 @@ export const renderMethods = {
       const s = Math.max(0, Math.ceil(this.prepTimer)); $("#timer").textContent = s + "s";
       $("#hud-timer").classList.toggle("urgent", s <= 5);
     }
-    this.refreshTaxChip();
+    this.refreshRankChip();
   },
 
-  // HUD chip: amount of the next tax (or ✅ once prepaid), pulsing red when imminent.
-  refreshTaxChip() {
-    const chip = $("#tax-chip"); if (!chip) return;
-    const info = nextTaxInfo(this.levelCfg, this.round);
-    if (!info) { chip.textContent = "🏛️ —"; $("#hud-tax").classList.remove("urgent"); return; }
-    const prepaid = this.player.prepaidTaxRound === info.round;
-    chip.textContent = prepaid ? "🏛️ ✅" : `🏛️ ${info.cost}$`;
-    $("#hud-tax").classList.toggle("urgent", !prepaid && (info.round - this.round) <= 1);
+  // HUD chip: live rank on cumulative revenue; pulses red while below the topX
+  // objective. Tap -> standings overlay (openRankInfo).
+  refreshRankChip() {
+    const chip = $("#rank-chip"); if (!chip || !this.player) return;
+    const rank = this.playerRank(), topX = this.levelCfg.topX || 1;
+    const medal = ["🥇", "🥈", "🥉"][rank - 1] || "🏆";
+    chip.textContent = `${medal} ${rank}ᵉ`;
+    $("#hud-rank").classList.toggle("urgent", rank > topX);
+  },
+
+  // --- standings overlay (tap the HUD rank chip) ---
+  openRankInfo() {
+    if (!this.player) return;
+    this._rankOpen = true; this._rankTimer = 0.3;
+    this.renderRankInfo();
+    $("#rankinfo-overlay").classList.remove("hidden");
+  },
+  closeRankInfo() { this._rankOpen = false; $("#rankinfo-overlay").classList.add("hidden"); },
+  renderRankInfo() {
+    const body = $("#rankinfo-body"); if (!body || !this.player) return;
+    const topX = this.levelCfg.topX || 1;
+    body.innerHTML = `<div class="rk-goal">🎯 Objectif : finir <b>top ${topX}</b> en revenus cumulés (round ${this.round}/${this.levelCfg.totalRounds})</div>`;
+    const list = el("div", "rk-list");
+    this.rankedByRevenue().forEach((c, i) => {
+      const row = el("div", "result-row" + (c.isPlayer ? " me" : ""));
+      row.innerHTML = `<span class="rank">${i + 1}</span><img src="${sprite(c.spriteId, c.spriteFolder)}"><span class="rname">${c.name}</span><span class="rmoney"><img src="${sprite("Coins", "UI")}">${c.revenue}</span>`;
+      list.appendChild(row);
+    });
+    body.appendChild(list);
   },
 
   // Resources the player's current machines can produce (output resource IDs).
@@ -60,7 +78,7 @@ export const renderMethods = {
   renderInventory() {
     const bar = $("#inventory-bar"); bar.innerHTML = "";
     this._invCells = {}; this._invRow = {};
-    const maxT = this.cfg.maxTier;
+    const maxT = this.maxUnlockedTier(); // locked tier columns simply don't exist yet
     bar.style.setProperty("--tiers", maxT);
 
     const top = el("div", "inv-top");
@@ -70,6 +88,7 @@ export const renderMethods = {
     // refreshInventory() whenever at least one merge is currently possible.
     const merge = el("button", "inv-merge-btn", "🔁 Merge"); merge.id = "inv-merge";
     merge.onclick = () => this.openMerge();
+    if (!Meta.featureUnlocked("merge")) merge.classList.add("hidden");
     top.append(el("span", "inv-top-label", "Inventaire"), merge, cap);
     bar.appendChild(top);
 
@@ -104,7 +123,7 @@ export const renderMethods = {
   },
   refreshInventory() {
     if (!this._invCells) return;
-    const maxT = this.cfg.maxTier;
+    const maxT = this.maxUnlockedTier();
     this.cfg.resourceOrder.forEach((rid) => {
       if (!this._invCells[rid]) return;
       for (let t = 1; t <= maxT; t++) {
@@ -205,10 +224,15 @@ export const renderMethods = {
       ? `${nch.displayName}<span class="sb-gears">${gearBadges(nxId) || ""}</span>`
       : `Ouvrier ×${this.player.workers.length}`;
     mk(`<img src="${ico}" onerror="this.onerror=null;this.src='${sprite("Worker", "UI")}'">`, label, w ? "$" + w.price : "MAX", () => !w || this.player.workers.length >= this.cfg.g.maxWorkersTotal || this.player.money < w.price, () => buyWorker(this));
-    const mkt = nextMkt(this);
-    mk("📣", `Mkt ${this.player.marketing.toFixed(1)}`, mkt ? "$" + mkt.price : "MAX", () => !mkt || this.player.money < mkt.price, () => buyMkt(this));
-    const st = nextStorage(this);
-    mk("📦", `Stock ${this.player.storageCap}`, st ? "$" + st.price : "MAX", () => !st || this.player.money < st.price, () => buyStorage(this));
+    // locked features are hidden completely, not greyed (feature_unlock)
+    if (Meta.featureUnlocked("marketting")) {
+      const mkt = nextMkt(this);
+      mk("📣", `Mkt ${this.player.marketing.toFixed(1)}`, mkt ? "$" + mkt.price : "MAX", () => !mkt || this.player.money < mkt.price, () => buyMkt(this));
+    }
+    if (Meta.featureUnlocked("storage")) {
+      const st = nextStorage(this);
+      mk("📦", `Stock ${this.player.storageCap}`, st ? "$" + st.price : "MAX", () => !st || this.player.money < st.price, () => buyStorage(this));
+    }
   },
   // Re-evaluate buy/upgrade buttons' enabled state in place whenever money changes.
   refreshAffordability() {
@@ -257,6 +281,7 @@ export const renderMethods = {
     const slots = el("div", "worker-slots"); footer.appendChild(slots);
     const btns = el("div", "machine-buttons");
     const rm = el("button", "ghost", "−"), ad = el("button", null, "+"), up = el("button", "upgrade");
+    if (!Meta.featureUnlocked("upgrade_machine")) up.classList.add("hidden");
     btns.append(rm, ad, up); footer.appendChild(btns);
     const prog = el("div", "progress"); prog.appendChild(el("div"));
     node.append(icon, name, recipe, footer, prog);
@@ -299,11 +324,8 @@ export const renderMethods = {
   renderWorkers() {
     const wrap = $("#worker-icons"); wrap.innerHTML = "";
     freeWorkers(this.player).forEach((w) => wrap.appendChild(this.workerChip(w)));
-    const free = freeWorkers(this.player).length;
     const hint = $("#worker-hint");
-    hint.textContent = free === 0 ? "Tous tes ouvriers sont assignés"
-      : this.selectedWorker ? "Touche une machine (+)"
-      : `${free} dispo — glisse-les sur les machines`;
+    hint.textContent = this.selectedWorker ? "Touche une machine (+)" : "";
     hint.classList.toggle("active", !!this.selectedWorker);
     this.player.machines.forEach((m) => { if (m._node) this.updateMachine(m, m._node); });
     this.renderShop();
@@ -396,8 +418,8 @@ export const renderMethods = {
   // --- suppliers / counters (market) ---
   renderSuppliers() {
     const wrap = $("#suppliers"); wrap.innerHTML = "";
-    const alive = this.competitors.filter((c) => !c.eliminated); // fixed order (joueur puis bots), indépendant de l'argent
-    alive.forEach((c) => {
+    // fixed order (joueur puis bots), indépendant de l'argent
+    this.competitors.forEach((c) => {
       const s = el("div", "counter" + (c.isPlayer ? " me" : "")); c._counter = s;
       s.innerHTML = `<img class="counter-avatar" src="${sprite(c.spriteId, c.spriteFolder)}"><div class="counter-name">${c.name}</div><div class="counter-money"><img src="${sprite("Coins", "UI")}"><span class="cmoney">${c.money}</span></div><div class="counter-mkt">📣${c.marketing.toFixed(1)}</div><div class="counter-inv"></div>`;
       c._moneyRef = s.querySelector(".cmoney");
@@ -431,7 +453,7 @@ export const renderMethods = {
       `<div class="cp-head">
         <img class="cp-skin" src="${sprite(c.spriteId, c.spriteFolder)}">
         <div class="cp-id">
-          <div class="cp-name">${c.name}${c.eliminated ? ' <span class="cp-elim">éliminé</span>' : ""}</div>
+          <div class="cp-name">${c.name}</div>
           <div class="cp-tags"><span class="cp-tag">@${tag}</span>${spec ? `<span class="cp-spec">${spec}</span>` : ""}</div>
         </div>
       </div>
@@ -493,7 +515,7 @@ export const renderMethods = {
   // Update money + inventory in place (keeps the hit/money-pop animations alive).
   refreshSuppliers() {
     this.competitors.forEach((c) => {
-      if (c.eliminated || !c._counter) return;
+      if (!c._counter) return;
       if (c._moneyRef) c._moneyRef.textContent = c.money;
       this.renderCounterInv(c);
     });
@@ -577,15 +599,29 @@ export const renderMethods = {
     wrap.appendChild(box);
   },
 
-  renderResults(ranked, elimNow) {
+  renderResults(ranked) {
+    // Before end_of_round_summary unlocks: a minimal screen — your own revenue,
+    // no standings, no market pie.
+    if (!Meta.featureUnlocked("end_of_round_summary")) {
+      $("#results-market").innerHTML = "";
+      const list = $("#results-list"); list.innerHTML = "";
+      const me = this.player;
+      const row = el("div", "result-row me");
+      row.innerHTML = `<img src="${sprite(me.spriteId, me.spriteFolder)}"><span class="rname">${me.name}</span><span class="rmoney"><img src="${sprite("Coins", "UI")}">${me.revenue}</span>`;
+      list.appendChild(row);
+      $("#results-title").textContent = `Round ${this.round} terminé`;
+      $("#results-overlay").classList.remove("hidden");
+      return;
+    }
     this.renderMarketPie();
     const list = $("#results-list"); list.innerHTML = "";
+    // Classement aux revenus cumulés — la seule valeur affichée est celle qui décide la victoire.
     ranked.forEach((c, i) => {
-      const row = el("div", "result-row" + (c.isPlayer ? " me" : "") + (elimNow.includes(c) ? " eliminated" : ""));
-      row.innerHTML = `<span class="rank">${i + 1}</span><img src="${sprite(c.spriteId, c.spriteFolder)}"><span class="rname">${c.name}</span><span class="rsales">+${c.salesThisRound}</span><span class="rmoney"><img src="${sprite("Coins", "UI")}">${c.money}</span>` + (elimNow.includes(c) ? `<span class="rx">ÉLIMINÉ</span>` : "");
+      const row = el("div", "result-row" + (c.isPlayer ? " me" : ""));
+      row.innerHTML = `<span class="rank">${i + 1}</span><img src="${sprite(c.spriteId, c.spriteFolder)}"><span class="rname">${c.name}</span><span class="rmoney"><img src="${sprite("Coins", "UI")}">${c.revenue}</span>`;
       list.appendChild(row);
     });
-    $("#results-title").textContent = elimNow.length ? (elimNow.includes(this.player) ? "Tu es éliminé…" : `${elimNow.map((c) => c.name).join(", ")} éliminé`) : `Round ${this.round} — classement`;
+    $("#results-title").textContent = `Round ${this.round} — classement`;
     $("#results-overlay").classList.remove("hidden");
   },
 };
