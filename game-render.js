@@ -246,6 +246,7 @@ export const renderMethods = {
     const recipe = el("div", "machine-recipe", this.recipeHtml(def));
     const footer = el("div", "machine-footer");
     const slots = el("div", "worker-slots"); footer.appendChild(slots);
+    const timer = el("span", "machine-timer", ""); footer.appendChild(timer); // décompte de production (setProgress)
     const btns = el("div", "machine-buttons");
     const rm = el("button", "ghost", "−"), ad = el("button", null, "+"), up = el("button", "upgrade");
     if (!Meta.featureUnlocked("upgrade_machine")) up.classList.add("hidden");
@@ -261,7 +262,7 @@ export const renderMethods = {
     icon.onclick = (e) => { if (this.selectedWorker) return; e.stopPropagation(); openBuildingPanel(m.id, { level: m.level }); };
     // tap an ingredient/output icon in the recipe -> its codex page
     recipe.addEventListener("click", (e) => { const img = e.target.closest("img[data-res]"); if (img) { e.stopPropagation(); openResource(img.dataset.res); } });
-    m._refs = { name, slots, ad, rm, up }; this.updateMachine(m, node); return node;
+    m._refs = { name, slots, ad, rm, up, timer }; this.updateMachine(m, node); return node;
   },
   recipeHtml(def) {
     const ic = (id, cls = "") => `<img class="${cls}" data-res="${id}" src="${this.tierSrc(id, 1)}" title="${this.res(id).displayName}">`;
@@ -285,7 +286,17 @@ export const renderMethods = {
     node.classList.toggle("producing", m.producing);
     node.classList.toggle("assignable", !!this.selectedWorker && m.crew.length < L.maxWorkers);
   },
-  setProgress(m, ratio) { if (m._node) m._node.querySelector(".progress > div").style.width = (ratio * 100) + "%"; },
+  // secs (optionnel) = temps restant avant le prochain spawn — affiché au centre
+  // du footer de la carte ; vide quand la machine ne tourne pas.
+  setProgress(m, ratio, secs) {
+    if (!m._node) return;
+    m._node.querySelector(".progress > div").style.width = (ratio * 100) + "%";
+    const t = m._refs && m._refs.timer;
+    if (t) {
+      const txt = secs != null ? secs.toFixed(1) + "s" : "";
+      if (t.textContent !== txt) t.textContent = txt;
+    }
+  },
 
   // --- workers (bar + chips + drag & drop) ---
   renderWorkers() {
@@ -567,28 +578,21 @@ export const renderMethods = {
   },
 
   renderResults(ranked) {
-    // Before end_of_round_summary unlocks: a minimal screen — your own revenue,
-    // no standings, no market pie.
-    if (!Meta.featureUnlocked("end_of_round_summary")) {
-      $("#results-market").innerHTML = "";
-      const list = $("#results-list"); list.innerHTML = "";
-      const me = this.player;
-      const row = el("div", "result-row me");
-      row.innerHTML = `<img src="${sprite(me.spriteId, me.spriteFolder)}"><span class="rname">${me.name}</span><span class="rmoney"><img src="${sprite("Coins", "UI")}">${me.revenue}</span>`;
-      list.appendChild(row);
-      $("#results-title").textContent = `Round ${this.round} terminé`;
-      $("#results-overlay").classList.remove("hidden");
-      return;
-    }
-    this.renderMarketPie();
+    // Le classement (objectif + qui est devant) se montre TOUJOURS — savoir où on
+    // en est fait partie du cœur du jeu. Ce que end_of_round_summary déverrouille,
+    // c'est le détail marché (camembert ventes/argent).
+    const full = Meta.featureUnlocked("end_of_round_summary");
+    if (full) this.renderMarketPie(); else $("#results-market").innerHTML = "";
     const list = $("#results-list"); list.innerHTML = "";
+    const topX = this.levelCfg.topX || 1;
+    list.appendChild(el("div", "rk-goal", `🎯 Objectif : finir <b>top ${topX}</b> en revenus cumulés`));
     // Classement aux revenus cumulés — la seule valeur affichée est celle qui décide la victoire.
     ranked.forEach((c, i) => {
       const row = el("div", "result-row" + (c.isPlayer ? " me" : ""));
       row.innerHTML = `<span class="rank">${i + 1}</span><img src="${sprite(c.spriteId, c.spriteFolder)}"><span class="rname">${c.name}</span><span class="rmoney"><img src="${sprite("Coins", "UI")}">${c.revenue}</span>`;
       list.appendChild(row);
     });
-    $("#results-title").textContent = `Round ${this.round} — classement`;
+    $("#results-title").textContent = full ? `Round ${this.round} — classement` : `Round ${this.round} terminé`;
     $("#results-overlay").classList.remove("hidden");
   },
 };

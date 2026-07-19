@@ -189,6 +189,13 @@ img { image-rendering: pixelated; }
   border: 2px solid var(--border); background: transparent;
 }
 .slot.filled { border-color: var(--accent); background: var(--accent); }
+/* Countdown to the next spawn: the two auto margins center it in the footer's
+   free space (between the crew slots and the −/+ buttons). tabular-nums keeps
+   the ticking digits from making the text jitter. */
+.machine-timer {
+  margin-left: auto; font-size: 13px; font-weight: bold;
+  color: var(--accent-2); font-variant-numeric: tabular-nums; min-width: 38px; text-align: center;
+}
 .machine-buttons { margin-left: auto; display: flex; gap: 6px; }
 
 /* progress bar */
@@ -715,6 +722,9 @@ button.codex-row:active { border-color: var(--accent); }
 .res-tiers { display: flex; flex-direction: column; gap: 5px; }
 .res-tier-row { display: grid; grid-template-columns: 44px 1fr auto auto auto; align-items: center; gap: 10px; background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 5px 10px; font-size: 13px; opacity: .55; }
 .res-tier-row.owned { opacity: 1; border-color: var(--accent-2); }
+.res-tier-row.locked { opacity: .35; }
+.res-tier-row.locked .res-tier-img { filter: grayscale(1) brightness(.7); }
+.res-tier-lock { grid-column: 3 / -1; text-align: right; font-size: 15px; }
 .res-tier-img { width: 40px; height: 40px; }
 .res-tier-name { font-weight: bold; }
 .res-tier-price { color: var(--accent); }
