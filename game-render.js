@@ -220,6 +220,31 @@ export const renderMethods = {
     });
   },
 
+  // --- game speed (HUD ×1/×2/×4 toggle, gated by feature_unlock) ---
+  availableSpeeds() {
+    const s = [1];
+    if (Meta.featureUnlocked("x2_button")) s.push(2);
+    if (Meta.featureUnlocked("x4_button")) s.push(4);
+    return s;
+  },
+  refreshSpeedBtn() {
+    const sel = $("#speed-sel"); if (!sel) return;
+    const speeds = this.availableSpeeds();
+    // locked speeds stay VISIBLE but greyed; the current one is highlighted
+    sel.querySelectorAll("button[data-speed]").forEach((b) => {
+      const v = +b.dataset.speed;
+      const open = speeds.includes(v);
+      b.classList.toggle("locked", !open);
+      b.disabled = !open;
+      b.classList.toggle("active", this.timeScale === v);
+    });
+  },
+  setGameSpeed(v) {
+    if (!this.availableSpeeds().includes(v)) return;   // still locked
+    this.timeScale = v;
+    this.refreshSpeedBtn();
+  },
+
   // --- machines ---
   renderMachines() { const list = $("#machine-list"); list.innerHTML = ""; this.player.machines.forEach((m) => { m._node = this.buildMachine(m); list.appendChild(m._node); }); },
   buildMachine(m) {

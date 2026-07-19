@@ -580,6 +580,7 @@ export function openChestUI(chestId, all) {
         const node = el("div", "drop-item " + dropRarity(d));
         node.innerHTML = dropHtml(d);
         dr.appendChild(node);
+        dr.scrollTop = dr.scrollHeight;   // keep the newest drop in view
         if (i === drops.length - 1) done();
       }, 350 + i * 280);
     });

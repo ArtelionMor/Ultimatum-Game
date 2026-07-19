@@ -181,6 +181,16 @@
       "tier_B": 6
     }
   ],
+  "feature_unlock": [
+    {
+      "id": "x2_button",
+      "level": 2
+    },
+    {
+      "id": "x4_button",
+      "level": 7
+    }
+  ],
   "competitors": [
     {
       "id": "bot_cat",

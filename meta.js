@@ -92,6 +92,22 @@ export const Meta = {
     return drops;
   },
 
+  // ---------- Feature unlocks ----------
+  // feature_unlock rows {id, level}: the feature turns on once the level with
+  // that 1-based trophy-road number is completed. One-shot levels complete in
+  // order, so the completed count IS the highest cleared level number.
+  featureUnlocked(fid) {
+    const lvl = (this.cfg.featureUnlocks || {})[fid];
+    if (lvl == null) return true;   // not in the sheet = always available
+    return this.state.completedLevels.length >= lvl;
+  },
+  // Features granted by completing this level (for the victory screen).
+  featuresUnlockedBy(levelId) {
+    const n = this.cfg.worldLevels.findIndex((l) => l.id === levelId) + 1;
+    const fu = this.cfg.featureUnlocks || {};
+    return Object.keys(fu).filter((id) => fu[id] === n);
+  },
+
   // ---------- Rewards & chests ----------
   // Roll a reward table: one weighted pick per group (A..E). Rows without content
   // are "nothing". Returns the list of applied drops for the UI.

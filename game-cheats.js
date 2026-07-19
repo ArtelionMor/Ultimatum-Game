@@ -32,6 +32,7 @@ export const cheatMethods = {
     const val = $("#cheat-speed-val"); if (val) val.textContent = "×" + this.timeScale;
     const wrap = $("#cheat-speeds");
     if (wrap) wrap.querySelectorAll("button[data-speed]").forEach((b) => b.classList.toggle("active", +b.dataset.speed === this.timeScale));
+    if (this.refreshSpeedBtn) this.refreshSpeedBtn();  // keep the in-game selector in sync
   },
   // Give (or take) money to the player and refresh anything money-dependent.
   cheatAddMoney(v) {
