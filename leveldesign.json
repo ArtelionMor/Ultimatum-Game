@@ -307,10 +307,7 @@
             "80%": "tennisBall",
             "20%": "carrot"
           },
-          "overrides": {
-            "avg": 2,
-            "customers": 20
-          }
+          "overrides": {}
         },
         {
           "blockId": "blk_mrmhfzix",
