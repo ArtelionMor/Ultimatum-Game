@@ -181,16 +181,6 @@
       "tier_B": 6
     }
   ],
-  "feature_unlock": [
-    {
-      "id": "x2_button",
-      "level": 2
-    },
-    {
-      "id": "x4_button",
-      "level": 7
-    }
-  ],
   "competitors": [
     {
       "id": "bot_cat",
@@ -2247,6 +2237,68 @@
       "Need": "sandwitch"
     }
   ],
+  "feature_unlock": [
+    {
+      "id": "tier2",
+      "level": 2
+    },
+    {
+      "id": "upgrade_machine",
+      "level": 3
+    },
+    {
+      "id": "tier3",
+      "level": 3
+    },
+    {
+      "id": "storage",
+      "level": 4
+    },
+    {
+      "id": "x2_button",
+      "level": 4
+    },
+    {
+      "id": "chest",
+      "level": 5
+    },
+    {
+      "id": "character",
+      "level": 5
+    },
+    {
+      "id": "end_of_round_summary",
+      "level": 6
+    },
+    {
+      "id": "tier4",
+      "level": 7
+    },
+    {
+      "id": "gears",
+      "level": 7
+    },
+    {
+      "id": "merge",
+      "level": 8
+    },
+    {
+      "id": "tier5",
+      "level": 8
+    },
+    {
+      "id": "marketting",
+      "level": 9
+    },
+    {
+      "id": "x4_button",
+      "level": 10
+    },
+    {
+      "id": "tier6",
+      "level": 11
+    }
+  ],
   "gears": [
     {
       "id": "hat_common",
@@ -3741,7 +3793,7 @@
       "quantity": 1,
       "weight": 8500,
       "group": "A",
-      "tier1": 30,
+      "tier1": 0,
       "tier2": 40,
       "tier3": 20,
       "tier4": 10,
@@ -3754,7 +3806,7 @@
       "quantity": 2,
       "weight": 1000,
       "group": "B",
-      "tier1": 30,
+      "tier1": 0,
       "tier2": 35,
       "tier3": 20,
       "tier4": 10,
@@ -3767,7 +3819,7 @@
       "quantity": 3,
       "weight": 350,
       "group": "C",
-      "tier1": 25,
+      "tier1": 0,
       "tier2": 35,
       "tier3": 25,
       "tier4": 10,
@@ -3780,7 +3832,7 @@
       "quantity": 1,
       "weight": 120,
       "group": "D",
-      "tier1": 25,
+      "tier1": 0,
       "tier2": 35,
       "tier3": 25,
       "tier4": 10,
@@ -3793,7 +3845,7 @@
       "quantity": 2,
       "weight": 25,
       "group": "E",
-      "tier1": 20,
+      "tier1": 0,
       "tier2": 30,
       "tier3": 25,
       "tier4": 15,
@@ -3806,7 +3858,7 @@
       "quantity": 3,
       "weight": 5,
       "group": "F",
-      "tier1": 20,
+      "tier1": 0,
       "tier2": 30,
       "tier3": 25,
       "tier4": 15,
@@ -3819,7 +3871,7 @@
       "quantity": 1,
       "weight": 8500,
       "group": "A",
-      "tier1": 30,
+      "tier1": 0,
       "tier2": 35,
       "tier3": 20,
       "tier4": 10,
@@ -3832,7 +3884,7 @@
       "quantity": 2,
       "weight": 1000,
       "group": "B",
-      "tier1": 25,
+      "tier1": 0,
       "tier2": 35,
       "tier3": 25,
       "tier4": 10,
@@ -3845,7 +3897,7 @@
       "quantity": 3,
       "weight": 350,
       "group": "C",
-      "tier1": 20,
+      "tier1": 0,
       "tier2": 35,
       "tier3": 25,
       "tier4": 10,
@@ -3858,7 +3910,7 @@
       "quantity": 1,
       "weight": 120,
       "group": "D",
-      "tier1": 20,
+      "tier1": 0,
       "tier2": 30,
       "tier3": 25,
       "tier4": 15,
@@ -3871,7 +3923,7 @@
       "quantity": 2,
       "weight": 25,
       "group": "E",
-      "tier1": 20,
+      "tier1": 0,
       "tier2": 30,
       "tier3": 25,
       "tier4": 15,
@@ -3884,7 +3936,7 @@
       "quantity": 3,
       "weight": 5,
       "group": "F",
-      "tier1": 15,
+      "tier1": 0,
       "tier2": 30,
       "tier3": 25,
       "tier4": 15,
@@ -3897,8 +3949,8 @@
       "quantity": 1,
       "weight": 8500,
       "group": "A",
-      "tier1": 25,
-      "tier2": 35,
+      "tier1": 0,
+      "tier2": 0,
       "tier3": 25,
       "tier4": 10,
       "tier5": 5,
@@ -3910,8 +3962,8 @@
       "quantity": 2,
       "weight": 1000,
       "group": "B",
-      "tier1": 20,
-      "tier2": 35,
+      "tier1": 0,
+      "tier2": 0,
       "tier3": 25,
       "tier4": 15,
       "tier5": 0,
@@ -3923,8 +3975,8 @@
       "quantity": 3,
       "weight": 350,
       "group": "C",
-      "tier1": 20,
-      "tier2": 30,
+      "tier1": 0,
+      "tier2": 0,
       "tier3": 25,
       "tier4": 15,
       "tier5": 5,
@@ -3936,8 +3988,8 @@
       "quantity": 1,
       "weight": 120,
       "group": "D",
-      "tier1": 20,
-      "tier2": 30,
+      "tier1": 0,
+      "tier2": 0,
       "tier3": 25,
       "tier4": 15,
       "tier5": 5,
@@ -3949,8 +4001,8 @@
       "quantity": 2,
       "weight": 25,
       "group": "E",
-      "tier1": 15,
-      "tier2": 30,
+      "tier1": 0,
+      "tier2": 0,
       "tier3": 25,
       "tier4": 15,
       "tier5": 10,
@@ -3962,8 +4014,8 @@
       "quantity": 3,
       "weight": 5,
       "group": "F",
-      "tier1": 15,
-      "tier2": 30,
+      "tier1": 0,
+      "tier2": 0,
       "tier3": 25,
       "tier4": 15,
       "tier5": 10,
@@ -3975,8 +4027,8 @@
       "quantity": 1,
       "weight": 8500,
       "group": "A",
-      "tier1": 20,
-      "tier2": 35,
+      "tier1": 0,
+      "tier2": 0,
       "tier3": 25,
       "tier4": 15,
       "tier5": 0,
@@ -3988,8 +4040,8 @@
       "quantity": 2,
       "weight": 1000,
       "group": "B",
-      "tier1": 20,
-      "tier2": 30,
+      "tier1": 0,
+      "tier2": 0,
       "tier3": 25,
       "tier4": 15,
       "tier5": 5,
@@ -4001,8 +4053,8 @@
       "quantity": 3,
       "weight": 350,
       "group": "C",
-      "tier1": 15,
-      "tier2": 35,
+      "tier1": 0,
+      "tier2": 0,
       "tier3": 25,
       "tier4": 15,
       "tier5": 5,
@@ -4014,8 +4066,8 @@
       "quantity": 1,
       "weight": 120,
       "group": "D",
-      "tier1": 15,
-      "tier2": 30,
+      "tier1": 0,
+      "tier2": 0,
       "tier3": 25,
       "tier4": 15,
       "tier5": 10,
@@ -4027,8 +4079,8 @@
       "quantity": 2,
       "weight": 25,
       "group": "E",
-      "tier1": 15,
-      "tier2": 25,
+      "tier1": 0,
+      "tier2": 0,
       "tier3": 25,
       "tier4": 20,
       "tier5": 10,
@@ -4040,8 +4092,8 @@
       "quantity": 3,
       "weight": 5,
       "group": "F",
-      "tier1": 10,
-      "tier2": 25,
+      "tier1": 0,
+      "tier2": 0,
       "tier3": 25,
       "tier4": 20,
       "tier5": 10,
@@ -4053,9 +4105,9 @@
       "quantity": 1,
       "weight": 8500,
       "group": "A",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
       "tier4": 15,
       "tier5": 5,
       "tier6": 5
@@ -4066,9 +4118,9 @@
       "quantity": 2,
       "weight": 1000,
       "group": "B",
-      "tier1": 15,
-      "tier2": 35,
-      "tier3": 25,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
       "tier4": 15,
       "tier5": 5,
       "tier6": 5
@@ -4079,9 +4131,9 @@
       "quantity": 3,
       "weight": 350,
       "group": "C",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
       "tier4": 15,
       "tier5": 10,
       "tier6": 5
@@ -4092,9 +4144,9 @@
       "quantity": 1,
       "weight": 120,
       "group": "D",
-      "tier1": 15,
-      "tier2": 25,
-      "tier3": 25,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
       "tier4": 20,
       "tier5": 10,
       "tier6": 5
@@ -4105,9 +4157,9 @@
       "quantity": 2,
       "weight": 25,
       "group": "E",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
       "tier4": 20,
       "tier5": 10,
       "tier6": 10
@@ -4118,9 +4170,9 @@
       "quantity": 3,
       "weight": 5,
       "group": "F",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
       "tier4": 20,
       "tier5": 10,
       "tier6": 10
@@ -4131,9 +4183,9 @@
       "quantity": 1,
       "weight": 8500,
       "group": "A",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
       "tier4": 15,
       "tier5": 10,
       "tier6": 5
@@ -4144,9 +4196,9 @@
       "quantity": 2,
       "weight": 1000,
       "group": "B",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
       "tier4": 15,
       "tier5": 10,
       "tier6": 5
@@ -4157,9 +4209,9 @@
       "quantity": 3,
       "weight": 350,
       "group": "C",
-      "tier1": 15,
-      "tier2": 25,
-      "tier3": 25,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
       "tier4": 20,
       "tier5": 10,
       "tier6": 5
@@ -4170,9 +4222,9 @@
       "quantity": 1,
       "weight": 120,
       "group": "D",
-      "tier1": 10,
-      "tier2": 30,
-      "tier3": 25,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
       "tier4": 20,
       "tier5": 10,
       "tier6": 5
@@ -4183,9 +4235,9 @@
       "quantity": 2,
       "weight": 25,
       "group": "E",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
       "tier4": 20,
       "tier5": 10,
       "tier6": 10
@@ -4196,9 +4248,9 @@
       "quantity": 3,
       "weight": 5,
       "group": "F",
-      "tier1": 10,
-      "tier2": 20,
-      "tier3": 30,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
       "tier4": 20,
       "tier5": 10,
       "tier6": 10
@@ -4209,10 +4261,10 @@
       "quantity": 1,
       "weight": 8500,
       "group": "A",
-      "tier1": 15,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
+      "tier4": 0,
       "tier5": 10,
       "tier6": 5
     },
@@ -4222,10 +4274,10 @@
       "quantity": 2,
       "weight": 1000,
       "group": "B",
-      "tier1": 15,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
+      "tier4": 0,
       "tier5": 10,
       "tier6": 5
     },
@@ -4235,10 +4287,10 @@
       "quantity": 3,
       "weight": 350,
       "group": "C",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
+      "tier4": 0,
       "tier5": 10,
       "tier6": 10
     },
@@ -4248,10 +4300,10 @@
       "quantity": 1,
       "weight": 120,
       "group": "D",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
+      "tier4": 0,
       "tier5": 10,
       "tier6": 10
     },
@@ -4261,10 +4313,10 @@
       "quantity": 2,
       "weight": 25,
       "group": "E",
-      "tier1": 10,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
+      "tier4": 0,
       "tier5": 15,
       "tier6": 10
     },
@@ -4274,10 +4326,10 @@
       "quantity": 3,
       "weight": 5,
       "group": "F",
-      "tier1": 5,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
+      "tier4": 0,
       "tier5": 15,
       "tier6": 15
     },
@@ -4287,10 +4339,10 @@
       "quantity": 1,
       "weight": 8500,
       "group": "A",
-      "tier1": 15,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
+      "tier4": 0,
       "tier5": 10,
       "tier6": 5
     },
@@ -4300,10 +4352,10 @@
       "quantity": 2,
       "weight": 1000,
       "group": "B",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
+      "tier4": 0,
       "tier5": 10,
       "tier6": 10
     },
@@ -4313,10 +4365,10 @@
       "quantity": 3,
       "weight": 350,
       "group": "C",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
+      "tier4": 0,
       "tier5": 10,
       "tier6": 10
     },
@@ -4326,10 +4378,10 @@
       "quantity": 1,
       "weight": 120,
       "group": "D",
-      "tier1": 10,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
+      "tier4": 0,
       "tier5": 15,
       "tier6": 10
     },
@@ -4339,10 +4391,10 @@
       "quantity": 2,
       "weight": 25,
       "group": "E",
-      "tier1": 5,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
+      "tier4": 0,
       "tier5": 15,
       "tier6": 15
     },
@@ -4352,10 +4404,10 @@
       "quantity": 3,
       "weight": 5,
       "group": "F",
-      "tier1": 5,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
+      "tier4": 0,
       "tier5": 15,
       "tier6": 15
     },
@@ -4365,11 +4417,11 @@
       "quantity": 1,
       "weight": 8500,
       "group": "A",
-      "tier1": 10,
-      "tier2": 25,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
+      "tier4": 0,
+      "tier5": 0,
       "tier6": 10
     },
     {
@@ -4378,11 +4430,11 @@
       "quantity": 2,
       "weight": 1000,
       "group": "B",
-      "tier1": 10,
-      "tier2": 20,
-      "tier3": 30,
-      "tier4": 20,
-      "tier5": 10,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
+      "tier4": 0,
+      "tier5": 0,
       "tier6": 10
     },
     {
@@ -4391,11 +4443,11 @@
       "quantity": 3,
       "weight": 350,
       "group": "C",
-      "tier1": 10,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
+      "tier4": 0,
+      "tier5": 0,
       "tier6": 10
     },
     {
@@ -4404,11 +4456,11 @@
       "quantity": 1,
       "weight": 120,
       "group": "D",
-      "tier1": 5,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
+      "tier4": 0,
+      "tier5": 0,
       "tier6": 15
     },
     {
@@ -4417,11 +4469,11 @@
       "quantity": 2,
       "weight": 25,
       "group": "E",
-      "tier1": 5,
-      "tier2": 20,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
+      "tier4": 0,
+      "tier5": 0,
       "tier6": 15
     },
     {
@@ -4430,11 +4482,11 @@
       "quantity": 3,
       "weight": 5,
       "group": "F",
-      "tier1": 5,
-      "tier2": 15,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 15,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
+      "tier4": 0,
+      "tier5": 0,
       "tier6": 20
     }
   ],
@@ -5261,6 +5313,13 @@
     },
     {
       "id": "reward_common_chest",
+      "group": "A",
+      "weights": 20,
+      "amount": 1,
+      "content": "common_shard"
+    },
+    {
+      "id": "reward_common_chest",
       "group": "B",
       "weights": 1,
       "amount": 50,
@@ -5277,6 +5336,13 @@
       "id": "reward_common_chest",
       "group": "B",
       "weights": 1
+    },
+    {
+      "id": "reward_common_chest",
+      "group": "A",
+      "weights": 1,
+      "amount": 1,
+      "content": "common_shard"
     },
     {
       "id": "reward_common_chest",
@@ -5379,6 +5445,13 @@
     },
     {
       "id": "reward_rare_chest",
+      "group": "A",
+      "weights": 20,
+      "amount": 1,
+      "content": "rare_shard"
+    },
+    {
+      "id": "reward_rare_chest",
       "group": "B",
       "weights": 1,
       "amount": 50,
@@ -5395,6 +5468,13 @@
       "id": "reward_rare_chest",
       "group": "B",
       "weights": 1
+    },
+    {
+      "id": "reward_rare_chest",
+      "group": "B",
+      "weights": 1,
+      "amount": 1,
+      "content": "rare_shard"
     },
     {
       "id": "reward_rare_chest",
@@ -5497,6 +5577,13 @@
     },
     {
       "id": "reward_epic_chest",
+      "group": "A",
+      "weights": 20,
+      "amount": 1,
+      "content": "epic_shard"
+    },
+    {
+      "id": "reward_epic_chest",
       "group": "B",
       "weights": 1,
       "amount": 50,
@@ -5513,6 +5600,13 @@
       "id": "reward_epic_chest",
       "group": "B",
       "weights": 1
+    },
+    {
+      "id": "reward_epic_chest",
+      "group": "B",
+      "weights": 20,
+      "amount": 1,
+      "content": "rare_shard"
     },
     {
       "id": "reward_epic_chest",
@@ -5608,6 +5702,13 @@
     },
     {
       "id": "reward_legendary_chest",
+      "group": "A",
+      "weights": 20,
+      "amount": 1,
+      "content": "legendary_shard"
+    },
+    {
+      "id": "reward_legendary_chest",
       "group": "B",
       "weights": 1,
       "amount": 50,
@@ -5645,6 +5746,13 @@
       "weights": 1,
       "amount": 1,
       "content": "epic_shard"
+    },
+    {
+      "id": "reward_legendary_chest",
+      "group": "C",
+      "weights": 1,
+      "amount": 1,
+      "content": "legendary_gear"
     },
     {
       "id": "reward_legendary_chest",
@@ -7891,52 +7999,62 @@
     {
       "id": "level1",
       "config": "Tutorial_1",
-      "reward": "1_common_chest"
+      "reward": "1_common_chest",
+      "topX": 2
     },
     {
       "id": "level2",
       "config": "Tutorial_2",
-      "reward": "2_common_chest"
+      "reward": "2_common_chest",
+      "topX": 2
     },
     {
       "id": "level3",
       "config": "Tutorial_3",
-      "reward": "3_rare_chest"
+      "reward": "3_rare_chest",
+      "topX": 2
     },
     {
       "id": "level4",
       "config": "Bottle_Intro",
-      "reward": "4_epic_chest"
+      "reward": "4_epic_chest",
+      "topX": 2
     },
     {
       "id": "level5",
       "config": "Bottle_2_Intense",
-      "reward": "1_legendary_chest"
+      "reward": "1_legendary_chest",
+      "topX": 2
     },
     {
       "id": "level6",
       "config": "Bottle_3_Slow",
-      "reward": "1_legendary_chest"
+      "reward": "1_legendary_chest",
+      "topX": 1
     },
     {
       "id": "level7",
       "config": "Bottle_4_Intense",
-      "reward": "1_legendary_chest"
+      "reward": "1_legendary_chest",
+      "topX": 1
     },
     {
       "id": "level8",
       "config": "Nenuphar_Intro",
-      "reward": "1_legendary_chest"
+      "reward": "1_legendary_chest",
+      "topX": 1
     },
     {
       "id": "level9",
       "config": "Nest_Intro",
-      "reward": "1_legendary_chest"
+      "reward": "1_legendary_chest",
+      "topX": 1
     },
     {
       "id": "level10",
       "config": "Nest_1_Normal",
-      "reward": "1_legendary_chest"
+      "reward": "1_legendary_chest",
+      "topX": 1
     }
   ]
 }

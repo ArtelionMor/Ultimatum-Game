@@ -13,6 +13,7 @@
 import { $, el, sprite, openOverlay } from "./helpers.js";
 import { openBuildingPanel } from "./building.js";
 import { openCodexCustomer } from "./codex.js";
+import { Meta } from "./meta.js";
 
 let Game = null;
 let current = null;   // focused resource id
@@ -101,8 +102,8 @@ function renderResourcePanel() {
     body.appendChild(cwrap);
   }
 
-  // --- refine action (in-game only) ---
-  if (context.allowRefine && Game.cfg.convert[rid]) {
+  // --- refine action (in-game only, hidden until the merge feature unlocks) ---
+  if (context.allowRefine && Game.cfg.convert[rid] && Meta.featureUnlocked("merge")) {
     const btn = el("button", "cv-btn", "🔁 Merge");
     btn.onclick = () => { closeResource(); Game.openMerge(); };
     body.appendChild(btn);

@@ -48,6 +48,7 @@ function sellTo(game, c, resId, qty) {
   const tiers = Object.keys(m).map(Number).sort((a, b) => b - a); // highest tier first
   for (const t of tiers) { while (qty > 0 && m[t] > 0) { m[t]--; qty--; gain += game.tierInfo(resId, t).price; } }
   c.money += gain; c.salesThisRound += gain;
+  c.revenue += gain; // revenus cumulés : LA métrique du classement (dépenser ne fait pas reculer)
   c.unitsThisRound = (c.unitsThisRound || 0) + (asked - qty); // parts de marché en volume (camembert de fin de round)
   if (c === game.player) game._invDirty = true;
   return gain;
@@ -71,7 +72,7 @@ export function spawnCustomer(game) {
   requestAnimationFrame(() => cust.classList.add("falling"));
 
   setTimeout(() => {
-    const eligible = game.competitors.filter((c) => !c.eliminated && game.stockOf(c, need.resId) >= need.qty);
+    const eligible = game.competitors.filter((c) => game.stockOf(c, need.resId) >= need.qty);
     if (eligible.length) {
       const winner = chooseShop(game, eligible, need.resId);
       const gain = sellTo(game, winner, need.resId, need.qty);

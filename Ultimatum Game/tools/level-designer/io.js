@@ -24,7 +24,8 @@ export const spriteUrl = (id, folder = "Ressources") => (id ? `/web/sprites/${fo
 // normalize() crash — but the gaps are surfaced so a broken *game* isn't hidden.
 // `upgrades`/`upgrade_profile` dropped: the game reads the renamed sections
 // (upgrade_machines_profile / upgrade_character_profile) with fallback since 2026-07-16.
-const UNUSED_BY_TOOL = ["general", "inputs", "machines", "purshases", "tax", "unlock_config", "world_config", "world_level", "rewards", "gears", "characters", "roundIncome"];
+// "tax" dropped 2026-07-19: the tax feature was cut from the game, normalize() no longer reads it.
+const UNUSED_BY_TOOL = ["general", "inputs", "machines", "purshases", "unlock_config", "world_config", "world_level", "rewards", "gears", "characters", "roundIncome"];
 // These sections no longer live in the sheet at all: the tool generates them
 // (they ship to the game as web/config_levels.json). Absent = normal, not a gap.
 const GENERATED_BY_TOOL = ["market_config", "competitors_behavior", "competitors_buffs"];

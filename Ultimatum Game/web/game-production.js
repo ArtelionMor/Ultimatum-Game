@@ -28,7 +28,7 @@ function hasInputs(game, p, def) { return def.inputs.every((i) => game.stockOf(p
 function consumeInputs(game, p, def) { def.inputs.forEach((i) => { let need = i.quantity; const m = p.stock[i.type]; for (const t of Object.keys(m).sort((a, b) => a - b)) { while (need > 0 && m[t] > 0) { m[t]--; need--; } } }); if (p === game.player) game._invDirty = true; }
 
 export function tickProduction(game, dt) {
-  game.competitors.forEach((p) => { if (!p.eliminated) tickOne(game, dt, p); });
+  game.competitors.forEach((p) => tickOne(game, dt, p));
 }
 
 function tickOne(game, dt, p) {
@@ -53,7 +53,9 @@ function tickOne(game, dt, p) {
       const out = pickOutput(game.cfg, def.outputs, m.level);
       if (!out) return;                   // resource with no drop table: skip rather than throw
       if (converts) { if (!hasInputs(game, p, def)) return; consumeInputs(game, p, def); }
-      const tier = rollTier(out.tiers);   // one tier for the whole spawn (matches the "+N Tier T" popup)
+      // one tier for the whole spawn (matches the "+N Tier T" popup); drops above
+      // the feature-unlock cap are clamped to the best unlocked tier, same quantity
+      const tier = Math.min(rollTier(out.tiers), game.maxUnlockedTier());
       // characters' "2x proba" (affinity + gear for the player, flat buff for a bot)
       const doubled = Math.random() < crewProba2x(m) + buffProba2x(p);
       const qty = out.quantity * (doubled ? 2 : 1);

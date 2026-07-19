@@ -53,51 +53,27 @@ img { image-rendering: pixelated; }
 .hud-item { display: flex; align-items: center; gap: 5px; white-space: nowrap; }
 #hud-money { color: var(--accent); font-size: 18px; }
 .hud-icon { width: 22px; height: 22px; }
-#hud-phase { color: var(--accent-2); font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
 #hud-timer { color: var(--text); min-width: 38px; justify-content: flex-end; }
 #hud-timer.urgent { color: var(--danger); }
 .clickable { cursor: pointer; }
-#hud-tax {
+#hud-rank {
   color: var(--text); font-size: 13px; font-weight: bold;
   background: var(--bg-card); border: 1px solid var(--accent);
   border-radius: 8px; padding: 4px 9px; cursor: pointer;
   box-shadow: 0 1px 0 rgba(0,0,0,.25);
   transition: background .15s ease, transform .08s ease;
 }
-#hud-tax::after { content: "›"; margin-left: 5px; color: var(--accent); font-weight: bold; }
-#hud-tax:hover { background: var(--bg-card-active); }
-#hud-tax:active { transform: scale(.93); }
-#hud-tax.urgent { color: var(--danger); border-color: var(--danger); animation: wpPulse .8s ease-in-out infinite; }
-#hud-tax.urgent::after { color: var(--danger); }
+#hud-rank::after { content: "›"; margin-left: 5px; color: var(--accent); font-weight: bold; }
+#hud-rank:hover { background: var(--bg-card-active); }
+#hud-rank:active { transform: scale(.93); }
+#hud-rank.urgent { color: var(--danger); border-color: var(--danger); animation: wpPulse .8s ease-in-out infinite; }
+#hud-rank.urgent::after { color: var(--danger); }
 
-/* ---------- Tax & waves info screen ---------- */
-.tx-topline { color: var(--text-dim); font-size: 14px; margin-bottom: 10px; }
-.tx-topline b { color: var(--text); }
-.tx-progress { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-bottom: 18px; }
-.tx-dot {
-  width: 20px; height: 20px; border-radius: 6px;
-  background: var(--bg-card); border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; line-height: 1;
-}
-.tx-dot.past { opacity: .4; }
-.tx-dot.tax { border-color: var(--accent); }
-.tx-dot.now { outline: 2px solid var(--accent-2); outline-offset: 1px; }
-.tx-dot.next { background: var(--accent); border-color: var(--accent); }
-.tx-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; text-align: left; }
-.tx-card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 10px; }
-.tx-card-title { color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: .5px; font-size: 13px; }
-.tx-when { color: var(--text-dim); font-size: 13px; }
-.tx-rows { display: flex; flex-direction: column; gap: 4px; }
-.tx-row { display: flex; justify-content: space-between; gap: 20px; font-size: 15px; }
-.tx-row .ok { color: var(--ok); }
-.tx-row .danger { color: var(--danger); }
-.tx-proj { border-top: 1px solid var(--border); margin-top: 6px; padding-top: 8px; }
-.tx-prepay { margin-top: 14px; text-align: center; }
-.tx-prepay-line { font-size: 14px; margin-bottom: 10px; }
-.tx-save { color: var(--ok); font-size: 12px; display: block; margin-top: 2px; }
-.tx-prepay button { background: var(--accent); color: #2a1e00; width: 100%; }
-.tx-warn { color: var(--danger); font-size: 12px; margin-top: 6px; }
+/* ---------- Standings info screen (rank chip) ---------- */
+.rk-goal { color: var(--text-dim); font-size: 14px; margin-bottom: 12px; }
+.rk-goal b { color: var(--accent); }
+.rk-list { display: flex; flex-direction: column; gap: 6px; }
+#rankinfo-close { margin-top: 16px; }
 /* ---------- Market-share donut (results overlay) ---------- */
 #results-market { margin-bottom: 12px; }
 .pie-toggle { display: flex; justify-content: center; gap: 0; margin-bottom: 10px; }
@@ -132,15 +108,6 @@ img { image-rendering: pixelated; }
 .pie-leg-pct { color: var(--text-dim); min-width: 32px; text-align: right; }
 .pie-empty { text-align: center; color: var(--text-dim); font-size: 12px; padding: 8px 0; }
 
-.tx-last {
-  color: var(--accent-2); font-size: 12px; font-weight: bold;
-  border: 1px dashed var(--accent-2); border-radius: 8px;
-  padding: 5px 8px; margin-bottom: 10px;
-}
-.tx-paid { color: var(--ok); font-weight: bold; padding: 8px; text-align: center; }
-.tx-none { color: var(--ok); font-weight: bold; padding: 8px; text-align: center; }
-#taxinfo-close { margin-top: 16px; }
-
 /* ---------- Wave banner ---------- */
 /* Un seul bandeau, deux états : la vague À VENIR (prep, doré) et la vague EN COURS
    (teal). Tout ce qui est teinté suit --wp-accent, donc le bandeau entier bascule
@@ -163,7 +130,6 @@ img { image-rendering: pixelated; }
   border-radius: 999px; padding: 1px 7px;
 }
 #wave-preview.wp-current .wp-state { background: color-mix(in srgb, var(--accent-2) 18%, transparent); }
-.wp-meta { color: var(--text-dim); }
 .wp-countdown { margin-left: auto; font-weight: bold; color: var(--wp-accent); }
 .wp-countdown.imminent { color: var(--danger); animation: wpPulse .7s ease-in-out infinite; }
 @keyframes wpPulse { 0%,100%{ opacity: 1; } 50%{ opacity: .4; } }
@@ -174,18 +140,6 @@ img { image-rendering: pixelated; }
   padding: 2px 7px 2px 4px; font-size: 13px; font-weight: bold;
 }
 .wp-chip img { width: 44px; height: 44px; }
-
-/* ---------- Phase banner ---------- */
-#phase-banner {
-  flex: 0 0 auto;
-  text-align: center;
-  font-size: 13px;
-  font-weight: bold;
-  color: var(--text-dim);
-  padding: 6px;
-  background: rgba(0,0,0,.15);
-  min-height: 28px;
-}
 
 /* ---------- Content (scrollable) ---------- */
 #content {
@@ -329,9 +283,6 @@ button.sell { background: var(--ok); color: #03210a; }
 }
 @keyframes pop { from { transform: scale(.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .panel h2 { margin-bottom: 18px; color: var(--accent); }
-.tax-row { display: flex; justify-content: space-between; gap: 30px; padding: 6px 0; font-size: 16px; }
-.tax-amount { color: var(--danger); font-weight: bold; }
-.tax-after { border-top: 1px solid var(--border); margin-top: 6px; padding-top: 10px; color: var(--accent); font-weight: bold; }
 .big-icon { width: 64px; height: 64px; margin-bottom: 8px; }
 .final-score { font-size: 36px; font-weight: bold; color: var(--accent); }
 #gameover-rank { color: var(--text-dim); margin: 10px 0 20px; }
@@ -743,8 +694,6 @@ button.codex-row:active { border-color: var(--accent); }
 .result-row .rsales { color: var(--ok); font-size: 12px; }
 .result-row .rmoney { color: var(--accent); display: flex; align-items: center; gap: 3px; font-weight: bold; }
 .result-row .rmoney img { width: 14px; height: 14px; }
-.result-row.eliminated { opacity: .6; border-color: var(--danger); }
-.result-row .rx { grid-column: 1 / -1; color: var(--danger); font-weight: bold; font-size: 11px; text-align: center; }
 
 /* ---------- Competitor info widget ---------- */
 .counter { cursor: pointer; }

@@ -57,16 +57,6 @@ export function normalize(raw) {
   });
 
   // tax profiles: one row per profile, "round N" columns hold the cost (0 = no tax)
-  const taxProfiles = {};
-  raw.tax.forEach((t) => {
-    const prof = {};
-    for (const k in t) {
-      const m = /^round (\d+)$/.exec(k);
-      if (m && t[k] > 0) prof[+m[1]] = t[k];
-    }
-    taxProfiles[t.id] = prof;
-  });
-
   // unlock profiles: which machines exist in a level and the round they unlock
   const unlockProfiles = {};
   raw.unlock_config.forEach((u) => { (unlockProfiles[u.id] = unlockProfiles[u.id] || {})[u.machine] = u.unlock; });
@@ -76,13 +66,14 @@ export function normalize(raw) {
   raw.world_config.forEach((w) => {
     const wc = (worldConfigs[w.id] = worldConfigs[w.id] || {
       id: w.id, competitors: [], nbOfRounds: w.nbOfRounds,
-      taxConfig: w.taxConfig, marketConfig: w.marketConfig, unlockConfig: w.unlockConfig,
+      marketConfig: w.marketConfig, unlockConfig: w.unlockConfig,
     });
     if (w.competitors) wc.competitors.push(w.competitors);
   });
 
-  // ordered level list (menu order = sheet order)
-  const worldLevels = raw.world_level.map((l) => ({ id: l.id, config: l.config, reward: l.reward }));
+  // ordered level list (menu order = sheet order); topX = rank the player must
+  // reach (1 = finish first, 2 = top 2…) to win the level on cumulative revenue
+  const worldLevels = raw.world_level.map((l) => ({ id: l.id, config: l.config, reward: l.reward, topX: l.topX || 1 }));
 
   // rewards: rolls grouped by reward id then group letter; a row without content = "nothing"
   const rewards = {};
@@ -229,7 +220,7 @@ export function normalize(raw) {
 
   return {
     g, resources, resourceOrder, maxTier, machines, purchases, roundIncome, competitors, convert, slots, customerSprites, customerDefs, customerOrder,
-    marketProfiles, taxProfiles, unlockProfiles, worldConfigs, worldLevels, rewards, gears, characters, characterOrder, upgradeProfiles,
+    marketProfiles, unlockProfiles, worldConfigs, worldLevels, rewards, gears, characters, characterOrder, upgradeProfiles,
     behaviorProfiles, buffProfiles, progressProfiles, characterSlots, featureUnlocks,
   };
 }
@@ -238,7 +229,7 @@ export function normalize(raw) {
 // Level resolution: world_level -> effective per-game config
 // ============================================================
 // Returns everything the engine needs to run one level: rounds, market rows,
-// tax schedule, machine unlocks and the exact bot lineup.
+// machine unlocks, the exact bot lineup and the topX win condition.
 export function resolveLevel(cfg, levelId) {
   const level = cfg.worldLevels.find((l) => l.id === levelId);
   if (!level) throw new Error("Unknown level: " + levelId);
@@ -246,7 +237,6 @@ export function resolveLevel(cfg, levelId) {
   if (!wc) throw new Error("Unknown world config: " + level.config);
   // same id chain as the bots below: marketConfig column, else the ids themselves
   const market = cfg.marketProfiles[wc.marketConfig] || cfg.marketProfiles[level.id] || cfg.marketProfiles[wc.id] || {};
-  const tax = cfg.taxProfiles[wc.taxConfig] || {};
   const unlocks = cfg.unlockProfiles[wc.unlockConfig] || {};
   // behavior/buffs are scoped by world_level id: the same bot can play
   // differently in every level (competitors_behavior v2). Fallbacks on the
@@ -264,5 +254,5 @@ export function resolveLevel(cfg, levelId) {
   // the market profile defines the level's length; sheet nbOfRounds is only a fallback
   const rounds = Object.keys(market).map(Number);
   const totalRounds = rounds.length ? Math.max(...rounds) : (wc.nbOfRounds || 0);
-  return { id: level.id, reward: level.reward, totalRounds, market, tax, unlocks, bots };
+  return { id: level.id, reward: level.reward, totalRounds, market, unlocks, bots, topX: level.topX || 1 };
 }

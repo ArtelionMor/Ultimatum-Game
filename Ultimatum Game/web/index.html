@@ -32,17 +32,13 @@
   <div id="app">
     <header id="hud">
       <div class="hud-item" id="hud-money"><img class="hud-icon" src="sprites/UI/Coins.png" alt="$" /><span id="money">0</span></div>
-      <div class="hud-item" id="hud-round">R <span id="round">0</span>/<span id="total-rounds">0</span></div>
-      <div class="hud-item clickable" id="hud-tax" title="Impôts & vagues"><span id="tax-chip">🏛️ —</span></div>
-      <div class="hud-item" id="hud-phase"><span id="phase-label">—</span></div>
+      <div class="hud-item clickable" id="hud-rank" title="Classement"><span id="rank-chip">🏆 —</span></div>
       <div class="hud-item" id="hud-timer"><span id="timer">0</span></div>
       <div class="hud-item clickable" id="hud-home" title="Retour au menu">🏠</div>
     </header>
 
     <!-- Next-wave demand menu -->
     <div id="wave-preview"></div>
-
-    <div id="phase-banner"></div>
 
     <main id="content">
       <!-- MARKET (top) -->
@@ -65,27 +61,17 @@
     </main>
 
     <footer id="worker-bar">
-      <div id="worker-hint">Touche un ouvrier puis une machine</div>
+      <div id="worker-hint"></div>
       <div id="worker-icons"></div>
     </footer>
   </div>
 
-  <!-- Tax & waves info screen -->
-  <div id="taxinfo-overlay" class="overlay hidden">
+  <!-- Standings info screen (tap the HUD rank chip) -->
+  <div id="rankinfo-overlay" class="overlay hidden">
     <div class="panel wide">
-      <h2>🏛️ Impôts &amp; Vagues</h2>
-      <div id="taxinfo-body"></div>
-      <button id="taxinfo-close" class="ghost">Fermer</button>
-    </div>
-  </div>
-
-  <!-- Tax overlay -->
-  <div id="tax-overlay" class="overlay hidden">
-    <div class="panel">
-      <h2 id="tax-title">Impôts</h2>
-      <div class="tax-row"><span>Avant</span><span id="tax-before">0</span></div>
-      <div class="tax-row tax-amount"><span>Impôt</span><span id="tax-amount">0</span></div>
-      <div class="tax-row tax-after"><span>Après</span><span id="tax-after">0</span></div>
+      <h2>🏆 Classement</h2>
+      <div id="rankinfo-body"></div>
+      <button id="rankinfo-close" class="ghost">Fermer</button>
     </div>
   </div>
 

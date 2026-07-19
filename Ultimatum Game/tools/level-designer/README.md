@@ -64,9 +64,10 @@ l'économie sur des graphiques, et l'outil génère les lignes exactes que le je
 - `competitors_behavior` : les poids des bots.
 
 **Toujours dans la sheet (source de vérité) :** resources, machines/inputs,
-upgrades, purshases, tax, unlock_config, **world_config / world_level** (qui
-référencent les ids générés), competitors (identités), customers, rewards,
-gears, characters, general, outputs…
+upgrades, purshases, unlock_config, **world_config / world_level** (qui
+référencent les ids générés — `world_level.topX` = rang à atteindre pour
+gagner, les impôts ont été coupés du jeu 2026-07-19), competitors (identités),
+customers, rewards, gears, characters, general, outputs…
 
 ✅ **Le jeu consomme le format v2** (migré 2026-07-16). `normalize()` indexe
 `behaviorProfiles[config][bot][round]` + `buffProfiles[config][bot]` ;
