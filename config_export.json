@@ -2269,16 +2269,16 @@
       "level": 2
     },
     {
+      "id": "storage",
+      "level": 2
+    },
+    {
       "id": "upgrade_machine",
       "level": 3
     },
     {
       "id": "tier3",
       "level": 3
-    },
-    {
-      "id": "storage",
-      "level": 4
     },
     {
       "id": "x2_button",
