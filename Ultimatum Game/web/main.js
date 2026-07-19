@@ -19,6 +19,9 @@ import { tickProduction } from "./game-production.js";
 import { renderMethods } from "./game-render.js";
 import { cheatMethods } from "./game-cheats.js";
 
+// Player-facing names of feature_unlock ids (victory screen announcement).
+const FEATURE_LABEL = { x2_button: "Vitesse ×2 débloquée !", x4_button: "Vitesse ×4 débloquée !" };
+
 // ============================================================
 // Game
 // ============================================================
@@ -110,7 +113,7 @@ const Game = {
     if (!this.lastTime) this.lastTime = t;
     let dt = (t - this.lastTime) / 1000; this.lastTime = t;
     if (dt > 0.2) dt = 0.2;
-    dt *= (this.timeScale || 1); // cheat console time acceleration
+    dt *= (this.timeScale || 1); // time acceleration (HUD speed button / cheat console)
     if (this.state === S.Play) this.updatePlay(dt);
     requestAnimationFrame((t2) => this.loop(t2));
   },
@@ -215,6 +218,8 @@ const Game = {
     const g = this.cfg.g;
     this.round = 0;
     this.selectedWorker = null;
+    this.timeScale = 1;           // each run starts at normal speed
+    this.refreshSpeedBtn();
     this._taxVictory = false;   // victoire par dernier impôt réglé (game-tax.js)
     const pav = Meta.profileSprite();
     this.player = {
@@ -414,12 +419,27 @@ const Game = {
     // Victory rewards (once per one-shot level, every time in endless).
     const rewards = $("#gameover-rewards"); rewards.innerHTML = "";
     if (won && this.levelCfg) {
+      const firstClear = !Meta.isEndless(this.levelCfg.id) && !Meta.isCompleted(this.levelCfg.id);
       const drops = Meta.completeLevel(this.levelCfg.id);
       if (drops.length) {
         rewards.appendChild(el("div", "cp-section", "Récompenses"));
         const list = el("div", "go-drops");
         renderDropList(list, drops);
         rewards.appendChild(list);
+      }
+      // Feature unlocks presented like rewards ("finish level N -> feature").
+      if (firstClear) {
+        const feats = Meta.featuresUnlockedBy(this.levelCfg.id);
+        if (feats.length) {
+          rewards.appendChild(el("div", "cp-section", "Débloqué"));
+          const list = el("div", "go-drops");
+          feats.forEach((f) => {
+            const node = el("div", "drop-item legendary");
+            node.innerHTML = `<span class="drop-ico">🚀</span><span>${FEATURE_LABEL[f] || f}</span>`;
+            list.appendChild(node);
+          });
+          rewards.appendChild(list);
+        }
       }
     }
     // Replay only when the level is still playable (lost one-shot, or endless).
@@ -433,6 +453,7 @@ const Game = {
 Object.assign(Game, renderMethods, cheatMethods);
 
 $("#replay-btn").addEventListener("click", () => { $("#gameover-overlay").classList.add("hidden"); Game.transitionTo(S.Setup); });
+$("#speed-sel").addEventListener("click", (e) => { const b = e.target.closest("button[data-speed]"); if (b) Game.setGameSpeed(+b.dataset.speed); });
 $("#gameover-menu-btn")?.addEventListener("click", () => Game.toMenu());
 // Home button: confirm before abandoning a running level.
 $("#hud-home")?.addEventListener("click", () => {

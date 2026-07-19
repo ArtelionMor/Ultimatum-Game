@@ -145,6 +145,12 @@ export function normalize(raw) {
   });
   characterSlots.sort((a, b) => a.order - b.order);
 
+  // feature unlocks: {id, level} — the feature turns on once the level with
+  // that 1-based number on the trophy road is COMPLETED (announced as a reward
+  // on that level's victory screen).
+  const featureUnlocks = {};
+  (raw.feature_unlock || []).forEach((f) => { if (f.id) featureUnlocks[f.id] = f.level || 0; });
+
   // upgrade profiles: shard cost to reach each level (level 1 = unlock cost)
   const upgradeProfiles = {};
   (raw.upgrade_character_profile || raw.upgrade_profile || []).forEach((u) => { (upgradeProfiles[u.id] = upgradeProfiles[u.id] || {})[u.level] = { amount: u.amount, content: u.content }; });
@@ -224,7 +230,7 @@ export function normalize(raw) {
   return {
     g, resources, resourceOrder, maxTier, machines, purchases, roundIncome, competitors, convert, slots, customerSprites, customerDefs, customerOrder,
     marketProfiles, taxProfiles, unlockProfiles, worldConfigs, worldLevels, rewards, gears, characters, characterOrder, upgradeProfiles,
-    behaviorProfiles, buffProfiles, progressProfiles, characterSlots,
+    behaviorProfiles, buffProfiles, progressProfiles, characterSlots, featureUnlocks,
   };
 }
 
