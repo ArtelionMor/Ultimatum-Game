@@ -730,6 +730,32 @@
       "machine_3": "carrotFarm"
     }
   ],
+  "ressources_tier": [
+    {
+      "id": "Tier1",
+      "color": "EFEFEF"
+    },
+    {
+      "id": "Tier2",
+      "color": "ACFF47"
+    },
+    {
+      "id": "Tier3",
+      "color": "00C8FF"
+    },
+    {
+      "id": "Tier4",
+      "color": "D400FF"
+    },
+    {
+      "id": "Tier5",
+      "color": "EEFF00"
+    },
+    {
+      "id": "Tier6",
+      "color": "FF0000"
+    }
+  ],
   "character_slot": [
     {
       "id": "slot_tennisBall",
@@ -2540,7 +2566,7 @@
     },
     {
       "id": "startingStorage",
-      "value": 20
+      "value": 5
     },
     {
       "id": "minimalPercentage",

@@ -59,32 +59,14 @@ export const renderMethods = {
     body.appendChild(list);
   },
 
-  // Resources the player's current machines can produce (output resource IDs).
-  producibleResources() {
-    const set = new Set();
-    this.player.machines.forEach((m) => { const def = this.machineDef(m.id); if (def) set.add(def.outputs); });
-    return set;
-  },
-
-  // True if a machine staffed with enough workers to run outputs this resource.
-  isStaffedFor(rid) {
-    return this.player.machines.some((m) => {
-      const def = this.machineDef(m.id);
-      return def && def.outputs === rid && m.crew.length >= this.lvl(m).workersRequired;
-    });
-  },
-
-  // --- inventory grid: resources (rows) × tiers (columns) ---
+  // --- inventory: one tile per stored UNIT, background = its tier's color
+  // (cfg.tierColors, sheet tab ressources_tier). "7/20" in the header is the
+  // storage cap — the tile count IS the stock, no per-cell numbers anymore.
   renderInventory() {
     const bar = $("#inventory-bar"); bar.innerHTML = "";
-    this._invCells = {}; this._invRow = {};
-    const maxT = this.maxUnlockedTier(); // locked tier columns simply don't exist yet
-    bar.style.setProperty("--tiers", maxT);
-
     const top = el("div", "inv-top");
     const cap = el("span", "inv-cap", ""); cap.id = "inv-cap";
-    // One Merge entry point for the whole inventory (the old per-row 🔁 badge was
-    // absolutely positioned outside its row and clipped on mobile). It glows via
+    // One Merge entry point for the whole inventory. It glows via
     // refreshInventory() whenever at least one merge is currently possible.
     const merge = el("button", "inv-merge-btn", "🔁 Merge"); merge.id = "inv-merge";
     merge.onclick = () => this.openMerge();
@@ -92,58 +74,43 @@ export const renderMethods = {
     top.append(el("span", "inv-top-label", "Inventaire"), merge, cap);
     bar.appendChild(top);
 
-    const head = el("div", "inv-grid-head");
-    head.appendChild(el("div", "inv-hcorner", ""));
-    for (let t = 1; t <= maxT; t++) head.appendChild(el("div", "inv-hcell", "T" + t));
-    bar.appendChild(head);
-
     const scroll = el("div", "inv-scroll");
     chainOverscroll(scroll);  // at the list's top/bottom, keep the swipe scrolling the page
-    const producible = this.producibleResources();
-    this.cfg.resourceOrder.forEach((rid) => {
-      if (!producible.has(rid)) return;
-      const row = el("div", "inv-row");
-      const rowHead = el("div", "inv-row-head");
-      const icon = this.tierImg(rid, this.bestTier(this.player, rid) || 1); icon.className = "inv-row-icon"; icon.title = this.res(rid).displayName;
-      rowHead.appendChild(icon);
-      rowHead.classList.add("clickable"); rowHead.title = this.res(rid).displayName;
-      rowHead.onclick = () => openResource(rid, { player: this.player, allowRefine: true }); // resource widget (merge entry lives inside it)
-      row.appendChild(rowHead);
-      this._invCells[rid] = {};
-      for (let t = 1; t <= maxT; t++) {
-        const cell = el("div", "inv-cell", "");
-        row.appendChild(cell);
-        this._invCells[rid][t] = { el: cell, last: -1 };
-      }
-      this._invRow[rid] = row;
-      scroll.appendChild(row);
-    });
+    this._invTiles = el("div", "inv-tiles");
+    scroll.appendChild(this._invTiles);
     bar.appendChild(scroll);
+    this._invSig = null;      // force the first tile build
     this.refreshInventory();
   },
   refreshInventory() {
-    if (!this._invCells) return;
-    const maxT = this.maxUnlockedTier();
+    if (!this._invTiles) return;
+    const p = this.player;
+    // Rebuild only when the stock actually changed (the refresh runs every flush).
+    const parts = [];
     this.cfg.resourceOrder.forEach((rid) => {
-      if (!this._invCells[rid]) return;
-      for (let t = 1; t <= maxT; t++) {
-        const ref = this._invCells[rid][t]; const v = this.tierCount(this.player, rid, t);
-        if (v !== ref.last) {
-          ref.el.textContent = v > 0 ? v : "";
-          ref.el.classList.toggle("has", v > 0);
-          if (v > ref.last && ref.last >= 0) { ref.el.classList.remove("bump"); void ref.el.offsetWidth; ref.el.classList.add("bump"); }
-          ref.last = v;
-        }
-      }
-      if (this._invRow[rid]) {
-        // Show a row when the player holds stock OR a staffed machine produces it (so assigning
-        // workers reveals the row right away). Vacant rows collapse (display:none); the reflow is
-        // confined to the capped-height .inv-scroll box, so the machine list below never bumps.
-        const vacant = this.stockOf(this.player, rid) <= 0 && !this.isStaffedFor(rid);
-        this._invRow[rid].classList.toggle("inv-row-vacant", vacant);
-      }
+      const m = p.stock[rid] || {};
+      Object.keys(m).map(Number).sort((a, b) => a - b).forEach((t) => { if (m[t] > 0) parts.push(rid + ":" + t + ":" + m[t]); });
     });
-    const tot = this.stockTotal(this.player), cap = this.player.storageCap;
+    const sig = parts.join("|");
+    if (sig !== this._invSig) {
+      this._invSig = sig;
+      this._invTiles.innerHTML = "";
+      this.cfg.resourceOrder.forEach((rid) => {
+        const m = p.stock[rid] || {};
+        Object.keys(m).map(Number).sort((a, b) => a - b).forEach((t) => {
+          for (let i = 0; i < m[t]; i++) {
+            const tile = el("div", "inv-unit");
+            tile.style.background = this.tierColor(t);
+            tile.title = `${this.res(rid).displayName} — Tier ${t}`;
+            tile.appendChild(this.tierImg(rid, t));
+            tile.onclick = () => openResource(rid, { player: p, allowRefine: true }); // resource widget (merge entry lives inside it)
+            this._invTiles.appendChild(tile);
+          }
+        });
+      });
+      if (!this._invTiles.children.length) this._invTiles.appendChild(el("div", "inv-empty", "vide"));
+    }
+    const tot = this.stockTotal(p), cap = p.storageCap;
     const c = $("#inv-cap"); if (c) { c.textContent = `${tot}/${cap}`; c.classList.toggle("full", tot >= cap); }
     const mb = $("#inv-merge"); if (mb) mb.classList.toggle("glow", this.cfg.resourceOrder.some((rid) => this.anyConvert(rid)));
     const mo = $("#merge-overlay"); // ?.-style guard: a stale cached index.html must not break the inventory loop
