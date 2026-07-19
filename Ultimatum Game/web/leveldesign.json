@@ -299,7 +299,9 @@
             "Half": "tennisBall",
             "Half2": "carrot"
           },
-          "overrides": {}
+          "overrides": {
+            "customers": 7
+          }
         },
         {
           "blockId": "blk_duo",
@@ -307,7 +309,9 @@
             "80%": "tennisBall",
             "20%": "carrot"
           },
-          "overrides": {}
+          "overrides": {
+            "customers": 7
+          }
         },
         {
           "blockId": "blk_mrmhfzix",
@@ -315,7 +319,147 @@
             "100%": "carrot"
           },
           "overrides": {
-            "avg": 3
+            "customers": 5
+          }
+        }
+      ],
+      "competitors": [
+        {
+          "id": "bot_cat",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "weights": {
+            "tennisBall": 62,
+            "carrot": 100,
+            "increaseWorker": 5,
+            "increaseMarketting": 5,
+            "increaseStorage": 5
+          },
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "autoMerge": true
+        }
+      ],
+      "biomeId": "biome_1"
+    },
+    {
+      "id": "Tutorial_1_2",
+      "instances": [
+        {
+          "blockId": "blk_intro",
+          "bind": {
+            "100%": "tennisBall"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_intro",
+          "bind": {
+            "100%": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "tennisBall",
+            "Half2": "carrot"
+          },
+          "overrides": {
+            "customers": 7
+          }
+        },
+        {
+          "blockId": "blk_duo",
+          "bind": {
+            "80%": "tennisBall",
+            "20%": "carrot"
+          },
+          "overrides": {
+            "customers": 7
+          }
+        },
+        {
+          "blockId": "blk_mrmhfzix",
+          "bind": {
+            "100%": "carrot"
+          },
+          "overrides": {
+            "customers": 5
+          }
+        }
+      ],
+      "competitors": [
+        {
+          "id": "bot_cat",
+          "auto": true,
+          "specialization": 1,
+          "focusBoost": 1,
+          "weights": {
+            "tennisBall": 62,
+            "carrot": 100,
+            "increaseWorker": 5,
+            "increaseMarketting": 5,
+            "increaseStorage": 5
+          },
+          "purchase": {
+            "mode": "const",
+            "value": 5
+          },
+          "buffs": {},
+          "autoMerge": true
+        }
+      ],
+      "biomeId": "biome_1"
+    },
+    {
+      "id": "Tutorial_1_3",
+      "instances": [
+        {
+          "blockId": "blk_intro",
+          "bind": {
+            "100%": "tennisBall"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_intro",
+          "bind": {
+            "100%": "carrot"
+          },
+          "overrides": {}
+        },
+        {
+          "blockId": "blk_mrmh8ook",
+          "bind": {
+            "Half": "tennisBall",
+            "Half2": "carrot"
+          },
+          "overrides": {
+            "customers": 7
+          }
+        },
+        {
+          "blockId": "blk_duo",
+          "bind": {
+            "80%": "tennisBall",
+            "20%": "carrot"
+          },
+          "overrides": {
+            "customers": 7
+          }
+        },
+        {
+          "blockId": "blk_mrmhfzix",
+          "bind": {
+            "100%": "carrot"
+          },
+          "overrides": {
+            "customers": 5
           }
         }
       ],

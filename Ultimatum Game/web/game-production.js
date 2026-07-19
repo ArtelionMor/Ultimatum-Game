@@ -20,9 +20,13 @@ import { crewSpeedBonus, crewProba2x } from "./game-workers.js";
 const buffSpeed = (p) => (p.buffs ? (p.buffs.speed || 0) / 100 : 0);
 const buffProba2x = (p) => (p.buffs ? (p.buffs.proba2x || 0) / 100 : 0);
 
+// Les bonus s'additionnent en VITESSE, pas en réduction de temps (rework 2026-07-19) :
+// temps = base / (1 + somme des bonus). Chaque +100% ajoute « une machine de base »
+// de débit — linéaire, jamais zéro, pas d'explosion au cumul (l'ancien modèle
+// base × (1 − somme) plafonnait au plancher dès ~100% de bonus).
 function effTime(game, p, machine) {
   const L = game.lvl(machine);
-  return Math.max(0.3, L.productionTime * (1 - crewSpeedBonus(L, machine) - buffSpeed(p)));
+  return Math.max(0.3, L.productionTime / (1 + crewSpeedBonus(L, machine) + buffSpeed(p)));
 }
 function hasInputs(game, p, def) { return def.inputs.every((i) => game.stockOf(p, i.type) >= i.quantity); }
 function consumeInputs(game, p, def) { def.inputs.forEach((i) => { let need = i.quantity; const m = p.stock[i.type]; for (const t of Object.keys(m).sort((a, b) => a - b)) { while (need > 0 && m[t] > 0) { m[t]--; need--; } } }); if (p === game.player) game._invDirty = true; }
@@ -45,7 +49,7 @@ function tickOne(game, dt, p) {
     m.producing = true;
     m.elapsed += dt;
     const time = effTime(game, p, m);
-    game.setProgress(m, Math.min(1, m.elapsed / time));
+    game.setProgress(m, Math.min(1, m.elapsed / time), Math.max(0, time - m.elapsed));
     if (m.elapsed >= time) {
       m.elapsed = 0;
       // Roll BEFORE consuming: a resource with no drop table would otherwise eat the

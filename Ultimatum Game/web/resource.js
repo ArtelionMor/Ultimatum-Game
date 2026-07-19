@@ -70,20 +70,27 @@ function renderResourcePanel() {
   }
 
   // --- tiers (owned counts only when a player is in context) ---
+  // Tiers above the feature-unlock cap show as LOCKED: greyed sprite, no price,
+  // just a padlock — a teaser of what the trophy road still holds.
   body.appendChild(el("div", "cp-section", "Tiers"));
+  const maxUnlocked = Game.maxUnlockedTier();
   const tiers = el("div", "res-tiers");
   for (let t = 1; t <= maxT; t++) {
     const ti = Game.cfg.resources[rid].tiers[t]; if (!ti) continue;
-    const have = context.player ? Game.tierCount(context.player, rid, t) : 0;
-    const row = el("div", "res-tier-row" + (have > 0 ? " owned" : ""));
+    const locked = t > maxUnlocked;
+    const have = !locked && context.player ? Game.tierCount(context.player, rid, t) : 0;
+    const row = el("div", "res-tier-row" + (locked ? " locked" : have > 0 ? " owned" : ""));
     const img = Game.tierImg(rid, t); img.className = "res-tier-img";
-    row.append(
-      img,
-      el("span", "res-tier-name", `Tier ${t}`),
-      el("span", "res-tier-price", `💰 ${ti.price}`),
-      el("span", "res-tier-inf", `📣 ${ti.influence}`)
-    );
-    if (context.player) row.append(el("span", "res-tier-have", `×${have}`));
+    row.append(img, el("span", "res-tier-name", `Tier ${t}`));
+    if (locked) {
+      row.append(el("span", "res-tier-lock", "🔒"));
+    } else {
+      row.append(
+        el("span", "res-tier-price", `💰 ${ti.price}`),
+        el("span", "res-tier-inf", `📣 ${ti.influence}`)
+      );
+      if (context.player) row.append(el("span", "res-tier-have", `×${have}`));
+    }
     tiers.appendChild(row);
   }
   body.appendChild(tiers);
