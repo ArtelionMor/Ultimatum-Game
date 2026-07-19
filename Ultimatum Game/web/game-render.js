@@ -196,7 +196,15 @@ export const renderMethods = {
       this._shopBtns.push({ b, disFn });
     };
     const w = nextWorker(this);
-    mk(`<img src="${sprite("Worker", "UI")}">`, `Ouvrier ×${this.player.workers.length}`, w ? "$" + w.price : "MAX", () => !w || this.player.workers.length >= this.cfg.g.maxWorkersTotal || this.player.money < w.price, () => buyWorker(this));
+    // Preview WHO joins next (Meta.recruitOrder), with its gear; generic
+    // Worker once every owned character is already on the payroll.
+    const nxId = Meta.nextRecruit(this.player.workers.map((x) => x.charId).filter(Boolean));
+    const nch = nxId && this.cfg.characters[nxId];
+    const ico = nch && nch.spriteId ? sprite(nch.spriteId, "Characters") : sprite("Worker", "UI");
+    const label = nch
+      ? `${nch.displayName}<span class="sb-gears">${gearBadges(nxId) || ""}</span>`
+      : `Ouvrier ×${this.player.workers.length}`;
+    mk(`<img src="${ico}" onerror="this.onerror=null;this.src='${sprite("Worker", "UI")}'">`, label, w ? "$" + w.price : "MAX", () => !w || this.player.workers.length >= this.cfg.g.maxWorkersTotal || this.player.money < w.price, () => buyWorker(this));
     const mkt = nextMkt(this);
     mk("📣", `Mkt ${this.player.marketing.toFixed(1)}`, mkt ? "$" + mkt.price : "MAX", () => !mkt || this.player.money < mkt.price, () => buyMkt(this));
     const st = nextStorage(this);

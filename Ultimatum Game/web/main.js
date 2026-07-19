@@ -216,8 +216,9 @@ const Game = {
     this.round = 0;
     this.selectedWorker = null;
     this._taxVictory = false;   // victoire par dernier impôt réglé (game-tax.js)
+    const pav = Meta.profileSprite();
     this.player = {
-      id: "player", name: "Toi", spriteId: "Worker", spriteFolder: "UI", isPlayer: true, eliminated: false,
+      id: "player", name: "Toi", spriteId: pav.spriteId, spriteFolder: pav.folder, isPlayer: true, eliminated: false,
       money: g.startingMoney, stock: this.emptyStock(), storageCap: g.startingStorage,
       marketing: BASE_MARKETING, workers: [],
       machines: [], buys: { increaseWorker: 0, increaseMarketting: 0, increaseStorage: 0 },
