@@ -2574,7 +2574,7 @@
     },
     {
       "id": "customerRate",
-      "value": 0.2
+      "value": 0.15
     },
     {
       "id": "earlyTaxDiscount",
@@ -3347,8 +3347,8 @@
       "quantity": 1,
       "weight": 8500,
       "group": "A",
-      "tier1": 70,
-      "tier2": 30,
+      "tier1": 2,
+      "tier2": 0,
       "tier3": 0,
       "tier4": 0,
       "tier5": 0,
@@ -3360,8 +3360,8 @@
       "quantity": 2,
       "weight": 1000,
       "group": "B",
-      "tier1": 65,
-      "tier2": 35,
+      "tier1": 3,
+      "tier2": 2,
       "tier3": 0,
       "tier4": 0,
       "tier5": 0,
@@ -3373,284 +3373,285 @@
       "quantity": 3,
       "weight": 350,
       "group": "C",
-      "tier1": 60,
-      "tier2": 35,
+      "tier1": 4,
+      "tier2": 2,
+      "tier3": 0,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 1,
+      "quantity": 1,
+      "weight": 120,
+      "group": "D",
+      "tier1": 4,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 1,
+      "quantity": 2,
+      "weight": 25,
+      "group": "E",
+      "tier1": 4,
+      "tier2": 5,
+      "tier3": 2,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0,
+      "": 0.6
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 1,
+      "quantity": 3,
+      "weight": 5,
+      "group": "F",
+      "tier1": 3,
+      "tier2": 4,
+      "tier3": 2,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 2,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 3,
+      "tier2": 2,
+      "tier3": 0,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 2,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 5,
+      "tier2": 2,
+      "tier3": 0,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 2,
+      "quantity": 3,
+      "weight": 350,
+      "group": "C",
+      "tier1": 4,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 2,
+      "quantity": 1,
+      "weight": 120,
+      "group": "D",
+      "tier1": 4,
+      "tier2": 4,
+      "tier3": 2,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 2,
+      "quantity": 2,
+      "weight": 25,
+      "group": "E",
+      "tier1": 3,
+      "tier2": 7,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 2,
+      "quantity": 3,
+      "weight": 5,
+      "group": "F",
+      "tier1": 2,
+      "tier2": 4,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 3,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 4,
+      "tier2": 2,
+      "tier3": 0,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 3,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 6,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 3,
+      "quantity": 3,
+      "weight": 350,
+      "group": "C",
+      "tier1": 4,
+      "tier2": 4,
+      "tier3": 2,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 3,
+      "quantity": 1,
+      "weight": 120,
+      "group": "D",
+      "tier1": 3,
+      "tier2": 5,
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 3,
+      "quantity": 2,
+      "weight": 25,
+      "group": "E",
+      "tier1": 2,
+      "tier2": 7,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 3,
+      "quantity": 3,
+      "weight": 5,
+      "group": "F",
+      "tier1": 2,
+      "tier2": 4,
+      "tier3": 4,
+      "tier4": 2,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 4,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 5,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 4,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 5,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 4,
+      "quantity": 3,
+      "weight": 350,
+      "group": "C",
+      "tier1": 3,
+      "tier2": 4,
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 4,
+      "quantity": 1,
+      "weight": 120,
+      "group": "D",
+      "tier1": 2,
+      "tier2": 5,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 4,
+      "quantity": 2,
+      "weight": 25,
+      "group": "E",
+      "tier1": 2,
+      "tier2": 5,
+      "tier3": 4,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 4,
+      "quantity": 3,
+      "weight": 5,
+      "group": "F",
+      "tier1": 0,
+      "tier2": 3,
       "tier3": 5,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 1,
-      "quantity": 1,
-      "weight": 120,
-      "group": "D",
-      "tier1": 55,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 1,
-      "quantity": 2,
-      "weight": 25,
-      "group": "E",
-      "tier1": 45,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 1,
-      "quantity": 3,
-      "weight": 5,
-      "group": "F",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 2,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 60,
-      "tier2": 35,
-      "tier3": 5,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 2,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 60,
-      "tier2": 35,
-      "tier3": 5,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 2,
-      "quantity": 3,
-      "weight": 350,
-      "group": "C",
-      "tier1": 55,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 2,
-      "quantity": 1,
-      "weight": 120,
-      "group": "D",
-      "tier1": 45,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 2,
-      "quantity": 2,
-      "weight": 25,
-      "group": "E",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 2,
-      "quantity": 3,
-      "weight": 5,
-      "group": "F",
-      "tier1": 40,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 3,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 55,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 3,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 50,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 3,
-      "quantity": 3,
-      "weight": 350,
-      "group": "C",
-      "tier1": 45,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 3,
-      "quantity": 1,
-      "weight": 120,
-      "group": "D",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 3,
-      "quantity": 2,
-      "weight": 25,
-      "group": "E",
-      "tier1": 35,
-      "tier2": 40,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 3,
-      "quantity": 3,
-      "weight": 5,
-      "group": "F",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 4,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 50,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 4,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 45,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 4,
-      "quantity": 3,
-      "weight": 350,
-      "group": "C",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 4,
-      "quantity": 1,
-      "weight": 120,
-      "group": "D",
-      "tier1": 40,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 4,
-      "quantity": 2,
-      "weight": 25,
-      "group": "E",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 4,
-      "quantity": 3,
-      "weight": 5,
-      "group": "F",
-      "tier1": 25,
-      "tier2": 40,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
+      "tier4": 3,
+      "tier5": 2,
       "tier6": 0
     },
     {
@@ -3659,10 +3660,10 @@
       "quantity": 1,
       "weight": 8500,
       "group": "A",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
+      "tier1": 4,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 0,
       "tier5": 0,
       "tier6": 0
     },
@@ -3672,10 +3673,10 @@
       "quantity": 2,
       "weight": 1000,
       "group": "B",
-      "tier1": 35,
-      "tier2": 45,
-      "tier3": 15,
-      "tier4": 5,
+      "tier1": 3,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 2,
       "tier5": 0,
       "tier6": 0
     },
@@ -3685,10 +3686,10 @@
       "quantity": 3,
       "weight": 350,
       "group": "C",
-      "tier1": 35,
-      "tier2": 40,
-      "tier3": 20,
-      "tier4": 5,
+      "tier1": 2,
+      "tier2": 4,
+      "tier3": 3,
+      "tier4": 2,
       "tier5": 0,
       "tier6": 0
     },
@@ -3698,11 +3699,11 @@
       "quantity": 1,
       "weight": 120,
       "group": "D",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
+      "tier1": 2,
+      "tier2": 4,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 0,
       "tier6": 0
     },
     {
@@ -3711,11 +3712,11 @@
       "quantity": 2,
       "weight": 25,
       "group": "E",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
+      "tier1": 0,
+      "tier2": 2,
+      "tier3": 4,
+      "tier4": 2,
+      "tier5": 2,
       "tier6": 0
     },
     {
@@ -3724,11 +3725,11 @@
       "quantity": 3,
       "weight": 5,
       "group": "F",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
+      "tier1": 0,
+      "tier2": 2,
+      "tier3": 4,
+      "tier4": 3,
+      "tier5": 2,
       "tier6": 0
     },
     {
@@ -3737,10 +3738,10 @@
       "quantity": 1,
       "weight": 8500,
       "group": "A",
-      "tier1": 40,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 5,
+      "tier1": 3,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 2,
       "tier5": 0,
       "tier6": 0
     },
@@ -3750,10 +3751,10 @@
       "quantity": 2,
       "weight": 1000,
       "group": "B",
-      "tier1": 40,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 5,
+      "tier1": 2,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 2,
       "tier5": 0,
       "tier6": 0
     },
@@ -3763,11 +3764,11 @@
       "quantity": 3,
       "weight": 350,
       "group": "C",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
+      "tier1": 2,
+      "tier2": 4,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 0,
       "tier6": 0
     },
     {
@@ -3776,11 +3777,11 @@
       "quantity": 1,
       "weight": 120,
       "group": "D",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
+      "tier1": 0,
+      "tier2": 3,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 2,
       "tier6": 0
     },
     {
@@ -3789,11 +3790,11 @@
       "quantity": 2,
       "weight": 25,
       "group": "E",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 4,
+      "tier4": 3,
+      "tier5": 2,
       "tier6": 0
     },
     {
@@ -3802,12 +3803,12 @@
       "quantity": 3,
       "weight": 5,
       "group": "F",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 3,
+      "tier4": 3,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -3815,10 +3816,10 @@
       "quantity": 1,
       "weight": 8500,
       "group": "A",
-      "tier1": 0,
-      "tier2": 40,
-      "tier3": 20,
-      "tier4": 10,
+      "tier1": 2,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 2,
       "tier5": 0,
       "tier6": 0
     },
@@ -3829,232 +3830,232 @@
       "weight": 1000,
       "group": "B",
       "tier1": 0,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 7,
-      "quantity": 3,
-      "weight": 350,
-      "group": "C",
-      "tier1": 0,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 7,
-      "quantity": 1,
-      "weight": 120,
-      "group": "D",
-      "tier1": 0,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 7,
-      "quantity": 2,
-      "weight": 25,
-      "group": "E",
-      "tier1": 0,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 7,
-      "quantity": 3,
-      "weight": 5,
-      "group": "F",
-      "tier1": 0,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 8,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 0,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 8,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 0,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 8,
-      "quantity": 3,
-      "weight": 350,
-      "group": "C",
-      "tier1": 0,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 5
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 8,
-      "quantity": 1,
-      "weight": 120,
-      "group": "D",
-      "tier1": 0,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 8,
-      "quantity": 2,
-      "weight": 25,
-      "group": "E",
-      "tier1": 0,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 8,
-      "quantity": 3,
-      "weight": 5,
-      "group": "F",
-      "tier1": 0,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 9,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 0,
-      "tier2": 0,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 9,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 0,
-      "tier2": 0,
-      "tier3": 25,
-      "tier4": 15,
+      "tier2": 3,
+      "tier3": 3,
+      "tier4": 2,
       "tier5": 0,
-      "tier6": 5
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
-      "level": 9,
+      "level": 7,
       "quantity": 3,
       "weight": 350,
       "group": "C",
       "tier1": 0,
-      "tier2": 0,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
+      "tier2": 3,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
-      "level": 9,
+      "level": 7,
       "quantity": 1,
       "weight": 120,
       "group": "D",
       "tier1": 0,
-      "tier2": 0,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
+      "tier2": 2,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
-      "level": 9,
+      "level": 7,
       "quantity": 2,
       "weight": 25,
       "group": "E",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 3,
+      "tier4": 3,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
-      "level": 9,
+      "level": 7,
       "quantity": 3,
       "weight": 5,
       "group": "F",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 3,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
-      "level": 10,
+      "level": 8,
       "quantity": 1,
       "weight": 8500,
       "group": "A",
-      "tier1": 0,
-      "tier2": 0,
-      "tier3": 25,
-      "tier4": 15,
+      "tier1": 2,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 2,
       "tier5": 0,
-      "tier6": 5
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 8,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 0,
+      "tier2": 3,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 8,
+      "quantity": 3,
+      "weight": 350,
+      "group": "C",
+      "tier1": 0,
+      "tier2": 2,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 8,
+      "quantity": 1,
+      "weight": 120,
+      "group": "D",
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 8,
+      "quantity": 2,
+      "weight": 25,
+      "group": "E",
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 3,
+      "tier4": 3,
+      "tier5": 2,
+      "tier6": 2
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 8,
+      "quantity": 3,
+      "weight": 5,
+      "group": "F",
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 2,
+      "tier4": 3,
+      "tier5": 2,
+      "tier6": 2
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 9,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 0,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 9,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 0,
+      "tier2": 2,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 9,
+      "quantity": 3,
+      "weight": 350,
+      "group": "C",
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 9,
+      "quantity": 1,
+      "weight": 120,
+      "group": "D",
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 9,
+      "quantity": 2,
+      "weight": 25,
+      "group": "E",
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 2,
+      "tier4": 3,
+      "tier5": 2,
+      "tier6": 2
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 9,
+      "quantity": 3,
+      "weight": 5,
+      "group": "F",
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
+      "tier4": 3,
+      "tier5": 2,
+      "tier6": 2
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 10,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 0,
+      "tier2": 2,
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
@@ -4063,11 +4064,11 @@
       "weight": 1000,
       "group": "B",
       "tier1": 0,
-      "tier2": 0,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
+      "tier2": 2,
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
@@ -4077,10 +4078,10 @@
       "group": "C",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4090,10 +4091,10 @@
       "group": "D",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4103,10 +4104,10 @@
       "group": "E",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 0,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4116,10 +4117,10 @@
       "group": "F",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10
+      "tier3": 0,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4128,11 +4129,11 @@
       "weight": 8500,
       "group": "A",
       "tier1": 0,
-      "tier2": 0,
-      "tier3": 0,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
+      "tier2": 2,
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
@@ -4142,10 +4143,10 @@
       "group": "B",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 0,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
@@ -4155,10 +4156,10 @@
       "group": "C",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 0,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4168,10 +4169,10 @@
       "group": "D",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 0,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4182,9 +4183,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4195,9 +4196,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4207,10 +4208,10 @@
       "group": "A",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 0,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
@@ -4220,10 +4221,10 @@
       "group": "B",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 0,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
@@ -4233,10 +4234,10 @@
       "group": "C",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 0,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4247,9 +4248,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4260,9 +4261,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4273,9 +4274,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10
+      "tier4": 0,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4285,10 +4286,10 @@
       "group": "A",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 0,
-      "tier4": 0,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
@@ -4298,10 +4299,10 @@
       "group": "B",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 0,
-      "tier4": 0,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4312,9 +4313,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 0,
-      "tier5": 10,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4325,9 +4326,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 0,
-      "tier5": 10,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4338,9 +4339,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 0,
-      "tier5": 15,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4352,8 +4353,8 @@
       "tier2": 0,
       "tier3": 0,
       "tier4": 0,
-      "tier5": 15,
-      "tier6": 15
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4363,10 +4364,10 @@
       "group": "A",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 0,
-      "tier4": 0,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
@@ -4377,9 +4378,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 0,
-      "tier5": 10,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4390,9 +4391,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 0,
-      "tier5": 10,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4403,9 +4404,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 0,
-      "tier5": 15,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4417,8 +4418,8 @@
       "tier2": 0,
       "tier3": 0,
       "tier4": 0,
-      "tier5": 15,
-      "tier6": 15
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4430,8 +4431,8 @@
       "tier2": 0,
       "tier3": 0,
       "tier4": 0,
-      "tier5": 15,
-      "tier6": 15
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4442,9 +4443,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
@@ -4455,9 +4456,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4468,9 +4469,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4482,8 +4483,8 @@
       "tier2": 0,
       "tier3": 0,
       "tier4": 0,
-      "tier5": 0,
-      "tier6": 15
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4495,8 +4496,8 @@
       "tier2": 0,
       "tier3": 0,
       "tier4": 0,
-      "tier5": 0,
-      "tier6": 15
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4509,7 +4510,7 @@
       "tier3": 0,
       "tier4": 0,
       "tier5": 0,
-      "tier6": 20
+      "tier6": 2
     }
   ],
   "resources": [
@@ -4529,7 +4530,7 @@
       "description": "Tennis Ball Tier 2 description",
       "spriteId": "Tennis Ball Tier 2",
       "baseSellPrice": 14,
-      "influence": 1.1
+      "influence": 1.5
     },
     {
       "id": "tennisBall",
@@ -4538,7 +4539,7 @@
       "description": "Tennis Ball Tier 3 description",
       "spriteId": "Tennis Ball Tier 3",
       "baseSellPrice": 32,
-      "influence": 1.2
+      "influence": 2
     },
     {
       "id": "tennisBall",
@@ -4547,7 +4548,7 @@
       "description": "Tennis Ball Tier 4 description",
       "spriteId": "Tennis Ball Tier 4",
       "baseSellPrice": 48,
-      "influence": 1.3
+      "influence": 2.5
     },
     {
       "id": "tennisBall",
@@ -4556,7 +4557,7 @@
       "description": "Tennis Ball Tier 5 description",
       "spriteId": "Tennis Ball Tier 5",
       "baseSellPrice": 81,
-      "influence": 1.4
+      "influence": 3
     },
     {
       "id": "tennisBall",
@@ -4565,7 +4566,7 @@
       "description": "Tennis Ball Tier 6 description",
       "spriteId": "Tennis Ball Tier 6",
       "baseSellPrice": 155,
-      "influence": 1.5
+      "influence": 3.5
     },
     {
       "id": "carrot",
@@ -4583,7 +4584,7 @@
       "description": "Carrot Tier 2 description",
       "spriteId": "Carrot Tier 2",
       "baseSellPrice": 22,
-      "influence": 1.1
+      "influence": 1.5
     },
     {
       "id": "carrot",
@@ -4592,7 +4593,7 @@
       "description": "Carrot Tier 3 description",
       "spriteId": "Carrot Tier 3",
       "baseSellPrice": 59,
-      "influence": 1.2
+      "influence": 2
     },
     {
       "id": "carrot",
@@ -4601,7 +4602,7 @@
       "description": "Carrot Tier 4 description",
       "spriteId": "Carrot Tier 4",
       "baseSellPrice": 104,
-      "influence": 1.3
+      "influence": 2.5
     },
     {
       "id": "carrot",
@@ -4610,7 +4611,7 @@
       "description": "Carrot Tier 5 description",
       "spriteId": "Carrot Tier 5",
       "baseSellPrice": 210,
-      "influence": 1.4
+      "influence": 3
     },
     {
       "id": "carrot",
@@ -4619,7 +4620,7 @@
       "description": "Carrot Tier 6 description",
       "spriteId": "Carrot Tier 6",
       "baseSellPrice": 488,
-      "influence": 1.5
+      "influence": 3.5
     },
     {
       "id": "nenuphar",
@@ -4637,7 +4638,7 @@
       "description": "Nenuphar Tier 2 description",
       "spriteId": "Nenuphar Tier 2",
       "baseSellPrice": 26,
-      "influence": 1.1
+      "influence": 1.5
     },
     {
       "id": "nenuphar",
@@ -4646,7 +4647,7 @@
       "description": "Nenuphar Tier 3 description",
       "spriteId": "Nenuphar Tier 3",
       "baseSellPrice": 74,
-      "influence": 1.2
+      "influence": 2
     },
     {
       "id": "nenuphar",
@@ -4655,7 +4656,7 @@
       "description": "Nenuphar Tier 4 description",
       "spriteId": "Nenuphar Tier 4",
       "baseSellPrice": 138,
-      "influence": 1.3
+      "influence": 2.5
     },
     {
       "id": "nenuphar",
@@ -4664,7 +4665,7 @@
       "description": "Nenuphar Tier 5 description",
       "spriteId": "Nenuphar Tier 5",
       "baseSellPrice": 295,
-      "influence": 1.4
+      "influence": 3
     },
     {
       "id": "nenuphar",
@@ -4673,7 +4674,7 @@
       "description": "Nenuphar Tier 6 description",
       "spriteId": "Nenuphar Tier 6",
       "baseSellPrice": 729,
-      "influence": 1.5
+      "influence": 3.5
     },
     {
       "id": "nest",
@@ -4691,7 +4692,7 @@
       "description": "Nest Tier 2 description",
       "spriteId": "Nest Tier 2",
       "baseSellPrice": 68,
-      "influence": 1.1
+      "influence": 1.5
     },
     {
       "id": "nest",
@@ -4700,7 +4701,7 @@
       "description": "Nest Tier 3 description",
       "spriteId": "Nest Tier 3",
       "baseSellPrice": 249,
-      "influence": 1.2
+      "influence": 2
     },
     {
       "id": "nest",
@@ -4709,7 +4710,7 @@
       "description": "Nest Tier 4 description",
       "spriteId": "Nest Tier 4",
       "baseSellPrice": 597,
-      "influence": 1.3
+      "influence": 2.5
     },
     {
       "id": "nest",
@@ -4718,7 +4719,7 @@
       "description": "Nest Tier 5 description",
       "spriteId": "Nest Tier 5",
       "baseSellPrice": 1657,
-      "influence": 1.4
+      "influence": 3
     },
     {
       "id": "nest",
@@ -4727,7 +4728,7 @@
       "description": "Nest Tier 6 description",
       "spriteId": "Nest Tier 6",
       "baseSellPrice": 5334,
-      "influence": 1.5
+      "influence": 3.5
     },
     {
       "id": "candle",
@@ -4745,7 +4746,7 @@
       "description": "Candle Tier 2 description",
       "spriteId": "Candle Tier 2",
       "baseSellPrice": 18,
-      "influence": 1.1
+      "influence": 1.5
     },
     {
       "id": "candle",
@@ -4754,7 +4755,7 @@
       "description": "Candle Tier 3 description",
       "spriteId": "Candle Tier 3",
       "baseSellPrice": 45,
-      "influence": 1.2
+      "influence": 2
     },
     {
       "id": "candle",
@@ -4763,7 +4764,7 @@
       "description": "Candle Tier 4 description",
       "spriteId": "Candle Tier 4",
       "baseSellPrice": 74,
-      "influence": 1.3
+      "influence": 2.5
     },
     {
       "id": "candle",
@@ -4772,7 +4773,7 @@
       "description": "Candle Tier 5 description",
       "spriteId": "Candle Tier 5",
       "baseSellPrice": 138,
-      "influence": 1.4
+      "influence": 3
     },
     {
       "id": "candle",
@@ -4781,7 +4782,7 @@
       "description": "Candle Tier 6 description",
       "spriteId": "Candle Tier 6",
       "baseSellPrice": 295,
-      "influence": 1.5
+      "influence": 3.5
     },
     {
       "id": "pillow",
@@ -4789,7 +4790,7 @@
       "displayName": "Pillow Tier 1",
       "description": "Pillow Tier 1 description",
       "spriteId": "Pillow Tier 1",
-      "baseSellPrice": 0,
+      "baseSellPrice": 6,
       "influence": 1
     },
     {
@@ -4798,8 +4799,8 @@
       "displayName": "Pillow Tier 2",
       "description": "Pillow Tier 2 description",
       "spriteId": "Pillow Tier 2",
-      "baseSellPrice": 0,
-      "influence": 1.1
+      "baseSellPrice": 14,
+      "influence": 1.5
     },
     {
       "id": "pillow",
@@ -4807,8 +4808,8 @@
       "displayName": "Pillow Tier 3",
       "description": "Pillow Tier 3 description",
       "spriteId": "Pillow Tier 3",
-      "baseSellPrice": 0,
-      "influence": 1.2
+      "baseSellPrice": 32,
+      "influence": 2
     },
     {
       "id": "pillow",
@@ -4816,8 +4817,8 @@
       "displayName": "Pillow Tier 4",
       "description": "Pillow Tier 4 description",
       "spriteId": "Pillow Tier 4",
-      "baseSellPrice": 0,
-      "influence": 1.3
+      "baseSellPrice": 48,
+      "influence": 2.5
     },
     {
       "id": "pillow",
@@ -4825,8 +4826,8 @@
       "displayName": "Pillow Tier 5",
       "description": "Pillow Tier 5 description",
       "spriteId": "Pillow Tier 5",
-      "baseSellPrice": 0,
-      "influence": 1.4
+      "baseSellPrice": 81,
+      "influence": 3
     },
     {
       "id": "pillow",
@@ -4834,8 +4835,8 @@
       "displayName": "Pillow Tier 6",
       "description": "Pillow Tier 6 description",
       "spriteId": "Pillow Tier 6",
-      "baseSellPrice": 0,
-      "influence": 1.5
+      "baseSellPrice": 155,
+      "influence": 3.5
     },
     {
       "id": "blackLotus",
@@ -4853,7 +4854,7 @@
       "description": "Black Lotus Tier 2 description",
       "spriteId": "Black Lotus Tier 2",
       "baseSellPrice": 528,
-      "influence": 1.1
+      "influence": 1.5
     },
     {
       "id": "blackLotus",
@@ -4862,7 +4863,7 @@
       "description": "Black Lotus Tier 3 description",
       "spriteId": "Black Lotus Tier 3",
       "baseSellPrice": 2875,
-      "influence": 1.2
+      "influence": 2
     },
     {
       "id": "blackLotus",
@@ -4871,7 +4872,7 @@
       "description": "Black Lotus Tier 4 description",
       "spriteId": "Black Lotus Tier 4",
       "baseSellPrice": 9944,
-      "influence": 1.3
+      "influence": 2.5
     },
     {
       "id": "blackLotus",
@@ -4880,7 +4881,7 @@
       "description": "Black Lotus Tier 5 description",
       "spriteId": "Black Lotus Tier 5",
       "baseSellPrice": 39752,
-      "influence": 1.4
+      "influence": 3
     },
     {
       "id": "blackLotus",
@@ -4889,7 +4890,7 @@
       "description": "Black Lotus Tier 6 description",
       "spriteId": "Black Lotus Tier 6",
       "baseSellPrice": 182834,
-      "influence": 1.5
+      "influence": 3.5
     },
     {
       "id": "bottle",
@@ -4897,7 +4898,7 @@
       "displayName": "Bottle Tier 1",
       "description": "Bottle Tier 1 description",
       "spriteId": "Bottle Tier 1",
-      "baseSellPrice": 10,
+      "baseSellPrice": 40,
       "influence": 1
     },
     {
@@ -4906,8 +4907,8 @@
       "displayName": "Bottle Tier 2",
       "description": "Bottle Tier 2 description",
       "spriteId": "Bottle Tier 2",
-      "baseSellPrice": 30,
-      "influence": 1.1
+      "baseSellPrice": 192,
+      "influence": 1.5
     },
     {
       "id": "bottle",
@@ -4915,8 +4916,8 @@
       "displayName": "Bottle Tier 3",
       "description": "Bottle Tier 3 description",
       "spriteId": "Bottle Tier 3",
-      "baseSellPrice": 89,
-      "influence": 1.2
+      "baseSellPrice": 877,
+      "influence": 2
     },
     {
       "id": "bottle",
@@ -4924,8 +4925,8 @@
       "displayName": "Bottle Tier 4",
       "description": "Bottle Tier 4 description",
       "spriteId": "Bottle Tier 4",
-      "baseSellPrice": 173,
-      "influence": 1.3
+      "baseSellPrice": 2581,
+      "influence": 2.5
     },
     {
       "id": "bottle",
@@ -4933,8 +4934,8 @@
       "displayName": "Bottle Tier 5",
       "description": "Bottle Tier 5 description",
       "spriteId": "Bottle Tier 5",
-      "baseSellPrice": 387,
-      "influence": 1.4
+      "baseSellPrice": 8806,
+      "influence": 3
     },
     {
       "id": "bottle",
@@ -4942,8 +4943,8 @@
       "displayName": "Bottle Tier 6",
       "description": "Bottle Tier 6 description",
       "spriteId": "Bottle Tier 6",
-      "baseSellPrice": 1001,
-      "influence": 1.5
+      "baseSellPrice": 34738,
+      "influence": 3.5
     },
     {
       "id": "coffee",
@@ -4961,7 +4962,7 @@
       "description": "Coffee Tier 2 description",
       "spriteId": "Coffee Tier 2",
       "baseSellPrice": 10,
-      "influence": 1.1
+      "influence": 1.5
     },
     {
       "id": "coffee",
@@ -4970,7 +4971,7 @@
       "description": "Coffee Tier 3 description",
       "spriteId": "Coffee Tier 3",
       "baseSellPrice": 20,
-      "influence": 1.2
+      "influence": 2
     },
     {
       "id": "coffee",
@@ -4979,7 +4980,7 @@
       "description": "Coffee Tier 4 description",
       "spriteId": "Coffee Tier 4",
       "baseSellPrice": 26,
-      "influence": 1.3
+      "influence": 2.5
     },
     {
       "id": "coffee",
@@ -4988,7 +4989,7 @@
       "description": "Coffee Tier 5 description",
       "spriteId": "Coffee Tier 5",
       "baseSellPrice": 37,
-      "influence": 1.4
+      "influence": 3
     },
     {
       "id": "coffee",
@@ -4997,7 +4998,7 @@
       "description": "Coffee Tier 6 description",
       "spriteId": "Coffee Tier 6",
       "baseSellPrice": 58,
-      "influence": 1.5
+      "influence": 3.5
     },
     {
       "id": "sandwitch",
@@ -5015,7 +5016,7 @@
       "description": "Sandwitch Tier 2 description",
       "spriteId": "Sandwitch Tier 2",
       "baseSellPrice": 48,
-      "influence": 1.1
+      "influence": 1.5
     },
     {
       "id": "sandwitch",
@@ -5024,7 +5025,7 @@
       "description": "Sandwitch Tier 3 description",
       "spriteId": "Sandwitch Tier 3",
       "baseSellPrice": 161,
-      "influence": 1.2
+      "influence": 2
     },
     {
       "id": "sandwitch",
@@ -5033,7 +5034,7 @@
       "description": "Sandwitch Tier 4 description",
       "spriteId": "Sandwitch Tier 4",
       "baseSellPrice": 355,
-      "influence": 1.3
+      "influence": 2.5
     },
     {
       "id": "sandwitch",
@@ -5042,7 +5043,7 @@
       "description": "Sandwitch Tier 5 description",
       "spriteId": "Sandwitch Tier 5",
       "baseSellPrice": 905,
-      "influence": 1.4
+      "influence": 3
     },
     {
       "id": "sandwitch",
@@ -5051,7 +5052,7 @@
       "description": "Sandwitch Tier 6 description",
       "spriteId": "Sandwitch Tier 6",
       "baseSellPrice": 2676,
-      "influence": 1.5
+      "influence": 3.5
     },
     {
       "id": "croissant",
@@ -5069,7 +5070,7 @@
       "description": "Croissant Tier 2 description",
       "spriteId": "Croissant Tier 2",
       "baseSellPrice": 89,
-      "influence": 1.1
+      "influence": 1.5
     },
     {
       "id": "croissant",
@@ -5078,7 +5079,7 @@
       "description": "Croissant Tier 3 description",
       "spriteId": "Croissant Tier 3",
       "baseSellPrice": 347,
-      "influence": 1.2
+      "influence": 2
     },
     {
       "id": "croissant",
@@ -5087,7 +5088,7 @@
       "description": "Croissant Tier 4 description",
       "spriteId": "Croissant Tier 4",
       "baseSellPrice": 881,
-      "influence": 1.3
+      "influence": 2.5
     },
     {
       "id": "croissant",
@@ -5096,7 +5097,7 @@
       "description": "Croissant Tier 5 description",
       "spriteId": "Croissant Tier 5",
       "baseSellPrice": 2595,
-      "influence": 1.4
+      "influence": 3
     },
     {
       "id": "croissant",
@@ -5105,7 +5106,7 @@
       "description": "Croissant Tier 6 description",
       "spriteId": "Croissant Tier 6",
       "baseSellPrice": 8860,
-      "influence": 1.5
+      "influence": 3.5
     }
   ],
   "rewards": [
@@ -6507,7 +6508,7 @@
       "level": 3,
       "cost": 91,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.22050000000000003,
       "productionTime": 11
     },
@@ -6516,7 +6517,7 @@
       "level": 4,
       "cost": 100,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.23152500000000004,
       "productionTime": 10
     },
@@ -6525,7 +6526,7 @@
       "level": 5,
       "cost": 110,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.24310125000000005,
       "productionTime": 9
     },
@@ -6534,7 +6535,7 @@
       "level": 6,
       "cost": 121,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2552563125000001,
       "productionTime": 8
     },
@@ -6543,7 +6544,7 @@
       "level": 7,
       "cost": 133,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2680191281250001,
       "productionTime": 7
     },
@@ -6552,7 +6553,7 @@
       "level": 8,
       "cost": 146,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2814200845312501,
       "productionTime": 6
     },
@@ -6561,7 +6562,7 @@
       "level": 9,
       "cost": 161,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.29549108875781266,
       "productionTime": 5
     },
@@ -6570,7 +6571,7 @@
       "level": 10,
       "cost": 177,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3102656431957033,
       "productionTime": 5
     },
@@ -6579,7 +6580,7 @@
       "level": 11,
       "cost": 195,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3257789253554885,
       "productionTime": 5
     },
@@ -6588,7 +6589,7 @@
       "level": 12,
       "cost": 215,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.34206787162326296,
       "productionTime": 5
     },
@@ -6597,7 +6598,7 @@
       "level": 13,
       "cost": 237,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3591712652044261,
       "productionTime": 5
     },
@@ -6606,7 +6607,7 @@
       "level": 14,
       "cost": 261,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.37712982846464743,
       "productionTime": 5
     },
@@ -6615,7 +6616,7 @@
       "level": 15,
       "cost": 287,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3959863198878798,
       "productionTime": 5
     },
@@ -6642,7 +6643,7 @@
       "level": 3,
       "cost": 432,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.22050000000000003,
       "productionTime": 18
     },
@@ -6651,7 +6652,7 @@
       "level": 4,
       "cost": 518,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.23152500000000004,
       "productionTime": 17
     },
@@ -6660,7 +6661,7 @@
       "level": 5,
       "cost": 622,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.24310125000000005,
       "productionTime": 16
     },
@@ -6669,7 +6670,7 @@
       "level": 6,
       "cost": 746,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2552563125000001,
       "productionTime": 15
     },
@@ -6678,7 +6679,7 @@
       "level": 7,
       "cost": 895,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2680191281250001,
       "productionTime": 14
     },
@@ -6687,7 +6688,7 @@
       "level": 8,
       "cost": 1074,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2814200845312501,
       "productionTime": 13
     },
@@ -6696,7 +6697,7 @@
       "level": 9,
       "cost": 1289,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.29549108875781266,
       "productionTime": 12
     },
@@ -6705,7 +6706,7 @@
       "level": 10,
       "cost": 1547,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3102656431957033,
       "productionTime": 11
     },
@@ -6714,7 +6715,7 @@
       "level": 11,
       "cost": 1856,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3257789253554885,
       "productionTime": 10
     },
@@ -6723,7 +6724,7 @@
       "level": 12,
       "cost": 2227,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.34206787162326296,
       "productionTime": 9
     },
@@ -6732,7 +6733,7 @@
       "level": 13,
       "cost": 2672,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3591712652044261,
       "productionTime": 8
     },
@@ -6741,7 +6742,7 @@
       "level": 14,
       "cost": 3206,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.37712982846464743,
       "productionTime": 7
     },
@@ -6750,7 +6751,7 @@
       "level": 15,
       "cost": 3847,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3959863198878798,
       "productionTime": 6
     },
@@ -6777,7 +6778,7 @@
       "level": 3,
       "cost": 845,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.22050000000000003,
       "productionTime": 48
     },
@@ -6786,7 +6787,7 @@
       "level": 4,
       "cost": 1099,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.23152500000000004,
       "productionTime": 47
     },
@@ -6795,7 +6796,7 @@
       "level": 5,
       "cost": 1429,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.24310125000000005,
       "productionTime": 46
     },
@@ -6804,7 +6805,7 @@
       "level": 6,
       "cost": 1858,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2552563125000001,
       "productionTime": 45
     },
@@ -6813,7 +6814,7 @@
       "level": 7,
       "cost": 2415,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2680191281250001,
       "productionTime": 44
     },
@@ -6822,7 +6823,7 @@
       "level": 8,
       "cost": 3140,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2814200845312501,
       "productionTime": 43
     },
@@ -6831,7 +6832,7 @@
       "level": 9,
       "cost": 4082,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.29549108875781266,
       "productionTime": 42
     },
@@ -6840,7 +6841,7 @@
       "level": 10,
       "cost": 5307,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3102656431957033,
       "productionTime": 41
     },
@@ -6849,7 +6850,7 @@
       "level": 11,
       "cost": 6899,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3257789253554885,
       "productionTime": 40
     },
@@ -6858,7 +6859,7 @@
       "level": 12,
       "cost": 8969,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.34206787162326296,
       "productionTime": 39
     },
@@ -6867,7 +6868,7 @@
       "level": 13,
       "cost": 11660,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3591712652044261,
       "productionTime": 38
     },
@@ -6876,7 +6877,7 @@
       "level": 14,
       "cost": 15158,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.37712982846464743,
       "productionTime": 37
     },
@@ -6885,7 +6886,7 @@
       "level": 15,
       "cost": 19705,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3959863198878798,
       "productionTime": 36
     },
@@ -6912,7 +6913,7 @@
       "level": 3,
       "cost": 1960,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.22050000000000003,
       "productionTime": 192
     },
@@ -6921,7 +6922,7 @@
       "level": 4,
       "cost": 2744,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.23152500000000004,
       "productionTime": 188
     },
@@ -6930,7 +6931,7 @@
       "level": 5,
       "cost": 3842,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.24310125000000005,
       "productionTime": 184
     },
@@ -6939,7 +6940,7 @@
       "level": 6,
       "cost": 5379,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2552563125000001,
       "productionTime": 180
     },
@@ -6948,7 +6949,7 @@
       "level": 7,
       "cost": 7531,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2680191281250001,
       "productionTime": 176
     },
@@ -6957,7 +6958,7 @@
       "level": 8,
       "cost": 10543,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2814200845312501,
       "productionTime": 172
     },
@@ -6966,7 +6967,7 @@
       "level": 9,
       "cost": 14760,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.29549108875781266,
       "productionTime": 169
     },
@@ -6975,7 +6976,7 @@
       "level": 10,
       "cost": 20664,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3102656431957033,
       "productionTime": 166
     },
@@ -6984,7 +6985,7 @@
       "level": 11,
       "cost": 28930,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3257789253554885,
       "productionTime": 163
     },
@@ -6993,7 +6994,7 @@
       "level": 12,
       "cost": 40502,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.34206787162326296,
       "productionTime": 160
     },
@@ -7002,7 +7003,7 @@
       "level": 13,
       "cost": 56703,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3591712652044261,
       "productionTime": 157
     },
@@ -7011,7 +7012,7 @@
       "level": 14,
       "cost": 79384,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.37712982846464743,
       "productionTime": 154
     },
@@ -7020,7 +7021,7 @@
       "level": 15,
       "cost": 111138,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3959863198878798,
       "productionTime": 151
     },
@@ -8050,13 +8051,13 @@
       "id": "level4",
       "config": "Tutorial_2",
       "reward": "2_common_chest",
-      "topX": 2
+      "topX": 3
     },
     {
       "id": "level5",
       "config": "Tutorial_3",
       "reward": "3_rare_chest",
-      "topX": 2
+      "topX": 3
     },
     {
       "id": "level6",
@@ -8074,31 +8075,31 @@
       "id": "level8",
       "config": "Bottle_3_Slow",
       "reward": "1_legendary_chest",
-      "topX": 1
+      "topX": 2
     },
     {
       "id": "level9",
       "config": "Bottle_4_Intense",
       "reward": "1_legendary_chest",
-      "topX": 1
+      "topX": 2
     },
     {
       "id": "level10",
       "config": "Nenuphar_Intro",
       "reward": "1_legendary_chest",
-      "topX": 1
+      "topX": 2
     },
     {
       "id": "level9",
       "config": "Nest_Intro",
       "reward": "1_legendary_chest",
-      "topX": 1
+      "topX": 2
     },
     {
       "id": "level10",
       "config": "Nest_1_Normal",
       "reward": "1_legendary_chest",
-      "topX": 1
+      "topX": 2
     }
   ]
 }

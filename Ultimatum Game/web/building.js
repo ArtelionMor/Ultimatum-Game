@@ -223,9 +223,11 @@ function renderDropRate(slot, rid) {
   const tiers = dropTiers(rid, dropLevel);
   if (!tiers) return;
   const maxT = Game.cfg.maxTier;
+  // Config values are weights, not percentages: normalize over the group's total.
+  const totalW = tiers.reduce((s, w) => s + (w || 0), 0);
   const bars = el("div", "bp-drop-bars");
   for (let t = 1; t <= maxT; t++) {
-    const pct = tiers[t - 1] || 0;
+    const pct = totalW > 0 ? Math.round(((tiers[t - 1] || 0) / totalW) * 100) : 0;
     const row = el("div", "bp-drop-row" + (pct > 0 ? "" : " zero"));
     const tSprite = (res(rid).tiers[t] || {}).spriteId || res(rid).spriteId;
     const img = `<img class="bp-drop-icon" src="${sprite(tSprite, "Ressources")}">`;

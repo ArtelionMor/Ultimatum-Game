@@ -3,7 +3,7 @@
   "configurations": [
     {
       "name": "ultimatum-web",
-      "runtimeExecutable": "python3",
+      "runtimeExecutable": "python",
       "runtimeArgs": ["-m", "http.server", "8792", "--directory", "Ultimatum Game/web"],
       "port": 8792
     }

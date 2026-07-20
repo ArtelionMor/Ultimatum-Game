@@ -3,7 +3,7 @@
   {
    "id": "Tutorial_1",
    "round": "round_1",
-   "customers": 6,
+   "customers": 4,
    "average amount": 1,
    "qty_spread": 0,
    "tennisBall": 3,
@@ -21,7 +21,7 @@
   {
    "id": "Tutorial_1",
    "round": "round_2",
-   "customers": 6,
+   "customers": 4,
    "average amount": 1,
    "qty_spread": 0,
    "tennisBall": 0,
@@ -93,7 +93,7 @@
   {
    "id": "Tutorial_1_2",
    "round": "round_1",
-   "customers": 6,
+   "customers": 4,
    "average amount": 1,
    "qty_spread": 0,
    "tennisBall": 3,
@@ -111,7 +111,7 @@
   {
    "id": "Tutorial_1_2",
    "round": "round_2",
-   "customers": 6,
+   "customers": 4,
    "average amount": 1,
    "qty_spread": 0,
    "tennisBall": 0,
@@ -183,7 +183,7 @@
   {
    "id": "Tutorial_1_3",
    "round": "round_1",
-   "customers": 6,
+   "customers": 4,
    "average amount": 1,
    "qty_spread": 0,
    "tennisBall": 3,
@@ -201,7 +201,7 @@
   {
    "id": "Tutorial_1_3",
    "round": "round_2",
-   "customers": 6,
+   "customers": 4,
    "average amount": 1,
    "qty_spread": 0,
    "tennisBall": 0,
@@ -273,7 +273,7 @@
   {
    "id": "Tutorial_2",
    "round": "round_1",
-   "customers": 6,
+   "customers": 4,
    "average amount": 1,
    "qty_spread": 0,
    "tennisBall": 3,
@@ -399,7 +399,7 @@
   {
    "id": "Tutorial_3",
    "round": "round_1",
-   "customers": 6,
+   "customers": 4,
    "average amount": 1,
    "qty_spread": 0,
    "tennisBall": 3,
@@ -561,7 +561,7 @@
   {
    "id": "Bottle_Intro",
    "round": "round_1",
-   "customers": 6,
+   "customers": 4,
    "average amount": 1,
    "qty_spread": 0,
    "tennisBall": 3,
@@ -687,7 +687,7 @@
   {
    "id": "Bottle_2_Intense",
    "round": "round_1",
-   "customers": 6,
+   "customers": 4,
    "average amount": 1,
    "qty_spread": 0,
    "tennisBall": 3,
@@ -1155,7 +1155,7 @@
   {
    "id": "Nenuphar_Intro",
    "round": "round_1",
-   "customers": 6,
+   "customers": 4,
    "average amount": 1,
    "qty_spread": 0,
    "tennisBall": 0,

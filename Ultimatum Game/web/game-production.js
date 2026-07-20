@@ -87,8 +87,10 @@ export function pickOutput(cfg, resId, level) {
   return list[list.length - 1];
 }
 
-export function rollTier(tierPcts) {
-  let r = Math.random() * 100;
-  for (let i = 0; i < tierPcts.length; i++) { r -= tierPcts[i]; if (r <= 0) return i + 1; }
+export function rollTier(tierWeights) {
+  const total = tierWeights.reduce((s, w) => s + (w || 0), 0);
+  if (total <= 0) return 1;
+  let r = Math.random() * total;
+  for (let i = 0; i < tierWeights.length; i++) { r -= tierWeights[i] || 0; if (r <= 0) return i + 1; }
   return 1;
 }
