@@ -39,24 +39,33 @@ function tickOne(game, dt, p) {
   p.machines.forEach((m) => {
     const def = game.machineDef(m.id), L = game.lvl(m);
     const staffed = m.crew.length >= L.workersRequired;
-    if (!staffed) { m.producing = false; m.elapsed = 0; game.setProgress(m, 0); return; }
+    // Understaffed = PAUSED, not reset: the cycle picks up where it stopped when a
+    // worker comes back. The frozen bar is drawn against the cycle length that was
+    // running (`_cycle`), not the crewless one, so pulling the last worker out
+    // doesn't make the fill jump backwards.
+    if (!staffed) { m.producing = false; game.setProgress(m, Math.min(1, m.elapsed / (m._cycle || effTime(game, p, m)))); return; }
     const converts = def.inputs.length > 0;
-    // A converter needs its inputs to even run.
-    if (converts && !hasInputs(game, p, def)) { m.producing = false; m.elapsed = 0; game.setProgress(m, 0); return; }
+    // A converter pays for its cycle UP FRONT: the ingredients leave the stock when
+    // the cycle STARTS, not when it finishes. Same rule as above — a machine that
+    // cannot start just waits, it doesn't lose what it had — and a cycle already
+    // paid for always runs to the end, whatever happens to the stock meanwhile.
+    if (converts && !m.charged) {
+      if (!hasInputs(game, p, def)) { m.producing = false; game.setProgress(m, Math.min(1, m.elapsed / (m._cycle || effTime(game, p, m)))); return; }
+      consumeInputs(game, p, def);
+      m.charged = true;
+    }
     // Storage full: only pure generators pause. Converters keep running — they
     // consume inputs (freeing space) before storing output, so they never deadlock.
     if (!converts && game.stockTotal(p) >= p.storageCap) { m.producing = false; game.setProgress(m, 1); return; }
     m.producing = true;
     m.elapsed += dt;
-    const time = effTime(game, p, m);
+    const time = m._cycle = effTime(game, p, m);
     game.setProgress(m, Math.min(1, m.elapsed / time), Math.max(0, time - m.elapsed));
     if (m.elapsed >= time) {
       m.elapsed = 0;
-      // Roll BEFORE consuming: a resource with no drop table would otherwise eat the
-      // converter's inputs and hand back nothing at all.
+      m.charged = false;                  // the next cycle buys its own ingredients
       const out = pickOutput(game.cfg, def.outputs, m.level);
       if (!out) return;                   // resource with no drop table: skip rather than throw
-      if (converts) { if (!hasInputs(game, p, def)) return; consumeInputs(game, p, def); }
       // one tier for the whole spawn (matches the "+N Tier T" popup); drops above
       // the feature-unlock cap are clamped to the best unlocked tier, same quantity
       const tier = Math.min(rollTier(out.tiers), game.maxUnlockedTier());

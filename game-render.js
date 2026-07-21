@@ -100,6 +100,7 @@ export const renderMethods = {
         Object.keys(m).map(Number).sort((a, b) => a - b).forEach((t) => {
           for (let i = 0; i < m[t]; i++) {
             const tile = el("div", "inv-unit");
+            tile.dataset.tier = t;   // tutorial target [ressource_tierN]
             tile.style.background = this.tierColor(t);
             tile.title = `${this.res(rid).displayName} — Tier ${t}`;
             tile.appendChild(this.tierImg(rid, t));
@@ -175,9 +176,11 @@ export const renderMethods = {
     this._shopBtns = [];
     // disFn is stored so refreshAffordability() can re-evaluate disabled in place
     // (never rebuild the buttons — a rebuild mid-click would swallow the tap).
-    const mk = (icon, label, val, disFn, fn) => {
+    // `tut` names the button for the tutorial overlay (feature_unlock targets).
+    const mk = (icon, label, val, disFn, fn, tut) => {
       const b = el("button", "shop-btn");
       b.innerHTML = `<span class="si">${icon}</span><span>${label}</span><b>${val}</b>`;
+      if (tut) b.dataset.tut = tut;
       b.disabled = disFn(); b.onclick = fn; bar.appendChild(b);
       this._shopBtns.push({ b, disFn });
     };
@@ -190,15 +193,15 @@ export const renderMethods = {
     const label = nch
       ? `${nch.displayName}<span class="sb-gears">${gearBadges(nxId) || ""}</span>`
       : `Ouvrier ×${this.player.workers.length}`;
-    mk(`<img src="${ico}" onerror="this.onerror=null;this.src='${sprite("Worker", "UI")}'">`, label, w ? "$" + w.price : "MAX", () => !w || this.player.workers.length >= this.cfg.g.maxWorkersTotal || this.player.money < w.price, () => buyWorker(this));
+    mk(`<img src="${ico}" onerror="this.onerror=null;this.src='${sprite("Worker", "UI")}'">`, label, w ? "$" + w.price : "MAX", () => !w || this.player.workers.length >= this.cfg.g.maxWorkersTotal || this.player.money < w.price, () => buyWorker(this), "buy_a_worker");
     // locked features are hidden completely, not greyed (feature_unlock)
     if (Meta.featureUnlocked("marketting")) {
       const mkt = nextMkt(this);
-      mk("📣", `Mkt ${this.player.marketing.toFixed(1)}`, mkt ? "$" + mkt.price : "MAX", () => !mkt || this.player.money < mkt.price, () => buyMkt(this));
+      mk("📣", `Mkt ${this.player.marketing.toFixed(1)}`, mkt ? "$" + mkt.price : "MAX", () => !mkt || this.player.money < mkt.price, () => buyMkt(this), "marketting");
     }
     if (Meta.featureUnlocked("storage")) {
       const st = nextStorage(this);
-      mk("📦", `Stock ${this.player.storageCap}`, st ? "$" + st.price : "MAX", () => !st || this.player.money < st.price, () => buyStorage(this));
+      mk("📦", `Stock ${this.player.storageCap}`, st ? "$" + st.price : "MAX", () => !st || this.player.money < st.price, () => buyStorage(this), "storage");
     }
   },
   // Re-evaluate buy/upgrade buttons' enabled state in place whenever money changes.
@@ -372,7 +375,10 @@ export const renderMethods = {
     });
   },
   dropTargetAt(ev) {
-    const under = document.elementFromPoint(ev.clientX, ev.clientY);
+    // Skip the tutorial layer: while a black_mask teaches the drag, its shields
+    // sit on top of the board and elementFromPoint would only ever see them, so
+    // every drop would silently do nothing.
+    const under = document.elementsFromPoint(ev.clientX, ev.clientY).find((n) => !n.closest("#tut-layer"));
     if (!under) return null;
     if (under.closest("#worker-bar")) return "bar";
     const node = under.closest(".machine");
@@ -544,6 +550,7 @@ export const renderMethods = {
     const seg = el("div", "pie-toggle");
     [["sales", "Ventes"], ["money", "Argent"]].forEach(([mode, label]) => {
       const b = el("button", "pie-mode" + ((this._pieMode === "money") === (mode === "money") ? " on" : ""), label);
+      if (mode === "money") b.dataset.tut = "results_money_toggle"; // end_of_round_summary red dot
       b.onclick = () => { this._pieMode = mode; this.renderMarketPie(); };
       seg.appendChild(b);
     });

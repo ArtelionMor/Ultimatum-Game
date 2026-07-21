@@ -17,6 +17,7 @@ import { spawnCustomer, restackCustomers } from "./game-customers.js";
 import { tickProduction } from "./game-production.js";
 import { renderMethods } from "./game-render.js";
 import { cheatMethods } from "./game-cheats.js";
+import { Tutorial } from "./tutorial.js";
 
 // Player-facing names of feature_unlock ids (victory screen announcement).
 const FEATURE_LABEL = {
@@ -77,6 +78,7 @@ const Game = {
     }
     Meta.init(this.cfg);
     initMenu(this);
+    Tutorial.init(this);
     this.applyCheatMode();
     this.transitionTo(S.Menu);
     this.setupInventoryObserver();
@@ -88,6 +90,10 @@ const Game = {
   enterMenu() { $("#app").classList.add("hidden"); showMenu(); },
   launchLevel(levelId) {
     this.levelCfg = this.resolveLevel(levelId);
+    // enter_level_[number]: same progression point as reach_level_(N-1), but
+    // observed here, with the in-game UI on screen — that is where the tutorials
+    // pointing at in-game buttons need to fire.
+    Meta.noteEnterLevel(this.cfg.worldLevels.findIndex((l) => l.id === levelId) + 1);
     hideMenu();
     $("#app").classList.remove("hidden");
     this.transitionTo(S.Setup);
@@ -124,7 +130,9 @@ const Game = {
     let dt = (t - this.lastTime) / 1000; this.lastTime = t;
     if (dt > 0.2) dt = 0.2;
     dt *= (this.timeScale || 1); // time acceleration (HUD speed button / cheat console)
-    if (this.state === S.Play) this.updatePlay(dt);
+    // A black_mask freezes the run: the prep countdown must not drain behind a
+    // modal the player can only dismiss by performing the action.
+    if (this.state === S.Play && !Tutorial.isBlocking()) this.updatePlay(dt);
     requestAnimationFrame((t2) => this.loop(t2));
   },
 
@@ -240,6 +248,10 @@ const Game = {
   // ---------- Setup ----------
   enterSetup() {
     const g = this.cfg.g;
+    // The run starts with an empty inventory, so the stock/wave trigger records
+    // start over too: a condition like "hold 3 tennis balls" has to be met in
+    // THIS run, not inherited from the last one.
+    Meta.startRun();
     this.round = 0;
     this.selectedWorker = null;
     this.timeScale = 1;           // each run starts at normal speed
@@ -294,6 +306,7 @@ const Game = {
   // Prep window before a wave: production runs, player prepares, top menu shows demand.
   startPrep() {
     this.round++;
+    Meta.noteWave(this.round);   // reach_wave_[number]
     const g = this.cfg.g;
     this.waveActive = false;
     this.prepTimer = g.tycoonPhaseDuration;
@@ -309,7 +322,6 @@ const Game = {
     this.competitors.forEach((c) => {
       this.cfg.machines.forEach((m) => { if (this.machineUnlockRound(m.id) === this.round) this.giveMachine(c, m.id); });
     });
-    this.player.machines.forEach((m) => { m.elapsed = 0; });
 
     // Les bots décident leur round ici : acheter, puis staffer. Ils ne fabriquent
     // rien eux-mêmes — leurs machines tournent dans tickProduction comme les tiennes.
@@ -519,4 +531,5 @@ $("#cheat-reset")?.addEventListener("click", () => { if (confirm("Effacer toute 
 
 window.Game = Game; // expose for console debugging
 window.Meta = Meta; // idem: Meta.state, Meta.openChest("common_chest"), Meta.reset()…
+window.Tutorial = Tutorial; // idem: Tutorial.pending(), Tutorial.evaluate()
 Game.start();

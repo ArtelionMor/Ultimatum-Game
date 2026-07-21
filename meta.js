@@ -27,6 +27,13 @@ export const Meta = {
     let saved = null;
     try { saved = JSON.parse(localStorage.getItem(SAVE_KEY)); } catch (e) { /* corrupt save -> restart fresh */ }
     this.state = Object.assign(this.defaultState(), saved || {});
+    // Object.assign is shallow: a save written before a field was added would
+    // carry a half-filled `tut` object into the trigger code.
+    this.state.tut = Object.assign(this.defaultTut(), this.state.tut || {});
+    // Anything the save already satisfies is banked as permanently unlocked
+    // before startRun() wipes the run records — a save written when those records
+    // were still global must not lose the features it had earned.
+    Object.keys(cfg.featureUnlocks || {}).forEach((fid) => this.featureUnlocked(fid));
     // Merge in characters added to the config after the save was created.
     cfg.characterOrder.forEach((id) => {
       if (!this.state.characters[id]) this.state.characters[id] = { level: 0 };
@@ -55,7 +62,39 @@ export const Meta = {
       equipment: {},                 // charId -> { hat, suit, shoes } (gear uid or null)
       slotAssignments: {},           // slotId -> charId (one character per slot, one RACE globally)
       profileChar: null,             // charId whose sprite is the player's avatar (null = generic Worker)
+      tut: this.defaultTut(),        // trigger latches + tutorial bookkeeping
     };
+  },
+  // Two different lifetimes here, and mixing them up fires tutorials early.
+  //  - The RUN records (stock, waves) reset at every level start. They must be
+  //    records within a run so selling your stock can't undo an unlock, but they
+  //    can't carry across runs: "reach 3 tennis balls" would already be true on
+  //    entering the next level and the merge tutorial would greet you at the door.
+  //  - `unlocked` is the permanent half: once a feature's trigger has been
+  //    satisfied it stays open forever, whatever the run records say afterwards.
+  defaultTut() {
+    return {
+      maxEnteredLevel: 0,   // highest trophy-road number the player ever launched
+      unlocked: [],         // feature ids whose trigger fired at least once (permanent)
+      done: [],             // feature ids whose tutorial was fully walked through
+      step: {},             // feature id -> index in its target chain
+      ...this.defaultRun(),
+    };
+  },
+  // The per-run half, wiped by startRun().
+  defaultRun() {
+    return {
+      maxWave: 0,           // deepest wave reached in the CURRENT run
+      maxStock: 0,          // highest total unit count held this run
+      maxRes: {},           // resourceId -> highest count held this run (all tiers)
+      tiers: [],            // "tennisBall:2" for every resource+tier held this run
+    };
+  },
+  // A new level starts from a clean inventory, so its stock triggers must start
+  // from zero too — otherwise every stock condition is pre-satisfied on entry.
+  startRun() {
+    Object.assign(this.state.tut, this.defaultRun());
+    this.save();
   },
 
   save() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(this.state)); } catch (e) { /* storage full/blocked */ } },
@@ -92,20 +131,111 @@ export const Meta = {
     return drops;
   },
 
-  // ---------- Feature unlocks ----------
-  // feature_unlock rows {id, level}: the feature turns on once the level with
-  // that 1-based trophy-road number is completed. One-shot levels complete in
-  // order, so the completed count IS the highest cleared level number.
-  featureUnlocked(fid) {
-    const lvl = (this.cfg.featureUnlocks || {})[fid];
-    if (lvl == null) return true;   // not in the sheet = always available
-    return this.state.completedLevels.length >= lvl;
+  // ---------- Triggers ----------
+  // Record-keeping for the conditions that can't be recomputed from the state
+  // (a stock peak is gone the moment the player sells). Called from the game loop.
+  noteEnterLevel(n) {
+    const t = this.state.tut;
+    if (n > t.maxEnteredLevel) { t.maxEnteredLevel = n; this.save(); }
   },
-  // Features granted by completing this level (for the victory screen).
+  // Waves restart at 1 every level, so this is the deepest wave ever reached in
+  // any run — enough for a tutorial, which only ever fires once anyway.
+  noteWave(n) {
+    const t = this.state.tut;
+    if (n > t.maxWave) { t.maxWave = n; this.save(); }
+  },
+  // One inventory snapshot: the total, the per-resource counts, and which
+  // resource+tier pairs were held ("tennisBall:2").
+  noteStock(total, perResource, tiers) {
+    const t = this.state.tut; let dirty = false;
+    if (total > t.maxStock) { t.maxStock = total; dirty = true; }
+    for (const rid in perResource) {
+      if (perResource[rid] > (t.maxRes[rid] || 0)) { t.maxRes[rid] = perResource[rid]; dirty = true; }
+    }
+    (tiers || []).forEach((k) => { if (!t.tiers.includes(k)) { t.tiers.push(k); dirty = true; } });
+    if (dirty) this.save();
+  },
+
+  // Evaluate one trigger id: either an AND/OR group from `triggers_group`, or an
+  // atomic trigger from the `triggers` tab. `seen` breaks a cycle if the sheet
+  // ever grows one (a group referencing itself would recurse forever).
+  triggerMet(trigger, value, seen) {
+    if (!trigger) return true;      // no condition = open from the start
+    const grp = (this.cfg.triggerGroups || {})[trigger];
+    if (grp) {
+      seen = seen || [];
+      // An empty group is a half-written sheet row, not "no condition": treat it
+      // as unmet, or `every([])` would silently open the feature from turn one.
+      if (!grp.terms.length) return false;
+      if (seen.includes(trigger)) return false;
+      const inner = seen.concat(trigger);
+      const test = (t) => this.triggerMet(t.trigger, t.value, inner);
+      return grp.logic === "OR" ? grp.terms.some(test) : grp.terms.every(test);
+    }
+    return this.atomicTriggerMet(trigger, value);
+  },
+  atomicTriggerMet(trigger, value) {
+    const t = this.state.tut;
+    switch (trigger) {
+      // One-shot levels complete in sheet order, so the completed count IS the
+      // highest cleared trophy-road number.
+      case "reach_level_[number]": return this.state.completedLevels.length >= (+value || 0);
+      // Same progression point as reach_level_(N-1), but observed when the player
+      // LAUNCHES the level — i.e. with the in-game UI on screen. ">=" so skipping
+      // a level (or arriving with an older save) still fires it.
+      case "enter_level_[number]": return t.maxEnteredLevel >= (+value || 0);
+      case "reach_wave_[number]": return t.maxWave >= (+value || 0);
+      case "reach_[number]_in_stock": return t.maxStock >= (+value || 0);
+      // value is "tennisBall, 2" — the resource and the tier it must have reached.
+      case "optain_[ressource]_of_Tier[number]": {
+        const [rid, tier] = String(value == null ? "" : value).split(",").map((s) => s.trim());
+        return !!rid && t.tiers.includes(rid + ":" + tier);
+      }
+      // value is "3, tennisBall" — a count and the resource it applies to.
+      case "reach_[number]_of_[ressource]": {
+        const [n, rid] = String(value == null ? "" : value).split(",").map((s) => s.trim());
+        return !!rid && (t.maxRes[rid] || 0) >= (+n || 0);
+      }
+      // Own any character of that race (characters are never lost, so no latch).
+      case "optain_[character_typeSlot]":
+        return this.cfg.characterOrder.some((id) => this.cfg.characters[id].typeSlot === value && this.isOwned(id));
+      default: return false;        // unknown trigger = stays locked, loudly
+    }
+  },
+
+  // ---------- Feature unlocks ----------
+  // Reading this promotes the feature the first time its trigger fires: the run
+  // records are about to be wiped by the next level, but the unlock is for good.
+  featureUnlocked(fid) {
+    const f = (this.cfg.featureUnlocks || {})[fid];
+    if (!f) return true;            // not in the sheet = always available
+    if (this.state.tut.unlocked.includes(fid)) return true;
+    if (!this.triggerMet(f.trigger, f.value)) return false;
+    this.state.tut.unlocked.push(fid);
+    this.save();
+    return true;
+  },
+  // Features granted by completing this level (for the victory screen). Only the
+  // reach_level rows land here — the rest announce themselves through their own
+  // tutorial, in game, at the moment they open.
   featuresUnlockedBy(levelId) {
     const n = this.cfg.worldLevels.findIndex((l) => l.id === levelId) + 1;
     const fu = this.cfg.featureUnlocks || {};
-    return Object.keys(fu).filter((id) => fu[id] === n);
+    return Object.keys(fu).filter((id) => fu[id].trigger === "reach_level_[number]" && +fu[id].value === n);
+  },
+
+  // ---------- Tutorial bookkeeping ----------
+  // A tutorial is walked one target at a time; `step` is how far down the chain
+  // the player got. Both survive a reload, so a tutorial is never replayed.
+  tutorialDone(fid) { return this.state.tut.done.includes(fid); },
+  tutorialStep(fid) { return this.state.tut.step[fid] || 0; },
+  advanceTutorial(fid, total) {
+    const t = this.state.tut;
+    const next = this.tutorialStep(fid) + 1;
+    if (next >= total) { t.step[fid] = total; if (!t.done.includes(fid)) t.done.push(fid); }
+    else t.step[fid] = next;
+    this.save();
+    return this.tutorialDone(fid);
   },
 
   // ---------- Rewards & chests ----------
@@ -211,6 +341,9 @@ export const Meta = {
   // race (typeSlot) must be in the slot's containments, and a race can hold at
   // most ONE slot across the board.
   slotChar(slotId) { return this.state.slotAssignments[slotId] || null; },
+  // A slot only exists once its feature_unlock row fired (owning a character of
+  // the race it accepts). Slots with no row are always open.
+  slotUnlocked(slotId) { return this.featureUnlocked("unlock_" + slotId); },
   charSlot(charId) {
     for (const s in this.state.slotAssignments) if (this.state.slotAssignments[s] === charId) return s;
     return null;
@@ -229,6 +362,7 @@ export const Meta = {
     const slot = this.cfg.characterSlots.find((s) => s.id === slotId);
     const ch = this.cfg.characters[charId];
     if (!slot || !ch || !this.isOwned(charId)) return false;
+    if (!this.slotUnlocked(slotId)) return false;
     if (!slot.containments.includes(ch.typeSlot)) return false;
     return !this.assignedRaces(slotId).includes(ch.typeSlot);
   },
@@ -283,7 +417,7 @@ export const Meta = {
       if (this.charSlot(id)) return;
       const race = this.cfg.characters[id].typeSlot;
       if (!race || this.assignedRaces().includes(race)) return;
-      const slot = this.cfg.characterSlots.find((s) => !this.slotChar(s.id) && s.containments.includes(race));
+      const slot = this.cfg.characterSlots.find((s) => !this.slotChar(s.id) && s.containments.includes(race) && this.slotUnlocked(s.id));
       if (slot) { this.state.slotAssignments[slot.id] = id; changed = true; }
     });
     if (changed) this.save();

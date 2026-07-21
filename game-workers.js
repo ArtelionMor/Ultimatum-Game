@@ -65,7 +65,9 @@ export function unassignWorker(game, w, opts) {
   w.machineId = null;
   if (m) {
     m.crew = m.crew.filter((x) => x !== w);
-    if (m.crew.length < game.lvl(m).workersRequired) { m.producing = false; m.elapsed = 0; game.setProgress(m, 0); }
+    // Just stop it: `elapsed` is kept so the cycle resumes on the next worker, and
+    // tickProduction repaints the frozen bar on the very next frame.
+    if (m.crew.length < game.lvl(m).workersRequired) m.producing = false;
     if (!opts || !opts.silent) { game.renderWorkers(); game.refreshMachineCard(m); }
   }
 }
