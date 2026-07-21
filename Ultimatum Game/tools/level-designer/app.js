@@ -8,6 +8,8 @@ import {
   toCompetitorBuffRows, toConfigLevels, diagnoseColumns, BOT_BUFFS,
 } from "./model.js";
 import * as io from "./io.js";
+import { makeBus } from "./sync.js";
+import { makeHistory } from "./history.js";
 import { lineChart, smallMultiples, barsH, groupedBars, fmt } from "./charts.js";
 
 const $ = (s) => document.querySelector(s);
@@ -23,7 +25,132 @@ const resSprite = (id) => {
 const level = () => st.doc.levels[st.level];
 
 function status(msg, kind = "") { const e = $("#status"); e.textContent = msg; e.className = kind; }
-function mark() { st.dirty = true; status("Modifications non sauvegardées ●"); }
+
+// Every edit path in the tool ends here, so this is where the change is banked
+// for undo and broadcast to the other windows.
+function mark() {
+  hist.commit(st.doc, coalescing());
+  st.dirty = !hist.isClean();
+  status(st.dirty ? "Modifications non sauvegardées ●" : "Sauvegardé ✔", st.dirty ? "" : "ok");
+  syncUndoButtons();
+  bus.push(snapshot());
+}
+
+// ============================================================
+// Undo / redo (see history.js)
+// ============================================================
+const hist = makeHistory();
+
+// Typing a level id must be one undo step, not one per letter: fold consecutive
+// edits made in the same field. Anything else (a select, a checkbox, a button,
+// or moving to another field) starts a fresh step.
+let lastField = null;
+let lastEditAt = 0;
+function coalescing() {
+  const a = document.activeElement;
+  const typed = a && a.matches("input[type=text], input[type=number], textarea");
+  const same = typed && a === lastField && Date.now() - lastEditAt < 1500;
+  lastField = typed ? a : null;
+  lastEditAt = Date.now();
+  return same;
+}
+
+function syncUndoButtons() {
+  $("#undo").disabled = !hist.canUndo();
+  $("#redo").disabled = !hist.canRedo();
+}
+
+// Undo/redo replace the whole doc, so they must not go back through mark() —
+// that would bank the restored state as a new edit and make redo unreachable.
+function applyHistory(doc, label) {
+  st.doc = doc;
+  st.level = Math.max(0, Math.min(st.level, st.doc.levels.length - 1));
+  st.dirty = !hist.isClean();
+  lastField = null; // never fold the next edit into a step we just walked off
+  renderAll();
+  status(st.dirty ? `${label} — modifications non sauvegardées ●` : `${label} — identique au fichier`, st.dirty ? "" : "ok");
+  syncUndoButtons();
+  bus.push(snapshot());
+}
+
+function doUndo() { const d = hist.undo(); d ? applyHistory(d, "Annulé ↶") : status("Rien à annuler"); }
+function doRedo() { const d = hist.redo(); d ? applyHistory(d, "Rétabli ↷") : status("Rien à rétablir"); }
+
+// Ctrl+Z is intercepted even inside a field. The native text undo would restore
+// the visible characters without firing `input`, leaving the document holding
+// the new value and the field showing the old one — silent desync. Our history
+// redraws the field from the document, so the two can't disagree.
+document.addEventListener("keydown", (e) => {
+  if (!e.ctrlKey && !e.metaKey) return;
+  const k = e.key.toLowerCase();
+  if (k === "z" && !e.shiftKey) { e.preventDefault(); doUndo(); }
+  else if (k === "y" || (k === "z" && e.shiftKey)) { e.preventDefault(); doRedo(); }
+});
+
+// ============================================================
+// Cross-tab sync (see sync.js)
+// ============================================================
+// The doc *and* the selected level are shared by every open tab: the Économie
+// tab always describes the level being edited, whichever screen it's edited on.
+// Only the valuation tier stays per-tab — it's a way of reading the same level,
+// not a place in the document.
+const snapshot = () => ({ doc: st.doc, level: st.level, dirty: st.dirty, handle: io.getHandle() });
+
+const bus = makeBus({
+  getState: snapshot,
+  onState: (m) => { io.adoptHandle(m.handle); adopt(m); },
+  // A save carries the doc it wrote, so this window lands exactly on the bytes
+  // that reached the disk before clearing its own unsaved flag.
+  onSaved: (m) => { io.adoptHandle(m.handle); adopt({ ...m, saved: true }); },
+});
+
+// Applying a remote doc rebuilds the DOM, which would eat the caret of anyone
+// typing here. In practice only one screen is being edited at a time, so the
+// passive tab just holds the update until its field loses focus.
+let queued = null;
+let flushTimer = 0;
+const editing = () => {
+  const a = document.activeElement;
+  return a && (a.matches("input, select, textarea") || a.isContentEditable);
+};
+
+function flush() {
+  if (!queued || editing()) return;
+  clearInterval(flushTimer); flushTimer = 0;
+  const q = queued; queued = null;
+  adopt(q);
+}
+
+function adopt(m) {
+  if (editing()) {
+    queued = m;
+    // A background window fires no focus events in Chrome, so focusout alone can
+    // strand the update forever — poll as the safety net.
+    if (!flushTimer) flushTimer = setInterval(flush, 250);
+    return;
+  }
+  const wasId = level() && level().id;
+  st.doc = m.doc;
+  // A remote edit is new activity on the document, so it goes on this window's
+  // undo stack too: Ctrl+Z here undoes the last thing that happened, wherever it
+  // happened. Never coalesced — the sender already grouped its keystrokes.
+  hist.commit(st.doc, false);
+  if (m.saved) hist.markSaved();
+  st.dirty = !hist.isClean();
+  syncUndoButtons();
+  // Follow the sender's selection. Falling back to the id (not the index) keeps
+  // this tab on its level if the message predates a level being added or moved.
+  const byId = st.doc.levels.findIndex((l) => l.id === wasId);
+  const wanted = m.level != null ? m.level : byId >= 0 ? byId : st.level;
+  st.level = Math.max(0, Math.min(wanted, st.doc.levels.length - 1));
+  renderAll();
+  if (m.saved) status("Sauvegardé ✔ (autre fenêtre)", "ok");
+  else status(st.dirty ? "Modifications non sauvegardées ● (synchronisé)" : "Synchronisé avec l'autre fenêtre", st.dirty ? "" : "ok");
+}
+
+// focusout fires before the next focusin, so defer: tabbing between two fields
+// must not count as "done editing" and redraw the form under the user.
+document.addEventListener("focusout", () => setTimeout(flush, 0));
 
 // ============================================================
 // Boot
@@ -45,11 +172,26 @@ function mark() { st.dirty = true; status("Modifications non sauvegardées ●")
        competitors, competitors_behavior, customers…), puis recharge cette page (F5).</p></div>`;
     return;
   }
-  const disk = await io.loadDocFromServer();
+  // Ask the other tabs first: one of them may hold unsaved edits, in which case
+  // the copy on disk is stale and adopting it would fork the document.
+  const peer = await bus.hello();
+  io.adoptHandle(peer && peer.handle);
+  const disk = (peer && peer.dirty && peer.doc) || (await io.loadDocFromServer());
   st.doc = disk || seedDoc();
+  st.dirty = !!(peer && peer.dirty);
   if (!st.doc.levels.length) st.doc.levels.push(makeLevel("world_config_1", st.doc.biomes[0].id));
+  // Open on the level the other screens are on, so a new window joins the work
+  // in progress instead of dropping back to the first level.
+  if (peer && peer.level != null) st.level = Math.max(0, Math.min(peer.level, st.doc.levels.length - 1));
+  // History starts here: there is nothing to undo back past the loaded document.
+  // Only a clean load counts as the saved point — adopting a peer's unsaved work
+  // must keep the unsaved marker.
+  hist.reset(st.doc);
+  if (!st.dirty) hist.markSaved();
+  syncUndoButtons();
   fillStatics();
   renderAll();
+  if (st.dirty) return status("Modifications non sauvegardées ● (synchronisé avec l'autre fenêtre)");
   if (missing.length) {
     // The tool works without these sections, but the game's normalize() won't.
     status(`Sections absentes de config_export.json : ${missing.join(", ")} — le designer fonctionne, mais le JEU ne chargera probablement pas cette config.`, "err");
@@ -383,6 +525,7 @@ function selectLevel(idx, scroll) {
     document.querySelector(`.level-row[data-idx="${idx}"]`)?.classList.add("sel");
     $("#levelSel").value = idx;
     renderEcon(); renderBots(); renderExport();
+    bus.push(snapshot()); // the other screens follow, so Économie can't drift off-level
   }
   if (scroll) document.querySelector(`.level-row[data-idx="${idx}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" });
 }
@@ -856,11 +999,26 @@ $("#addBot").onclick = () => {
 $("#tierSel").onchange = (e) => { st.tier = +e.target.value; refresh(); };
 $("#shareScale").onchange = renderEcon;
 
+// Loading a different document from disk starts a new history: undoing back into
+// the document you just replaced would silently resurrect it.
+function loaded(msg) {
+  hist.reset(st.doc);
+  hist.markSaved();
+  syncUndoButtons();
+  renderAll();
+  status(msg, "ok");
+  bus.push(snapshot());
+}
+
+$("#undo").onclick = doUndo;
+$("#redo").onclick = doRedo;
+
 $("#open").onclick = async () => {
   try {
     const doc = io.canUseFS() ? (await io.pickDocFile("open"), await io.readHandle()) : await io.pickLocalFile();
     if (!doc) return;
-    st.doc = doc; st.level = 0; st.dirty = false; renderAll(); status("Chargé", "ok");
+    st.doc = doc; st.level = 0; st.dirty = false;
+    loaded("Chargé");
   } catch (e) { if (e.name !== "AbortError") status(e.message, "err"); }
 };
 $("#save").onclick = async () => {
@@ -871,7 +1029,13 @@ $("#save").onclick = async () => {
     } else {
       io.download("leveldesign.json", JSON.stringify(st.doc, null, 2));
     }
+    // The history keeps the saved point, so undoing back to it clears the
+    // unsaved marker instead of leaving a phantom "●".
+    hist.markSaved();
     st.dirty = false; status("Sauvegardé ✔", "ok");
+    // Clears the dirty flag everywhere, and hands the freshly picked file handle
+    // to tabs that don't have one yet.
+    bus.saved(io.getHandle());
   } catch (e) { if (e.name !== "AbortError") status(e.message, "err"); }
 };
 $("#reload").onclick = async () => {
@@ -879,7 +1043,7 @@ $("#reload").onclick = async () => {
   const doc = (io.hasHandle() ? await io.readHandle() : null) || await io.loadDocFromServer();
   if (!doc) return status("Aucun leveldesign.json trouvé sur le disque", "err");
   st.doc = doc; st.level = Math.min(st.level, doc.levels.length - 1); st.dirty = false;
-  renderAll(); status("Rechargé depuis le disque", "ok");
+  loaded("Rechargé depuis le disque");
 };
 $("#dlGame").onclick = () => {
   const f = toConfigLevels(st.doc, st.cfg, st.tier);

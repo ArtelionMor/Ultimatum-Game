@@ -144,11 +144,38 @@ export function normalize(raw) {
   });
   characterSlots.sort((a, b) => a.order - b.order);
 
-  // feature unlocks: {id, level} — the feature turns on once the level with
-  // that 1-based number on the trophy road is COMPLETED (announced as a reward
-  // on that level's victory screen).
+  // feature unlocks: {id, tutorial, target, trigger, value}. The feature turns on
+  // when its `trigger` is satisfied — either an atomic trigger from the `triggers`
+  // tab (reach_level_[number], enter_level_[number], reach_[number]_in_stock,
+  // reach_[number]_of_[ressource], optain_[character_typeSlot]) or the id of an
+  // AND/OR group in `triggers_group`. `tutorial` (black_mask | red_dot) and the
+  // `target` chain drive the onboarding overlay (tutorial.js); a row with no
+  // tutorial just gates the feature silently.
   const featureUnlocks = {};
-  (raw.feature_unlock || []).forEach((f) => { if (f.id) featureUnlocks[f.id] = f.level || 0; });
+  (raw.feature_unlock || []).forEach((f) => {
+    if (!f.id) return;
+    featureUnlocks[f.id] = {
+      id: f.id,
+      // "back_mask" is a recurring typo in the sheet — same thing as black_mask,
+      // and silently ignoring the row would just make the tutorial not show up.
+      tutorial: f.tutorial === "back_mask" ? "black_mask" : (f.tutorial || null),
+      // "character_tab, dog, equip_hat" -> a chain the player walks one click at a time
+      targets: String(f.target == null ? "" : f.target).split(",").map((s) => s.trim()).filter(Boolean),
+      trigger: f.trigger || null,
+      value: f.value,
+    };
+  });
+
+  // trigger groups: several rows share one id, each adding a term. `logic` is
+  // carried by every row of the group (AND / OR) and a term may itself be another
+  // group id — that is how unlock_merge nests reach_3_common_ressources.
+  const triggerGroups = {};
+  (raw.triggers_group || []).forEach((g) => {
+    if (!g.id) return;
+    const grp = (triggerGroups[g.id] = triggerGroups[g.id] || { id: g.id, logic: "AND", terms: [] });
+    if (g.logic) grp.logic = String(g.logic).toUpperCase();
+    if (g.trigger) grp.terms.push({ trigger: g.trigger, value: g.value });
+  });
 
   // upgrade profiles: shard cost to reach each level (level 1 = unlock cost)
   const upgradeProfiles = {};
@@ -229,7 +256,7 @@ export function normalize(raw) {
   return {
     g, resources, resourceOrder, maxTier, tierColors, machines, purchases, roundIncome, competitors, convert, slots, customerSprites, customerDefs, customerOrder,
     marketProfiles, unlockProfiles, worldConfigs, worldLevels, rewards, gears, characters, characterOrder, upgradeProfiles,
-    behaviorProfiles, buffProfiles, progressProfiles, characterSlots, featureUnlocks,
+    behaviorProfiles, buffProfiles, progressProfiles, characterSlots, featureUnlocks, triggerGroups,
   };
 }
 

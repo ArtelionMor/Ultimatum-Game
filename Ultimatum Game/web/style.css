@@ -1165,3 +1165,50 @@ body.dragging-worker { cursor: grabbing; }
 
 /* machine crew slots hold chips now */
 .worker-slots { align-items: center; flex-wrap: wrap; }
+
+/* ============================================================
+ * Tutorial overlay (tutorial.js — feature_unlock tab)
+ * ============================================================ */
+#tut-layer { position: fixed; inset: 0; z-index: 4000; pointer-events: none; }
+
+/* black_mask: four shields around the target leave a real hole, so the click
+ * lands on the button itself while everything else is unreachable. */
+.tut-shield {
+  position: fixed; background: rgba(6, 8, 18, .82);
+  pointer-events: auto; cursor: not-allowed;
+  animation: tut-fade .18s ease-out;
+}
+@keyframes tut-fade { from { opacity: 0; } to { opacity: 1; } }
+.tut-ring {
+  position: fixed; pointer-events: none; border-radius: 12px;
+  box-shadow: 0 0 0 3px var(--accent), 0 0 22px 6px rgba(244, 185, 66, .45);
+  animation: tut-pulse 1.4s ease-in-out infinite;
+}
+@keyframes tut-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px var(--accent), 0 0 22px 6px rgba(244, 185, 66, .45); }
+  50%      { box-shadow: 0 0 0 3px var(--accent), 0 0 30px 12px rgba(244, 185, 66, .18); }
+}
+
+/* the hand comes in after a few seconds and taps in place */
+.tut-hand {
+  position: fixed; width: 80px; height: 80px; pointer-events: none;
+  opacity: 0; transform: translateY(14px); transition: opacity .25s ease-out;
+}
+.tut-hand.on { opacity: 1; animation: tut-tap 1.1s ease-in-out infinite; }
+@keyframes tut-tap {
+  0%, 100% { transform: translate(0, 14px) scale(1); }
+  45%      { transform: translate(0, 2px) scale(.92); }
+}
+
+/* red_dot: a badge pinned on the target until the first tap */
+.tut-dot {
+  position: fixed; width: 12px; height: 12px; border-radius: 50%;
+  background: var(--danger); border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .5);
+  pointer-events: none; opacity: 0; transition: opacity .15s ease-out;
+}
+.tut-dot.on { opacity: 1; animation: tut-dot-pulse 1.5s ease-in-out infinite; }
+@keyframes tut-dot-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.25); }
+}

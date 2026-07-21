@@ -6,6 +6,12 @@
       "runtimeExecutable": "python",
       "runtimeArgs": ["-m", "http.server", "8792", "--directory", "Ultimatum Game/web"],
       "port": 8792
+    },
+    {
+      "name": "level-designer",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["Ultimatum Game/tools/level-designer/serve.py", "8791"],
+      "port": 8791
     }
   ]
 }

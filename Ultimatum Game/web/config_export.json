@@ -2265,64 +2265,259 @@
   ],
   "feature_unlock": [
     {
-      "id": "tier2",
-      "level": 1
+      "id": "attributing_a_worker",
+      "tutorial": "black_mask",
+      "target": "buy_a_worker, assign_a_worker",
+      "trigger": "reach_level_[number]",
+      "value": 0
+    },
+    {
+      "id": "switch_a_worker",
+      "tutorial": "black_mask",
+      "target": "drag_n_drop_a_worker",
+      "trigger": "reach_wave_[number]",
+      "value": 2
     },
     {
       "id": "storage",
-      "level": 1
+      "tutorial": "black_mask",
+      "target": "storage",
+      "trigger": "unlock_storage",
+      "value": 1
     },
     {
       "id": "merge",
-      "level": 2
+      "tutorial": "black_mask",
+      "target": "merge_button",
+      "trigger": "unlock_merge"
+    },
+    {
+      "id": "tier2",
+      "tutorial": "red_dot",
+      "target": "[ressource_tier2]",
+      "trigger": "reach_level_[number]",
+      "value": 2
     },
     {
       "id": "upgrade_machine",
-      "level": 3
+      "tutorial": "red_dot",
+      "target": "upgrade_button",
+      "trigger": "enter_level_[number]",
+      "value": 4
     },
     {
       "id": "tier3",
-      "level": 3
+      "tutorial": "red_dot",
+      "target": "[ressource_tier3]",
+      "trigger": "reach_level_[number]",
+      "value": 3
     },
     {
       "id": "x2_button",
-      "level": 4
+      "tutorial": "red_dot",
+      "target": "x2_button",
+      "trigger": "reach_level_[number]",
+      "value": 4
     },
     {
       "id": "chest",
-      "level": 5
+      "tutorial": "red_dot",
+      "target": "chest_tab",
+      "trigger": "reach_level_[number]",
+      "value": 5
     },
     {
       "id": "character",
-      "level": 5
+      "tutorial": "red_dot",
+      "target": "character_tab, dog",
+      "trigger": "reach_level_[number]",
+      "value": 5
     },
     {
       "id": "end_of_round_summary",
-      "level": 6
+      "tutorial": "red_dot",
+      "target": "hud-money",
+      "trigger": "reach_level_[number]",
+      "value": 6
     },
     {
       "id": "tier4",
-      "level": 7
+      "tutorial": "red_dot",
+      "target": "[ressource_tier4]",
+      "trigger": "reach_level_[number]",
+      "value": 7
     },
     {
       "id": "gears",
-      "level": 7
+      "tutorial": "red_dot",
+      "target": "character_tab, dog, equip_hat",
+      "trigger": "reach_level_[number]",
+      "value": 7
     },
     {
       "id": "tier5",
-      "level": 8
+      "tutorial": "red_dot",
+      "target": "[ressource_tier5]",
+      "trigger": "reach_level_[number]",
+      "value": 8
     },
     {
       "id": "marketting",
-      "level": 9
+      "tutorial": "black_mask",
+      "target": "marketting",
+      "trigger": "enter_level_[number]",
+      "value": 10
     },
     {
       "id": "x4_button",
-      "level": 10
+      "tutorial": "red_dot",
+      "target": "x4_button",
+      "trigger": "reach_level_[number]",
+      "value": 10
     },
     {
       "id": "tier6",
-      "level": 11
+      "tutorial": "red_dot",
+      "target": "[ressource_tier6]",
+      "trigger": "reach_level_[number]",
+      "value": 11
+    },
+    {
+      "id": "unlock_slot_tennisBall",
+      "tutorial": "red_dot",
+      "target": "slot_tennisBall",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Dog"
+    },
+    {
+      "id": "unlock_slot_coffee",
+      "tutorial": "red_dot",
+      "target": "slot_coffee",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Cat"
+    },
+    {
+      "id": "unlock_slot_carrot",
+      "tutorial": "red_dot",
+      "target": "slot_carrot",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Rabbit"
+    },
+    {
+      "id": "unlock_slot_nenuphar",
+      "tutorial": "red_dot",
+      "target": "slot_nenuphar",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Frog"
+    },
+    {
+      "id": "unlock_slot_pillow",
+      "tutorial": "red_dot",
+      "target": "slot_pillow",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Sloth"
+    },
+    {
+      "id": "unlock_slot_bottle",
+      "tutorial": "red_dot",
+      "target": "slot_bottle",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Octopus"
+    },
+    {
+      "id": "unlock_slot_sandwitch",
+      "tutorial": "red_dot",
+      "target": "slot_sandwitch",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Fox"
+    },
+    {
+      "id": "unlock_slot_nest",
+      "tutorial": "red_dot",
+      "target": "slot_nest",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Owl"
+    },
+    {
+      "id": "unlock_slot_croissant",
+      "tutorial": "red_dot",
+      "target": "slot_croissant",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Robin"
+    },
+    {
+      "id": "unlock_slot_candle",
+      "tutorial": "red_dot",
+      "target": "slot_candle",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Goat"
+    },
+    {
+      "id": "unlock_slot_blackLotus",
+      "tutorial": "red_dot",
+      "target": "slot_blackLotus",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Crow"
+    }
+  ],
+  "triggers_group": [
+    {
+      "id": "unlock_merge",
+      "logic": "AND",
+      "trigger": "reach_level_[number]",
+      "value": 2
+    },
+    {
+      "id": "unlock_merge",
+      "logic": "AND",
+      "trigger": "reach_3_common_ressources"
+    },
+    {
+      "id": "reach_3_common_ressources",
+      "logic": "OR",
+      "trigger": "reach_[number]_of_[ressource]",
+      "value": "3, tennisBall"
+    },
+    {
+      "id": "reach_3_common_ressources",
+      "logic": "OR",
+      "trigger": "reach_[number]_of_[ressource]",
+      "value": "3, carrot"
+    },
+    {
+      "id": "unlock_storage",
+      "logic": "AND",
+      "trigger": "reach_[number]_in_stock",
+      "value": 5
+    },
+    {
+      "id": "unlock_storage",
+      "logic": "AND",
+      "trigger": "reach_level_[number]",
+      "value": 1
+    }
+  ],
+  "triggers": [
+    {
+      "id": "reach_[number]_in_stock"
+    },
+    {
+      "id": "reach_[number]_of_[ressource]"
+    },
+    {
+      "id": "reach_level_[number]"
+    },
+    {
+      "id": "optain_[character_typeSlot]"
+    },
+    {
+      "id": "optain_[ressource]_of_Tier[number]"
+    },
+    {
+      "id": "enter_level_[number]"
+    },
+    {
+      "id": "reach_wave_[number]"
     }
   ],
   "gears": [
@@ -2554,7 +2749,7 @@
     },
     {
       "id": "startingWorkers",
-      "value": 1
+      "value": 0
     },
     {
       "id": "maxWorkersTotal",
@@ -2718,6 +2913,12 @@
     }
   ],
   "purshases": [
+    {
+      "id": "more_worker_0",
+      "type": "increaseWorker",
+      "effect": 1,
+      "price": 0
+    },
     {
       "id": "more_worker_1",
       "type": "increaseWorker",
