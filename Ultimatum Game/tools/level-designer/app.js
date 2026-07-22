@@ -5,7 +5,7 @@
 import {
   makeBlock, makeLevel, emptyDoc, compileLevel, econ, priceOf, curveAt,
   deriveBotWeightsPerWave, adaptationPerWave, toMarketConfigRows, toCompetitorRows,
-  toCompetitorBuffRows, toConfigLevels, diagnoseColumns, BOT_BUFFS,
+  toCompetitorBuffRows, toUnlockRows, toConfigLevels, diagnoseColumns, BOT_BUFFS,
 } from "./model.js";
 import * as io from "./io.js";
 import { makeBus } from "./sync.js";
@@ -16,6 +16,7 @@ const $ = (s) => document.querySelector(s);
 const st = { doc: emptyDoc(), cfg: null, raw: null, level: 0, tier: 1, dirty: false };
 
 const resName = (id) => (st.cfg.resources[id] ? st.cfg.resources[id].displayName : id);
+const machineName = (id) => { const m = st.cfg.machines.find((x) => x.id === id); return (m && m.displayName) || id; };
 const resSprite = (id) => {
   const r = st.cfg.resources[id];
   if (!r) return "";
@@ -971,10 +972,16 @@ function renderExport() {
   const mc = toMarketConfigRows(l, st.doc.blocks, st.cfg);
   const bots = toCompetitorRows(l, st.doc.blocks, st.cfg, st.tier);
   const buffs = toCompetitorBuffRows(l);
+  const unlocks = toUnlockRows(l, st.doc.blocks, st.cfg);
   $("#mcCount").textContent = mc.length;
   $("#outMarket").textContent = JSON.stringify(mc, null, 1);
   $("#outBots").textContent = JSON.stringify(bots, null, 1);
   $("#outBuffs").textContent = JSON.stringify(buffs, null, 1);
+  // "Machine (round N)" reads faster than raw rows when eyeballing the pacing.
+  $("#unlockSummary").textContent = unlocks.length
+    ? unlocks.map((u) => `${machineName(u.machine)} → vague ${u.unlock}`).join("  ·  ")
+    : "Aucune machine requise (aucune ressource demandée sur ce niveau).";
+  $("#outUnlock").textContent = JSON.stringify(unlocks, null, 1);
 
   // the sheet no longer carries market_config: diagnose the generated rows instead
   const d = diagnoseColumns(st.raw.market_config && st.raw.market_config.length ? st.raw.market_config : mc, st.cfg);
@@ -1112,7 +1119,7 @@ $("#reload").onclick = async () => {
 $("#dlGame").onclick = () => {
   const f = toConfigLevels(st.doc, st.cfg, st.tier);
   io.download("config_levels.json", JSON.stringify(f, null, 1));
-  status(`config_levels.json — ${st.doc.levels.length} niveaux, ${f.market_config.length} lignes market → à placer dans web/`, "ok");
+  status(`config_levels.json — ${st.doc.levels.length} niveaux, ${f.market_config.length} lignes market, ${f.unlock_config.length} unlock → à placer dans web/`, "ok");
 };
 $("#dlDoc").onclick = () => io.download("leveldesign.json", JSON.stringify(st.doc, null, 2));
 $("#dlMarket").onclick = () => io.download("market_config.json", JSON.stringify(toMarketConfigRows(level(), st.doc.blocks, st.cfg), null, 2));

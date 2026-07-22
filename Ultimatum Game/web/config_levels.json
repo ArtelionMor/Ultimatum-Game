@@ -9828,5 +9828,362 @@
    "buff": "autoMerge",
    "value": 1
   }
+ ],
+ "unlock_config": [
+  {
+   "id": "Tutorial_1",
+   "machine": "tennisBallFactory",
+   "unlock": 1
+  },
+  {
+   "id": "Tutorial_1",
+   "machine": "carrotFarm",
+   "unlock": 2
+  },
+  {
+   "id": "Tutorial_1_2",
+   "machine": "tennisBallFactory",
+   "unlock": 1
+  },
+  {
+   "id": "Tutorial_1_2",
+   "machine": "carrotFarm",
+   "unlock": 2
+  },
+  {
+   "id": "Tutorial_1_3",
+   "machine": "tennisBallFactory",
+   "unlock": 1
+  },
+  {
+   "id": "Tutorial_1_3",
+   "machine": "carrotFarm",
+   "unlock": 2
+  },
+  {
+   "id": "Tutorial_2",
+   "machine": "tennisBallFactory",
+   "unlock": 1
+  },
+  {
+   "id": "Tutorial_2",
+   "machine": "carrotFarm",
+   "unlock": 2
+  },
+  {
+   "id": "Tutorial_3",
+   "machine": "tennisBallFactory",
+   "unlock": 1
+  },
+  {
+   "id": "Tutorial_3",
+   "machine": "carrotFarm",
+   "unlock": 2
+  },
+  {
+   "id": "Bottle_Intro",
+   "machine": "tennisBallFactory",
+   "unlock": 1
+  },
+  {
+   "id": "Bottle_Intro",
+   "machine": "carrotFarm",
+   "unlock": 2
+  },
+  {
+   "id": "Bottle_Intro",
+   "machine": "bottleMaker",
+   "unlock": 5
+  },
+  {
+   "id": "Bottle_2_Intense",
+   "machine": "tennisBallFactory",
+   "unlock": 1
+  },
+  {
+   "id": "Bottle_2_Intense",
+   "machine": "carrotFarm",
+   "unlock": 2
+  },
+  {
+   "id": "Bottle_2_Intense",
+   "machine": "bottleMaker",
+   "unlock": 3
+  },
+  {
+   "id": "Bottle_3_Slow",
+   "machine": "tennisBallFactory",
+   "unlock": 1
+  },
+  {
+   "id": "Bottle_3_Slow",
+   "machine": "carrotFarm",
+   "unlock": 1
+  },
+  {
+   "id": "Bottle_3_Slow",
+   "machine": "bottleMaker",
+   "unlock": 2
+  },
+  {
+   "id": "Bottle_4_Intense",
+   "machine": "tennisBallFactory",
+   "unlock": 1
+  },
+  {
+   "id": "Bottle_4_Intense",
+   "machine": "carrotFarm",
+   "unlock": 1
+  },
+  {
+   "id": "Bottle_4_Intense",
+   "machine": "bottleMaker",
+   "unlock": 2
+  },
+  {
+   "id": "Nenuphar_Intro",
+   "machine": "tennisBallFactory",
+   "unlock": 2
+  },
+  {
+   "id": "Nenuphar_Intro",
+   "machine": "carrotFarm",
+   "unlock": 2
+  },
+  {
+   "id": "Nenuphar_Intro",
+   "machine": "nenupharFarm",
+   "unlock": 1
+  },
+  {
+   "id": "Nenuphar_Intro",
+   "machine": "bottleMaker",
+   "unlock": 6
+  },
+  {
+   "id": "Nest_Intro",
+   "machine": "tennisBallFactory",
+   "unlock": 1
+  },
+  {
+   "id": "Nest_Intro",
+   "machine": "carrotFarm",
+   "unlock": 2
+  },
+  {
+   "id": "Nest_Intro",
+   "machine": "nestFactory",
+   "unlock": 5
+  },
+  {
+   "id": "Nest_Intro",
+   "machine": "nenupharFarm",
+   "unlock": 1
+  },
+  {
+   "id": "Nest_Intro",
+   "machine": "bottleMaker",
+   "unlock": 3
+  },
+  {
+   "id": "Nest_1_Normal",
+   "machine": "tennisBallFactory",
+   "unlock": 1
+  },
+  {
+   "id": "Nest_1_Normal",
+   "machine": "carrotFarm",
+   "unlock": 1
+  },
+  {
+   "id": "Nest_1_Normal",
+   "machine": "nestFactory",
+   "unlock": 5
+  },
+  {
+   "id": "Nest_1_Normal",
+   "machine": "nenupharFarm",
+   "unlock": 2
+  },
+  {
+   "id": "Nest_1_Normal",
+   "machine": "bottleMaker",
+   "unlock": 2
+  },
+  {
+   "id": "Intro_Sandwitch",
+   "machine": "tennisBallFactory",
+   "unlock": 3
+  },
+  {
+   "id": "Intro_Sandwitch",
+   "machine": "carrotFarm",
+   "unlock": 1
+  },
+  {
+   "id": "Intro_Sandwitch",
+   "machine": "nenupharFarm",
+   "unlock": 2
+  },
+  {
+   "id": "Intro_Sandwitch",
+   "machine": "sandwichStore",
+   "unlock": 3
+  },
+  {
+   "id": "Intro_Croissant",
+   "machine": "carrotFarm",
+   "unlock": 1
+  },
+  {
+   "id": "Intro_Croissant",
+   "machine": "nenupharFarm",
+   "unlock": 2
+  },
+  {
+   "id": "Intro_Croissant",
+   "machine": "sandwichStore",
+   "unlock": 2
+  },
+  {
+   "id": "Intro_Croissant",
+   "machine": "croissantMaker",
+   "unlock": 5
+  },
+  {
+   "id": "Intro_Coffee & Pillow",
+   "machine": "pillowMaker",
+   "unlock": 2
+  },
+  {
+   "id": "Intro_Coffee & Pillow",
+   "machine": "candleBabaYagaHut",
+   "unlock": 4
+  },
+  {
+   "id": "Intro_Coffee & Pillow",
+   "machine": "coffeeShop",
+   "unlock": 1
+  },
+  {
+   "id": "Breakfast",
+   "machine": "carrotFarm",
+   "unlock": 1
+  },
+  {
+   "id": "Breakfast",
+   "machine": "coffeeShop",
+   "unlock": 1
+  },
+  {
+   "id": "Breakfast",
+   "machine": "sandwichStore",
+   "unlock": 2
+  },
+  {
+   "id": "Breakfast",
+   "machine": "croissantMaker",
+   "unlock": 4
+  },
+  {
+   "id": "Bottles & Candles",
+   "machine": "pillowMaker",
+   "unlock": 1
+  },
+  {
+   "id": "Bottles & Candles",
+   "machine": "tennisBallFactory",
+   "unlock": 1
+  },
+  {
+   "id": "Bottles & Candles",
+   "machine": "candleBabaYagaHut",
+   "unlock": 2
+  },
+  {
+   "id": "Bottles & Candles",
+   "machine": "coffeeShop",
+   "unlock": 1
+  },
+  {
+   "id": "Bottles & Candles",
+   "machine": "bottleMaker",
+   "unlock": 3
+  },
+  {
+   "id": "Intro_Black Lotus",
+   "machine": "pillowMaker",
+   "unlock": 1
+  },
+  {
+   "id": "Intro_Black Lotus",
+   "machine": "tennisBallFactory",
+   "unlock": 7
+  },
+  {
+   "id": "Intro_Black Lotus",
+   "machine": "nenupharFarm",
+   "unlock": 1
+  },
+  {
+   "id": "Intro_Black Lotus",
+   "machine": "candleBabaYagaHut",
+   "unlock": 2
+  },
+  {
+   "id": "Intro_Black Lotus",
+   "machine": "coffeeShop",
+   "unlock": 1
+  },
+  {
+   "id": "Intro_Black Lotus",
+   "machine": "gameStore",
+   "unlock": 5
+  },
+  {
+   "id": "Intro_Black Lotus",
+   "machine": "bottleMaker",
+   "unlock": 7
+  },
+  {
+   "id": "Lotus & Croissant",
+   "machine": "pillowMaker",
+   "unlock": 1
+  },
+  {
+   "id": "Lotus & Croissant",
+   "machine": "carrotFarm",
+   "unlock": 1
+  },
+  {
+   "id": "Lotus & Croissant",
+   "machine": "nenupharFarm",
+   "unlock": 1
+  },
+  {
+   "id": "Lotus & Croissant",
+   "machine": "candleBabaYagaHut",
+   "unlock": 3
+  },
+  {
+   "id": "Lotus & Croissant",
+   "machine": "coffeeShop",
+   "unlock": 1
+  },
+  {
+   "id": "Lotus & Croissant",
+   "machine": "gameStore",
+   "unlock": 5
+  },
+  {
+   "id": "Lotus & Croissant",
+   "machine": "sandwichStore",
+   "unlock": 2
+  },
+  {
+   "id": "Lotus & Croissant",
+   "machine": "croissantMaker",
+   "unlock": 4
+  }
  ]
 }

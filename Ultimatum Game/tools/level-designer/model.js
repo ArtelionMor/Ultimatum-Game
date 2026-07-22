@@ -251,14 +251,56 @@ export function toCompetitorBuffRows(level) {
   return out;
 }
 
+// unlock_config: paces when each machine appears in a level. A machine is
+// "needed" the first wave its output — or an ingredient of a demanded output,
+// walking the recipe graph upward — is asked for. That first-need round IS the
+// unlock, so a machine shows up exactly when the player first has a reason to run
+// it (converters and their ingredient machines unlock on the same wave).
+//
+// Machines a level never needs are simply omitted: the engine reads an absent row
+// as "never" (machineUnlockRound returns null), same as a blank `unlock` cell in
+// the sheet. Rows are keyed by level.id, like market_config — buildLevelContext
+// falls back to level.id when resolving unlockConfig.
+export function toUnlockRows(level, blocks, cfg) {
+  const rows = compileLevel(level, blocks);
+  const producer = {};                       // resource id -> the machine that outputs it
+  cfg.machines.forEach((m) => { if (m.outputs) producer[m.outputs] = m; });
+
+  // Full ingredient closure of a resource: itself + everything upstream. Cycles
+  // (should never happen in a recipe tree) are guarded by `seen`.
+  const cache = {};
+  function closure(resId) {
+    if (cache[resId]) return cache[resId];
+    const out = new Set(), seen = new Set();
+    (function walk(r) {
+      if (seen.has(r)) return; seen.add(r); out.add(r);
+      const m = producer[r]; if (m) (m.inputs || []).forEach((i) => walk(i.type));
+    })(resId);
+    return (cache[resId] = out);
+  }
+
+  const firstRound = {};                      // machine id -> earliest wave it is needed
+  rows.forEach((row) => {
+    const needed = new Set();
+    Object.keys(row.weights).forEach((rid) => { if (row.weights[rid] > 0) closure(rid).forEach((r) => needed.add(r)); });
+    needed.forEach((rid) => { const m = producer[rid]; if (m && firstRound[m.id] == null) firstRound[m.id] = row.round; });
+  });
+
+  // config-order for a stable, reviewable export
+  return cfg.machines
+    .filter((m) => firstRound[m.id] != null)
+    .map((m) => ({ id: level.id, machine: m.id, unlock: firstRound[m.id] }));
+}
+
 // The single file the game loads next to config_export.json
-// (web/config_levels.json): every level of the document, all three sections.
+// (web/config_levels.json): every level of the document, all four sections.
 export function toConfigLevels(doc, cfg, tier) {
-  const out = { market_config: [], competitors_behavior: [], competitors_buffs: [] };
+  const out = { market_config: [], competitors_behavior: [], competitors_buffs: [], unlock_config: [] };
   doc.levels.forEach((l) => {
     out.market_config.push(...toMarketConfigRows(l, doc.blocks, cfg));
     out.competitors_behavior.push(...toCompetitorRows(l, doc.blocks, cfg, tier));
     out.competitors_buffs.push(...toCompetitorBuffRows(l));
+    out.unlock_config.push(...toUnlockRows(l, doc.blocks, cfg));
   });
   return out;
 }
