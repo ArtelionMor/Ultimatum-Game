@@ -8171,254 +8171,63 @@
       "content": "legendary_shard"
     }
   ],
-  "unlock_config": [
-    {
-      "id": "Tutorial_1-3",
-      "machine": "tennisBallFactory",
-      "unlock": 1
-    },
-    {
-      "id": "Tutorial_1-3",
-      "machine": "carrotFarm",
-      "unlock": 2
-    },
-    {
-      "id": "Bottle_Intro",
-      "machine": "tennisBallFactory",
-      "unlock": 1
-    },
-    {
-      "id": "Bottle_Intro",
-      "machine": "carrotFarm",
-      "unlock": 2
-    },
-    {
-      "id": "Bottle_Intro",
-      "machine": "bottleMaker",
-      "unlock": 4
-    },
-    {
-      "id": "Bottle_2",
-      "machine": "tennisBallFactory",
-      "unlock": 1
-    },
-    {
-      "id": "Bottle_2",
-      "machine": "carrotFarm",
-      "unlock": 2
-    },
-    {
-      "id": "Bottle_2",
-      "machine": "bottleMaker",
-      "unlock": 3
-    },
-    {
-      "id": "Bottle_3",
-      "machine": "tennisBallFactory",
-      "unlock": 1
-    },
-    {
-      "id": "Bottle_3",
-      "machine": "carrotFarm",
-      "unlock": 1
-    },
-    {
-      "id": "Bottle_3",
-      "machine": "bottleMaker",
-      "unlock": 2
-    },
-    {
-      "id": "Bottle_4",
-      "machine": "tennisBallFactory",
-      "unlock": 1
-    },
-    {
-      "id": "Bottle_4",
-      "machine": "carrotFarm",
-      "unlock": 1
-    },
-    {
-      "id": "Bottle_4",
-      "machine": "bottleMaker",
-      "unlock": 2
-    },
-    {
-      "id": "Nenuphar_Intro",
-      "machine": "tennisBallFactory",
-      "unlock": 2
-    },
-    {
-      "id": "Nenuphar_Intro",
-      "machine": "carrotFarm",
-      "unlock": 2
-    },
-    {
-      "id": "Nenuphar_Intro",
-      "machine": "bottleMaker",
-      "unlock": 5
-    },
-    {
-      "id": "Nenuphar_Intro",
-      "machine": "nenupharFarm",
-      "unlock": 1
-    },
-    {
-      "id": "Nest_Intro",
-      "machine": "tennisBallFactory",
-      "unlock": 1
-    },
-    {
-      "id": "Nest_Intro",
-      "machine": "carrotFarm",
-      "unlock": 2
-    },
-    {
-      "id": "Nest_Intro",
-      "machine": "bottleMaker",
-      "unlock": 3
-    },
-    {
-      "id": "Nest_Intro",
-      "machine": "nenupharFarm",
-      "unlock": 1
-    },
-    {
-      "id": "Nest_Intro",
-      "machine": "nestFactory",
-      "unlock": 5
-    },
-    {
-      "id": "Nest_1_Normal",
-      "machine": "tennisBallFactory",
-      "unlock": 1
-    },
-    {
-      "id": "Nest_1_Normal",
-      "machine": "carrotFarm",
-      "unlock": 1
-    },
-    {
-      "id": "Nest_1_Normal",
-      "machine": "bottleMaker",
-      "unlock": 2
-    },
-    {
-      "id": "Nest_1_Normal",
-      "machine": "nenupharFarm",
-      "unlock": 2
-    },
-    {
-      "id": "Nest_1_Normal",
-      "machine": "nestFactory",
-      "unlock": 5
-    },
-    {
-      "id": "base",
-      "machine": "tennisBallFactory",
-      "unlock": 1
-    },
-    {
-      "id": "base",
-      "machine": "carrotFarm",
-      "unlock": 2
-    },
-    {
-      "id": "base",
-      "machine": "nestFactory",
-      "unlock": 3
-    },
-    {
-      "id": "base",
-      "machine": "nenupharFarm",
-      "unlock": 4
-    },
-    {
-      "id": "base",
-      "machine": "candleBabaYagaHut",
-      "unlock": 4
-    },
-    {
-      "id": "base",
-      "machine": "coffeeShop"
-    },
-    {
-      "id": "base",
-      "machine": "bottleMaker"
-    },
-    {
-      "id": "base",
-      "machine": "sandwichStore"
-    },
-    {
-      "id": "base",
-      "machine": "croissantMaker"
-    },
-    {
-      "id": "base",
-      "machine": "gameStore",
-      "unlock": 15
-    }
-  ],
   "world_config": [
     {
-      "id": "Tutorial_1",
-      "taxConfig": "tax_config_0",
-      "unlockConfig": "Tutorial_1-3"
+      "id": "Tutorial_1"
     },
     {
-      "id": "Tutorial_1_2",
-      "taxConfig": "tax_config_0",
-      "unlockConfig": "Tutorial_1-3"
+      "id": "Tutorial_1_2"
     },
     {
-      "id": "Tutorial_1_3",
-      "taxConfig": "tax_config_1",
-      "unlockConfig": "Tutorial_1-3"
+      "id": "Tutorial_1_3"
     },
     {
-      "id": "Tutorial_2",
-      "taxConfig": "tax_config_2",
-      "unlockConfig": "Tutorial_1-3"
+      "id": "Tutorial_2"
     },
     {
-      "id": "Tutorial_3",
-      "taxConfig": "tax_config_2",
-      "unlockConfig": "Tutorial_1-3"
+      "id": "Tutorial_3"
     },
     {
-      "id": "Bottle_Intro",
-      "taxConfig": "tax_config_2",
-      "unlockConfig": "Bottle_Intro"
+      "id": "Bottle_Intro"
     },
     {
-      "id": "Bottle_2_Intense",
-      "taxConfig": "tax_config_2",
-      "unlockConfig": "Bottle_2"
+      "id": "Bottle_2_Intense"
     },
     {
-      "id": "Bottle_3_Slow",
-      "taxConfig": "tax_config_2",
-      "unlockConfig": "Bottle_3"
+      "id": "Bottle_3_Slow"
     },
     {
-      "id": "Bottle_4_Intense",
-      "taxConfig": "tax_config_2",
-      "unlockConfig": "Bottle_4"
+      "id": "Bottle_4_Intense"
     },
     {
-      "id": "Nenuphar_Intro",
-      "taxConfig": "tax_config_2",
-      "unlockConfig": "Nenuphar_Intro"
+      "id": "Nenuphar_Intro"
     },
     {
-      "id": "Nest_Intro",
-      "taxConfig": "tax_config_2",
-      "unlockConfig": "Nest_Intro"
+      "id": "Nest_Intro"
     },
     {
-      "id": "Nest_1_Normal",
-      "taxConfig": "tax_config_2",
-      "unlockConfig": "Nest_1_Normal"
+      "id": "Nest_1_Normal"
+    },
+    {
+      "id": "Intro_Sandwitch"
+    },
+    {
+      "id": "Intro_Croissant"
+    },
+    {
+      "id": "Intro_Coffee & Pillow"
+    },
+    {
+      "id": "Breakfast"
+    },
+    {
+      "id": "Bottles & Candles"
+    },
+    {
+      "id": "Intro_Black Lotus"
+    },
+    {
+      "id": "Lotus & Croissant"
     }
   ],
   "world_level": [
@@ -8493,6 +8302,48 @@
       "config": "Nest_1_Normal",
       "reward": "1_legendary_chest",
       "topX": 2
+    },
+    {
+      "id": "level13",
+      "config": "Intro_Sandwitch",
+      "reward": "1_legendary_chest",
+      "topX": 2
+    },
+    {
+      "id": "level14",
+      "config": "Intro_Croissant",
+      "reward": "1_legendary_chest",
+      "topX": 2
+    },
+    {
+      "id": "level15",
+      "config": "Intro_Coffee & Pillow",
+      "reward": "1_legendary_chest",
+      "topX": 2
+    },
+    {
+      "id": "level16",
+      "config": "Breakfast",
+      "reward": "1_legendary_chest",
+      "topX": 2
+    },
+    {
+      "id": "level17",
+      "config": "Bottles & Candles",
+      "reward": "1_legendary_chest",
+      "topX": 2
+    },
+    {
+      "id": "level18",
+      "config": "Intro_Black Lotus",
+      "reward": "1_legendary_chest",
+      "topX": 2
+    },
+    {
+      "id": "level19",
+      "config": "Lotus & Croissant",
+      "reward": "1_legendary_chest",
+      "topX": 1
     }
   ]
 }
