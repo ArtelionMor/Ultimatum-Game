@@ -70,8 +70,11 @@ export function normalize(raw) {
 
   // tax profiles: one row per profile, "round N" columns hold the cost (0 = no tax)
   // unlock profiles: which machines exist in a level and the round they unlock
+  // `|| []`: unlock_config now lives in config_levels.json (tool-owned), so the
+  // sheet may drop it entirely — an absent section must default to empty, not
+  // crash, exactly like market_config / competitors_behavior above.
   const unlockProfiles = {};
-  raw.unlock_config.forEach((u) => { (unlockProfiles[u.id] = unlockProfiles[u.id] || {})[u.machine] = u.unlock; });
+  (raw.unlock_config || []).forEach((u) => { (unlockProfiles[u.id] = unlockProfiles[u.id] || {})[u.machine] = u.unlock; });
 
   // world configs: one row per (level config, competitor)
   const worldConfigs = {};
@@ -276,7 +279,10 @@ export function resolveLevel(cfg, levelId) {
   if (!wc) throw new Error("Unknown world config: " + level.config);
   // same id chain as the bots below: marketConfig column, else the ids themselves
   const market = cfg.marketProfiles[wc.marketConfig] || cfg.marketProfiles[level.id] || cfg.marketProfiles[wc.id] || {};
-  const unlocks = cfg.unlockProfiles[wc.unlockConfig] || {};
+  // same id chain as market/behavior: the designer scopes unlock_config by the
+  // world_level id, so fall back to it (then wc.id) when the world_config column
+  // doesn't name a profile of its own.
+  const unlocks = cfg.unlockProfiles[wc.unlockConfig] || cfg.unlockProfiles[level.id] || cfg.unlockProfiles[wc.id] || {};
   // behavior/buffs are scoped by world_level id: the same bot can play
   // differently in every level (competitors_behavior v2). Fallbacks on the
   // marketConfig id then the world_config id, so any of those columns can
