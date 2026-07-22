@@ -29,7 +29,17 @@ function effTime(game, p, machine) {
   return Math.max(0.3, L.productionTime / (1 + crewSpeedBonus(L, machine) + buffSpeed(p)));
 }
 function hasInputs(game, p, def) { return def.inputs.every((i) => game.stockOf(p, i.type) >= i.quantity); }
-function consumeInputs(game, p, def) { def.inputs.forEach((i) => { let need = i.quantity; const m = p.stock[i.type]; for (const t of Object.keys(m).sort((a, b) => a - b)) { while (need > 0 && m[t] > 0) { m[t]--; need--; } } }); if (p === game.player) game._invDirty = true; }
+// Returns the tier of EVERY unit actually taken off the shelf (one entry per unit,
+// lowest tiers first) — that list is what the cycle later rolls its quality bonus on.
+function consumeInputs(game, p, def) {
+  const taken = [];
+  def.inputs.forEach((i) => {
+    let need = i.quantity; const m = p.stock[i.type];
+    for (const t of Object.keys(m).sort((a, b) => a - b)) { while (need > 0 && m[t] > 0) { m[t]--; need--; taken.push(+t); } }
+  });
+  if (p === game.player) game._invDirty = true;
+  return taken;
+}
 
 export function tickProduction(game, dt) {
   game.competitors.forEach((p) => tickOne(game, dt, p));
@@ -51,7 +61,7 @@ function tickOne(game, dt, p) {
     // paid for always runs to the end, whatever happens to the stock meanwhile.
     if (converts && !m.charged) {
       if (!hasInputs(game, p, def)) { m.producing = false; game.setProgress(m, Math.min(1, m.elapsed / (m._cycle || effTime(game, p, m)))); return; }
-      consumeInputs(game, p, def);
+      m._inTiers = consumeInputs(game, p, def);
       m.charged = true;
     }
     // Storage full: only pure generators pause. Converters keep running — they
@@ -64,11 +74,20 @@ function tickOne(game, dt, p) {
     if (m.elapsed >= time) {
       m.elapsed = 0;
       m.charged = false;                  // the next cycle buys its own ingredients
+      const inTiers = m._inTiers; m._inTiers = null;   // spent: the next cycle rolls on its own ingredients
       const out = pickOutput(game.cfg, def.outputs, m.level);
       if (!out) return;                   // resource with no drop table: skip rather than throw
       // one tier for the whole spawn (matches the "+N Tier T" popup); drops above
       // the feature-unlock cap are clamped to the best unlocked tier, same quantity
-      const tier = Math.min(rollTier(out.tiers), game.maxUnlockedTier());
+      const cap = game.maxUnlockedTier();
+      const base = Math.min(rollTier(out.tiers), cap);
+      // Quality bonus: each ingredient this cycle burnt gets its own roll at +1 tier
+      // (odds = ressources_tier.increase of THAT ingredient's tier), so a 2-ingredient
+      // recipe can stack +2. Clamped like any other drop — a bonus eaten by the cap
+      // isn't announced.
+      const bonusTiers = rollIngredientBonus(game.cfg, inTiers);
+      const tier = Math.min(base + bonusTiers.length, cap);
+      const shownBonus = bonusTiers.slice(0, tier - base);
       // characters' "2x proba" (affinity + gear for the player, flat buff for a bot)
       const doubled = Math.random() < crewProba2x(m) + buffProba2x(p);
       const qty = out.quantity * (doubled ? 2 : 1);
@@ -79,7 +98,7 @@ function tickOne(game, dt, p) {
         game.flyToInventory(m, def.outputs, tier);
         added++;
       }
-      if (added > 0) game.showSpawnPopup(m, def.outputs, added, tier, out.group);
+      if (added > 0) game.showSpawnPopup(m, def.outputs, added, tier, out.group, shownBonus);
     }
   });
 }
@@ -94,6 +113,15 @@ export function pickOutput(cfg, resId, level) {
   let r = Math.random() * total;
   for (const o of list) { r -= o.weight; if (r <= 0) return o; }
   return list[list.length - 1];
+}
+
+// One roll per ingredient unit consumed by the cycle, at that unit's own tier odds
+// (ressources_tier.increase). Returns the tiers that WON, so the popup can name the
+// good ingredient — a T3 at 20% then a T4 at 40% is two independent tries for +1 each.
+export function rollIngredientBonus(cfg, inTiers) {
+  const won = [];
+  (inTiers || []).forEach((t) => { if (Math.random() < (cfg.tierBonusChance[t] || 0)) won.push(t); });
+  return won;
 }
 
 export function rollTier(tierWeights) {

@@ -231,12 +231,15 @@ const Game = {
   },
 
   // Floating "luck" popup over a machine, styled per its output slot group (A..F).
-  showSpawnPopup(m, resId, qty, tier, group) {
+  // `bonusTiers` = the ingredient tiers that won their +1 quality roll this cycle
+  // (game-production.rollIngredientBonus); each gets its own credit line under the drop.
+  showSpawnPopup(m, resId, qty, tier, group, bonusTiers) {
     const node = m._node; if (!node) return;
     const slot = (this.cfg.slots && this.cfg.slots[group]) || {};
     const r = node.getBoundingClientRect();
     const desc = slot.description ? slot.description + " " : "";
-    const pop = el("div", "spawn-pop", `${desc}+${qty} Tier ${tier} ${this.res(resId).displayName}`);
+    const bonus = (bonusTiers || []).map((t) => `<br><span class="spawn-bonus">bonus for good ingredient: Tier ${t}</span>`).join("");
+    const pop = el("div", "spawn-pop", `${desc}+${qty} Tier ${tier} ${this.res(resId).displayName}${bonus}`);
     if (slot.color) pop.style.color = slot.color;
     pop.style.fontSize = (slot.font || 12) + "px";
     pop.style.left = (r.left + r.width / 2) + "px";
