@@ -63,6 +63,9 @@ export function normalize(raw) {
       // qty_spread (tool checkbox, 1/0): opt back IN to the ±1 random quantity.
       // Absent or 0, every customer asks EXACTLY `avg` — "average 1" means 1.
       spread: !!m.qty_spread,
+      // customerBatch (level designer, défaut 2) : nombre max de clients par paquet.
+      // Absent = repli sur la constante moteur (SPAWN_BATCH_MAX).
+      customerBatch: m.customerBatch != null && m.customerBatch !== "" ? +m.customerBatch : null,
       // data-driven: one weight per known resource id (column named like the resource)
       weights: Object.fromEntries(resourceOrder.map((rid) => [rid, m[rid] || 0])),
     };
@@ -87,8 +90,13 @@ export function normalize(raw) {
   });
 
   // ordered level list (menu order = sheet order); topX = rank the player must
-  // reach (1 = finish first, 2 = top 2…) to win the level on cumulative revenue
-  const worldLevels = raw.world_level.map((l) => ({ id: l.id, config: l.config, reward: l.reward, topX: l.topX || 1 }));
+  // reach (1 = finish first, 2 = top 2…) to win the level on cumulative revenue.
+  // preparationTime (seconds) is the per-level prep window; blank falls back to
+  // the global general.tycoonPhaseDuration at resolve time (see startPrep).
+  // safeAssign (TRUE) = the wave refuses to start while the player still has an
+  // idle worker on the bench (see the assign-gate in updatePlay). The exporter
+  // may hand us a real boolean (checkbox column) or the string "TRUE".
+  const worldLevels = raw.world_level.map((l) => ({ id: l.id, config: l.config, reward: l.reward, topX: l.topX || 1, preparationTime: l.preparationTime != null && l.preparationTime !== "" ? +l.preparationTime : null, safeAssign: l.safeAssign === true || String(l.safeAssign).toUpperCase() === "TRUE" }));
 
   // rewards: rolls grouped by reward id then group letter; a row without content = "nothing"
   const rewards = {};
@@ -299,5 +307,5 @@ export function resolveLevel(cfg, levelId) {
   // the market profile defines the level's length; sheet nbOfRounds is only a fallback
   const rounds = Object.keys(market).map(Number);
   const totalRounds = rounds.length ? Math.max(...rounds) : (wc.nbOfRounds || 0);
-  return { id: level.id, reward: level.reward, totalRounds, market, unlocks, bots, topX: level.topX || 1 };
+  return { id: level.id, reward: level.reward, totalRounds, market, unlocks, bots, topX: level.topX || 1, preparationTime: level.preparationTime, safeAssign: level.safeAssign };
 }

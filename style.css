@@ -141,12 +141,41 @@ img { image-rendering: pixelated; }
 }
 .wp-chip img { width: 44px; height: 44px; }
 
+/* Annonce de la demande : apparaît au centre en « texte flottant » au début de la
+   prépa (announceDemand), puis glisse vers le bandeau #wave-preview et se fond dedans.
+   Cosmétique pur (pointer-events:none) — le bandeau réel est déjà en place dessous. */
+.demand-float {
+  position: fixed; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 500; pointer-events: none;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 16px 24px; border-radius: 16px;
+  background: linear-gradient(180deg, #2b3142 0%, #242a39 100%);
+  border: 2px solid var(--accent);
+  box-shadow: 0 14px 44px rgba(0, 0, 0, .55);
+  opacity: 0; transition: opacity .3s ease;
+}
+.demand-float .df-title {
+  font-weight: bold; color: var(--accent);
+  text-transform: uppercase; letter-spacing: .6px; font-size: 15px;
+}
+/* Les chips en GRILLE 2 colonnes (jamais empilées une par une sur mobile) ;
+   au-delà de 4 ressources ça déborde sur des lignes de 2. */
+.demand-float .wp-chips {
+  margin-top: 4px;
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+}
+.demand-float .wp-chip { font-size: 16px; padding: 4px 12px 4px 6px; justify-content: center; }
+.demand-float .wp-chip img { width: 56px; height: 56px; }
+
 /* ---------- Content (scrollable) ---------- */
 #content {
   flex: 1 1 auto;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 12px;
+  /* pas de padding EN HAUT : le marché épinglé (sticky top:0) doit coller au
+     bandeau de vague, sinon l'usine défilante transparaît dans la marge du haut. */
+  padding: 0 12px 12px;
   scrollbar-width: thin;
 }
 .zone { display: flex; flex-direction: column; gap: 12px; }
@@ -258,6 +287,14 @@ button.sell { background: var(--ok); color: #03210a; }
 }
 #worker-hint { font-size: 11px; color: var(--text-dim); height: 14px; }
 #worker-hint.active { color: var(--accent); }
+/* safeAssign : le banc clignote en rouge tant qu'un ouvrier n'est pas assigné et
+   que la vague est bloquée (voir assign-gate dans updatePlay). */
+#worker-bar.assign-warn { animation: benchWarn .7s ease-in-out infinite; }
+#worker-bar.assign-warn #worker-hint { color: var(--danger); font-weight: bold; }
+@keyframes benchWarn {
+  0%, 100% { background: var(--bg-panel); border-top-color: var(--border); box-shadow: none; }
+  50% { background: color-mix(in srgb, var(--danger) 26%, var(--bg-panel)); border-top-color: var(--danger); box-shadow: inset 0 0 0 2px var(--danger); }
+}
 #worker-icons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 .worker {
   width: 58px; height: 58px;
@@ -389,15 +426,27 @@ button.upgrade { background: var(--accent-2); color: #04231d; font-size: 12px; p
 button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
 
 /* ---------- Market: vertical street ---------- */
-#market-zone { position: relative; display: flex; flex-direction: column; gap: 0; }  /* anchors #speed-btn */
+/* La zone de marché (file de clients + fournisseurs) = le gameplay « live » : elle
+   reste accrochée en haut de la fenêtre pendant qu'on scrolle l'usine en dessous.
+   Le z-index la fait passer AU-DESSUS des cartes machines qui défilent sous elle
+   (ses enfants — lane + fournisseurs — sont opaques, donc rien ne transparaît). */
+#market-zone {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-direction: column; gap: 0;
+}  /* anchors #speed-btn */
 
 #customer-lane {
   position: relative; height: 240px; flex: 0 0 auto; overflow: hidden;
   background:
     repeating-linear-gradient(180deg, transparent 0 38px, rgba(255,255,255,.025) 38px 40px),
     linear-gradient(180deg, #20283a 0%, #283755 100%);
-  border-radius: 12px 12px 0 0;
+  /* haut carré = collé au bandeau sans coin qui laisse transparaître l'usine ;
+     la hauteur s'anime pour le rétrécissement au scroll (#market-zone.condensed). */
+  border-radius: 0;
+  transition: height .25s ease;
 }
+/* Marché épinglé : rétréci dès qu'on scrolle l'usine, pleine taille en haut. */
+#market-zone.condensed #customer-lane { height: 150px; }
 .customer {
   position: absolute; top: -16%; width: 0;
   display: flex; flex-direction: column; align-items: center; gap: 2px;

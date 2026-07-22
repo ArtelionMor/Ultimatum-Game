@@ -24,7 +24,7 @@ const buffProba2x = (p) => (p.buffs ? (p.buffs.proba2x || 0) / 100 : 0);
 // temps = base / (1 + somme des bonus). Chaque +100% ajoute « une machine de base »
 // de débit — linéaire, jamais zéro, pas d'explosion au cumul (l'ancien modèle
 // base × (1 − somme) plafonnait au plancher dès ~100% de bonus).
-function effTime(game, p, machine) {
+export function effTime(game, p, machine) {
   const L = game.lvl(machine);
   return Math.max(0.3, L.productionTime / (1 + crewSpeedBonus(L, machine) + buffSpeed(p)));
 }
