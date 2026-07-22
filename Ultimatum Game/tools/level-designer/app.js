@@ -223,7 +223,52 @@ function fillStatics() {
   ts.value = st.tier;
   const bs = $("#botSel"); bs.innerHTML = "";
   st.cfg.competitors.forEach((c) => bs.appendChild(new Option(c.displayName || c.id, c.id)));
+  buildBotPicker();
 }
+
+// ---------- Faux select "concurrent" (avec sprite) ----------
+const botDef = (id) => st.cfg.competitors.find((c) => c.id === id) || null;
+const botName = (c) => (c && (c.displayName || c.id)) || "";
+// Sprite du concurrent. Même dossier et même repli que le jeu (main.js pose
+// spriteFolder "Characters" sur chaque bot) : un PNG absent retombe sur l'icône
+// ouvrier au lieu d'afficher une image cassée — les noms de sprites bougent.
+function botSpriteImg(c) {
+  const img = document.createElement("img");
+  img.className = "pick-sprite"; img.alt = "";
+  img.src = io.spriteUrl(c && c.spriteId, "Characters") || io.spriteUrl("Worker", "UI");
+  img.onerror = () => { img.onerror = null; img.src = io.spriteUrl("Worker", "UI"); };
+  return img;
+}
+
+function buildBotPicker() {
+  const menu = $("#botPickMenu"); menu.innerHTML = "";
+  st.cfg.competitors.forEach((c) => {
+    const opt = document.createElement("div");
+    opt.className = "pick-opt"; opt.role = "option"; opt.dataset.id = c.id;
+    opt.append(botSpriteImg(c));
+    opt.append(Object.assign(document.createElement("span"), { textContent: botName(c) }));
+    opt.onclick = () => { $("#botSel").value = c.id; syncBotPick(); closeBotPick(); };
+    menu.appendChild(opt);
+  });
+  syncBotPick();
+}
+
+// Le bouton reflète la valeur du <select> caché — seule source de vérité.
+function syncBotPick() {
+  const c = botDef($("#botSel").value);
+  const btn = $("#botPickBtn"); btn.innerHTML = "";
+  if (c) btn.append(botSpriteImg(c));
+  btn.append(Object.assign(document.createElement("span"), { className: "pick-lab", textContent: c ? botName(c) : "—" }));
+  btn.append(Object.assign(document.createElement("span"), { className: "pick-caret", textContent: "▾" }));
+  $("#botPickMenu").querySelectorAll(".pick-opt").forEach((o) => o.classList.toggle("sel", !!c && o.dataset.id === c.id));
+}
+
+function openBotPick() {
+  const menu = $("#botPickMenu");
+  menu.hidden = false; $("#botPickBtn").setAttribute("aria-expanded", "true");
+  menu.querySelector(".pick-opt.sel")?.scrollIntoView({ block: "nearest" });
+}
+function closeBotPick() { $("#botPickMenu").hidden = true; $("#botPickBtn").setAttribute("aria-expanded", "false"); }
 
 function resOptions(sel, val) {
   sel.innerHTML = "";
@@ -796,7 +841,12 @@ function botCard(c, idx, l, e) {
   const card = document.createElement("div"); card.className = "card";
 
   const head = document.createElement("div"); head.className = "row";
-  head.innerHTML = `<h3 style="margin:0">${c.id}</h3>`;
+  // Sprite + nom lisible devant l'id : une carte se reconnaît d'un coup d'œil,
+  // et ça raccorde la carte à la vignette du sélecteur au-dessus.
+  const d = botDef(c.id);
+  head.append(botSpriteImg(d));
+  head.append(Object.assign(document.createElement("h3"), { style: "margin:0", textContent: botName(d) || c.id }));
+  if (d && d.displayName) head.append(Object.assign(document.createElement("span"), { className: "hint", textContent: c.id }));
   // Auto-merge : le bot plie son stock (3×Tn → Tn+1) comme le joueur. Coché par
   // défaut ; décoché, l'export émet autoMerge:0 et le moteur ne merge pas ce bot
   // — le knob "bot facile" des premiers niveaux.
@@ -998,6 +1048,20 @@ $("#addBot").onclick = () => {
 };
 $("#tierSel").onchange = (e) => { st.tier = +e.target.value; refresh(); };
 $("#shareScale").onchange = renderEcon;
+
+// Faux select : le clic sur le bouton bascule, tout clic ailleurs referme, Échap
+// aussi. Les flèches ↑/↓ déplacent la sélection sans ouvrir, comme un vrai select.
+$("#botPickBtn").onclick = () => { $("#botPickMenu").hidden ? openBotPick() : closeBotPick(); };
+document.addEventListener("click", (e) => { if (!e.target.closest("#botPick")) closeBotPick(); });
+$("#botPick").addEventListener("keydown", (e) => {
+  if (e.key === "Escape") return closeBotPick();
+  if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+  e.preventDefault();
+  const ids = st.cfg.competitors.map((c) => c.id);
+  const i = ids.indexOf($("#botSel").value);
+  const next = ids[Math.min(ids.length - 1, Math.max(0, (i < 0 ? 0 : i) + (e.key === "ArrowDown" ? 1 : -1)))];
+  if (next) { $("#botSel").value = next; syncBotPick(); }
+});
 
 // Loading a different document from disk starts a new history: undoing back into
 // the document you just replaced would silently resurrect it.

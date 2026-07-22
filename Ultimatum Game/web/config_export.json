@@ -184,27 +184,213 @@
   "competitors": [
     {
       "id": "bot_cat",
-      "displayName": "Mew Corp",
-      "spriteId": "Cat",
-      "startingMoney": 50,
-      "increaseByRound": 50,
-      "upgradeEffect": 50
+      "displayName": "Meow & Co",
+      "spriteId": "Cat"
     },
     {
       "id": "bot_octopus",
-      "displayName": "8 Helps",
-      "spriteId": "Octopus",
-      "startingMoney": 50,
-      "increaseByRound": 50,
-      "upgradeEffect": 50
+      "displayName": "Tentacles & Associates",
+      "spriteId": "Octopus"
     },
     {
       "id": "bot_sloth",
-      "displayName": "Sleepy Inc",
-      "spriteId": "Sloth",
-      "startingMoney": 50,
-      "increaseByRound": 50,
-      "upgradeEffect": 50
+      "displayName": "Sloth Express",
+      "spriteId": "Sloth"
+    },
+    {
+      "id": "bot_dog",
+      "displayName": "Woof Woof LLC",
+      "spriteId": "Dog"
+    },
+    {
+      "id": "bot_robin",
+      "displayName": "Birdie Logistics",
+      "spriteId": "Robin"
+    },
+    {
+      "id": "bot_BigBadWolfMythic",
+      "displayName": "Werewolf MegaCorp",
+      "spriteId": "Big Bad Wolf Mythic"
+    },
+    {
+      "id": "bot_BigBadWolf",
+      "displayName": "Huff & Puff Inc.",
+      "spriteId": "Big Bad Wolf"
+    },
+    {
+      "id": "bot_catGinger",
+      "displayName": "Ginger Cat LLC",
+      "spriteId": "Cat Ginger"
+    },
+    {
+      "id": "bot_catMenkoun",
+      "displayName": "Maine Coonnection",
+      "spriteId": "Cat Menkoun"
+    },
+    {
+      "id": "bot_catSiamee",
+      "displayName": "Siamese & Me",
+      "spriteId": "Cat Siamese"
+    },
+    {
+      "id": "bot_catSphinx",
+      "displayName": "Bald & Beautiful Inc.",
+      "spriteId": "Cat Sphinx"
+    },
+    {
+      "id": "bot_catWitch",
+      "displayName": "Broom & Meow",
+      "spriteId": "Cat Witch"
+    },
+    {
+      "id": "bot_crowSkeleton",
+      "displayName": "Deadly Croak Corp",
+      "spriteId": "Crow Skeleton"
+    },
+    {
+      "id": "bot_crowThreeEyes",
+      "displayName": "Third Eye Corp",
+      "spriteId": "Crow Three Eyes"
+    },
+    {
+      "id": "bot_crowVolcanic",
+      "displayName": "Burnt Raven",
+      "spriteId": "Crow Volcanic"
+    },
+    {
+      "id": "bot_crowWhite",
+      "displayName": "White Feather LLC",
+      "spriteId": "Crow White"
+    },
+    {
+      "id": "bot_crow",
+      "displayName": "Raven & Fox Ltd.",
+      "spriteId": "Crow"
+    },
+    {
+      "id": "bot_Cocker",
+      "displayName": "Floppy Ears Inc.",
+      "spriteId": "Dog Cocker"
+    },
+    {
+      "id": "bot_dogGermanShepherd",
+      "displayName": "German Shepherd Security",
+      "spriteId": "Dog German Shepherd"
+    },
+    {
+      "id": "bot_dogGniocci",
+      "displayName": "Gnocchi Pup",
+      "spriteId": "Dog Gniocci"
+    },
+    {
+      "id": "bot_falcon",
+      "displayName": "True Falcon",
+      "spriteId": "Falcon"
+    },
+    {
+      "id": "bot_foxRobinHood",
+      "displayName": "Thieves & Co",
+      "spriteId": "Fox Robin Hood"
+    },
+    {
+      "id": "bot_foxSnow",
+      "displayName": "Arctic Fox Ltd.",
+      "spriteId": "Fox Snow"
+    },
+    {
+      "id": "bot_foxWild",
+      "displayName": "Wild Fox & Co",
+      "spriteId": "Fox Wild"
+    },
+    {
+      "id": "bot_frogCaptain",
+      "displayName": "Amphibian Chief",
+      "spriteId": "Frog Captain"
+    },
+    {
+      "id": "bot_frogToad",
+      "displayName": "Slimy Toad",
+      "spriteId": "Frog Toad"
+    },
+    {
+      "id": "bot_frogVenomous",
+      "displayName": "Toxic Frog",
+      "spriteId": "Frog Venomous"
+    },
+    {
+      "id": "bot_frog",
+      "displayName": "Croak Inc.",
+      "spriteId": "Frog"
+    },
+    {
+      "id": "bot_owlAcademic",
+      "displayName": "Smart Owl",
+      "spriteId": "Owl Academic"
+    },
+    {
+      "id": "bot_owlCosmonaute",
+      "displayName": "Cosmo-Owl",
+      "spriteId": "Owl Cosmonaute"
+    },
+    {
+      "id": "bot_owlGreatHorned",
+      "displayName": "Great Horned Corp",
+      "spriteId": "Owl Great Horned"
+    },
+    {
+      "id": "bot_owlSnow",
+      "displayName": "Snow Owl Inc.",
+      "spriteId": "Owl Snow"
+    },
+    {
+      "id": "bot_owl",
+      "displayName": "Owl Vision",
+      "spriteId": "Owl"
+    },
+    {
+      "id": "bot_rabbitEnglishLop",
+      "displayName": "Floppy Bunny LLC",
+      "spriteId": "Rabbit English Lop"
+    },
+    {
+      "id": "bot_rabbitMyxomatose",
+      "displayName": "Sick Rabbit Corp",
+      "spriteId": "Rabbit Myxomatose"
+    },
+    {
+      "id": "bot_rabbitRobot",
+      "displayName": "Robo-Carrot",
+      "spriteId": "Rabbit Robot"
+    },
+    {
+      "id": "bot_rabbit",
+      "displayName": "Fast Rabbit Inc.",
+      "spriteId": "Rabbit"
+    },
+    {
+      "id": "bot_redPandaKitsune",
+      "displayName": "Magic Red Panda",
+      "spriteId": "Red Panda Kitsune"
+    },
+    {
+      "id": "bot_redPanda",
+      "displayName": "Red & Cute Inc.",
+      "spriteId": "Red Panda"
+    },
+    {
+      "id": "bot_SlothCosmoSloth",
+      "displayName": "Cosmo-Sloth",
+      "spriteId": "Sloth CosmoSloth"
+    },
+    {
+      "id": "bot_VolcanoSloth",
+      "displayName": "Volcanic Slowness",
+      "spriteId": "Sloth Volcano"
+    },
+    {
+      "id": "bot_goat",
+      "displayName": "Biquette Corp",
+      "spriteId": "Goat"
     }
   ],
   "characters": [
@@ -559,11 +745,11 @@
       "machine_2": "bottleMaker"
     },
     {
-      "id": "owlGreatHornedOwl",
+      "id": "owlGreatHorned",
       "name": "Great Horned Owl",
       "upgrade_profile": "epic_character",
       "typeSlot": "Owl",
-      "spriteIngame": "Owl Great Horned Owl",
+      "spriteIngame": "Owl Great Horned",
       "progress_profile": "level_profile_3",
       "multiplier": 1.3,
       "machine_1": "nestFactory",
@@ -733,27 +919,33 @@
   "ressources_tier": [
     {
       "id": "Tier1",
-      "color": "EFEFEF"
+      "color": "EFEFEF",
+      "increase": 0
     },
     {
       "id": "Tier2",
-      "color": "ACFF47"
+      "color": "ACFF47",
+      "increase": 0.1
     },
     {
       "id": "Tier3",
-      "color": "00C8FF"
+      "color": "00C8FF",
+      "increase": 0.2
     },
     {
       "id": "Tier4",
-      "color": "D400FF"
+      "color": "D400FF",
+      "increase": 0.4
     },
     {
       "id": "Tier5",
-      "color": "EEFF00"
+      "color": "EEFF00",
+      "increase": 0.5
     },
     {
       "id": "Tier6",
-      "color": "FF0000"
+      "color": "FF0000",
+      "increase": 1
     }
   ],
   "character_slot": [
@@ -4829,7 +5021,7 @@
       "displayName": "Nenuphar Tier 1",
       "description": "Nenuphar Tier 1 description",
       "spriteId": "Nenuphar Tier 1",
-      "baseSellPrice": 9,
+      "baseSellPrice": 6,
       "influence": 1
     },
     {
@@ -4838,7 +5030,7 @@
       "displayName": "Nenuphar Tier 2",
       "description": "Nenuphar Tier 2 description",
       "spriteId": "Nenuphar Tier 2",
-      "baseSellPrice": 26,
+      "baseSellPrice": 14,
       "influence": 1.5
     },
     {
@@ -4847,7 +5039,7 @@
       "displayName": "Nenuphar Tier 3",
       "description": "Nenuphar Tier 3 description",
       "spriteId": "Nenuphar Tier 3",
-      "baseSellPrice": 74,
+      "baseSellPrice": 32,
       "influence": 2
     },
     {
@@ -4856,7 +5048,7 @@
       "displayName": "Nenuphar Tier 4",
       "description": "Nenuphar Tier 4 description",
       "spriteId": "Nenuphar Tier 4",
-      "baseSellPrice": 138,
+      "baseSellPrice": 48,
       "influence": 2.5
     },
     {
@@ -4865,7 +5057,7 @@
       "displayName": "Nenuphar Tier 5",
       "description": "Nenuphar Tier 5 description",
       "spriteId": "Nenuphar Tier 5",
-      "baseSellPrice": 295,
+      "baseSellPrice": 81,
       "influence": 3
     },
     {
@@ -4874,7 +5066,7 @@
       "displayName": "Nenuphar Tier 6",
       "description": "Nenuphar Tier 6 description",
       "spriteId": "Nenuphar Tier 6",
-      "baseSellPrice": 729,
+      "baseSellPrice": 155,
       "influence": 3.5
     },
     {
@@ -4883,7 +5075,7 @@
       "displayName": "Nest Tier 1",
       "description": "Nest Tier 1 description",
       "spriteId": "Nest Tier 1",
-      "baseSellPrice": 18,
+      "baseSellPrice": 200,
       "influence": 1
     },
     {
@@ -4892,7 +5084,7 @@
       "displayName": "Nest Tier 2",
       "description": "Nest Tier 2 description",
       "spriteId": "Nest Tier 2",
-      "baseSellPrice": 68,
+      "baseSellPrice": 1381,
       "influence": 1.5
     },
     {
@@ -4901,7 +5093,7 @@
       "displayName": "Nest Tier 3",
       "description": "Nest Tier 3 description",
       "spriteId": "Nest Tier 3",
-      "baseSellPrice": 249,
+      "baseSellPrice": 8673,
       "influence": 2
     },
     {
@@ -4910,7 +5102,7 @@
       "displayName": "Nest Tier 4",
       "description": "Nest Tier 4 description",
       "spriteId": "Nest Tier 4",
-      "baseSellPrice": 597,
+      "baseSellPrice": 34156,
       "influence": 2.5
     },
     {
@@ -4919,7 +5111,7 @@
       "displayName": "Nest Tier 5",
       "description": "Nest Tier 5 description",
       "spriteId": "Nest Tier 5",
-      "baseSellPrice": 1657,
+      "baseSellPrice": 154845,
       "influence": 3
     },
     {
@@ -4928,7 +5120,7 @@
       "displayName": "Nest Tier 6",
       "description": "Nest Tier 6 description",
       "spriteId": "Nest Tier 6",
-      "baseSellPrice": 5334,
+      "baseSellPrice": 803630,
       "influence": 3.5
     },
     {
@@ -4937,7 +5129,7 @@
       "displayName": "Candle Tier 1",
       "description": "Candle Tier 1 description",
       "spriteId": "Candle Tier 1",
-      "baseSellPrice": 7,
+      "baseSellPrice": 80,
       "influence": 1
     },
     {
@@ -4946,7 +5138,7 @@
       "displayName": "Candle Tier 2",
       "description": "Candle Tier 2 description",
       "spriteId": "Candle Tier 2",
-      "baseSellPrice": 18,
+      "baseSellPrice": 457,
       "influence": 1.5
     },
     {
@@ -4955,7 +5147,7 @@
       "displayName": "Candle Tier 3",
       "description": "Candle Tier 3 description",
       "spriteId": "Candle Tier 3",
-      "baseSellPrice": 45,
+      "baseSellPrice": 2431,
       "influence": 2
     },
     {
@@ -4964,7 +5156,7 @@
       "displayName": "Candle Tier 4",
       "description": "Candle Tier 4 description",
       "spriteId": "Candle Tier 4",
-      "baseSellPrice": 74,
+      "baseSellPrice": 8231,
       "influence": 2.5
     },
     {
@@ -4973,7 +5165,7 @@
       "displayName": "Candle Tier 5",
       "description": "Candle Tier 5 description",
       "spriteId": "Candle Tier 5",
-      "baseSellPrice": 138,
+      "baseSellPrice": 32228,
       "influence": 3
     },
     {
@@ -4982,7 +5174,7 @@
       "displayName": "Candle Tier 6",
       "description": "Candle Tier 6 description",
       "spriteId": "Candle Tier 6",
-      "baseSellPrice": 295,
+      "baseSellPrice": 145291,
       "influence": 3.5
     },
     {
@@ -4991,7 +5183,7 @@
       "displayName": "Pillow Tier 1",
       "description": "Pillow Tier 1 description",
       "spriteId": "Pillow Tier 1",
-      "baseSellPrice": 6,
+      "baseSellPrice": 8,
       "influence": 1
     },
     {
@@ -5000,7 +5192,7 @@
       "displayName": "Pillow Tier 2",
       "description": "Pillow Tier 2 description",
       "spriteId": "Pillow Tier 2",
-      "baseSellPrice": 14,
+      "baseSellPrice": 22,
       "influence": 1.5
     },
     {
@@ -5009,7 +5201,7 @@
       "displayName": "Pillow Tier 3",
       "description": "Pillow Tier 3 description",
       "spriteId": "Pillow Tier 3",
-      "baseSellPrice": 32,
+      "baseSellPrice": 59,
       "influence": 2
     },
     {
@@ -5018,7 +5210,7 @@
       "displayName": "Pillow Tier 4",
       "description": "Pillow Tier 4 description",
       "spriteId": "Pillow Tier 4",
-      "baseSellPrice": 48,
+      "baseSellPrice": 104,
       "influence": 2.5
     },
     {
@@ -5027,7 +5219,7 @@
       "displayName": "Pillow Tier 5",
       "description": "Pillow Tier 5 description",
       "spriteId": "Pillow Tier 5",
-      "baseSellPrice": 81,
+      "baseSellPrice": 210,
       "influence": 3
     },
     {
@@ -5036,7 +5228,7 @@
       "displayName": "Pillow Tier 6",
       "description": "Pillow Tier 6 description",
       "spriteId": "Pillow Tier 6",
-      "baseSellPrice": 155,
+      "baseSellPrice": 488,
       "influence": 3.5
     },
     {
@@ -5045,7 +5237,7 @@
       "displayName": "Black Lotus Tier 1",
       "description": "Black Lotus Tier 1 description",
       "spriteId": "Black Lotus Tier 1",
-      "baseSellPrice": 90,
+      "baseSellPrice": 400,
       "influence": 1
     },
     {
@@ -5054,7 +5246,7 @@
       "displayName": "Black Lotus Tier 2",
       "description": "Black Lotus Tier 2 description",
       "spriteId": "Black Lotus Tier 2",
-      "baseSellPrice": 528,
+      "baseSellPrice": 3122,
       "influence": 1.5
     },
     {
@@ -5063,7 +5255,7 @@
       "displayName": "Black Lotus Tier 3",
       "description": "Black Lotus Tier 3 description",
       "spriteId": "Black Lotus Tier 3",
-      "baseSellPrice": 2875,
+      "baseSellPrice": 21819,
       "influence": 2
     },
     {
@@ -5072,7 +5264,7 @@
       "displayName": "Black Lotus Tier 4",
       "description": "Black Lotus Tier 4 description",
       "spriteId": "Black Lotus Tier 4",
-      "baseSellPrice": 9944,
+      "baseSellPrice": 94669,
       "influence": 2.5
     },
     {
@@ -5081,7 +5273,7 @@
       "displayName": "Black Lotus Tier 5",
       "description": "Black Lotus Tier 5 description",
       "spriteId": "Black Lotus Tier 5",
-      "baseSellPrice": 39752,
+      "baseSellPrice": 471093,
       "influence": 3
     },
     {
@@ -5090,7 +5282,7 @@
       "displayName": "Black Lotus Tier 6",
       "description": "Black Lotus Tier 6 description",
       "spriteId": "Black Lotus Tier 6",
-      "baseSellPrice": 182834,
+      "baseSellPrice": 2672561,
       "influence": 3.5
     },
     {
@@ -5153,7 +5345,7 @@
       "displayName": "Coffee Tier 1",
       "description": "Coffee Tier 1 description",
       "spriteId": "Coffee Tier 1",
-      "baseSellPrice": 5,
+      "baseSellPrice": 9,
       "influence": 1
     },
     {
@@ -5162,7 +5354,7 @@
       "displayName": "Coffee Tier 2",
       "description": "Coffee Tier 2 description",
       "spriteId": "Coffee Tier 2",
-      "baseSellPrice": 10,
+      "baseSellPrice": 26,
       "influence": 1.5
     },
     {
@@ -5171,7 +5363,7 @@
       "displayName": "Coffee Tier 3",
       "description": "Coffee Tier 3 description",
       "spriteId": "Coffee Tier 3",
-      "baseSellPrice": 20,
+      "baseSellPrice": 74,
       "influence": 2
     },
     {
@@ -5180,7 +5372,7 @@
       "displayName": "Coffee Tier 4",
       "description": "Coffee Tier 4 description",
       "spriteId": "Coffee Tier 4",
-      "baseSellPrice": 26,
+      "baseSellPrice": 138,
       "influence": 2.5
     },
     {
@@ -5189,7 +5381,7 @@
       "displayName": "Coffee Tier 5",
       "description": "Coffee Tier 5 description",
       "spriteId": "Coffee Tier 5",
-      "baseSellPrice": 37,
+      "baseSellPrice": 295,
       "influence": 3
     },
     {
@@ -5198,7 +5390,7 @@
       "displayName": "Coffee Tier 6",
       "description": "Coffee Tier 6 description",
       "spriteId": "Coffee Tier 6",
-      "baseSellPrice": 58,
+      "baseSellPrice": 729,
       "influence": 3.5
     },
     {
@@ -5207,7 +5399,7 @@
       "displayName": "Sandwitch Tier 1",
       "description": "Sandwitch Tier 1 description",
       "spriteId": "Sandwitch Tier 1",
-      "baseSellPrice": 14,
+      "baseSellPrice": 45,
       "influence": 1
     },
     {
@@ -5216,7 +5408,7 @@
       "displayName": "Sandwitch Tier 2",
       "description": "Sandwitch Tier 2 description",
       "spriteId": "Sandwitch Tier 2",
-      "baseSellPrice": 48,
+      "baseSellPrice": 223,
       "influence": 1.5
     },
     {
@@ -5225,7 +5417,7 @@
       "displayName": "Sandwitch Tier 3",
       "description": "Sandwitch Tier 3 description",
       "spriteId": "Sandwitch Tier 3",
-      "baseSellPrice": 161,
+      "baseSellPrice": 1047,
       "influence": 2
     },
     {
@@ -5234,7 +5426,7 @@
       "displayName": "Sandwitch Tier 4",
       "description": "Sandwitch Tier 4 description",
       "spriteId": "Sandwitch Tier 4",
-      "baseSellPrice": 355,
+      "baseSellPrice": 3162,
       "influence": 2.5
     },
     {
@@ -5243,7 +5435,7 @@
       "displayName": "Sandwitch Tier 5",
       "description": "Sandwitch Tier 5 description",
       "spriteId": "Sandwitch Tier 5",
-      "baseSellPrice": 905,
+      "baseSellPrice": 11067,
       "influence": 3
     },
     {
@@ -5252,7 +5444,7 @@
       "displayName": "Sandwitch Tier 6",
       "description": "Sandwitch Tier 6 description",
       "spriteId": "Sandwitch Tier 6",
-      "baseSellPrice": 2676,
+      "baseSellPrice": 44755,
       "influence": 3.5
     },
     {
@@ -5261,7 +5453,7 @@
       "displayName": "Croissant Tier 1",
       "description": "Croissant Tier 1 description",
       "spriteId": "Croissant Tier 1",
-      "baseSellPrice": 22,
+      "baseSellPrice": 90,
       "influence": 1
     },
     {
@@ -5270,7 +5462,7 @@
       "displayName": "Croissant Tier 2",
       "description": "Croissant Tier 2 description",
       "spriteId": "Croissant Tier 2",
-      "baseSellPrice": 89,
+      "baseSellPrice": 528,
       "influence": 1.5
     },
     {
@@ -5279,7 +5471,7 @@
       "displayName": "Croissant Tier 3",
       "description": "Croissant Tier 3 description",
       "spriteId": "Croissant Tier 3",
-      "baseSellPrice": 347,
+      "baseSellPrice": 2875,
       "influence": 2
     },
     {
@@ -5288,7 +5480,7 @@
       "displayName": "Croissant Tier 4",
       "description": "Croissant Tier 4 description",
       "spriteId": "Croissant Tier 4",
-      "baseSellPrice": 881,
+      "baseSellPrice": 9944,
       "influence": 2.5
     },
     {
@@ -5297,7 +5489,7 @@
       "displayName": "Croissant Tier 5",
       "description": "Croissant Tier 5 description",
       "spriteId": "Croissant Tier 5",
-      "baseSellPrice": 2595,
+      "baseSellPrice": 39752,
       "influence": 3
     },
     {
@@ -5306,7 +5498,7 @@
       "displayName": "Croissant Tier 6",
       "description": "Croissant Tier 6 description",
       "spriteId": "Croissant Tier 6",
-      "baseSellPrice": 8860,
+      "baseSellPrice": 182834,
       "influence": 3.5
     }
   ],
@@ -8291,13 +8483,13 @@
       "topX": 2
     },
     {
-      "id": "level9",
+      "id": "level11",
       "config": "Nest_Intro",
       "reward": "1_legendary_chest",
       "topX": 2
     },
     {
-      "id": "level10",
+      "id": "level12",
       "config": "Nest_1_Normal",
       "reward": "1_legendary_chest",
       "topX": 2

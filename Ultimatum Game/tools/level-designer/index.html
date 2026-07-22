@@ -95,7 +95,15 @@
     <div class="card">
       <div class="row">
         <label>Ajouter un concurrent :</label>
-        <select id="botSel"></select>
+        <!-- Un <option> natif ne peut pas contenir d'image : la liste est donc un
+             faux select (bouton + listbox dessinés à la main), et le <select>
+             #botSel reste caché comme porteur de valeur — #addBot lit toujours
+             $("#botSel").value sans rien savoir du habillage. -->
+        <div class="pick" id="botPick">
+          <button type="button" class="pick-btn" id="botPickBtn" aria-haspopup="listbox" aria-expanded="false"></button>
+          <div class="pick-menu" id="botPickMenu" role="listbox" hidden></div>
+        </div>
+        <select id="botSel" hidden></select>
         <button id="addBot">Ajouter</button>
         <span class="sp"></span>
         <span class="hint">Les poids sont des cotes de tirage relatives (voir game-bots.js).</span>

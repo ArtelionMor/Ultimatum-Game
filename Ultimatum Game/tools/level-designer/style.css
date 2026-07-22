@@ -77,6 +77,31 @@ input[type=number] { width: 62px; }
 input:focus, select:focus, button:focus-visible { outline: 2px solid var(--series-1); outline-offset: 1px; }
 label { color: var(--text-secondary); font-size: 12px; }
 
+/* ---------- faux select avec sprite (choix du concurrent) ----------
+   Un <option> natif ne rend pas d'image : bouton + listbox maison, calés sur les
+   mêmes tokens que input/select pour rester indiscernables des vrais champs. */
+.pick { position: relative; display: inline-block; }
+.pick-btn {
+  display: flex; align-items: center; gap: 7px; min-width: 210px;
+  background: var(--surface-1); border: 1px solid var(--border); border-radius: 6px;
+  padding: 3px 8px; text-align: left;
+}
+.pick-lab { flex: 1 1 auto; }
+.pick-caret { color: var(--muted); font-size: 10px; flex: 0 0 auto; }
+.pick-sprite { width: 22px; height: 22px; object-fit: contain; flex: 0 0 auto; }
+.pick-menu {
+  position: absolute; z-index: 40; top: calc(100% + 4px); left: 0; min-width: 100%;
+  max-height: 320px; overflow-y: auto;
+  background: var(--surface-1); border: 1px solid var(--border); border-radius: 8px;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, .28); padding: 4px;
+}
+.pick-opt {
+  display: flex; align-items: center; gap: 8px; white-space: nowrap;
+  padding: 4px 8px; border-radius: 6px; cursor: pointer;
+}
+.pick-opt:hover { background: var(--plane); }
+.pick-opt.sel { background: var(--series-1-soft); }
+
 /* ---------- shell ---------- */
 header {
   display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
