@@ -2,7 +2,7 @@
  * Customer spawning, shop choice and sales extracted from main.js.
  *  - pickNeed: pure (market def + resource order).
  *  - restackCustomers: pure DOM (no game state).
- *  - attractiveness / chooseShop / sellTo: module-local, take game.
+ *  - attractiveness / chooseShop / reserveSale / settleSale: module-local, take game.
  *  - spawnCustomer: exported orchestration (DOM + animation).
  */
 "use strict";
@@ -41,17 +41,22 @@ function chooseShop(game, eligible, resId) {
   return eligible[eligible.length - 1];
 }
 
-function sellTo(game, c, resId, qty) {
-  let gain = 0;
-  const asked = qty;
+// Le client choisit son shop À L'APPARITION et RÉSERVE tout de suite le stock
+// (décrémenté ici) — ainsi un paquet de clients ne survend pas le même comptoir et
+// chacun tombe devant le comptoir qu'il va vraiment visiter. L'argent, lui, n'est
+// crédité qu'à l'ARRIVÉE (settleSale), pour garder le ressenti « payé à la vente ».
+function reserveSale(game, c, resId, qty) {
+  let gain = 0; const asked = qty;
   const m = c.stock[resId];
   const tiers = Object.keys(m).map(Number).sort((a, b) => b - a); // highest tier first
   for (const t of tiers) { while (qty > 0 && m[t] > 0) { m[t]--; qty--; gain += game.tierInfo(resId, t).price; } }
-  c.money += gain; c.salesThisRound += gain;
-  c.revenue += gain; // revenus cumulés : LA métrique du classement (dépenser ne fait pas reculer)
-  c.unitsThisRound = (c.unitsThisRound || 0) + (asked - qty); // parts de marché en volume (camembert de fin de round)
   if (c === game.player) game._invDirty = true;
-  return gain;
+  return { gain, units: asked - qty };
+}
+function settleSale(game, c, sale) {
+  c.money += sale.gain; c.salesThisRound += sale.gain;
+  c.revenue += sale.gain; // revenus cumulés : LA métrique du classement (dépenser ne fait pas reculer)
+  c.unitsThisRound = (c.unitsThisRound || 0) + sale.units; // parts de marché en volume (camembert de fin de round)
 }
 
 export function spawnCustomer(game) {
@@ -59,7 +64,26 @@ export function spawnCustomer(game) {
   const m = game.market; m.active++;
   const lane = $("#customer-lane");
   const cust = el("div", "customer");
-  cust.style.left = randInt(12, 88) + "%";
+
+  // CHOIX DU SHOP DÈS L'APPARITION (plus au dernier moment) : on regarde qui a le
+  // stock MAINTENANT, on tire le vainqueur, et on réserve sa marchandise. Le client
+  // descend alors DEVANT ce comptoir. S'il n'y a personne, il est déjà « perdu ».
+  const eligible = game.competitors.filter((c) => game.stockOf(c, need.resId) >= need.qty);
+  const winner = eligible.length ? chooseShop(game, eligible, need.resId) : null;
+  const sale = winner ? reserveSale(game, winner, need.resId, need.qty) : null;
+
+  // Servi : pile devant le comptoir choisi. Non servi (personne n'a la ressource) :
+  // il prend une LIGNE au hasard — le comptoir d'un concurrent tiré au sort — et
+  // ratera sa cible en bas. Petit jitter pour ne pas empiler un paquet.
+  const laneRect = lane.getBoundingClientRect();
+  const laneAt = (c) => {
+    const cr = c._counter.getBoundingClientRect();
+    const x = cr.left - laneRect.left + cr.width / 2 + randInt(-18, 18);
+    return Math.max(10, Math.min(laneRect.width - 10, x)) + "px";
+  };
+  const laneTarget = winner || game.competitors[randInt(0, game.competitors.length - 1)];
+  cust.style.left = laneTarget && laneTarget._counter ? laneAt(laneTarget) : randInt(12, 88) + "%";
+
   const custSprite = game.cfg.customerSprites[need.resId]; // sprite chosen by demanded resource
   const custSrc = custSprite ? sprite(custSprite, "Characters") : sprite("Customer", "UI"); // else generic UI customer
   cust.innerHTML = `<div class="bubble"><span>${need.qty}×</span><img src="${game.tierSrc(need.resId, 1)}"></div><img class="cust-sprite" src="${custSrc}">`;
@@ -72,20 +96,13 @@ export function spawnCustomer(game) {
   requestAnimationFrame(() => cust.classList.add("falling"));
 
   setTimeout(() => {
-    const eligible = game.competitors.filter((c) => game.stockOf(c, need.resId) >= need.qty);
-    if (eligible.length) {
-      const winner = chooseShop(game, eligible, need.resId);
-      const gain = sellTo(game, winner, need.resId, need.qty);
-      if (winner._counter) {
-        const cr = winner._counter.getBoundingClientRect(), lr = lane.getBoundingClientRect();
-        cust.style.left = (cr.left - lr.left + cr.width / 2) + "px";
-        cust.classList.add("toShop");
-        game.flashStall(winner, gain);
-      }
+    if (winner && sale) {
+      settleSale(game, winner, sale); // stock déjà réservé à l'apparition, on crédite l'argent ici
+      cust.classList.add("toShop");
+      game.flashStall(winner, sale.gain);
     } else {
-      cust.classList.add("nobody"); // turns red
-      const x = parseFloat(cust.style.left) || 50;
-      cust.style.left = (x < 50 ? -25 : 125) + "%"; // slide off to the nearest edge
+      cust.classList.add("nobody"); // turns red : il a raté sa cible dans sa ligne
+      requestAnimationFrame(() => cust.classList.add("done")); // fond sur place, pas de glissade hors écran
       // Demande non servie = part de marché PERDUE (camembert de fin de round).
       // Valorisée au prix T1 : on ignore quel tier aurait été vendu, c'est le
       // minimum que ce client aurait payé.

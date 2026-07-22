@@ -59,6 +59,7 @@ export function migrate(doc) {
   const known = new Set(d.biomes.map((b) => b.id));
   d.levels.forEach((l) => {
     if (!l.biomeId || !known.has(l.biomeId)) l.biomeId = d.biomes[0].id;
+    if (l.customerBatch == null) l.customerBatch = 2; // paquet de clients : défaut 2 (docs pré-batch)
     // A level's market used to carry its own id, free to drift from the level's on
     // rename — which silently shipped the market under a dead name and loaded the
     // level with 0 rounds. One id now; drop the old field so it can't come back.

@@ -533,6 +533,17 @@ function levelRow(l, idx) {
     head.appendChild(bio);
   }
 
+  // Clients par paquet (max) : combien de clients peuvent arriver EN MÊME TEMPS.
+  // Défaut 2. Émis dans chaque ligne market_config du niveau (colonne customerBatch).
+  const batchWrap = document.createElement("label"); batchWrap.className = "level-batch";
+  batchWrap.title = "Clients par paquet (max) — nombre max de clients qui arrivent en même temps";
+  const batchIn = document.createElement("input"); batchIn.type = "number"; batchIn.min = "1"; batchIn.max = "20"; batchIn.step = "1";
+  batchIn.value = l.customerBatch != null ? l.customerBatch : 2; batchIn.style.width = "42px";
+  batchIn.onclick = (e) => e.stopPropagation();
+  batchIn.oninput = () => { l.customerBatch = Math.max(1, Math.round(+batchIn.value || 2)); mark(); renderExport(); };
+  batchWrap.append(document.createTextNode("👥"), batchIn);
+  head.append(batchWrap);
+
   head.append(spacer());
 
   const stats = document.createElement("span"); stats.className = "level-stats";

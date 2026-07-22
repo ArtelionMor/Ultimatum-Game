@@ -1968,7 +1968,8 @@
           },
           "buffs": {},
           "weights": {},
-          "focus": "candle"
+          "focus": "candle",
+          "autoMerge": true
         },
         {
           "id": "bot_catMenkoun",
@@ -1981,7 +1982,8 @@
           },
           "buffs": {},
           "weights": {},
-          "focus": "coffee"
+          "focus": "coffee",
+          "autoMerge": true
         }
       ]
     },
@@ -2094,7 +2096,8 @@
           },
           "buffs": {},
           "weights": {},
-          "focus": "croissant"
+          "focus": "croissant",
+          "autoMerge": true
         },
         {
           "id": "bot_robin",
@@ -2107,7 +2110,8 @@
           },
           "buffs": {},
           "weights": {},
-          "focus": "sandwitch"
+          "focus": "sandwitch",
+          "autoMerge": true
         },
         {
           "id": "bot_catSiamee",
@@ -2120,7 +2124,8 @@
           },
           "buffs": {},
           "weights": {},
-          "focus": "coffee"
+          "focus": "coffee",
+          "autoMerge": true
         }
       ]
     },
@@ -2217,7 +2222,8 @@
           },
           "buffs": {},
           "weights": {},
-          "focus": "bottle"
+          "focus": "bottle",
+          "autoMerge": true
         },
         {
           "id": "bot_goat",
@@ -2230,7 +2236,8 @@
           },
           "buffs": {},
           "weights": {},
-          "focus": "candle"
+          "focus": "candle",
+          "autoMerge": true
         },
         {
           "id": "bot_SlothCosmoSloth",
@@ -2243,7 +2250,8 @@
           },
           "buffs": {},
           "weights": {},
-          "focus": "pillow"
+          "focus": "pillow",
+          "autoMerge": true
         }
       ]
     },
@@ -2343,7 +2351,8 @@
           },
           "buffs": {},
           "weights": {},
-          "focus": "blackLotus"
+          "focus": "blackLotus",
+          "autoMerge": true
         },
         {
           "id": "bot_frogVenomous",
@@ -2356,7 +2365,8 @@
           },
           "buffs": {},
           "weights": {},
-          "focus": "nenuphar"
+          "focus": "nenuphar",
+          "autoMerge": true
         },
         {
           "id": "bot_goat",
@@ -2369,7 +2379,8 @@
           },
           "buffs": {},
           "weights": {},
-          "focus": "candle"
+          "focus": "candle",
+          "autoMerge": true
         }
       ]
     },
@@ -2461,7 +2472,8 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         },
         {
           "id": "bot_redPandaKitsune",
@@ -2473,7 +2485,8 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         },
         {
           "id": "bot_frogCaptain",
@@ -2485,7 +2498,8 @@
             "value": 5
           },
           "buffs": {},
-          "weights": {}
+          "weights": {},
+          "autoMerge": true
         }
       ]
     }

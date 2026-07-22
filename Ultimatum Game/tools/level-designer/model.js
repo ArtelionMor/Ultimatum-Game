@@ -50,7 +50,7 @@ export function makeBlock(id, name) {
 // looked it up by the new one, found nothing, and the level loaded with 0 rounds.
 // Two levels could even collide on the same market id. Not worth the flexibility.
 export function makeLevel(id, biomeId) {
-  return { id, biomeId, instances: [], competitors: [] };
+  return { id, biomeId, instances: [], competitors: [], customerBatch: 2 };
 }
 
 // Biomes are display clusters ("Meadow", "Town"…): they group levels in the
@@ -208,7 +208,7 @@ export const BOT_BUFFS = [
 // anything else is silently read as zero by the engine.
 export function toMarketConfigRows(level, blocks, cfg) {
   return compileLevel(level, blocks).map((row) => {
-    const o = { id: level.id, round: "round_" + row.round, customers: row.customers, "average amount": row.avg, qty_spread: row.spread ? 1 : 0 };
+    const o = { id: level.id, round: "round_" + row.round, customers: row.customers, "average amount": row.avg, qty_spread: row.spread ? 1 : 0, customerBatch: level.customerBatch != null ? level.customerBatch : 2 };
     cfg.resourceOrder.forEach((r) => (o[r] = row.weights[r] || 0));
     return o;
   });
@@ -308,7 +308,7 @@ export function toConfigLevels(doc, cfg, tier) {
 // Columns the engine will read as zero, and resources with no column at all.
 export function diagnoseColumns(rawMarketRows, cfg) {
   const ids = new Set(cfg.resourceOrder);
-  const known = new Set(["id", "round", "customers", "average amount", "qty_spread"]);
+  const known = new Set(["id", "round", "customers", "average amount", "qty_spread", "customerBatch"]);
   const stale = new Set(); const seen = new Set();
   (rawMarketRows || []).forEach((r) => {
     Object.keys(r).forEach((k) => {
