@@ -26,9 +26,16 @@ html, body {
   color: var(--text);
   font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
   overflow: hidden;
+  /* C'est un JEU tactile : un tap-glissé doit déplacer un ouvrier, jamais
+     surligner du texte ou soulever une image — la sélection volait le geste. */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;   /* iOS : pas de menu « enregistrer l'image » en appui long */
 }
+/* Les champs de saisie restent sélectionnables (console de triche). */
+input, textarea { user-select: text; -webkit-user-select: text; }
 
-img { image-rendering: pixelated; }
+img { image-rendering: pixelated; -webkit-user-drag: none; user-drag: none; }
 
 #app {
   position: relative;
