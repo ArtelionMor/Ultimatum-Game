@@ -2957,11 +2957,11 @@
     },
     {
       "id": "customerSpeed",
-      "value": 0.65
+      "value": 0.4
     },
     {
       "id": "customerRate",
-      "value": 0.15
+      "value": 0.05
     },
     {
       "id": "earlyTaxDiscount",
@@ -3115,565 +3115,565 @@
       "id": "more_worker_1",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 75
+      "price": 50
     },
     {
       "id": "more_worker_2",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 150
+      "price": 55
     },
     {
       "id": "more_worker_3",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 300
+      "price": 61
     },
     {
       "id": "more_worker_4",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 600
+      "price": 68
     },
     {
       "id": "more_worker_5",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 1200
+      "price": 75
     },
     {
       "id": "more_worker_6",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 1800
+      "price": 83
     },
     {
       "id": "more_worker_7",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 2200
+      "price": 92
     },
     {
       "id": "more_worker_8",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 2600
+      "price": 102
     },
     {
       "id": "more_worker_9",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 3200
+      "price": 113
     },
     {
       "id": "more_worker_10",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 4000
+      "price": 125
     },
     {
       "id": "more_worker_11",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 5000
+      "price": 138
     },
     {
       "id": "more_worker_12",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 6000
+      "price": 152
     },
     {
       "id": "more_worker_13",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 7000
+      "price": 168
     },
     {
       "id": "more_worker_14",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 8000
+      "price": 185
     },
     {
       "id": "better_marketing_1",
       "type": "increaseMarketting",
       "effect": 1.1,
-      "price": 75
+      "price": 10
     },
     {
       "id": "better_marketing_2",
       "type": "increaseMarketting",
       "effect": 1.2,
-      "price": 150
+      "price": 12
     },
     {
       "id": "better_marketing_3",
       "type": "increaseMarketting",
       "effect": 1.3,
-      "price": 300
+      "price": 15
     },
     {
       "id": "better_marketing_4",
       "type": "increaseMarketting",
       "effect": 1.4,
-      "price": 450
+      "price": 18
     },
     {
       "id": "better_marketing_5",
       "type": "increaseMarketting",
       "effect": 1.5,
-      "price": 600
+      "price": 22
     },
     {
       "id": "better_marketing_6",
       "type": "increaseMarketting",
       "effect": 1.6,
-      "price": 800
+      "price": 27
     },
     {
       "id": "better_marketing_7",
       "type": "increaseMarketting",
       "effect": 1.7,
-      "price": 1000
+      "price": 33
     },
     {
       "id": "better_marketing_8",
       "type": "increaseMarketting",
       "effect": 1.8,
-      "price": 1200
+      "price": 40
     },
     {
       "id": "better_marketing_9",
       "type": "increaseMarketting",
       "effect": 1.9,
-      "price": 1400
+      "price": 48
     },
     {
       "id": "better_marketing_10",
       "type": "increaseMarketting",
       "effect": 2,
-      "price": 1600
+      "price": 58
     },
     {
       "id": "better_marketing_11",
       "type": "increaseMarketting",
       "effect": 2.1,
-      "price": 1800
+      "price": 70
     },
     {
       "id": "better_marketing_12",
       "type": "increaseMarketting",
       "effect": 2.2,
-      "price": 2000
+      "price": 84
     },
     {
       "id": "better_marketing_13",
       "type": "increaseMarketting",
       "effect": 2.3,
-      "price": 2200
+      "price": 101
     },
     {
       "id": "better_marketing_14",
       "type": "increaseMarketting",
       "effect": 2.4,
-      "price": 2400
+      "price": 122
     },
     {
       "id": "better_marketing_15",
       "type": "increaseMarketting",
       "effect": 2.5,
-      "price": 2600
+      "price": 147
     },
     {
       "id": "better_marketing_16",
       "type": "increaseMarketting",
       "effect": 2.6,
-      "price": 2800
+      "price": 177
     },
     {
       "id": "better_marketing_17",
       "type": "increaseMarketting",
       "effect": 2.7,
-      "price": 3000
+      "price": 213
     },
     {
       "id": "better_marketing_18",
       "type": "increaseMarketting",
       "effect": 2.8,
-      "price": 3200
+      "price": 256
     },
     {
       "id": "better_marketing_19",
       "type": "increaseMarketting",
       "effect": 2.9,
-      "price": 3400
+      "price": 308
     },
     {
       "id": "better_marketing_20",
       "type": "increaseMarketting",
       "effect": 3,
-      "price": 3600
+      "price": 370
     },
     {
       "id": "better_marketing_21",
       "type": "increaseMarketting",
       "effect": 3.1,
-      "price": 3800
+      "price": 444
     },
     {
       "id": "better_marketing_22",
       "type": "increaseMarketting",
       "effect": 3.2,
-      "price": 4000
+      "price": 533
     },
     {
       "id": "better_marketing_23",
       "type": "increaseMarketting",
       "effect": 3.3,
-      "price": 4200
+      "price": 640
     },
     {
       "id": "better_marketing_24",
       "type": "increaseMarketting",
       "effect": 3.4,
-      "price": 4400
+      "price": 768
     },
     {
       "id": "better_marketing_25",
       "type": "increaseMarketting",
       "effect": 3.5,
-      "price": 4600
+      "price": 922
     },
     {
       "id": "better_marketing_26",
       "type": "increaseMarketting",
       "effect": 3.6,
-      "price": 4800
+      "price": 1107
     },
     {
       "id": "better_marketing_27",
       "type": "increaseMarketting",
       "effect": 3.7,
-      "price": 5000
+      "price": 1329
     },
     {
       "id": "better_marketing_28",
       "type": "increaseMarketting",
       "effect": 3.8,
-      "price": 5200
+      "price": 1595
     },
     {
       "id": "better_marketing_29",
       "type": "increaseMarketting",
       "effect": 3.9,
-      "price": 5400
+      "price": 1914
     },
     {
       "id": "better_marketing_30",
       "type": "increaseMarketting",
       "effect": 4,
-      "price": 5600
+      "price": 2297
     },
     {
       "id": "better_marketing_31",
       "type": "increaseMarketting",
       "effect": 4.1,
-      "price": 5800
+      "price": 2757
     },
     {
       "id": "better_marketing_32",
       "type": "increaseMarketting",
       "effect": 4.2,
-      "price": 6000
+      "price": 3309
     },
     {
       "id": "better_marketing_33",
       "type": "increaseMarketting",
       "effect": 4.3,
-      "price": 6200
+      "price": 3971
     },
     {
       "id": "better_marketing_34",
       "type": "increaseMarketting",
       "effect": 4.4,
-      "price": 6400
+      "price": 4766
     },
     {
       "id": "better_marketing_35",
       "type": "increaseMarketting",
       "effect": 4.5,
-      "price": 6600
+      "price": 5720
     },
     {
       "id": "better_marketing_36",
       "type": "increaseMarketting",
       "effect": 4.6,
-      "price": 6800
+      "price": 6864
     },
     {
       "id": "better_marketing_37",
       "type": "increaseMarketting",
       "effect": 4.7,
-      "price": 7000
+      "price": 8237
     },
     {
       "id": "better_marketing_38",
       "type": "increaseMarketting",
       "effect": 4.8,
-      "price": 7200
+      "price": 9885
     },
     {
       "id": "better_marketing_39",
       "type": "increaseMarketting",
       "effect": 4.9,
-      "price": 7400
+      "price": 11862
     },
     {
       "id": "better_marketing_40",
       "type": "increaseMarketting",
       "effect": 5,
-      "price": 7600
+      "price": 14235
     },
     {
       "id": "better_storage_1",
       "type": "increaseStorage",
-      "effect": 5,
-      "price": 38
+      "effect": 1,
+      "price": 5
     },
     {
       "id": "better_storage_2",
       "type": "increaseStorage",
-      "effect": 5,
-      "price": 75
+      "effect": 1,
+      "price": 6
     },
     {
       "id": "better_storage_3",
       "type": "increaseStorage",
-      "effect": 5,
-      "price": 150
+      "effect": 1,
+      "price": 7
     },
     {
       "id": "better_storage_4",
       "type": "increaseStorage",
-      "effect": 5,
-      "price": 225
+      "effect": 1,
+      "price": 8
     },
     {
       "id": "better_storage_5",
       "type": "increaseStorage",
-      "effect": 5,
-      "price": 300
+      "effect": 1,
+      "price": 9
     },
     {
       "id": "better_storage_6",
       "type": "increaseStorage",
-      "effect": 5,
-      "price": 400
+      "effect": 1,
+      "price": 10
     },
     {
       "id": "better_storage_7",
       "type": "increaseStorage",
-      "effect": 5,
-      "price": 500
+      "effect": 1,
+      "price": 11
     },
     {
       "id": "better_storage_8",
       "type": "increaseStorage",
-      "effect": 5,
-      "price": 600
+      "effect": 1,
+      "price": 12
     },
     {
       "id": "better_storage_9",
       "type": "increaseStorage",
-      "effect": 5,
-      "price": 700
+      "effect": 1,
+      "price": 13
     },
     {
       "id": "better_storage_10",
       "type": "increaseStorage",
-      "effect": 20,
-      "price": 800
+      "effect": 1,
+      "price": 14
     },
     {
       "id": "better_storage_11",
       "type": "increaseStorage",
-      "effect": 20,
-      "price": 900
+      "effect": 1,
+      "price": 15
     },
     {
       "id": "better_storage_12",
       "type": "increaseStorage",
-      "effect": 20,
-      "price": 1000
+      "effect": 1,
+      "price": 17
     },
     {
       "id": "better_storage_13",
       "type": "increaseStorage",
-      "effect": 20,
-      "price": 1100
+      "effect": 1,
+      "price": 19
     },
     {
       "id": "better_storage_14",
       "type": "increaseStorage",
-      "effect": 20,
-      "price": 1200
+      "effect": 1,
+      "price": 21
     },
     {
       "id": "better_storage_15",
       "type": "increaseStorage",
-      "effect": 20,
-      "price": 1300
+      "effect": 1,
+      "price": 23
     },
     {
       "id": "better_storage_16",
       "type": "increaseStorage",
-      "effect": 20,
-      "price": 1400
+      "effect": 1,
+      "price": 25
     },
     {
       "id": "better_storage_17",
       "type": "increaseStorage",
-      "effect": 20,
-      "price": 1500
+      "effect": 1,
+      "price": 28
     },
     {
       "id": "better_storage_18",
       "type": "increaseStorage",
-      "effect": 20,
-      "price": 1600
+      "effect": 1,
+      "price": 31
     },
     {
       "id": "better_storage_19",
       "type": "increaseStorage",
-      "effect": 20,
-      "price": 1700
+      "effect": 1,
+      "price": 34
     },
     {
       "id": "better_storage_20",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 1800
+      "effect": 1,
+      "price": 37
     },
     {
       "id": "better_storage_21",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 1900
+      "effect": 1,
+      "price": 41
     },
     {
       "id": "better_storage_22",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 2000
+      "effect": 1,
+      "price": 45
     },
     {
       "id": "better_storage_23",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 2100
+      "effect": 1,
+      "price": 50
     },
     {
       "id": "better_storage_24",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 2200
+      "effect": 1,
+      "price": 55
     },
     {
       "id": "better_storage_25",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 2300
+      "effect": 1,
+      "price": 61
     },
     {
       "id": "better_storage_26",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 2400
+      "effect": 1,
+      "price": 67
     },
     {
       "id": "better_storage_27",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 2500
+      "effect": 1,
+      "price": 74
     },
     {
       "id": "better_storage_28",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 2600
+      "effect": 1,
+      "price": 81
     },
     {
       "id": "better_storage_29",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 2700
+      "effect": 1,
+      "price": 89
     },
     {
       "id": "better_storage_30",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 2800
+      "effect": 1,
+      "price": 98
     },
     {
       "id": "better_storage_31",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 2900
+      "effect": 1,
+      "price": 108
     },
     {
       "id": "better_storage_32",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 3000
+      "effect": 1,
+      "price": 119
     },
     {
       "id": "better_storage_33",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 3100
+      "effect": 1,
+      "price": 131
     },
     {
       "id": "better_storage_34",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 3200
+      "effect": 1,
+      "price": 144
     },
     {
       "id": "better_storage_35",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 3300
+      "effect": 1,
+      "price": 158
     },
     {
       "id": "better_storage_36",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 3400
+      "effect": 1,
+      "price": 174
     },
     {
       "id": "better_storage_37",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 3500
+      "effect": 1,
+      "price": 191
     },
     {
       "id": "better_storage_38",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 3600
+      "effect": 1,
+      "price": 210
     },
     {
       "id": "better_storage_39",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 3700
+      "effect": 1,
+      "price": 231
     },
     {
       "id": "better_storage_40",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 3800
+      "effect": 1,
+      "price": 254
     }
   ],
   "outputs": [
@@ -6881,7 +6881,7 @@
     {
       "id": "upgrade_profile_complexity_0",
       "level": 1,
-      "cost": 75,
+      "cost": 25,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.2,
@@ -6890,7 +6890,7 @@
     {
       "id": "upgrade_profile_complexity_0",
       "level": 2,
-      "cost": 83,
+      "cost": 28,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.21000000000000002,
@@ -6899,7 +6899,7 @@
     {
       "id": "upgrade_profile_complexity_0",
       "level": 3,
-      "cost": 91,
+      "cost": 31,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.22050000000000003,
@@ -6908,7 +6908,7 @@
     {
       "id": "upgrade_profile_complexity_0",
       "level": 4,
-      "cost": 100,
+      "cost": 34,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.23152500000000004,
@@ -6917,7 +6917,7 @@
     {
       "id": "upgrade_profile_complexity_0",
       "level": 5,
-      "cost": 110,
+      "cost": 37,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.24310125000000005,
@@ -6926,7 +6926,7 @@
     {
       "id": "upgrade_profile_complexity_0",
       "level": 6,
-      "cost": 121,
+      "cost": 41,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.2552563125000001,
@@ -6935,7 +6935,7 @@
     {
       "id": "upgrade_profile_complexity_0",
       "level": 7,
-      "cost": 133,
+      "cost": 45,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.2680191281250001,
@@ -6944,7 +6944,7 @@
     {
       "id": "upgrade_profile_complexity_0",
       "level": 8,
-      "cost": 146,
+      "cost": 50,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.2814200845312501,
@@ -6953,7 +6953,7 @@
     {
       "id": "upgrade_profile_complexity_0",
       "level": 9,
-      "cost": 161,
+      "cost": 55,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.29549108875781266,
@@ -6962,7 +6962,7 @@
     {
       "id": "upgrade_profile_complexity_0",
       "level": 10,
-      "cost": 177,
+      "cost": 61,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.3102656431957033,
@@ -6971,7 +6971,7 @@
     {
       "id": "upgrade_profile_complexity_0",
       "level": 11,
-      "cost": 195,
+      "cost": 67,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.3257789253554885,
@@ -6980,7 +6980,7 @@
     {
       "id": "upgrade_profile_complexity_0",
       "level": 12,
-      "cost": 215,
+      "cost": 74,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.34206787162326296,
@@ -6989,7 +6989,7 @@
     {
       "id": "upgrade_profile_complexity_0",
       "level": 13,
-      "cost": 237,
+      "cost": 81,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.3591712652044261,
@@ -6998,7 +6998,7 @@
     {
       "id": "upgrade_profile_complexity_0",
       "level": 14,
-      "cost": 261,
+      "cost": 89,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.37712982846464743,
@@ -7007,7 +7007,7 @@
     {
       "id": "upgrade_profile_complexity_0",
       "level": 15,
-      "cost": 287,
+      "cost": 98,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.3959863198878798,
@@ -7016,7 +7016,7 @@
     {
       "id": "upgrade_profile_complexity_1",
       "level": 1,
-      "cost": 300,
+      "cost": 50,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.2,
@@ -7025,7 +7025,7 @@
     {
       "id": "upgrade_profile_complexity_1",
       "level": 2,
-      "cost": 360,
+      "cost": 60,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.21000000000000002,
@@ -7034,7 +7034,7 @@
     {
       "id": "upgrade_profile_complexity_1",
       "level": 3,
-      "cost": 432,
+      "cost": 72,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.22050000000000003,
@@ -7043,7 +7043,7 @@
     {
       "id": "upgrade_profile_complexity_1",
       "level": 4,
-      "cost": 518,
+      "cost": 86,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.23152500000000004,
@@ -7052,7 +7052,7 @@
     {
       "id": "upgrade_profile_complexity_1",
       "level": 5,
-      "cost": 622,
+      "cost": 103,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.24310125000000005,
@@ -7061,7 +7061,7 @@
     {
       "id": "upgrade_profile_complexity_1",
       "level": 6,
-      "cost": 746,
+      "cost": 124,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.2552563125000001,
@@ -7070,7 +7070,7 @@
     {
       "id": "upgrade_profile_complexity_1",
       "level": 7,
-      "cost": 895,
+      "cost": 149,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.2680191281250001,
@@ -7079,7 +7079,7 @@
     {
       "id": "upgrade_profile_complexity_1",
       "level": 8,
-      "cost": 1074,
+      "cost": 179,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.2814200845312501,
@@ -7088,7 +7088,7 @@
     {
       "id": "upgrade_profile_complexity_1",
       "level": 9,
-      "cost": 1289,
+      "cost": 215,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.29549108875781266,
@@ -7097,7 +7097,7 @@
     {
       "id": "upgrade_profile_complexity_1",
       "level": 10,
-      "cost": 1547,
+      "cost": 258,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.3102656431957033,
@@ -7106,7 +7106,7 @@
     {
       "id": "upgrade_profile_complexity_1",
       "level": 11,
-      "cost": 1856,
+      "cost": 310,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.3257789253554885,
@@ -7115,7 +7115,7 @@
     {
       "id": "upgrade_profile_complexity_1",
       "level": 12,
-      "cost": 2227,
+      "cost": 372,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.34206787162326296,
@@ -7124,7 +7124,7 @@
     {
       "id": "upgrade_profile_complexity_1",
       "level": 13,
-      "cost": 2672,
+      "cost": 446,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.3591712652044261,
@@ -7133,7 +7133,7 @@
     {
       "id": "upgrade_profile_complexity_1",
       "level": 14,
-      "cost": 3206,
+      "cost": 535,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.37712982846464743,
@@ -7142,7 +7142,7 @@
     {
       "id": "upgrade_profile_complexity_1",
       "level": 15,
-      "cost": 3847,
+      "cost": 642,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.3959863198878798,
@@ -7151,7 +7151,7 @@
     {
       "id": "upgrade_profile_complexity_2",
       "level": 1,
-      "cost": 500,
+      "cost": 75,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.2,
@@ -7160,7 +7160,7 @@
     {
       "id": "upgrade_profile_complexity_2",
       "level": 2,
-      "cost": 650,
+      "cost": 98,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.21000000000000002,
@@ -7169,7 +7169,7 @@
     {
       "id": "upgrade_profile_complexity_2",
       "level": 3,
-      "cost": 845,
+      "cost": 127,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.22050000000000003,
@@ -7178,7 +7178,7 @@
     {
       "id": "upgrade_profile_complexity_2",
       "level": 4,
-      "cost": 1099,
+      "cost": 165,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.23152500000000004,
@@ -7187,7 +7187,7 @@
     {
       "id": "upgrade_profile_complexity_2",
       "level": 5,
-      "cost": 1429,
+      "cost": 215,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.24310125000000005,
@@ -7196,7 +7196,7 @@
     {
       "id": "upgrade_profile_complexity_2",
       "level": 6,
-      "cost": 1858,
+      "cost": 280,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.2552563125000001,
@@ -7205,7 +7205,7 @@
     {
       "id": "upgrade_profile_complexity_2",
       "level": 7,
-      "cost": 2415,
+      "cost": 364,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.2680191281250001,
@@ -7214,7 +7214,7 @@
     {
       "id": "upgrade_profile_complexity_2",
       "level": 8,
-      "cost": 3140,
+      "cost": 473,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.2814200845312501,
@@ -7223,7 +7223,7 @@
     {
       "id": "upgrade_profile_complexity_2",
       "level": 9,
-      "cost": 4082,
+      "cost": 615,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.29549108875781266,
@@ -7232,7 +7232,7 @@
     {
       "id": "upgrade_profile_complexity_2",
       "level": 10,
-      "cost": 5307,
+      "cost": 800,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.3102656431957033,
@@ -7241,7 +7241,7 @@
     {
       "id": "upgrade_profile_complexity_2",
       "level": 11,
-      "cost": 6899,
+      "cost": 1040,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.3257789253554885,
@@ -7250,7 +7250,7 @@
     {
       "id": "upgrade_profile_complexity_2",
       "level": 12,
-      "cost": 8969,
+      "cost": 1352,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.34206787162326296,
@@ -7259,7 +7259,7 @@
     {
       "id": "upgrade_profile_complexity_2",
       "level": 13,
-      "cost": 11660,
+      "cost": 1758,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.3591712652044261,
@@ -7268,7 +7268,7 @@
     {
       "id": "upgrade_profile_complexity_2",
       "level": 14,
-      "cost": 15158,
+      "cost": 2285,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.37712982846464743,
@@ -7277,7 +7277,7 @@
     {
       "id": "upgrade_profile_complexity_2",
       "level": 15,
-      "cost": 19705,
+      "cost": 2971,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.3959863198878798,
@@ -7286,7 +7286,7 @@
     {
       "id": "upgrade_profile_complexity_3",
       "level": 1,
-      "cost": 1000,
+      "cost": 85,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.2,
@@ -7295,7 +7295,7 @@
     {
       "id": "upgrade_profile_complexity_3",
       "level": 2,
-      "cost": 1400,
+      "cost": 119,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.21000000000000002,
@@ -7304,7 +7304,7 @@
     {
       "id": "upgrade_profile_complexity_3",
       "level": 3,
-      "cost": 1960,
+      "cost": 167,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.22050000000000003,
@@ -7313,7 +7313,7 @@
     {
       "id": "upgrade_profile_complexity_3",
       "level": 4,
-      "cost": 2744,
+      "cost": 234,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.23152500000000004,
@@ -7322,7 +7322,7 @@
     {
       "id": "upgrade_profile_complexity_3",
       "level": 5,
-      "cost": 3842,
+      "cost": 328,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.24310125000000005,
@@ -7331,7 +7331,7 @@
     {
       "id": "upgrade_profile_complexity_3",
       "level": 6,
-      "cost": 5379,
+      "cost": 459,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.2552563125000001,
@@ -7340,7 +7340,7 @@
     {
       "id": "upgrade_profile_complexity_3",
       "level": 7,
-      "cost": 7531,
+      "cost": 643,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.2680191281250001,
@@ -7349,7 +7349,7 @@
     {
       "id": "upgrade_profile_complexity_3",
       "level": 8,
-      "cost": 10543,
+      "cost": 900,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.2814200845312501,
@@ -7358,7 +7358,7 @@
     {
       "id": "upgrade_profile_complexity_3",
       "level": 9,
-      "cost": 14760,
+      "cost": 1260,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.29549108875781266,
@@ -7367,7 +7367,7 @@
     {
       "id": "upgrade_profile_complexity_3",
       "level": 10,
-      "cost": 20664,
+      "cost": 1764,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.3102656431957033,
@@ -7376,7 +7376,7 @@
     {
       "id": "upgrade_profile_complexity_3",
       "level": 11,
-      "cost": 28930,
+      "cost": 2470,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.3257789253554885,
@@ -7385,7 +7385,7 @@
     {
       "id": "upgrade_profile_complexity_3",
       "level": 12,
-      "cost": 40502,
+      "cost": 3458,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.34206787162326296,
@@ -7394,7 +7394,7 @@
     {
       "id": "upgrade_profile_complexity_3",
       "level": 13,
-      "cost": 56703,
+      "cost": 4841,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.3591712652044261,
@@ -7403,7 +7403,7 @@
     {
       "id": "upgrade_profile_complexity_3",
       "level": 14,
-      "cost": 79384,
+      "cost": 6777,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.37712982846464743,
@@ -7412,7 +7412,7 @@
     {
       "id": "upgrade_profile_complexity_3",
       "level": 15,
-      "cost": 111138,
+      "cost": 9488,
       "workersRequired": 1,
       "maxWorkers": 4,
       "workerSpeedBonus": 0.3959863198878798,
@@ -7421,7 +7421,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 1,
-      "cost": 75,
+      "cost": 100,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.2,
@@ -7430,7 +7430,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 2,
-      "cost": 113,
+      "cost": 150,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.21000000000000002,
@@ -7439,7 +7439,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 3,
-      "cost": 170,
+      "cost": 225,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.22050000000000003,
@@ -7448,7 +7448,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 4,
-      "cost": 255,
+      "cost": 338,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.23152500000000004,
@@ -7457,7 +7457,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 5,
-      "cost": 383,
+      "cost": 507,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.24310125000000005,
@@ -7466,7 +7466,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 6,
-      "cost": 575,
+      "cost": 761,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2552563125000001,
@@ -7475,7 +7475,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 7,
-      "cost": 863,
+      "cost": 1142,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2680191281250001,
@@ -7484,7 +7484,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 8,
-      "cost": 1295,
+      "cost": 1713,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2814200845312501,
@@ -7493,7 +7493,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 9,
-      "cost": 1943,
+      "cost": 2570,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.29549108875781266,
@@ -7502,7 +7502,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 10,
-      "cost": 2915,
+      "cost": 3855,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.3102656431957033,
@@ -7511,7 +7511,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 11,
-      "cost": 4373,
+      "cost": 5783,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.3257789253554885,
@@ -7520,7 +7520,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 12,
-      "cost": 6560,
+      "cost": 8675,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.34206787162326296,
@@ -7529,7 +7529,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 13,
-      "cost": 9840,
+      "cost": 13013,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.3591712652044261,
@@ -7538,7 +7538,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 14,
-      "cost": 14760,
+      "cost": 19520,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.37712982846464743,
@@ -7547,7 +7547,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 15,
-      "cost": 22140,
+      "cost": 29280,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.3959863198878798,
@@ -7556,7 +7556,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 1,
-      "cost": 75,
+      "cost": 115,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.15,
@@ -7565,7 +7565,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 2,
-      "cost": 120,
+      "cost": 184,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.1575,
@@ -7574,7 +7574,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 3,
-      "cost": 192,
+      "cost": 294,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.16537500000000002,
@@ -7583,7 +7583,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 4,
-      "cost": 307,
+      "cost": 470,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.17364375000000004,
@@ -7592,7 +7592,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 5,
-      "cost": 491,
+      "cost": 752,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.18232593750000006,
@@ -7601,7 +7601,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 6,
-      "cost": 786,
+      "cost": 1203,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.19144223437500008,
@@ -7610,7 +7610,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 7,
-      "cost": 1258,
+      "cost": 1925,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2010143460937501,
@@ -7619,7 +7619,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 8,
-      "cost": 2013,
+      "cost": 3080,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2110650633984376,
@@ -7628,7 +7628,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 9,
-      "cost": 3221,
+      "cost": 4928,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2216183165683595,
@@ -7637,7 +7637,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 10,
-      "cost": 5154,
+      "cost": 7885,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2326992323967775,
@@ -7646,7 +7646,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 11,
-      "cost": 8246,
+      "cost": 12616,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.24433419401661638,
@@ -7655,7 +7655,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 12,
-      "cost": 13194,
+      "cost": 20186,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2565509037174472,
@@ -7664,7 +7664,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 13,
-      "cost": 21110,
+      "cost": 32298,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2693784489033196,
@@ -7673,7 +7673,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 14,
-      "cost": 33776,
+      "cost": 51677,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2828473713484856,
@@ -7682,7 +7682,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 15,
-      "cost": 54042,
+      "cost": 82683,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2969897399159099,
