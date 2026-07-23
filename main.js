@@ -3,7 +3,7 @@
  */
 "use strict";
 
-import { BASE_MARKETING, SPAWN_INTERVAL, SPAWN_BATCH_MAX, FALL_TIME, S } from "./constants.js";
+import { BASE_MARKETING, SPAWN_INTERVAL, SPAWN_BATCH_MAX, SPAWN_BATCH_GAP, FALL_TIME, S } from "./constants.js";
 import { sprite, $, el, randInt } from "./helpers.js";
 import { normalize, resolveLevel } from "./config.js";
 import { Meta } from "./meta.js";
@@ -305,7 +305,7 @@ const Game = {
     this._screenReady = true;
     $("#factory-zone").classList.remove("hidden");
     $("#market-zone").classList.remove("hidden");
-    $("#worker-bar").style.display = "flex";
+    this.updateBench(false);   // le banc n'apparaît que s'il reste un ouvrier à poster
     $("#customer-lane").innerHTML = "";
     this.setupMarketCondense();
   },
@@ -313,14 +313,26 @@ const Game = {
   // Le marché épinglé rétrécit un peu dès qu'on descend dans l'usine et retrouve
   // sa taille pleine une fois revenu tout en haut. Hystérésis (>32 / <8) pour
   // éviter le clignotement quand on s'arrête pile sur le seuil.
+  //
+  // La classe est posée SUR #content aussi : le CSS lui rend en padding-bas les
+  // 90 px que la lane perd, donc la hauteur scrollable ne change pas. Sinon, tout
+  // en bas de page, condenser raccourcissait le scroller → le navigateur clampait
+  // scrollTop sous le seuil → on dépliait → la page rallongeait → on recondensait :
+  // le menu clignotait en boucle à cette « valeur limite ».
   setupMarketCondense() {
     const content = $("#content"), market = $("#market-zone");
     if (!content || !market || this._condenseWired) return;
     this._condenseWired = true;
+    const setCondensed = (on) => {
+      if (this._condensed === on) return;      // pas de write DOM inutile à chaque frame de scroll
+      this._condensed = on;
+      market.classList.toggle("condensed", on);
+      content.classList.toggle("market-condensed", on);
+    };
     const onScroll = () => {
       const y = content.scrollTop;
-      if (y > 32) market.classList.add("condensed");
-      else if (y < 8) market.classList.remove("condensed");
+      if (y > 32) setCondensed(true);
+      else if (y < 8) setCondensed(false);
     };
     content.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
@@ -358,6 +370,7 @@ const Game = {
     // rien eux-mêmes — leurs machines tournent dans tickProduction comme les tiennes.
     this.competitors.forEach((c) => { if (!c.isPlayer) botPlanRound(this, c); });
 
+    this.clearCounters();   // vague finie : plus une seule commande en attente sur les comptoirs
     this.renderInventory(); this.renderShop(); this.renderMachines(); this.renderWorkers();
     this.renderSuppliers(); this.renderWavePreview(); this.refreshHud();
     // Freshly rebuilt machine cards start empty : on ré-affiche la barre figée du
@@ -428,12 +441,19 @@ const Game = {
       // Les clients arrivent par PAQUETS (1..N d'un coup), plus un par un. Le tout
       // premier paquet n'apparaît qu'après le délai posé dans startWave (= temps de
       // prépa de la ressource la plus demandée), le temps de produire un peu.
-      if (m.remaining > 0 && m.spawnTimer <= 0) {
+      if (m.remaining > 0 && m.pending <= 0 && m.spawnTimer <= 0) {
         const batchMax = (m.def && m.def.customerBatch) || this.cfg.g.customerBatch || SPAWN_BATCH_MAX; // par niveau (level designer), défaut 2
         const batch = Math.min(m.remaining, randInt(1, batchMax));
-        for (let i = 0; i < batch; i++) spawnCustomer(this);
-        m.remaining -= batch;
+        m.remaining -= batch; m.pending = batch; m.batchTimer = 0;
         m.spawnTimer = SPAWN_INTERVAL / (this.cfg.g.customerRate || 1);
+      }
+      // Le paquet s'ÉGRÈNE (SPAWN_BATCH_GAP entre deux clients) au lieu de tomber
+      // d'un bloc : deux clients nés à la même frame partaient de la même hauteur et,
+      // s'ils visaient le même comptoir, descendaient superposés. Le décalage passe
+      // par le timer du jeu (donc suit x1/x2/x4), pas par un setTimeout.
+      if (m.pending > 0) {
+        m.batchTimer -= dt;
+        if (m.batchTimer <= 0) { spawnCustomer(this); m.pending--; m.batchTimer = SPAWN_BATCH_GAP; }
       }
       this._stackTimer = (this._stackTimer || 0) - dt;
       if (this._stackTimer <= 0) { restackCustomers(); this._stackTimer = 0.1; }
@@ -476,7 +496,7 @@ const Game = {
     const m = this.marketFor(this.round);
     // Le premier client attend le temps de PRODUIRE la ressource la plus demandée :
     // spawnTimer démarre à ce délai (au lieu de 0), le reste des paquets suit à l'interval.
-    this.market = { def: m, remaining: m.customers, total: m.customers, served: 0, spawnTimer: this.firstDemandDelay(m), active: 0, lostUnits: 0, lostValue: 0 };
+    this.market = { def: m, remaining: m.customers, total: m.customers, served: 0, spawnTimer: this.firstDemandDelay(m), pending: 0, batchTimer: 0, active: 0, lostUnits: 0, lostValue: 0 };
     $("#customer-lane").innerHTML = "";
     this.renderSuppliers(); this.renderWavePreview(); this.refreshHud();
     const content = $("#content"); if (content) content.scrollTo({ top: 0, behavior: "smooth" });

@@ -45,18 +45,60 @@ function chooseShop(game, eligible, resId) {
 // (décrémenté ici) — ainsi un paquet de clients ne survend pas le même comptoir et
 // chacun tombe devant le comptoir qu'il va vraiment visiter. L'argent, lui, n'est
 // crédité qu'à l'ARRIVÉE (settleSale), pour garder le ressenti « payé à la vente ».
+//
+// RÉSERVE ≠ COMPTOIR : la marchandise réservée sort du stock mais ne s'évapore pas,
+// elle est POSÉE SUR LE COMPTOIR (putOnCounter) et y reste visible jusqu'à ce que le
+// client descende la prendre. `tiers` liste le tier de chaque unité servie, dans
+// l'ordre où elle a été piochée — c'est ce qui est affiché sur le comptoir.
 function reserveSale(game, c, resId, qty) {
-  let gain = 0; const asked = qty;
+  let gain = 0; const asked = qty; const taken = [];
   const m = c.stock[resId];
   const tiers = Object.keys(m).map(Number).sort((a, b) => b - a); // highest tier first
-  for (const t of tiers) { while (qty > 0 && m[t] > 0) { m[t]--; qty--; gain += game.tierInfo(resId, t).price; } }
+  for (const t of tiers) { while (qty > 0 && m[t] > 0) { m[t]--; qty--; gain += game.tierInfo(resId, t).price; taken.push(t); } }
   if (c === game.player) game._invDirty = true;
-  return { gain, units: asked - qty };
+  return { gain, units: asked - qty, resId, tiers: taken };
 }
 function settleSale(game, c, sale) {
   c.money += sale.gain; c.salesThisRound += sale.gain;
   c.revenue += sale.gain; // revenus cumulés : LA métrique du classement (dépenser ne fait pas reculer)
   c.unitsThisRound = (c.unitsThisRound || 0) + sale.units; // parts de marché en volume (camembert de fin de round)
+}
+
+// --- Anti-chevauchement des colonnes -----------------------------------------
+// Le jitter aléatoire d'avant (±18 px pour un sprite de 46) laissait deux clients
+// tomber quasiment au même x : côte à côte dans le temps (même paquet, même
+// comptoir), ils se superposaient. On choisit maintenant des CRÉNEAUX espacés et on
+// écarte ceux qu'occupe déjà un client encore en haut de la lane.
+const LANE_SLOT = 52;   // px : sprite 46 + marge ; en-deçà deux clients se recouvrent
+const LANE_BUSY = 80;   // px sous le haut de la lane : au-delà, le client a assez descendu
+
+// x (centre, en px dans la lane) des clients encore trop hauts pour être doublés.
+function busyLaneXs(lane, laneRect) {
+  return [...lane.querySelectorAll(".customer")]
+    .filter((c) => c.getBoundingClientRect().top - laneRect.top < LANE_BUSY)
+    .map((c) => parseFloat(c.style.left))
+    .filter((x) => !Number.isNaN(x));
+}
+
+// band = { center, half } : la plage autorisée (le comptoir visé, ou la lane entière).
+// On balaie cette plage et on garde le meilleur x selon un score à deux étages :
+// d'abord s'écarter des voisins (plafonné à LANE_SLOT : au-delà c'est déjà « libre »),
+// ensuite, à égalité, viser au plus près du comptoir. Un comptoir saturé ne peut plus
+// espacer tout le monde — on prend alors le point le MOINS mauvais, jamais un doublon.
+function freeLaneX(lane, laneRect, band) {
+  const taken = busyLaneXs(lane, laneRect);
+  const aim = band.center + randInt(-8, 8);              // léger flou : pas toujours pile au centre
+  let lo = Math.max(10, band.center - band.half + LANE_SLOT / 2);
+  let hi = Math.min(laneRect.width - 10, band.center + band.half - LANE_SLOT / 2);
+  if (hi < lo) lo = hi = Math.max(10, Math.min(laneRect.width - 10, band.center)); // comptoir minuscule
+  if (!taken.length) return Math.max(lo, Math.min(hi, aim));
+  const gap = (x) => Math.min(...taken.map((t) => Math.abs(t - x)));
+  let best = lo, score = -Infinity;
+  for (let x = lo; x <= hi; x += 4) {
+    const s = Math.min(gap(x), LANE_SLOT) * 1000 - Math.abs(x - aim);
+    if (s > score) { score = s; best = x; }
+  }
+  return best;
 }
 
 export function spawnCustomer(game) {
@@ -71,18 +113,18 @@ export function spawnCustomer(game) {
   const eligible = game.competitors.filter((c) => game.stockOf(c, need.resId) >= need.qty);
   const winner = eligible.length ? chooseShop(game, eligible, need.resId) : null;
   const sale = winner ? reserveSale(game, winner, need.resId, need.qty) : null;
+  if (sale) game.putOnCounter(winner, sale);   // la marchandise glisse de la réserve au comptoir
 
   // Servi : pile devant le comptoir choisi. Non servi (personne n'a la ressource) :
   // il prend une LIGNE au hasard — le comptoir d'un concurrent tiré au sort — et
-  // ratera sa cible en bas. Petit jitter pour ne pas empiler un paquet.
+  // ratera sa cible en bas. La colonne exacte est choisie par freeLaneX (anti-chevauchement).
   const laneRect = lane.getBoundingClientRect();
-  const laneAt = (c) => {
-    const cr = c._counter.getBoundingClientRect();
-    const x = cr.left - laneRect.left + cr.width / 2 + randInt(-18, 18);
-    return Math.max(10, Math.min(laneRect.width - 10, x)) + "px";
-  };
   const laneTarget = winner || game.competitors[randInt(0, game.competitors.length - 1)];
-  cust.style.left = laneTarget && laneTarget._counter ? laneAt(laneTarget) : randInt(12, 88) + "%";
+  const counter = laneTarget && laneTarget._counter ? laneTarget._counter.getBoundingClientRect() : null;
+  const band = counter
+    ? { center: counter.left - laneRect.left + counter.width / 2, half: counter.width / 2 }
+    : { center: laneRect.width / 2, half: laneRect.width * .38 };   // pas de comptoir : toute la lane
+  cust.style.left = freeLaneX(lane, laneRect, band) + "px";
 
   const custSprite = game.cfg.customerSprites[need.resId]; // sprite chosen by demanded resource
   const custSrc = custSprite ? sprite(custSprite, "Characters") : sprite("Customer", "UI"); // else generic UI customer
@@ -98,6 +140,7 @@ export function spawnCustomer(game) {
   setTimeout(() => {
     if (winner && sale) {
       settleSale(game, winner, sale); // stock déjà réservé à l'apparition, on crédite l'argent ici
+      game.takeFromCounter(winner, sale, cust); // le client emporte enfin sa commande posée sur le comptoir
       cust.classList.add("toShop");
       game.flashStall(winner, sale.gain);
     } else {
