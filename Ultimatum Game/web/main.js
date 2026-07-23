@@ -10,8 +10,8 @@ import { Meta } from "./meta.js";
 import { initMenu, showMenu, hideMenu, renderMenu, openCharacterPanel, gearBadges, renderDropList } from "./menu.js";
 import { openBuildingPanel } from "./building.js";
 import { openResource } from "./resource.js";
-import { freeWorkers, crewSpeedBonus, crewProba2x, addWorker, selectWorker, assignWorker, removeWorker, unassignWorker } from "./game-workers.js";
-import { nextWorker, buyWorker, nextMkt, buyMkt, nextStorage, buyStorage, nextMachineLevel, upgradeMachine } from "./game-shop.js";
+import { freeWorkers, addWorker } from "./game-workers.js";
+import { nextMkt, buyMkt, nextStorage, buyStorage, nextMachineLevel, upgradeMachine } from "./game-shop.js";
 import { botPlanRound, staffBot } from "./game-bots.js";
 import { spawnCustomer, restackCustomers, retryWaiting } from "./game-customers.js";
 import { tickProduction, effTime } from "./game-production.js";
@@ -262,7 +262,7 @@ const Game = {
       machines: [], buys: { increaseWorker: 0, increaseMarketting: 0, increaseStorage: 0 },
       salesThisRound: 0, revenue: 0,
     };
-    for (let i = 0; i < g.startingWorkers; i++) addWorker(this, this.player);
+    // Plus d'ouvriers de départ à poser : chaque machine arrive équipée (fillCrew).
     this.cfg.machines.forEach((m) => { const r = this.machineUnlockRound(m.id); if (r != null && r <= 1) this.giveMachine(this.player, m.id); });
 
     // The level defines the exact bot lineup.
@@ -276,10 +276,9 @@ const Game = {
       workers: [], machines: [],
       buys: { increaseWorker: 0, increaseMarketting: 0, increaseStorage: 0 }, salesThisRound: 0, revenue: 0,
     }));
-    // Les bots jouent TON économie : mêmes ouvriers de départ, mêmes machines
-    // débloquées, même horloge de production (game-production.js tickProduction).
+    // Les bots jouent TON économie : mêmes machines débloquées (équipées d'office),
+    // même horloge de production (game-production.js tickProduction).
     bots.forEach((b) => {
-      for (let i = 0; i < g.startingWorkers; i++) addWorker(this, b);
       this.cfg.machines.forEach((m) => { const r = this.machineUnlockRound(m.id); if (r != null && r <= 1) this.giveMachine(b, m.id); });
     });
     this.competitors = [this.player, ...bots];
@@ -287,7 +286,28 @@ const Game = {
     this.transitionTo(S.Play);
   },
 
-  giveMachine(p, id) { if (!p.machines.some((m) => m.id === id)) p.machines.push({ id, level: 1, crew: [], elapsed: 0, producing: false }); },
+  // Rework « rabatteur » : plus de gestion d'ouvriers. Une machine ARRIVE avec son
+  // équipe au complet (maxWorkers de son niveau) et ne la partage plus. Le verbe du
+  // joueur n'est plus « déplacer des bonshommes » mais « choisir la posture de
+  // chaque machine » : mode "prod" (fabrique) ou "sell" (rabatteur — l'équipe crie
+  // sur le pas de la porte : attractivité boostée sur SA ressource, zéro production).
+  giveMachine(p, id) {
+    if (p.machines.some((m) => m.id === id)) return;
+    const m = { id, level: 1, crew: [], elapsed: 0, producing: false, mode: "prod" };
+    p.machines.push(m);
+    this.fillCrew(p, m);
+  },
+  // Complète l'équipe d'une machine à maxWorkers (appelé à la création ET après
+  // chaque upgrade, joueur comme bot). Passe par addWorker : les PERSONNAGES du
+  // joueur embarquent toujours en premier (bonus de vitesse/proba conservés).
+  fillCrew(p, m) {
+    const L = this.lvl(m);
+    while (m.crew.length < L.maxWorkers) {
+      addWorker(this, p);
+      const w = p.workers[p.workers.length - 1];
+      w.machineId = m.id; m.crew.push(w);
+    }
+  },
 
   // ---------- Play (single screen: continuous production + customer waves) ----------
   enterPlay() {
@@ -387,8 +407,11 @@ const Game = {
     // accumulates in the model + flips _invDirty, so it never shifts the layout
     // while the player watches the machines.
     this.maybeRefreshInventory();
+    // Les rabatteurs se déplacent à CHAQUE frame (ce sont des agents physiques,
+    // leur trajet gate la reprise de production — voir game-render.tickHawkers).
+    this.tickHawkers(dt);
     this._supTimer = (this._supTimer || 0) - dt;
-    if (this._supTimer <= 0) { this.refreshSuppliers(); this.refreshAffordability(); this.refreshWaveCoverage(); this.refreshMachineDots(); this.refreshStockBtn(); this._supTimer = 0.2; }
+    if (this._supTimer <= 0) { this.refreshSuppliers(); this.refreshAffordability(); this.refreshWaveCoverage(); this.refreshMachineDots(); this.refreshMachineShares(); this.refreshCustomerDim(); this.refreshStockBtn(); this._supTimer = 0.2; }
     // Les bots redéploient leurs ouvriers en cours de round, comme tu le fais à la main :
     // une chaîne de conversion ne coule que si on passe l'ouvrier au convertisseur dès que
     // son stock d'intrants est prêt, puis qu'on le rend au fournisseur quand il est à sec.
@@ -555,11 +578,14 @@ const Game = {
     document.querySelectorAll("#wave-preview .wp-cov, .demand-float .wp-cov").forEach((n) => {
       const rid = n.dataset.covres;
       const producers = this.player.machines.filter((x) => { const d = this.machineDef(x.id); return d && d.outputs === rid; });
-      const staffed = producers.some((x) => x.crew.length >= this.lvl(x).workersRequired);
+      // Rework rabatteur : l'équipe est toujours au complet — ce qui arrête une
+      // machine, c'est son MODE. ⚠ = tout ce qui produit cette ressource est en
+      // mode Rabatteur, rien n'en sortira.
+      const producing = producers.some((x) => x.mode !== "sell");
       const hasStock = this.stockOf(this.player, rid) > 0;
       let cls, txt, tip;
-      if (staffed) { cls = "ok"; txt = "✓"; tip = "Ta machine est staffée : ça produira"; }
-      else if (producers.length) { cls = "warn"; txt = "⚠"; tip = hasStock ? "Tu as du stock mais la machine est à l'arrêt : assigne des ouvriers" : "Machine à l'arrêt et aucun stock : assigne des ouvriers"; }
+      if (producing) { cls = "ok"; txt = "✓"; tip = "Ta machine produit cette ressource"; }
+      else if (producers.length) { cls = "warn"; txt = "⚠"; tip = "Ta machine est en mode Rabatteur : rien ne produira"; }
       else if (hasStock) { cls = "ok"; txt = "✓"; tip = "Tu as du stock (mais aucune machine pour en refaire)"; }
       else { cls = "off"; txt = "–"; tip = "Tu n'es pas positionné sur cette ressource"; }
       n.className = "wp-cov " + cls; n.textContent = txt; n.title = tip;

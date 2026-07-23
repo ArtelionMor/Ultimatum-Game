@@ -25,7 +25,26 @@ function pickNeed(marketDef, order) {
   return { resId: res, qty };
 }
 
-function attractiveness(game, c, resId) { return c.marketing + game.tierInfo(resId, game.bestTier(c, resId)).influence; }
+// Rabatteurs DEHORS (état "out"/"toClient", voir game-render.tickHawkers) sur les
+// machines en mode "sell" produisant CETTE ressource. Un rabatteur en recharge à
+// la base ou sur le chemin du retour ne compte pas : capter coûte de l'uptime.
+function hawkersOut(c, resId, game) {
+  let n = 0;
+  c.machines.forEach((m) => {
+    if (m.mode !== "sell" || game.machineDef(m.id).outputs !== resId) return;
+    (m._hawkers || []).forEach((h) => { if (h.state === "out" || h.state === "toClient") n++; });
+  });
+  return n;
+}
+
+// Attractivité par (concurrent, ressource) : marketing + qualité, MULTIPLIÉE par
+// les rabatteurs actifs — le levier ACTIF du marché (× (1 + n × hawkerBoost),
+// défaut 0.75/ouvrier : 2 rabatteurs ≈ ×2.5, le « double ou triple » voulu).
+function attractiveness(game, c, resId) {
+  const base = c.marketing + game.tierInfo(resId, game.bestTier(c, resId)).influence;
+  const boost = Number.isFinite(game.cfg.g.hawkerBoost) ? game.cfg.g.hawkerBoost : 0.75;
+  return base * (1 + hawkersOut(c, resId, game) * boost);
+}
 
 // Les probabilités du tirage, séparées du tirage lui-même : c'est LA règle du jeu
 // (marketing + tier ⇒ part du client), donc elle doit être AFFICHABLE, pas seulement
@@ -214,6 +233,7 @@ export function spawnCustomer(game) {
   const m = game.market; m.active++;
   const lane = $("#customer-lane");
   const cust = el("div", "customer");
+  cust.dataset.res = need.resId;   // focus visuel : le carrousel estompe les clients hors sujet
 
   // CHOIX DU SHOP DÈS L'APPARITION (plus au dernier moment) : on regarde qui a le
   // stock MAINTENANT, on tire le vainqueur, et on réserve sa marchandise. Le client

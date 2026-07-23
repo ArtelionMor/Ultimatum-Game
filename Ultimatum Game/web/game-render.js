@@ -11,12 +11,23 @@ import { Meta } from "./meta.js";
 import { openCharacterPanel, gearBadges } from "./menu.js";
 import { openBuildingPanel } from "./building.js";
 import { openResource } from "./resource.js";
-import { freeWorkers, selectWorker, assignWorker, removeWorker, unassignWorker } from "./game-workers.js";
-import { nextWorker, buyWorker, nextMkt, buyMkt, nextStorage, buyStorage, nextMachineLevel, upgradeMachine } from "./game-shop.js";
+import { nextMkt, buyMkt, nextStorage, buyStorage, nextMachineLevel, upgradeMachine } from "./game-shop.js";
 import { botBehavior } from "./game-bots.js";
-import { expectedShares } from "./game-customers.js";
+import { expectedShares, shopOdds } from "./game-customers.js";
+
+// Couleur FIXE par concurrent (ordre du lineup) — la même partout : camembert de
+// fin de round, rabatteurs dans la rue. C'est elle qui permet de lire « ce
+// bonhomme travaille pour Woof Inc » au milieu de la mêlée.
+export const COMP_COLORS = ["#f4b942", "#279a86", "#8a6fe3", "#bf5f96"];
+
+// Rythme des rabatteurs (tickHawkers). Les délais de trajet découlent de la
+// vitesse (px/s), donc un grand écran = trajets plus longs, cohérent.
+const HAWK_SPEED = 55;          // balade
+const HAWK_RUN_SPEED = 150;     // course vers un client à livrer
+const HAWK_HOME_SPEED = 110;    // retour à la base
 
 export const renderMethods = {
+  compColor(c) { const i = this.competitors.indexOf(c); return COMP_COLORS[(i < 0 ? 0 : i) % COMP_COLORS.length]; },
   refreshHud() {
     this.player; $("#money").textContent = this.player.money;
     if (this.state === S.Play && this.waveActive) {
@@ -187,16 +198,8 @@ export const renderMethods = {
       b.disabled = disFn(); b.onclick = fn; bar.appendChild(b);
       this._shopBtns.push({ b, disFn });
     };
-    const w = nextWorker(this);
-    // Preview WHO joins next (Meta.recruitOrder), with its gear; generic
-    // Worker once every owned character is already on the payroll.
-    const nxId = Meta.nextRecruit(this.player.workers.map((x) => x.charId).filter(Boolean));
-    const nch = nxId && this.cfg.characters[nxId];
-    const ico = nch && nch.spriteId ? sprite(nch.spriteId, "Characters") : sprite("Worker", "UI");
-    const label = nch
-      ? `${nch.displayName}<span class="sb-gears">${gearBadges(nxId) || ""}</span>`
-      : `Ouvrier ×${this.player.workers.length}`;
-    mk(`<img src="${ico}" onerror="this.onerror=null;this.src='${sprite("Worker", "UI")}'">`, label, w ? "$" + w.price : "MAX", () => !w || this.player.workers.length >= this.cfg.g.maxWorkersTotal || this.player.money < w.price, () => buyWorker(this), "buy_a_worker");
+    // Plus d'achat d'ouvriers (rework rabatteur : les équipes sont fixes) — la
+    // boutique ne vend plus que du marketing et du stockage.
     // locked features are hidden completely, not greyed (feature_unlock)
     if (Meta.featureUnlocked("marketting")) {
       const mkt = nextMkt(this);
@@ -297,10 +300,7 @@ export const renderMethods = {
       const d = el("button", "mdot");
       d.dataset.mi = i;
       d.title = this.machineDef(m.id).displayName;
-      d.onclick = () => {
-        if (this.selectedWorker) { assignWorker(this, m); return; }
-        if (m._node) m._node.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-      };
+      d.onclick = () => { if (m._node) m._node.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" }); };
       wrap.appendChild(d);
       return d;
     });
@@ -321,12 +321,26 @@ export const renderMethods = {
       });
     }
     this.player.machines.forEach((m, i) => {
-      const d = this._mdots[i], L = this.lvl(m);
+      const d = this._mdots[i];
       d.classList.toggle("active", i === active);
       d.classList.toggle("producing", !!m.producing);
-      d.classList.toggle("stalled", m.crew.length < L.workersRequired);
-      d.classList.toggle("assignable", !!this.selectedWorker && m.crew.length < L.maxWorkers);
+      d.classList.toggle("selling", m.mode === "sell");
     });
+    // Focus visuel : la machine active du carrousel définit LA ressource dont on
+    // parle — les clients qui veulent autre chose s'estompent dans la rue. La
+    // carte (icône + % de part) et la rue racontent alors le même produit.
+    const am = this.player.machines[active];
+    const focusRes = am ? this.machineDef(am.id).outputs : null;
+    if (focusRes !== this._focusRes) {
+      this._focusRes = focusRes;
+      document.querySelectorAll("#customer-lane .customer").forEach((n) => n.classList.toggle("dim", !!focusRes && n.dataset.res !== focusRes));
+    }
+  },
+  // Les clients apparus APRÈS le dernier changement de focus prennent leur état en
+  // naissant (appelé de spawnCustomer via refreshSuppliers ? non : tick 0.2 s).
+  refreshCustomerDim() {
+    if (this._focusRes == null) return;
+    document.querySelectorAll("#customer-lane .customer:not(.toShop):not(.done)").forEach((n) => n.classList.toggle("dim", n.dataset.res !== this._focusRes));
   },
   buildMachine(m) {
     const def = this.machineDef(m.id);
@@ -337,22 +351,43 @@ export const renderMethods = {
     const footer = el("div", "machine-footer");
     const slots = el("div", "worker-slots"); footer.appendChild(slots);
     const timer = el("span", "machine-timer", ""); footer.appendChild(timer); // décompte de production (setProgress)
+    // LE verbe du joueur : la posture de la machine. Produire (l'équipe fabrique)
+    // ou Rabatteur (l'équipe sort crier dans la rue : attractivité boostée sur SA
+    // ressource, production à l'arrêt). Plus de gestion d'ouvriers.
     const btns = el("div", "machine-buttons");
-    const rm = el("button", "ghost", "−"), ad = el("button", null, "+"), up = el("button", "upgrade");
+    const modeSeg = el("div", "mode-seg");
+    const prodB = el("button", "mode-btn", "⚙"); prodB.title = "Produire";
+    const sellB = el("button", "mode-btn", "📣"); sellB.title = "Rabatteur : l'équipe sort capter les clients (production à l'arrêt)";
+    modeSeg.append(prodB, sellB);
+    const up = el("button", "upgrade");
     if (!Meta.featureUnlocked("upgrade_machine")) up.classList.add("hidden");
-    btns.append(rm, ad, up); footer.appendChild(btns);
+    btns.append(modeSeg, up); footer.appendChild(btns);
+    // Part de marché sur LA ressource de cette machine : l'effet du mode Rabatteur
+    // se lit ici, à côté du produit concerné (icône incluse — pas d'ambiguïté).
+    const share = el("div", "machine-share");
+    share.innerHTML = `<img src="${this.tierSrc(def.outputs, 1)}"><b>–</b>`;
     const prog = el("div", "progress"); prog.appendChild(el("div"));
-    node.append(icon, name, recipe, footer, prog);
-    rm.onclick = (e) => { e.stopPropagation(); removeWorker(this, m); };
-    ad.onclick = (e) => { e.stopPropagation(); assignWorker(this, m); };
+    node.append(icon, name, recipe, footer, share, prog);
+    prodB.onclick = (e) => { e.stopPropagation(); this.setMachineMode(m, "prod"); };
+    sellB.onclick = (e) => { e.stopPropagation(); this.setMachineMode(m, "sell"); };
     up.onclick = (e) => { e.stopPropagation(); upgradeMachine(this, m); };
-    node.onclick = () => { if (this.selectedWorker) assignWorker(this, m); };
-    // tap the building sprite -> its detail widget (unless assigning a worker)
+    // tap the building sprite -> its detail widget
     icon.style.cursor = "pointer";
-    icon.onclick = (e) => { if (this.selectedWorker) return; e.stopPropagation(); openBuildingPanel(m.id, { level: m.level }); };
+    icon.onclick = (e) => { e.stopPropagation(); openBuildingPanel(m.id, { level: m.level }); };
     // tap an ingredient/output icon in the recipe -> its codex page
     recipe.addEventListener("click", (e) => { const img = e.target.closest("img[data-res]"); if (img) { e.stopPropagation(); openResource(img.dataset.res); } });
-    m._refs = { name, slots, ad, rm, up, timer }; this.updateMachine(m, node); return node;
+    m._refs = { name, slots, up, timer, prodB, sellB, share: share.querySelector("b") };
+    this.updateMachine(m, node); return node;
+  },
+
+  setMachineMode(m, mode) {
+    if (m.mode === mode) return;
+    m.mode = mode;
+    // Le trajet fait foi (tickHawkers) : passer en "sell" fait SORTIR l'équipe un
+    // par un ; repasser en "prod" la fait RENTRER À PIED — la production ne
+    // reprend qu'une fois tout le monde à la base (gate dans tickProduction).
+    this.refreshMachineCard(m);
+    this.refreshMachineDots();
   },
   recipeHtml(def) {
     const ic = (id, cls = "") => `<img class="${cls}" data-res="${id}" src="${this.tierSrc(id, 1)}" title="${this.res(id).displayName}">`;
@@ -362,19 +397,41 @@ export const renderMethods = {
   },
   refreshMachineCard(m) { if (m._node) this.updateMachine(m, m._node); this.renderWorkers(); },
   updateMachine(m, node) {
-    const def = this.machineDef(m.id), L = this.lvl(m), r = m._refs;
+    const def = this.machineDef(m.id), r = m._refs;
     r.name.innerHTML = `${def.displayName} <span class="lvl">Nv.${m.level}</span>`;
+    // L'équipe est fixe (fillCrew) : les chips sont un affichage, plus une gestion.
+    // Un ouvrier DEHORS (rabatteur pas encore rentré) apparaît estompé sur la carte.
     r.slots.innerHTML = "";
-    for (let i = 0; i < L.maxWorkers; i++) {
-      if (i < m.crew.length) r.slots.appendChild(this.workerChip(m.crew[i]));
-      else r.slots.appendChild(el("div", "slot" + (i < L.workersRequired ? " required" : "")));
-    }
-    r.ad.disabled = m.crew.length >= L.maxWorkers || freeWorkers(this.player).length <= 0;
-    r.rm.disabled = m.crew.length <= 0;
+    m.crew.forEach((w) => {
+      const chip = this.workerChip(w);
+      if (w._hawk) chip.classList.add("away");
+      r.slots.appendChild(chip);
+    });
+    r.prodB.classList.toggle("on", m.mode !== "sell");
+    r.sellB.classList.toggle("on", m.mode === "sell");
     const nx = nextMachineLevel(this, m);
     if (nx) { r.up.innerHTML = `⬆ $${nx.cost}`; r.up.disabled = this.player.money < nx.cost; } else { r.up.innerHTML = "⬆ MAX"; r.up.disabled = true; }
     node.classList.toggle("producing", m.producing);
-    node.classList.toggle("assignable", !!this.selectedWorker && m.crew.length < L.maxWorkers);
+    node.classList.toggle("selling", m.mode === "sell");
+  },
+  // Part de marché du joueur sur la ressource de CHAQUE machine (mêmes odds que le
+  // tirage), rafraîchie sur le tick 0.2 s : le mode Rabatteur fait bouger CE
+  // chiffre-là, à côté de l'icône du produit concerné.
+  refreshMachineShares() {
+    if (!this.player || !this.player.machines) return;
+    this.player.machines.forEach((m) => {
+      if (!m._refs || !m._refs.share || !m._node) return;
+      const resId = this.machineDef(m.id).outputs;
+      const eligible = this.competitors.filter((c) => this.stockOf(c, resId) > 0);
+      let pct = 0;
+      if (eligible.includes(this.player)) {
+        const p = shopOdds(this, eligible, resId);
+        pct = Math.round(p[eligible.indexOf(this.player)] * 100);
+      }
+      const txt = pct + "%";
+      if (m._refs.share.textContent !== txt) m._refs.share.textContent = txt;
+      m._refs.share.parentElement.classList.toggle("zero", pct === 0);
+    });
   },
   // secs (optionnel) = temps restant avant le prochain spawn — affiché au centre
   // du footer de la carte ; vide quand la machine ne tourne pas.
@@ -388,110 +445,31 @@ export const renderMethods = {
     }
   },
 
-  // --- workers (banc permanent dans la barre du bas + chips + drag & drop) ---
-  // Le banc ne s'escamote plus : la barre du bas est toujours là, donc plus de
-  // mode « surimpression pendant le drag » ni de hauteur qui saute.
+  // --- workers ---
+  // Rework « rabatteur » : les équipes sont FIXES (fillCrew), il n'y a plus de
+  // banc ni d'assignation. renderWorkers ne fait plus que rafraîchir les cartes.
   renderWorkers() {
-    const wrap = $("#worker-icons"); wrap.innerHTML = "";
-    freeWorkers(this.player).forEach((w) => wrap.appendChild(this.workerChip(w)));
-    const hint = $("#worker-hint");
-    hint.textContent = this.selectedWorker ? "Touche une machine ou une pastille" : "";
-    hint.classList.toggle("active", !!this.selectedWorker);
     this.player.machines.forEach((m) => { if (m._node) this.updateMachine(m, m._node); });
-    this.refreshMachineDots();   // la sélection allume les pastilles assignables
+    this.refreshMachineDots();
     this.renderShop();
   },
 
-  // One worker chip: avatar + (for characters) name, gear badges and level ring.
-  // Tap: character -> detail panel; generic free -> arm for tap-assign; generic
-  // assigned -> back to the pool. Drag & drop works for every chip.
+  // One worker chip: avatar + (for characters) gear badges. Affichage pur — tap
+  // sur un personnage ouvre sa fiche, c'est tout.
   workerChip(w) {
     const isChar = !!w.charId;
     const ch = isChar ? this.cfg.characters[w.charId] : null;
     const src = ch && ch.spriteId ? sprite(ch.spriteId, "Characters") : sprite("Worker", "UI");
-    const chip = el("div", "wchip" + (isChar ? " char" : "") + (this.selectedWorker === w ? " selected" : "") + (w.machineId ? " onmachine" : ""));
-    // No name/level on the chip (they clipped on mobile): avatar + gear row,
-    // details live in the character panel (tap).
+    const chip = el("div", "wchip" + (isChar ? " char" : ""));
     chip.innerHTML =
       `<span class="wava"><img src="${src}" onerror="this.onerror=null;this.src='${sprite("Worker", "UI")}'" draggable="false"></span>` +
       (isChar ? `<span class="wgears">${gearBadges(w.charId)}</span>` : "");
-    this.makeDraggable(chip, w);
+    if (isChar) chip.onclick = (e) => { e.stopPropagation(); openCharacterPanel(w.charId); };
     return chip;
   },
-  workerChipClick(w) {
-    if (w.charId) { openCharacterPanel(w.charId); return; }
-    if (w.machineId) { unassignWorker(this, w); return; }
-    selectWorker(this, w);
-  },
 
-  // Pointer-based drag & drop (touch friendly): a ghost follows the finger; drop
-  // on a machine assigns/moves the worker, drop on the worker bar recalls it.
-  // A small move threshold keeps plain taps working as clicks.
-  makeDraggable(chip, w) {
-    chip.addEventListener("pointerdown", (e) => {
-      if (e.button !== 0 && e.pointerType === "mouse") return;
-      e.preventDefault();
-      const start = { x: e.clientX, y: e.clientY };
-      let ghost = null, dragging = false;
-      const move = (ev) => {
-        if (!dragging && Math.hypot(ev.clientX - start.x, ev.clientY - start.y) > 8) {
-          dragging = true;
-          ghost = chip.cloneNode(true); ghost.classList.add("drag-ghost");
-          document.body.appendChild(ghost);
-          chip.classList.add("drag-src");
-          document.body.classList.add("dragging-worker");
-        }
-        if (dragging && ghost) {
-          ghost.style.left = ev.clientX + "px"; ghost.style.top = ev.clientY + "px";
-          this.highlightDropTarget(ev);
-        }
-      };
-      const up = (ev) => {
-        window.removeEventListener("pointermove", move);
-        window.removeEventListener("pointerup", up);
-        window.removeEventListener("pointercancel", up);
-        document.body.classList.remove("dragging-worker");
-        if (ghost) ghost.remove();
-        chip.classList.remove("drag-src");
-        this.clearDropHighlight();
-        if (!dragging) { this.workerChipClick(w); return; }
-        const target = this.dropTargetAt(ev);
-        if (target === "bar") unassignWorker(this, w);
-        else if (target) assignWorker(this, target, w);
-      };
-      window.addEventListener("pointermove", move);
-      window.addEventListener("pointerup", up);
-      window.addEventListener("pointercancel", up);
-    });
-  },
-  dropTargetAt(ev) {
-    // Skip the tutorial layer: while a black_mask teaches the drag, its shields
-    // sit on top of the board and elementFromPoint would only ever see them, so
-    // every drop would silently do nothing.
-    const under = document.elementsFromPoint(ev.clientX, ev.clientY).find((n) => !n.closest("#tut-layer"));
-    if (!under) return null;
-    if (under.closest("#worker-bar")) return "bar";
-    // Une pastille est une cible de drop : c'est CE qui permet de déplacer un
-    // ouvrier vers une machine hors écran sans scroller en plein glissement.
-    const dot = under.closest("#machine-dots .mdot");
-    if (dot) return this.player.machines[+dot.dataset.mi] || null;
-    const node = under.closest(".machine");
-    if (!node) return null;
-    return this.player.machines.find((x) => x._node === node) || null;
-  },
-  highlightDropTarget(ev) {
-    const t = this.dropTargetAt(ev);
-    this.player.machines.forEach((m) => {
-      if (!m._node) return;
-      const ok = t === m && m.crew.length < this.lvl(m).maxWorkers;
-      m._node.classList.toggle("drop-ok", ok);
-    });
-    $("#worker-bar").classList.toggle("drop-ok", t === "bar");
-  },
-  clearDropHighlight() {
-    this.player.machines.forEach((m) => { if (m._node) m._node.classList.remove("drop-ok"); });
-    $("#worker-bar").classList.remove("drop-ok");
-  },
+  // (Le drag & drop d'ouvriers est mort avec la gestion d'équipes : les crews sont
+  // fixes, le seul geste machine est le switch Prod/Rabatteur.)
 
   // --- suppliers / counters (market) ---
   renderSuppliers() {
@@ -582,6 +560,10 @@ export const renderMethods = {
     this.competitors.forEach((c) => {
       if (!c._counter) return;
       if (c._moneyRef) c._moneyRef.textContent = c.money;
+      // Stand illuminé (couleur du concurrent) tant que ses rabatteurs sont dehors.
+      const hawking = c.machines.some((m) => m.mode === "sell" && (m._hawkers || []).some((h) => h.state === "out" || h.state === "toClient"));
+      c._counter.classList.toggle("hawking", hawking);
+      if (hawking) c._counter.style.setProperty("--hc", this.compColor(c));
       if (c._shareRef) {
         const sh = es ? Math.round((es.shares.get(c) || 0) * 100) : null;
         c._shareRef.textContent = sh == null ? "–" : sh + "%";
@@ -670,22 +652,153 @@ export const renderMethods = {
     });
   },
 
-  // Le client est arrivé : il emporte sa commande (vol comptoir -> client, fondu).
+  // Le client est arrivé : il emporte sa commande. Si un rabatteur de la bonne
+  // ressource est dehors, c'est LUI qui court la livrer (dispatchHawker) — sinon
+  // la marchandise vole toute seule comme avant (comptoir -> client, fondu).
   takeFromCounter(c, sale, custEl) {
     const items = sale.items || []; sale.items = null;
     if (!items.length) return;
     c.counterItems = (c.counterItems || []).filter((it) => !items.includes(it));
     const target = custEl && custEl.querySelector(".cust-sprite");
     const to = target && target.isConnected ? target.getBoundingClientRect() : null;
-    items.forEach((it) => {
+    const courier = this.dispatchHawker(c, sale.resId, items[0].tier, custEl);
+    items.forEach((it, i) => {
       const chip = it._chip; it._chip = null;
       if (!chip || !chip.isConnected) return;
       const from = chip.getBoundingClientRect();
       const landing = chip.classList.contains("landing");  // pas encore arrivé : rien à faire voler
       chip.remove();
+      // Le premier colis est dans les mains du livreur ; les suivants volent.
+      if (courier && i === 0) return;
       if (to && from.width && !landing) this.flyItem(it.resId, it.tier, from, to, 340, true);
     });
     this.renderCounterDesk(c);   // ré-échelonne les chips restants
+  },
+
+  // --- rabatteurs : des ouvriers PHYSIQUES dans la rue -------------------------
+  // Une machine en mode "sell" envoie son équipe se balader dans la lane, aux
+  // couleurs de son patron (compColor). Cycle de vie d'un rabatteur :
+  //   recharge (à la base, invisible) → out (balade devant le stand, compte dans
+  //   l'attractivité) → toClient (course pour LIVRER un client servi) →
+  //   returning (rentre à pied) → recharge…
+  // Le TRAJET fait foi : repasser la machine en "prod" ne téléporte personne —
+  // tout le monde rentre à pied (returning) et la production ne reprend qu'une
+  // fois l'équipe au complet (gate dans game-production). Pas d'exploit de switch.
+  hawkerBaseX(c, laneRect) {
+    const s = c._counter;
+    if (!s || !s.isConnected) return laneRect.width / 2;
+    const r = s.getBoundingClientRect();
+    return Math.max(14, Math.min(laneRect.width - 14, r.left - laneRect.left + r.width / 2));
+  },
+  tickHawkers(dt) {
+    const lane = $("#customer-lane"); if (!lane || !this.competitors) return;
+    const laneRect = lane.getBoundingClientRect(); if (!laneRect.height) return;
+    const recharge = Number.isFinite(this.cfg.g.hawkerRecharge) ? this.cfg.g.hawkerRecharge : 1.5;
+    this.competitors.forEach((c) => c.machines.forEach((m) => {
+      const selling = m.mode === "sell";
+      m._hawkers = m._hawkers || [];
+      if (selling) {
+        m.crew.forEach((w) => {
+          if (w._hawk) return;
+          // Départs étalés : toute l'équipe ne surgit pas à la même frame.
+          w._hawk = { w, c, m, state: "recharge", timer: 0.2 + Math.random() * 0.9 };
+          m._hawkers.push(w._hawk);
+        });
+      }
+      m._hawkers = m._hawkers.filter((h) => !this.tickHawker(h, dt, lane, laneRect, selling, recharge));
+    }));
+    // Balayage défensif : un sprite .hawker que plus aucune entrée vivante ne
+    // possède (vague qui a vidé la lane, entrée retirée entre-temps) est enlevé —
+    // pas de bonshommes fantômes plantés dans la rue.
+    lane.querySelectorAll(".hawker").forEach((n) => { if (!n._hawk || n._hawk.el !== n) n.remove(); });
+  },
+  // Un pas de simulation pour UN rabatteur. Renvoie true quand il a terminé
+  // (rentré + machine plus en mode sell) : son entrée est retirée, w._hawk aussi.
+  tickHawker(h, dt, lane, laneRect, selling, recharge) {
+    const baseX = this.hawkerBaseX(h.c, laneRect), baseY = laneRect.height - 8;
+    // La vague a reconstruit la lane (innerHTML = "") : l'élément est orphelin —
+    // le bonhomme « est rentré entre les vagues », il repart proprement de la base.
+    if (h.el && !h.el.isConnected) { h.el = null; h.state = "recharge"; h.timer = recharge * Math.random(); }
+    if (h.state === "recharge") {
+      if (!selling) { h.w._hawk = null; return true; }   // à la base et plus besoin de lui
+      h.timer -= dt;
+      if (h.timer <= 0) {
+        h.el = el("div", "hawker");
+        h.el._hawk = h;   // lien de propriété, pour le balayage anti-fantômes
+        h.el.style.setProperty("--hc", this.compColor(h.c));
+        const src = h.w.charId && this.cfg.characters[h.w.charId] && this.cfg.characters[h.w.charId].spriteId
+          ? sprite(this.cfg.characters[h.w.charId].spriteId, "Characters") : sprite("Worker", "UI");
+        h.el.innerHTML = `<img class="hw" src="${src}">`;
+        lane.appendChild(h.el);
+        h.x = baseX; h.y = baseY;
+        h.state = "out"; this.hawkerNewTarget(h, laneRect, baseX);
+      }
+      return false;
+    }
+    if (h.state === "out") {
+      if (!selling) { h.state = "returning"; }
+      else if (this.hawkerStep(h, dt, HAWK_SPEED)) this.hawkerNewTarget(h, laneRect, baseX);
+    }
+    if (h.state === "toClient") {
+      const t = h.clientEl && h.clientEl.isConnected ? h.clientEl.getBoundingClientRect() : null;
+      if (t) { h.tx = t.left - laneRect.left + t.width / 2; h.ty = t.top - laneRect.top + t.height / 2; }
+      if (!t || this.hawkerStep(h, dt, HAWK_RUN_SPEED)) {
+        // Livré (ou client disparu) : le colis reste chez le client, retour base.
+        const item = h.el && h.el.querySelector(".hw-item"); if (item) item.remove();
+        h.clientEl = null;
+        h.state = "returning";
+      }
+    }
+    if (h.state === "returning") {
+      h.tx = baseX; h.ty = baseY;
+      if (this.hawkerStep(h, dt, HAWK_HOME_SPEED)) {
+        if (h.el) { h.el.remove(); h.el = null; }
+        if (!selling) { h.w._hawk = null; return true; }  // rentré pour de bon : la machine peut reproduire
+        h.state = "recharge"; h.timer = recharge;         // souffle un coup avant de ressortir
+      }
+    }
+    return false;
+  },
+  hawkerNewTarget(h, laneRect, baseX) {
+    // Balade dans la MOITIÉ BASSE de la rue, autour de son propre stand (±90 px) :
+    // on lit d'un coup d'œil pour qui il travaille, même dans la mêlée.
+    h.tx = Math.max(14, Math.min(laneRect.width - 14, baseX + (Math.random() * 180 - 90)));
+    h.ty = laneRect.height * (0.45 + Math.random() * 0.45);
+  },
+  // Avance vers (tx,ty) à `speed` px/s. true = arrivé.
+  hawkerStep(h, dt, speed) {
+    const dx = h.tx - h.x, dy = h.ty - h.y;
+    const d = Math.hypot(dx, dy), step = speed * dt;
+    if (d <= step || d === 0) { h.x = h.tx; h.y = h.ty; }
+    else { h.x += dx / d * step; h.y += dy / d * step; }
+    if (h.el) {
+      h.el.style.left = h.x + "px"; h.el.style.top = h.y + "px";
+      h.el.classList.toggle("flip", dx < 0);
+    }
+    return h.x === h.tx && h.y === h.ty;
+  },
+  // Un client vient d'être servi chez `c` : si un rabatteur de la BONNE ressource
+  // est dehors, c'est LUI qui apporte la commande (course + colis sur la tête).
+  // Sinon, la marchandise vole toute seule comme avant (fallback flyItem).
+  dispatchHawker(c, resId, tier, custEl) {
+    let best = null, bd = Infinity;
+    const t = custEl && custEl.isConnected ? custEl.getBoundingClientRect() : null;
+    if (!t) return null;
+    c.machines.forEach((m) => {
+      if (m.mode !== "sell" || this.machineDef(m.id).outputs !== resId) return;
+      (m._hawkers || []).forEach((h) => {
+        if (h.state !== "out" || !h.el) return;
+        const r = h.el.getBoundingClientRect();
+        const d = Math.hypot(r.left - t.left, r.top - t.top);
+        if (d < bd) { bd = d; best = h; }
+      });
+    });
+    if (!best) return null;
+    best.state = "toClient";
+    best.clientEl = custEl;
+    const item = this.tierImg(resId, tier); item.className = "hw-item";
+    best.el.appendChild(item);
+    return best;
   },
 
   // Fin/début de vague : plus aucune commande en attente (les clients ont tous été
@@ -728,11 +841,10 @@ export const renderMethods = {
     const val = (c) => (money ? c.salesThisRound : c.unitsThisRound) || 0;
     const lost = (money ? mkt.lostValue : mkt.lostUnits) || 0;
 
-    const PIE_COLORS = ["#b8841f", "#279a86", "#8a6fe3", "#bf5f96"];
     const segs = [];
-    this.competitors.forEach((c, i) => {
+    this.competitors.forEach((c) => {
       const v = val(c);
-      if (v > 0 || c.isPlayer) segs.push({ name: c.name, v, color: PIE_COLORS[i % PIE_COLORS.length] });
+      if (v > 0 || c.isPlayer) segs.push({ name: c.name, v, color: this.compColor(c) });
     });
     // Toujours listé, même à 0 : « Perdu ×0 » dit explicitement qu'aucun client
     // n'est reparti bredouille — l'absence de ligne ressemblait à un oubli.

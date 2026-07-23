@@ -345,21 +345,42 @@ concurrent qui produit pendant la chute peut rafler le client de la même façon
   l'écran (`IntersectionObserver`), pour que la production hors-écran ne
   provoque aucun reflow.
 
-### 6.5 Ouvriers & personnages
+### 6.5 Ouvriers, personnages & rabatteurs
 
-- Les **personnages possédés ET assignés à un slot** entrent en jeu en premier
-  (`Meta.nextRecruit`, ordre : rareté, puis pièces de gear portées, puis qualité
-  du gear, puis niveau) ; les embauches suivantes sont anonymes.
-- Un personnage n'apporte son bonus de vitesse que sur **ses** machines
-  (`character.machines`) ; le **gear** apporte vitesse + proba 2× partout.
+**Rework « rabatteur » (2026-07) : plus de gestion d'ouvriers.** Une machine
+arrive avec son équipe **au complet** (`fillCrew`, taille = `maxWorkers` de son
+niveau — la colonne sera renommée au balancing) et ne la partage plus. Plus de
+banc, plus d'achat d'ouvriers, plus de drag & drop, plus de `safeAssign` actif.
+
+Le verbe du joueur est le **switch de posture** sur chaque carte machine :
+
+- **⚙ Prod** : l'équipe fabrique (comportement d'avant).
+- **📣 Rabatteur** : l'équipe SORT dans la rue capter les clients. La machine ne
+  produit **rien**, et l'attractivité du stand sur **sa** ressource est
+  multipliée : `attr × (1 + rabatteursDehors × hawkerBoost)` (`general.hawkerBoost`,
+  défaut 0.75/ouvrier — 2 dehors ≈ ×2.5).
+
+Les rabatteurs sont des **agents physiques** (`tickHawkers`, chaque frame) :
+cycle `recharge (à la base) → out (balade devant son stand, compte dans
+l'attractivité) → toClient (course pour livrer un client servi, colis sur la
+tête) → returning (rentre à pied) → recharge` (`general.hawkerRecharge`, défaut
+1,5 s). **Le trajet fait foi** : repasser en Prod fait rentrer tout le monde à
+pied et la production ne reprend que l'équipe au complet (gate dans
+`game-production`) — pas d'exploit de switch. Chaque concurrent a une **couleur
+fixe** (`compColor`, partagée avec le camembert) : plot sous les pieds + halo,
+et le stand s'illumine (`.hawking`) tant que ses rabatteurs sont dehors. La
+carte machine affiche la **part de marché sur SA ressource**
+(`refreshMachineShares`) ; la machine active du carrousel **estompe** les
+clients qui veulent autre chose (`.customer.dim`).
+
+- Les **personnages** embarquent toujours en premier (`Meta.nextRecruit` via
+  `addWorker`, appelé par `fillCrew`) ; bonus de vitesse sur **leurs** machines,
+  gear partout. Tap sur la chip d'un personnage → sa fiche.
 - Un bot n'a pas de vrais personnages : sa panoplie est **rationalisée en buffs
   plats** (`speed`, `proba2x`, `marketing`) appliqués par-dessus son équipe.
-- Le **banc** (`#worker-bar`) vit dans la barre du bas, **toujours visible** :
-  cible permanente du geste « renvoyer l'ouvrier » (`dropTargetAt` → `"bar"`),
-  plus de mode escamoté ni de surimpression pendant le drag (voir §7). Le geste
-  principal pour déplacer un ouvrier est **tap → tap** (chip puis machine **ou
-  pastille**) ; le drag reste possible, pastilles comprises pour les machines
-  hors écran.
+- `staffBot` ne staffe plus : il décide les **modes** (~1×/s) — Rabatteur quand
+  la ressource se vend et que le stock est confortable
+  (`general.hawkerStockMin`, défaut 4, hystérésis −2), Prod sinon.
 
 ### 6.6 Bots (`game-bots.js`)
 

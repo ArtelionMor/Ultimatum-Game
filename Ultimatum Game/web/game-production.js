@@ -48,11 +48,12 @@ export function tickProduction(game, dt) {
 function tickOne(game, dt, p) {
   p.machines.forEach((m) => {
     const def = game.machineDef(m.id), L = game.lvl(m);
-    const staffed = m.crew.length >= L.workersRequired;
-    // Understaffed = PAUSED, not reset: the cycle picks up where it stopped when a
-    // worker comes back. The frozen bar is drawn against the cycle length that was
-    // running (`_cycle`), not the crewless one, so pulling the last worker out
-    // doesn't make the fill jump backwards.
+    // Rework « rabatteur » : une machine en mode "sell" ne produit RIEN — son
+    // équipe est dehors, à rabattre les clients. Et au retour en mode "prod", la
+    // production ne reprend que l'équipe AU COMPLET À LA BASE (w._hawk pas encore
+    // rentré = machine en pause) : pas de téléportation en switchant les modes.
+    // Pause = comme le sous-staffing d'avant : elapsed conservé, barre figée.
+    const staffed = m.crew.length >= L.workersRequired && m.mode !== "sell" && !m.crew.some((w) => w._hawk);
     if (!staffed) { m.producing = false; game.setProgress(m, Math.min(1, m.elapsed / (m._cycle || effTime(game, p, m)))); return; }
     const converts = def.inputs.length > 0;
     // A converter pays for its cycle UP FRONT: the ingredients leave the stock when

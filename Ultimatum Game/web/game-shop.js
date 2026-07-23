@@ -4,17 +4,10 @@
  */
 "use strict";
 
-import { addWorker } from "./game-workers.js";
 import { Meta } from "./meta.js";
 
-export function nextWorker(game) { return game.cfg.purchases.increaseWorker[game.player.buys.increaseWorker]; }
-export function buyWorker(game) {
-  const n = nextWorker(game);
-  if (!n || game.player.workers.length >= game.cfg.g.maxWorkersTotal || game.player.money < n.price) return;
-  game.player.money -= n.price; game.player.buys.increaseWorker++;
-  for (let i = 0; i < n.effect; i++) addWorker(game, game.player);
-  game.renderShop(); game.renderWorkers(); game.refreshHud();
-}
+// (Plus d'achat d'ouvriers — rework rabatteur : les équipes sont fixes, fillCrew
+// les complète à la création de la machine et à chaque upgrade.)
 
 export function nextMkt(game) { return game.cfg.purchases.increaseMarketting[game.player.buys.increaseMarketting]; }
 export function buyMkt(game) {
@@ -37,5 +30,6 @@ export function upgradeMachine(game, m) {
   const nx = nextMachineLevel(game, m);
   if (!Meta.featureUnlocked("upgrade_machine") || !nx || game.player.money < nx.cost) return;
   game.player.money -= nx.cost; m.level++;
+  game.fillCrew(game.player, m); // un niveau qui ouvre des sièges les remplit aussitôt
   game.refreshMachineCard(m); game.renderShop(); game.refreshHud();
 }

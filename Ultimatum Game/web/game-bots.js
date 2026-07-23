@@ -20,7 +20,6 @@
 "use strict";
 
 import { nextMachineLevel } from "./game-shop.js";
-import { addWorker } from "./game-workers.js";
 import { Meta } from "./meta.js";
 
 const PURCHASES = ["increaseWorker", "increaseMarketting", "increaseStorage"];
@@ -59,13 +58,6 @@ function wantedChain(game, b, behavior) {
   return want;
 }
 
-// A converter with nothing to convert produces strictly nothing, so it is not worth
-// a worker yet — its supplier is. Handing the worker back and forth IS the bot
-// playing the chain: fill the input buffer, then switch over. What you do by hand.
-function machineReady(game, b, m) {
-  return game.machineDef(m.id).inputs.every((i) => game.stockOf(b, i.type) >= i.quantity);
-}
-
 // Machine upgrades have no column of their own — the tool writes one appetite
 // into the three purchase columns, so we reuse it.
 const upgradeAppetite = (behavior) => Math.max(...PURCHASES.map((a) => behavior[a] || 0), 0);
@@ -81,10 +73,10 @@ export function botPlanRound(game, b) {
 function affordable(game, b, behavior, reserve) {
   const out = [];
   PURCHASES.forEach((a) => {
+    if (a === "increaseWorker") return; // rework rabatteur : les équipes sont fixes, plus d'achat d'ouvriers
     if (PURCHASE_FEATURE[a] && !Meta.featureUnlocked(PURCHASE_FEATURE[a])) return;
     const n = game.cfg.purchases[a][b.buys[a]];
     if (!n || !(behavior[a] > 0) || b.money - n.price < reserve) return;
-    if (a === "increaseWorker" && b.workers.length >= game.cfg.g.maxWorkersTotal) return; // même plafond que le joueur
     out.push({ w: behavior[a], buy: () => buyShop(game, b, a, n) });
   });
   const uw = Meta.featureUnlocked("upgrade_machine") ? upgradeAppetite(behavior) : 0;
@@ -93,7 +85,8 @@ function affordable(game, b, behavior, reserve) {
   if (uw > 0) [...wantedChain(game, b, behavior).keys()].forEach((m) => {
     const nx = nextMachineLevel(game, m);
     // Upgrading is how a bot buys better drop odds — the player's exact deal.
-    if (nx && b.money - nx.cost >= reserve) out.push({ w: uw, buy: () => { b.money -= nx.cost; m.level++; } });
+    // fillCrew : un niveau qui ouvre des sièges les remplit aussitôt (équipes fixes).
+    if (nx && b.money - nx.cost >= reserve) out.push({ w: uw, buy: () => { b.money -= nx.cost; m.level++; game.fillCrew(b, m); } });
   });
   return out;
 }
@@ -111,7 +104,6 @@ function botInvest(game, b) {
 
 function buyShop(game, b, a, n) {
   b.money -= n.price; b.buys[a]++; b.upgradesBought++;
-  if (a === "increaseWorker") for (let i = 0; i < n.effect; i++) addWorker(game, b);
   // keep the character buff on top: `n.effect` is the shop level's flat value,
   // not the bot's total (the old code overwrote the buff on the first purchase).
   if (a === "increaseMarketting") b.marketing = n.effect + (b.buffs.marketing || 0);
@@ -149,52 +141,26 @@ function mergeBotStock(game, b) {
   });
 }
 
-// Decide the crew, then move only the workers that differ. Called once per round
-// AND periodically during it (main.js updatePlay): a production chain only flows if
-// the bot can hand a worker over the moment an input buffer fills or runs dry.
+// Rework rabatteur : les équipes sont FIXES, le bot ne déplace plus d'ouvriers —
+// il décide le MODE de chaque machine, exactement le verbe du joueur. Appelé une
+// fois par round ET ~1×/s pendant (main.js updatePlay), comme l'ancien staffing.
+//
+// Heuristique : une machine passe en Rabatteur quand son produit se VEND (poids
+// de vague > 0) et que son stock est déjà confortable — produire de plus n'ajoute
+// rien, autant sortir crier. Elle repasse en prod dès que le stock retombe. Les
+// convertisseurs et les fournisseurs de chaîne restent en prod (leur sortie ne se
+// vend pas directement, un rabatteur n'y capterait personne).
 export function staffBot(game, b) {
-  mergeBotStock(game, b); // fold before staffing: merged stock changes what machineReady sees
-  const want = wantedChain(game, b, botBehavior(b, game.round));
-  const entries = [...want.entries()];
-
-  // Rank by STOCK DEFICIT, not by raw weight. Sorting on weight alone broke ties
-  // by Map insertion order — i.e. by resourceOrder — which buried late-listed
-  // resources (bottle is 8th): with equal 33/33/33 demand a bot needed enough
-  // workers to staff every OTHER wanted machine before its converter ever got
-  // one. Instead, produce what is missing relative to the wanted mix, the way
-  // the player does: a machine whose output is under-represented in stock beats
-  // one whose output is already piled up. Uses only the bot's own stock — no
-  // omniscience — and self-regulates the chain: the converter outranks its
-  // supplier while inputs are stocked, drops out when they run dry (ready
-  // filter), and the worker flows back upstream.
-  let totW = 0, totS = 0;
-  entries.forEach(([m, w]) => { totW += w; totS += game.stockOf(b, game.machineDef(m.id).outputs); });
-  const score = ([m, w]) => {
-    const deficit = Math.max(0, (totW ? w / totW : 0) - (totS ? game.stockOf(b, game.machineDef(m.id).outputs) / totS : 0));
-    return w * (0.15 + deficit); // 0.15 baseline: balanced stock still ranks by demand weight
-  };
-  const ready = entries.filter(([m]) => machineReady(game, b, m)).sort((a, z) => score(z) - score(a));
-
-  const target = new Map();
-  let pool = b.workers.length;
-  // 1. Get as many wanted machines RUNNING as possible: fill each one's minimum,
-  //    heaviest first. Below workersRequired a machine produces strictly nothing,
-  //    so a half-staffed crew is worth less than no crew at all.
-  ready.forEach(([m]) => { const need = game.lvl(m).workersRequired; if (pool >= need) { target.set(m, need); pool -= need; } });
-  // 2. Pile the leftovers onto the heaviest running machines — crew size buys speed
-  //    (crewSpeedBonus), not just eligibility.
-  ready.forEach(([m]) => {
-    if (!target.has(m)) return;
-    const max = game.lvl(m).maxWorkers;
-    while (target.get(m) < max && pool > 0) { target.set(m, target.get(m) + 1); pool--; }
-  });
-
-  // Release the excess first (that is what frees workers), then fill. A machine that
-  // keeps its crew keeps its progress — tickProduction wipes `elapsed` the instant a
-  // machine drops below its required crew, so never re-seat someone who was fine.
-  b.machines.forEach((m) => { const n = target.get(m) || 0; while (m.crew.length > n) { const w = m.crew.pop(); w.machineId = null; } });
+  mergeBotStock(game, b); // fold before deciding: merged stock changes the thresholds
+  const behavior = botBehavior(b, game.round);
+  const min = Number.isFinite(game.cfg.g.hawkerStockMin) ? game.cfg.g.hawkerStockMin : 4;
   b.machines.forEach((m) => {
-    const n = target.get(m) || 0;
-    while (m.crew.length < n) { const w = b.workers.find((x) => !x.machineId); if (!w) break; w.machineId = m.id; m.crew.push(w); }
+    const out = game.machineDef(m.id).outputs;
+    const sells = (behavior[out] || 0) > 0;
+    const stock = game.stockOf(b, out);
+    // Hystérésis grossière : sortir à `min`, rentrer sous `min - 2` — pas de
+    // flip-flop à chaque unité vendue (le trajet de retour coûte déjà assez).
+    if (m.mode === "sell") { if (!sells || stock < Math.max(1, min - 2)) m.mode = "prod"; }
+    else if (sells && stock >= min && game.waveActive) m.mode = "sell";
   });
 }
