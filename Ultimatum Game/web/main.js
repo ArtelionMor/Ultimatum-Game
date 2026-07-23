@@ -81,7 +81,7 @@ const Game = {
     Tutorial.init(this);
     this.applyCheatMode();
     this.transitionTo(S.Menu);
-    this.setupInventoryObserver();
+    this._invVisible = false; this._invDirty = false;   // la sheet Stock démarre fermée
     requestAnimationFrame((t) => this.loop(t));
   },
 
@@ -100,7 +100,8 @@ const Game = {
   },
   // Abandon or finish -> back to the menu (game loop idles in S.Menu).
   toMenu() {
-    ["#results-overlay", "#gameover-overlay", "#quit-overlay", "#rankinfo-overlay"].forEach((id) => $(id)?.classList.add("hidden"));
+    ["#results-overlay", "#gameover-overlay", "#quit-overlay", "#rankinfo-overlay", "#boutique-overlay", "#stock-overlay", "#merge-overlay"].forEach((id) => { const o = $(id); if (o) { o.classList.add("hidden"); o.classList.remove("open"); } });
+    this._invVisible = false;   // sheet Stock refermée avec le reste
     this.waveActive = false; this.market = null;
     const lane = $("#customer-lane"); if (lane) lane.innerHTML = "";
     this.transitionTo(S.Menu);
@@ -110,19 +111,9 @@ const Game = {
   onMetaChanged() { if (this.state === S.Play) { this.renderWorkers(); } },
 
   // The inventory DOM is deliberately kept stale: stock mutations only flip
-  // _invDirty. We flush to the DOM (chiffres + collapse des lignes vides) solely
-  // when the section is on screen, so off-screen production never touches the DOM
-  // and the reflow lands while the player is actually looking at the inventory.
-  setupInventoryObserver() {
-    this._invVisible = true; this._invDirty = false;
-    const bar = $("#inventory-bar");
-    if (!bar || !("IntersectionObserver" in window)) return; // no support → always flush
-    this._invVisible = false;
-    new IntersectionObserver((entries) => {
-      this._invVisible = entries[0].isIntersecting;
-      if (this._invVisible) this.maybeRefreshInventory();
-    }, { root: $("#content"), threshold: 0 }).observe(bar);
-  },
+  // _invDirty, and the flush only happens while the Stock sheet is open
+  // (_invVisible, posé par openStock/closeStock). L'IntersectionObserver de
+  // l'ancien layout scrollable n'a plus d'objet : la sheet EST la visibilité.
   maybeRefreshInventory() { if (this._invDirty && this._invVisible) this.refreshInventory(); },
 
   loop(t) {
@@ -216,11 +207,15 @@ const Game = {
     return img;
   },
 
-  // Fly a freshly produced unit from its machine card into the inventory tiles.
+  // Fly a freshly produced unit from its machine card into the inventory —
+  // les tuiles si la sheet Stock est ouverte, sinon le BOUTON Stock (la réserve
+  // visible du layout une-page ; l'exact inverse de reserveRect côté vente).
   flyToInventory(m, resId, tier) {
-    const node = m._node, box = this._invTiles;
-    if (!node || !box || !box.isConnected || !this._invVisible) return;
+    const node = m._node; if (!node) return;
+    const box = (this._invTiles && this._invTiles.isConnected && this._invVisible) ? this._invTiles : $("#stock-btn");
+    if (!box || !box.isConnected) return;
     const from = node.getBoundingClientRect(), to = box.getBoundingClientRect();
+    if (!to.width) return;
     const fly = this.tierImg(resId, tier); fly.className = "fly-res";
     document.body.appendChild(fly);
     const x0 = from.left + from.width / 2 - 14, y0 = from.top + 18;
@@ -300,42 +295,14 @@ const Game = {
     this.startPrep();
   },
 
-  // One-time screen setup: both zones visible, worker bar shown.
+  // One-time screen setup. L'écran une-page n'a plus de scroll vertical : la
+  // mécanique de condensation du marché (hystérésis, padding compensé) est morte
+  // avec lui — le marché est toujours en pleine taille.
   setupScreen() {
     this._screenReady = true;
     $("#factory-zone").classList.remove("hidden");
     $("#market-zone").classList.remove("hidden");
-    this.updateBench(false);   // le banc n'apparaît que s'il reste un ouvrier à poster
     $("#customer-lane").innerHTML = "";
-    this.setupMarketCondense();
-  },
-
-  // Le marché épinglé rétrécit un peu dès qu'on descend dans l'usine et retrouve
-  // sa taille pleine une fois revenu tout en haut. Hystérésis (>32 / <8) pour
-  // éviter le clignotement quand on s'arrête pile sur le seuil.
-  //
-  // La classe est posée SUR #content aussi : le CSS lui rend en padding-bas les
-  // 90 px que la lane perd, donc la hauteur scrollable ne change pas. Sinon, tout
-  // en bas de page, condenser raccourcissait le scroller → le navigateur clampait
-  // scrollTop sous le seuil → on dépliait → la page rallongeait → on recondensait :
-  // le menu clignotait en boucle à cette « valeur limite ».
-  setupMarketCondense() {
-    const content = $("#content"), market = $("#market-zone");
-    if (!content || !market || this._condenseWired) return;
-    this._condenseWired = true;
-    const setCondensed = (on) => {
-      if (this._condensed === on) return;      // pas de write DOM inutile à chaque frame de scroll
-      this._condensed = on;
-      market.classList.toggle("condensed", on);
-      content.classList.toggle("market-condensed", on);
-    };
-    const onScroll = () => {
-      const y = content.scrollTop;
-      if (y > 32) setCondensed(true);
-      else if (y < 8) setCondensed(false);
-    };
-    content.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
   },
 
   // Prep window before a wave: production runs, player prepares, top menu shows demand.
@@ -421,7 +388,7 @@ const Game = {
     // while the player watches the machines.
     this.maybeRefreshInventory();
     this._supTimer = (this._supTimer || 0) - dt;
-    if (this._supTimer <= 0) { this.refreshSuppliers(); this.refreshAffordability(); this.refreshWaveCoverage(); this._supTimer = 0.2; }
+    if (this._supTimer <= 0) { this.refreshSuppliers(); this.refreshAffordability(); this.refreshWaveCoverage(); this.refreshMachineDots(); this.refreshStockBtn(); this._supTimer = 0.2; }
     // Les bots redéploient leurs ouvriers en cours de round, comme tu le fais à la main :
     // une chaîne de conversion ne coule que si on passe l'ouvrier au convertisseur dès que
     // son stock d'intrants est prêt, puis qu'on le rend au fournisseur quand il est à sec.
@@ -509,7 +476,6 @@ const Game = {
     this.market = { def: m, remaining: m.customers, total: m.customers, served: 0, spawnTimer: this.firstDemandDelay(m), pending: 0, batchTimer: 0, waiting: [], active: 0, lostUnits: 0, lostValue: 0, stolenUnits: 0, ruptureUnits: 0 };
     $("#customer-lane").innerHTML = "";
     this.renderSuppliers(); this.renderWavePreview(); this.refreshHud();
-    const content = $("#content"); if (content) content.scrollTo({ top: 0, behavior: "smooth" });
   },
 
   // Délai avant le tout premier client de la vague. On prend le temps de complétion
@@ -687,6 +653,11 @@ $("#hud-home")?.addEventListener("click", () => {
 $("#quit-confirm")?.addEventListener("click", () => Game.toMenu());
 $("#quit-cancel")?.addEventListener("click", () => $("#quit-overlay").classList.add("hidden"));
 $("#merge-overlay")?.addEventListener("click", (e) => { if (e.target.id === "merge-overlay") Game.closeMerge(); });
+// Sheets Boutique & Stock : ouvertes par la barre du bas, fermées au tap sur le fond.
+$("#boutique-btn")?.addEventListener("click", () => Game.openBoutique());
+$("#stock-btn")?.addEventListener("click", () => Game.openStock());
+$("#boutique-overlay")?.addEventListener("click", (e) => { if (e.target.id === "boutique-overlay") Game.closeBoutique(); });
+$("#stock-overlay")?.addEventListener("click", (e) => { if (e.target.id === "stock-overlay") Game.closeStock(); });
 // L'auto-merge est un RÉGLAGE, pas un état de partie : il survit à la fermeture
 // de l'app (même modèle que la meta, clé localStorage à part).
 try { Game.autoMerge = localStorage.getItem("mu_automerge") === "1"; } catch (e) { /* storage bloqué → off */ }

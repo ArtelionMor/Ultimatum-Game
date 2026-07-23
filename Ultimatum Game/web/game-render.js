@@ -115,6 +115,7 @@ export const renderMethods = {
     }
     const tot = this.stockTotal(p), cap = p.storageCap;
     const c = $("#inv-cap"); if (c) { c.textContent = `${tot}/${cap}`; c.classList.toggle("full", tot >= cap); }
+    this.refreshStockBtn();
     const mb = $("#inv-merge"); if (mb) mb.classList.toggle("glow", this.cfg.resourceOrder.some((rid) => this.anyConvert(rid)));
     const mo = $("#merge-overlay"); // ?.-style guard: a stale cached index.html must not break the inventory loop
     if (mo && !mo.classList.contains("hidden")) this.renderMergeList();
@@ -214,6 +215,41 @@ export const renderMethods = {
       const nx = nextMachineLevel(this, m);
       m._refs.up.disabled = !nx || this.player.money < nx.cost;
     });
+    // La boutique est derrière un bouton : sans cette pastille, l'argent dort et
+    // rien à l'écran ne rappelle qu'un achat est possible.
+    const bb = $("#boutique-btn");
+    if (bb && this._shopBtns) bb.classList.toggle("glow", this._shopBtns.some(({ disFn }) => !disFn()));
+  },
+
+  // --- bottom sheets : Boutique (achats) & Stock (inventaire) ---
+  // Même patron que la sheet de merge : .hidden est display:none, il faut une
+  // frame peinte à translateY(100%) avant .open pour que la glissade joue.
+  _openSheet(id) {
+    openOverlay(id);
+    requestAnimationFrame(() => requestAnimationFrame(() => $("#" + id).classList.add("open")));
+  },
+  _closeSheet(id) {
+    const o = $("#" + id);
+    o.classList.remove("open");
+    setTimeout(() => o.classList.add("hidden"), 240);
+  },
+  openBoutique() { this.renderShop(); this.refreshAffordability(); this._openSheet("boutique-overlay"); },
+  closeBoutique() { this._closeSheet("boutique-overlay"); },
+  // _invVisible pilotait l'IntersectionObserver de l'ancien layout ; il veut
+  // maintenant dire « la sheet Stock est ouverte ». Même contrat pour le reste du
+  // code (maybeRefreshInventory, reserveRect) : l'inventaire hors écran n'écrit
+  // jamais le DOM.
+  openStock() { this._invVisible = true; this.refreshInventory(); this._openSheet("stock-overlay"); },
+  closeStock() { this._invVisible = false; this._closeSheet("stock-overlay"); },
+  // La jauge du bouton Stock vit SANS la sheet : l'inventaire ne réécrit son DOM
+  // que visible, mais « je sature » doit se voir depuis l'écran de jeu. Tick 0.2 s.
+  refreshStockBtn() {
+    if (!this.player) return;
+    const sc = $("#stock-btn-count"); if (!sc) return;
+    const tot = this.stockTotal(this.player), cap = this.player.storageCap;
+    const txt = `${tot}/${cap}`;
+    if (sc.textContent !== txt) sc.textContent = txt;
+    sc.style.color = tot >= cap ? "var(--danger)" : "";
   },
 
   // --- game speed (HUD ×1/×2/×4 toggle, gated by feature_unlock) ---
@@ -241,8 +277,57 @@ export const renderMethods = {
     this.refreshSpeedBtn();
   },
 
-  // --- machines ---
-  renderMachines() { const list = $("#machine-list"); list.innerHTML = ""; this.player.machines.forEach((m) => { m._node = this.buildMachine(m); list.appendChild(m._node); }); },
+  // --- machines : carrousel horizontal + pastilles d'état ---
+  renderMachines() {
+    const list = $("#machine-list"); list.innerHTML = "";
+    this.player.machines.forEach((m) => { m._node = this.buildMachine(m); list.appendChild(m._node); });
+    this.renderMachineDots();
+    // La pastille active suit le doigt : recalculée au scroll (léger — quelques
+    // classes), pas seulement sur le tick 0.2 s.
+    if (!list._snapWired) { list._snapWired = true; list.addEventListener("scroll", () => this.refreshMachineDots(), { passive: true }); }
+  },
+  // Une pastille par machine : la vue d'ensemble que le carrousel fait perdre.
+  // Couleur = état (verte produit, rouge à l'arrêt faute d'ouvriers) ; tap = le
+  // carrousel s'aimante dessus — ou, un ouvrier étant sélectionné, l'y assigne
+  // directement (la pastille est une cible au même titre que la carte).
+  renderMachineDots() {
+    const wrap = $("#machine-dots"); if (!wrap) return;
+    wrap.innerHTML = "";
+    this._mdots = this.player.machines.map((m, i) => {
+      const d = el("button", "mdot");
+      d.dataset.mi = i;
+      d.title = this.machineDef(m.id).displayName;
+      d.onclick = () => {
+        if (this.selectedWorker) { assignWorker(this, m); return; }
+        if (m._node) m._node.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      };
+      wrap.appendChild(d);
+      return d;
+    });
+    this.refreshMachineDots();
+  },
+  refreshMachineDots() {
+    if (!this._mdots || !this.player || this._mdots.length !== this.player.machines.length) return;
+    const list = $("#machine-list");
+    let active = 0;
+    if (list) {
+      const mid = list.scrollLeft + list.clientWidth / 2;
+      let best = Infinity;
+      this.player.machines.forEach((m, i) => {
+        if (!m._node) return;
+        const c = m._node.offsetLeft + m._node.offsetWidth / 2;
+        const dist = Math.abs(c - mid);
+        if (dist < best) { best = dist; active = i; }
+      });
+    }
+    this.player.machines.forEach((m, i) => {
+      const d = this._mdots[i], L = this.lvl(m);
+      d.classList.toggle("active", i === active);
+      d.classList.toggle("producing", !!m.producing);
+      d.classList.toggle("stalled", m.crew.length < L.workersRequired);
+      d.classList.toggle("assignable", !!this.selectedWorker && m.crew.length < L.maxWorkers);
+    });
+  },
   buildMachine(m) {
     const def = this.machineDef(m.id);
     const node = el("div", "machine");
@@ -303,32 +388,18 @@ export const renderMethods = {
     }
   },
 
-  // --- workers (bar + chips + drag & drop) ---
+  // --- workers (banc permanent dans la barre du bas + chips + drag & drop) ---
+  // Le banc ne s'escamote plus : la barre du bas est toujours là, donc plus de
+  // mode « surimpression pendant le drag » ni de hauteur qui saute.
   renderWorkers() {
     const wrap = $("#worker-icons"); wrap.innerHTML = "";
     freeWorkers(this.player).forEach((w) => wrap.appendChild(this.workerChip(w)));
     const hint = $("#worker-hint");
-    hint.textContent = this.selectedWorker ? "Touche une machine (+)" : "";
+    hint.textContent = this.selectedWorker ? "Touche une machine ou une pastille" : "";
     hint.classList.toggle("active", !!this.selectedWorker);
-    this.updateBench(document.body.classList.contains("dragging-worker"));
     this.player.machines.forEach((m) => { if (m._node) this.updateMachine(m, m._node); });
+    this.refreshMachineDots();   // la sélection allume les pastilles assignables
     this.renderShop();
-  },
-
-  // Le banc (la « réserve » d'ouvriers) ne s'affiche que s'il y a quelqu'un à
-  // assigner : tous les ouvriers postés, il ne restait qu'une barre vide qui mangeait
-  // ~86 px de haut en permanence.
-  // EXCEPTION pendant un drag : il doit rester la cible du geste « renvoyer l'ouvrier
-  // au banc ». Il revient alors EN SURIMPRESSION (.as-drop, position: fixed) et non
-  // dans le flux — sinon la mise en page se redistribuerait sous le doigt en plein
-  // glissement, déplaçant les machines que le joueur vise.
-  updateBench(dragging) {
-    const bar = $("#worker-bar"); if (!bar || !this.player) return;
-    const has = freeWorkers(this.player).length > 0;
-    const asDrop = !has && !!dragging;
-    bar.style.display = has || asDrop ? "flex" : "none";
-    bar.classList.toggle("as-drop", asDrop);
-    if (asDrop) { const h = $("#worker-hint"); h.textContent = "Relâche ici pour retirer l'ouvrier"; h.classList.add("active"); }
   },
 
   // One worker chip: avatar + (for characters) name, gear badges and level ring.
@@ -369,7 +440,6 @@ export const renderMethods = {
           document.body.appendChild(ghost);
           chip.classList.add("drag-src");
           document.body.classList.add("dragging-worker");
-          this.updateBench(true);   // banc masqué (aucun libre) : il revient en surimpression comme cible de retrait
         }
         if (dragging && ghost) {
           ghost.style.left = ev.clientX + "px"; ghost.style.top = ev.clientY + "px";
@@ -388,7 +458,6 @@ export const renderMethods = {
         const target = this.dropTargetAt(ev);
         if (target === "bar") unassignWorker(this, w);
         else if (target) assignWorker(this, target, w);
-        this.updateBench(false);   // drop dans le vide : le banc de secours se retire aussi
       };
       window.addEventListener("pointermove", move);
       window.addEventListener("pointerup", up);
@@ -402,6 +471,10 @@ export const renderMethods = {
     const under = document.elementsFromPoint(ev.clientX, ev.clientY).find((n) => !n.closest("#tut-layer"));
     if (!under) return null;
     if (under.closest("#worker-bar")) return "bar";
+    // Une pastille est une cible de drop : c'est CE qui permet de déplacer un
+    // ouvrier vers une machine hors écran sans scroller en plein glissement.
+    const dot = under.closest("#machine-dots .mdot");
+    if (dot) return this.player.machines[+dot.dataset.mi] || null;
     const node = under.closest(".machine");
     if (!node) return null;
     return this.player.machines.find((x) => x._node === node) || null;
@@ -531,9 +604,15 @@ export const renderMethods = {
   //  - sinon (inventaire hors écran, ou bot qui n'expose rien) -> de SOUS le stand,
   //    comme sorti de l'arrière-boutique.
   reserveRect(c) {
-    if (c === this.player && this._invTiles && this._invTiles.isConnected && this._invVisible) {
-      const r = this._invTiles.getBoundingClientRect();
-      if (r.width) return r;
+    if (c === this.player) {
+      // Sheet Stock ouverte : le vol part des tuiles, comme avant. Fermée : il
+      // part du BOUTON Stock — c'est lui, la réserve visible du nouveau layout.
+      if (this._invTiles && this._invTiles.isConnected && this._invVisible) {
+        const r = this._invTiles.getBoundingClientRect();
+        if (r.width) return r;
+      }
+      const sb = $("#stock-btn");
+      if (sb) { const r = sb.getBoundingClientRect(); if (r.width) return r; }
     }
     const s = c._counter; if (!s || !s.isConnected) return null;
     const r = s.getBoundingClientRect();

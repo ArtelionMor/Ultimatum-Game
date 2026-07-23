@@ -69,16 +69,20 @@ const GESTURES = {
     done: (before, after) => Object.keys(after).some((uid) => !before[uid] && after[uid]),
   },
   // Move a worker from one machine to another. Source = a staffed machine's
-  // chip, destination = another machine with a free slot; with a single machine
-  // on the board the gesture is impossible and the mask correctly never opens.
+  // chip, destination = la PASTILLE de l'autre machine (#machine-dots) : dans le
+  // carrousel, deux cartes ne sont jamais visibles en entier en même temps, mais
+  // chip + pastille tiennent toujours à l'écran ensemble — et la pastille est une
+  // vraie cible de drop (dropTargetAt). Une seule machine : geste impossible, le
+  // mask ne s'ouvre pas, comme avant.
   drag_n_drop_a_worker: {
     nodes(game) {
       const from = game.player.machines.find((m) => m.crew.length && m._node);
       if (!from) return null;
-      const to = game.player.machines.find((m) => m !== from && m._node && m.crew.length < game.lvl(m).maxWorkers);
-      if (!to) return null;
+      const toIdx = game.player.machines.findIndex((m) => m !== from && m.crew.length < game.lvl(m).maxWorkers);
+      if (toIdx < 0) return null;
       const chip = from._node.querySelector(".wchip");
-      return chip ? [chip, to._node] : null;
+      const dot = document.querySelectorAll("#machine-dots .mdot")[toIdx];
+      return chip && dot ? [chip, dot] : null;
     },
     // Done when a worker that was on a machine now stands on a DIFFERENT one —
     // recalling it to the bar doesn't count as a switch.
@@ -225,6 +229,16 @@ export const Tutorial = {
     const hit = document.elementFromPoint(cx, cy);
     return !!hit && (hit === node || node.contains(hit));
   },
+  // Les achats et l'inventaire vivent dans des bottom sheets fermées par défaut :
+  // une cible peut être dans le DOM mais invisible. Un mask a le droit d'OUVRIR la
+  // sheet qui la contient (le tutoriel amène le joueur à l'endroit qu'il enseigne) ;
+  // un red_dot, non — il attend que le joueur ouvre lui-même.
+  ensureSheet(node) {
+    const ov = node.closest("#boutique-overlay, #stock-overlay");
+    if (!ov || !ov.classList.contains("hidden")) return false;
+    if (ov.id === "boutique-overlay") this.game.openBoutique(); else this.game.openStock();
+    return true;   // elle s'ouvre (transition .26 s) : re-testé aux frames suivantes
+  },
   // A target counts as reachable only when it is laid out, hittable and — for a
   // mask — still enabled: masking a disabled button would trap the player behind
   // an action they cannot perform (no money for the worker, machine maxed…).
@@ -234,11 +248,13 @@ export const Tutorial = {
       .filter((n) => !needEnabled || !(n.disabled || n.classList.contains("locked")));
     const ready = nodes.find((n) => this.hittable(n));
     if (ready) return ready;
-    // Nothing tappable: for a mask, scroll the first candidate into view and
-    // re-test. Already-centred targets make this a no-op, so it is safe to run
-    // from the per-frame reposition.
+    // Nothing tappable: for a mask, open the owning sheet / scroll the first
+    // candidate into view and re-test. `inline: "center"` : le carrousel de
+    // machines scrolle horizontalement. Already-centred targets make this a
+    // no-op, so it is safe to run from the per-frame reposition.
     if (opts && opts.scroll && nodes.length) {
-      nodes[0].scrollIntoView({ block: "center", inline: "nearest" });
+      if (this.ensureSheet(nodes[0])) return null;
+      nodes[0].scrollIntoView({ block: "center", inline: "center" });
       if (this.hittable(nodes[0])) return nodes[0];
     }
     return null;
@@ -255,7 +271,7 @@ export const Tutorial = {
     if (!nodes) return null;
     if (nodes.every((n) => this.hittable(n))) return nodes;
     if (opts && opts.scroll) {
-      nodes[0].scrollIntoView({ block: "center", inline: "nearest" });
+      nodes[0].scrollIntoView({ block: "center", inline: "center" });
       nodes = g.nodes(this.game);   // the scroll may have re-rendered the cards
       if (nodes && nodes.every((n) => this.hittable(n))) return nodes;
     }

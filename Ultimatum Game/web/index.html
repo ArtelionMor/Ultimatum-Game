@@ -40,8 +40,11 @@
     <!-- Next-wave demand menu -->
     <div id="wave-preview"></div>
 
+    <!-- Écran UNIQUE, sans scroll vertical : marché toujours visible en haut,
+         machines en carrousel horizontal aimanté, banc + boutons en bas.
+         L'inventaire et les achats vivent dans des sheets (voir plus bas). -->
     <main id="content">
-      <!-- MARKET (top) -->
+      <!-- MARKET (top, pleine taille en permanence) -->
       <section id="market-zone" class="zone">
         <div id="speed-sel" title="Vitesse du jeu">
           <button data-speed="1"><span class="sp-ico">▶</span><span class="sp-lbl">x1</span></button>
@@ -52,18 +55,41 @@
         <div id="suppliers"></div>
       </section>
 
-      <!-- FACTORY (bottom) -->
+      <!-- FACTORY : pastilles d'état (une par machine, tap = y aller) + carrousel -->
       <section id="factory-zone" class="zone">
-        <div id="inventory-bar"></div>
-        <div id="shop-bar"></div>
+        <div id="machine-dots"></div>
         <div id="machine-list"></div>
       </section>
     </main>
 
-    <footer id="worker-bar">
-      <div id="worker-hint"></div>
-      <div id="worker-icons"></div>
+    <footer id="bottom-bar">
+      <div id="worker-bar">
+        <div id="worker-hint"></div>
+        <div id="worker-icons"></div>
+      </div>
+      <div id="bottom-actions">
+        <button id="boutique-btn" title="Achats : ouvriers, marketing, stockage">🛒<span class="ba-lbl">Boutique</span></button>
+        <button id="stock-btn" title="Ton inventaire">📦<span class="ba-lbl" id="stock-btn-count">0/0</span></button>
+      </div>
     </footer>
+  </div>
+
+  <!-- Boutique sheet : les achats tycoon (ouvrier / marketing / stockage).
+       #shop-bar garde son id : les cibles du tutoriel pointent dessus. -->
+  <div id="boutique-overlay" class="overlay hidden">
+    <div id="boutique-sheet" class="sheet">
+      <div class="sheet-grip"></div>
+      <div class="sheet-head"><h2>🛒 Boutique</h2></div>
+      <div id="shop-bar"></div>
+    </div>
+  </div>
+
+  <!-- Stock sheet : l'inventaire (avec son bouton Merge). Même règle d'id. -->
+  <div id="stock-overlay" class="overlay hidden">
+    <div id="stock-sheet" class="sheet">
+      <div class="sheet-grip"></div>
+      <div id="inventory-bar"></div>
+    </div>
   </div>
 
   <!-- Standings info screen (tap the HUD rank chip) -->

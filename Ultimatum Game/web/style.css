@@ -197,47 +197,75 @@ img { image-rendering: pixelated; }
 .demand-float .wp-chip { font-size: 16px; padding: 4px 12px 4px 6px; justify-content: center; }
 .demand-float .wp-chip img { width: 56px; height: 56px; }
 
-/* ---------- Content (scrollable) ---------- */
+/* ---------- Content (écran unique, AUCUN scroll vertical) ----------
+   Le layout historique empilait tout dans une colonne scrollable : le marché
+   épinglé et l'usine se battaient pour la hauteur (condensation au scroll,
+   hystérésis, banc escamotable…). Ici tout tient à l'écran : le marché prend
+   l'espace flexible, les machines défilent HORIZONTALEMENT en dessous. */
 #content {
   flex: 1 1 auto;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  /* pas de padding EN HAUT : le marché épinglé (sticky top:0) doit coller au
-     bandeau de vague, sinon l'usine défilante transparaît dans la marge du haut. */
-  padding: 0 12px 12px;
-  scrollbar-width: thin;
-  /* animée en même temps (et à la même durée) que la hauteur de la lane */
-  transition: padding-bottom .25s ease;
+  min-height: 0;                /* sans ça, flex refuse de rétrécir la lane */
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  padding: 0 10px;
 }
-/* Le marché condensé rend 90 px : on les redonne en bas du scroller. Sans ça, la
-   hauteur scrollable diminuait au moment de condenser ; en bas de page le navigateur
-   re-clampait scrollTop, ce qui repassait sous le seuil, dépliait le marché, rendait
-   la hauteur… et le menu clignotait entre les deux états (boucle de rétroaction). */
-#content.market-condensed { padding-bottom: calc(12px + var(--lane-shrink)); }
-.zone { display: flex; flex-direction: column; gap: 12px; }
+.zone { display: flex; flex-direction: column; }
 .hidden { display: none !important; }
 
-/* ---------- Machine card ---------- */
-#machine-list { display: flex; flex-direction: column; gap: 14px; }
+/* ---------- Machines : carrousel horizontal aimanté ----------
+   Une machine par « page », snap au centre, la voisine dépasse du bord pour dire
+   « ça continue ». La vue d'ensemble perdue est rendue par #machine-dots : une
+   pastille d'état par machine (refreshMachineDots), tap = le carrousel y va. */
+#machine-dots {
+  flex: 0 0 auto;
+  display: flex; gap: 7px; justify-content: center; align-items: center;
+  padding: 6px 0 2px;
+}
+.mdot {
+  width: 11px; height: 11px; border-radius: 50%;
+  background: var(--border); border: 0; padding: 0; cursor: pointer;
+  transition: transform .15s, background .2s;
+}
+.mdot.active { transform: scale(1.35); }
+.mdot.producing { background: var(--ok); }
+/* Machine à l'arrêt faute d'ouvriers : LA pastille à corriger, elle pulse. */
+.mdot.stalled { background: var(--danger); animation: wpPulse 1s ease-in-out infinite; }
+/* Ouvrier sélectionné (tap-tap) : les machines avec un siège libre s'annoncent. */
+.mdot.assignable { background: var(--accent); animation: wpPulse .8s ease-in-out infinite; }
+
+#machine-list {
+  flex: 0 0 auto;
+  display: flex; gap: 10px;
+  overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding: 2px 0 8px;
+}
+#machine-list::-webkit-scrollbar { display: none; }
 .machine {
+  flex: 0 0 84%;
+  scroll-snap-align: center;
   background: var(--bg-card);
   border: 2px solid var(--border);
   border-radius: 12px;
-  padding: 12px;
+  padding: 10px 12px;
   display: grid;
-  grid-template-columns: 140px 1fr;
+  grid-template-columns: 104px 1fr;
   grid-template-rows: auto auto auto;
   gap: 4px 12px;
   align-items: center;
   transition: border-color .15s, transform .1s;
 }
+/* Pseudo-cartes de bord : sans elles, la première/dernière machine ne peut pas
+   se snapper AU CENTRE (rien à scroller au-delà). */
+#machine-list::before, #machine-list::after { content: ""; flex: 0 0 8%; }
 .machine.assignable { border-color: var(--accent); cursor: pointer; }
 .machine.assignable:active { transform: scale(.99); }
 .machine.producing { border-color: var(--accent-2); }
 .machine-icon {
   grid-row: 1 / -1;
   width: 100%; height: 100%;
-  min-height: 140px;
+  min-height: 96px;
   object-fit: contain;
   align-self: stretch;
 }
@@ -309,42 +337,57 @@ button.sell { background: var(--ok); color: #03210a; }
 .demand.fulfilled { opacity: .5; border-color: var(--ok); }
 .demand.fulfilled .badge { color: var(--ok); font-weight: bold; }
 
-/* ---------- Worker bar ---------- */
-#worker-bar {
+/* ---------- Barre du bas : banc + Boutique + Stock ----------
+   Toujours visible, jamais escamotée : le banc n'a plus besoin de disparaître
+   (plus de conflit vertical) ni de revenir en surimpression pendant un drag —
+   il EST déjà là, cible permanente du geste « renvoyer l'ouvrier ». */
+#bottom-bar {
   flex: 0 0 auto;
+  display: flex; align-items: stretch; gap: 8px;
   background: var(--bg-panel);
   border-top: 2px solid var(--border);
-  padding: 8px 12px 12px;
-  min-height: 92px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
+  padding: 6px 10px calc(8px + env(safe-area-inset-bottom));
 }
-#worker-hint { font-size: 11px; color: var(--text-dim); height: 14px; }
+#worker-bar {
+  flex: 1 1 auto; min-width: 0;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+  border-radius: 8px; padding: 2px 4px;
+}
+#worker-hint { font-size: 10px; color: var(--text-dim); height: 13px; white-space: nowrap; }
 #worker-hint.active { color: var(--accent); }
 /* safeAssign : le banc clignote en rouge tant qu'un ouvrier n'est pas assigné et
    que la vague est bloquée (voir assign-gate dans updatePlay). */
 #worker-bar.assign-warn { animation: benchWarn .7s ease-in-out infinite; }
 #worker-bar.assign-warn #worker-hint { color: var(--danger); font-weight: bold; }
 @keyframes benchWarn {
-  0%, 100% { background: var(--bg-panel); border-top-color: var(--border); box-shadow: none; }
-  50% { background: color-mix(in srgb, var(--danger) 26%, var(--bg-panel)); border-top-color: var(--danger); box-shadow: inset 0 0 0 2px var(--danger); }
+  0%, 100% { background: transparent; box-shadow: none; }
+  50% { background: color-mix(in srgb, var(--danger) 26%, var(--bg-panel)); box-shadow: inset 0 0 0 2px var(--danger); }
 }
-/* Banc de secours pendant un drag alors qu'aucun ouvrier n'est libre (updateBench) :
-   posé PAR-DESSUS l'écran, il ne pousse rien — la mise en page ne bouge pas sous le
-   doigt en plein glissement. Calé sur #app (centré, 480 px max). */
-#worker-bar.as-drop {
-  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-  width: 100%; max-width: 480px; z-index: 40;
-  box-shadow: 0 -8px 22px rgba(0, 0, 0, .5);
+/* Cible de drop pendant un drag : le banc s'annonce en pointillés. */
+#worker-bar.drop-ok { background: rgba(244, 185, 66, .07); box-shadow: inset 0 0 0 2px var(--accent); }
+#worker-icons {
+  display: flex; gap: 8px; align-items: center;
+  overflow-x: auto; scrollbar-width: none; max-width: 100%;
+  min-height: 46px;
 }
-#worker-bar.as-drop #worker-icons {
-  min-height: 54px; align-self: stretch; align-items: center;
-  border: 2px dashed var(--accent); border-radius: 10px;
-  background: rgba(244, 185, 66, .07);
+#worker-icons::-webkit-scrollbar { display: none; }
+
+#bottom-actions { flex: 0 0 auto; display: flex; gap: 8px; align-items: center; }
+#bottom-actions > button {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  background: var(--bg-card); border: 2px solid var(--border); color: var(--text);
+  border-radius: 10px; padding: 6px 10px; font-size: 17px; line-height: 1.15;
 }
-#worker-icons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+#bottom-actions .ba-lbl { font-size: 10px; font-weight: bold; color: var(--text-dim); }
+/* Un achat est abordable pendant que la sheet est fermée : la Boutique le dit,
+   sinon l'argent dort sans que rien à l'écran ne le rappelle. */
+#boutique-btn.glow { border-color: var(--accent); }
+#boutique-btn.glow::after {
+  content: ""; position: absolute; top: -4px; right: -4px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--danger); animation: wpPulse 1s ease-in-out infinite;
+}
 .worker {
   width: 58px; height: 58px;
   border: 2px solid var(--border);
@@ -475,27 +518,24 @@ button.upgrade { background: var(--accent-2); color: #04231d; font-size: 12px; p
 button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
 
 /* ---------- Market: vertical street ---------- */
-/* La zone de marché (file de clients + fournisseurs) = le gameplay « live » : elle
-   reste accrochée en haut de la fenêtre pendant qu'on scrolle l'usine en dessous.
-   Le z-index la fait passer AU-DESSUS des cartes machines qui défilent sous elle
-   (ses enfants — lane + fournisseurs — sont opaques, donc rien ne transparaît). */
+/* La zone de marché (file de clients + fournisseurs) = le gameplay « live ».
+   Plus besoin de sticky ni de condensation : l'écran ne scrolle plus, le marché
+   est TOUJOURS là, en pleine taille. Il absorbe la hauteur flexible restante. */
 #market-zone {
-  position: sticky; top: 0; z-index: 10;
+  position: relative; z-index: 10;
+  flex: 1 1 auto; min-height: 0;
   display: flex; flex-direction: column; gap: 0;
 }  /* anchors #speed-btn */
 
 #customer-lane {
-  position: relative; height: var(--lane-h); flex: 0 0 auto; overflow: hidden;
+  /* Flexible : la lane absorbe la hauteur que l'écran veut bien lui donner,
+     bornée pour que les clients restent lisibles sur les petits écrans. */
+  position: relative; flex: 1 1 auto; min-height: 120px; max-height: var(--lane-h); overflow: hidden;
   background:
     repeating-linear-gradient(180deg, transparent 0 38px, rgba(255,255,255,.025) 38px 40px),
     linear-gradient(180deg, #20283a 0%, #283755 100%);
-  /* haut carré = collé au bandeau sans coin qui laisse transparaître l'usine ;
-     la hauteur s'anime pour le rétrécissement au scroll (#market-zone.condensed). */
   border-radius: 0;
-  transition: height .25s ease;
 }
-/* Marché épinglé : rétréci dès qu'on scrolle l'usine, pleine taille en haut. */
-#market-zone.condensed #customer-lane { height: var(--lane-h-condensed); }
 .customer {
   position: absolute; top: -16%; width: 0;
   display: flex; flex-direction: column; align-items: center; gap: 2px;
@@ -642,9 +682,10 @@ button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
 
 /* ---------- Refining (convert) overlay ---------- */
 #convert-list { display: flex; flex-direction: column; gap: 8px; margin: 10px 0 18px; }
-/* ---------- Merge sheet (slides in from the bottom edge) ---------- */
-#merge-overlay { align-items: flex-end; justify-content: stretch; }
-#merge-sheet {
+/* ---------- Bottom sheets (merge, boutique, stock) ----------
+   Même patron pour toutes : glissent du bas, grip, fond assombri. */
+#merge-overlay, #boutique-overlay, #stock-overlay { align-items: flex-end; justify-content: stretch; }
+#merge-sheet, .sheet {
   width: 100%;
   max-height: 68vh; overflow-y: auto;
   background: var(--bg-panel);
@@ -654,7 +695,12 @@ button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
   transform: translateY(100%);
   transition: transform .26s cubic-bezier(.2, .8, .25, 1);
 }
-#merge-overlay.open #merge-sheet { transform: translateY(0); }
+#merge-overlay.open #merge-sheet, .overlay.open .sheet { transform: translateY(0); }
+#boutique-sheet { border-top-color: var(--accent); }
+#boutique-sheet .sheet-head h2 { color: var(--accent); }
+/* Dans la sheet, l'inventaire n'a plus besoin de sa propre boîte bordée. */
+#stock-sheet #inventory-bar { border: none; background: transparent; padding: 0; margin: 0; }
+#stock-sheet .inv-scroll { max-height: 46vh; }
 .sheet-grip { width: 44px; height: 4px; border-radius: 2px; background: var(--border); margin: 2px auto 8px; }
 .sheet-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .sheet-head h2 { color: var(--accent-2); font-size: 18px; margin: 0; }

@@ -354,16 +354,12 @@ concurrent qui produit pendant la chute peut rafler le client de la même façon
   (`character.machines`) ; le **gear** apporte vitesse + proba 2× partout.
 - Un bot n'a pas de vrais personnages : sa panoplie est **rationalisée en buffs
   plats** (`speed`, `proba2x`, `marketing`) appliqués par-dessus son équipe.
-- Le **banc** (`#worker-bar`, la réserve d'ouvriers) n'existe que s'il reste
-  quelqu'un à poster — `updateBench()`. Tous les ouvriers assignés, il ne montrait
-  qu'une barre vide qui coûtait ~92 px de haut en permanence ; masqué, l'usine
-  visible passe de 582 à 674 px.
-  **Exception** : pendant un drag alors qu'aucun ouvrier n'est libre, il revient
-  **en surimpression** (`.as-drop`, `position: fixed`) — il reste la cible du geste
-  « renvoyer l'ouvrier au banc » (`dropTargetAt` → `"bar"`), et en surimpression
-  plutôt que dans le flux pour ne pas redistribuer la mise en page **sous le doigt**
-  en plein glissement. Il repart au `pointerup`, y compris si le drop tombe dans le
-  vide.
+- Le **banc** (`#worker-bar`) vit dans la barre du bas, **toujours visible** :
+  cible permanente du geste « renvoyer l'ouvrier » (`dropTargetAt` → `"bar"`),
+  plus de mode escamoté ni de surimpression pendant le drag (voir §7). Le geste
+  principal pour déplacer un ouvrier est **tap → tap** (chip puis machine **ou
+  pastille**) ; le drag reste possible, pastilles comprises pour les machines
+  hors écran.
 
 ### 6.6 Bots (`game-bots.js`)
 
@@ -418,26 +414,59 @@ Le tutoriel (`tutorial.js`) lit la même table : `black_mask` (masque troué,
 **gèle le jeu** jusqu'à l'action) ou `red_dot` (pastille non bloquante). Une
 chaîne de cibles est parcourue un clic à la fois, la progression est persistée.
 
+Layout une-page : une cible peut vivre dans une **sheet fermée** (Boutique,
+Stock). Un `black_mask` **ouvre lui-même** la sheet qui contient sa cible
+(`ensureSheet`) — le tutoriel amène le joueur à l'endroit qu'il enseigne ; un
+`red_dot` attend que le joueur l'ouvre. Le geste `drag_n_drop_a_worker` vise
+désormais chip → **pastille** de la machine de destination : dans le carrousel,
+deux cartes ne sont jamais entières à l'écran en même temps, chip + pastille si.
+
 ---
 
-## 7. Mise en page
+## 7. Mise en page — écran unique
 
-- La **zone de marché** (`#market-zone` : file de clients + comptoirs) est le
-  gameplay « live » : **épinglée** en haut (`position: sticky; top: 0;
-  z-index: 10`), elle reste visible pendant qu'on scrolle l'usine.
-- `#content` n'a **pas de padding en haut** (`0 12px 12px`) et le haut de la lane
-  est **carré** : sinon l'usine défilante transparaît dans la marge au-dessus.
-- Le marché **se condense au scroll** : lane 240 px → 150 px
-  (`#market-zone.condensed`), retour plein en haut. Hystérésis (condense > 32 px,
-  plein < 8 px) pour éviter le clignotement — `setupMarketCondense()`.
-- Condenser **ne doit pas raccourcir le scroller** : la même bascule pose
-  `.market-condensed` sur `#content`, qui rend les 90 px perdus en `padding-bottom`
-  (`--lane-shrink`, animé à la même durée que la lane). Sans ça, en bas d'une page
-  courte le navigateur re-clampait `scrollTop` sous le seuil → dépli → la page
-  rallongeait → recondense : le marché clignotait entre les deux états.
+**Plus aucun scroll vertical.** L'ancien layout empilait tout dans une colonne
+scrollable ; le marché épinglé et l'usine se battaient pour la hauteur, ce qui
+avait engendré trois systèmes de compensation (marché condensé au scroll avec
+hystérésis, inventaire à `IntersectionObserver`, banc escamotable avec mode
+surimpression pendant le drag). Les trois sont **supprimés**. L'écran est une
+colonne flex fixe :
+
+```
+#hud → #wave-preview → #market-zone (flex, toujours plein) →
+#machine-dots + #machine-list (carrousel) → #bottom-bar (banc + Boutique + Stock)
+```
+
+- **Marché toujours visible** : `#market-zone` absorbe la hauteur flexible ; la
+  lane est bornée (`min-height: 120px; max-height: var(--lane-h)`).
+- **Machines en carrousel horizontal aimanté** (`#machine-list`,
+  `scroll-snap-type: x mandatory`, cartes à 84 % — la voisine dépasse du bord).
+  Les pseudo-éléments `::before/::after` (8 %) permettent à la première/dernière
+  carte de se snapper au centre.
+- **Pastilles d'état** (`#machine-dots`, `renderMachineDots` /
+  `refreshMachineDots`) : la vue d'ensemble que le carrousel fait perdre. Une par
+  machine — verte = produit, **rouge pulsante = à l'arrêt faute d'ouvriers**,
+  or = assignable (un ouvrier est sélectionné). Tap = le carrousel s'y aimante,
+  ou y **assigne** l'ouvrier sélectionné. C'est aussi une **cible de drop**
+  (`dropTargetAt`) : on peut glisser un ouvrier vers une machine hors écran.
+- **Barre du bas permanente** (`#bottom-bar`) : le banc (`#worker-bar`, scroll
+  horizontal interne) + les boutons **Boutique** et **Stock**.
+- **Boutique** (`#boutique-overlay`, sheet) : les achats tycoon (`#shop-bar` y a
+  déménagé avec son id — les cibles tutoriel pointent toujours dessus). Le bouton
+  porte une pastille `.glow` quand un achat est abordable (`refreshAffordability`).
+  L'upgrade de machine reste sur la carte machine (contextuel).
+- **Stock** (`#stock-overlay`, sheet) : l'inventaire (`#inventory-bar`, id
+  conservé, bouton Merge compris). Le bouton affiche la jauge `7/20` en
+  permanence (`refreshStockBtn`, tick 0.2 s). `_invVisible` signifie désormais
+  « la sheet Stock est ouverte » — même contrat qu'avant pour le flush différé
+  (`maybeRefreshInventory`) et les vols : une unité produite vole **vers le
+  bouton Stock** quand la sheet est fermée (`flyToInventory`), une unité vendue
+  en **repart** (`reserveRect`).
 - Les overlays partagent un z-index ; `openOverlay()` incrémente un compteur pour
   que le dernier ouvert passe au-dessus (une fiche ouverte depuis une autre fiche
-  revient bien sur la précédente à la fermeture).
+  revient bien sur la précédente à la fermeture). Les sheets (merge, boutique,
+  stock) partagent le patron `.sheet` : une frame peinte à `translateY(100%)`
+  avant `.open`, sinon pas de glissade.
 
 ---
 
