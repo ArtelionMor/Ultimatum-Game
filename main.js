@@ -13,7 +13,7 @@ import { openResource } from "./resource.js";
 import { freeWorkers, crewSpeedBonus, crewProba2x, addWorker, selectWorker, assignWorker, removeWorker, unassignWorker } from "./game-workers.js";
 import { nextWorker, buyWorker, nextMkt, buyMkt, nextStorage, buyStorage, nextMachineLevel, upgradeMachine } from "./game-shop.js";
 import { botPlanRound, staffBot } from "./game-bots.js";
-import { spawnCustomer, restackCustomers } from "./game-customers.js";
+import { spawnCustomer, restackCustomers, retryWaiting } from "./game-customers.js";
 import { tickProduction, effTime } from "./game-production.js";
 import { renderMethods } from "./game-render.js";
 import { cheatMethods } from "./game-cheats.js";
@@ -456,7 +456,9 @@ const Game = {
         if (m.batchTimer <= 0) { spawnCustomer(this); m.pending--; m.batchTimer = SPAWN_BATCH_GAP; }
       }
       this._stackTimer = (this._stackTimer || 0) - dt;
-      if (this._stackTimer <= 0) { restackCustomers(); this._stackTimer = 0.1; }
+      // Même tick que le tri en profondeur : on retente de servir les clients partis
+      // à vide (leur commande a pu sortir d'une machine entre-temps).
+      if (this._stackTimer <= 0) { restackCustomers(); retryWaiting(this); this._stackTimer = 0.1; }
       if (m.remaining <= 0 && m.served >= m.total) this.endWave();
     } else {
       this.prepTimer -= dt;
@@ -467,6 +469,12 @@ const Game = {
         this.prepTimer = 0;
         if (this.assignGateBlocking()) this.setAssignWarning(true);
         else { this.setAssignWarning(false); this.startWave(); }
+      } else if (this._assignWarn && !this.assignGateBlocking()) {
+        // Alerte levée par un « ⏭ Lancer » refusé, chrono encore en cours : elle
+        // s'éteint dès que le banc est vidé. Sans ça, rien ne la re-testait avant 0 et
+        // le banc restait rouge alors que le joueur avait déjà corrigé. On ne lance
+        // PAS la vague pour autant : c'est au joueur de re-cliquer.
+        this.setAssignWarning(false);
       }
       this.updateWavePreviewTimer();
     }
@@ -496,7 +504,7 @@ const Game = {
     const m = this.marketFor(this.round);
     // Le premier client attend le temps de PRODUIRE la ressource la plus demandée :
     // spawnTimer démarre à ce délai (au lieu de 0), le reste des paquets suit à l'interval.
-    this.market = { def: m, remaining: m.customers, total: m.customers, served: 0, spawnTimer: this.firstDemandDelay(m), pending: 0, batchTimer: 0, active: 0, lostUnits: 0, lostValue: 0 };
+    this.market = { def: m, remaining: m.customers, total: m.customers, served: 0, spawnTimer: this.firstDemandDelay(m), pending: 0, batchTimer: 0, waiting: [], active: 0, lostUnits: 0, lostValue: 0 };
     $("#customer-lane").innerHTML = "";
     this.renderSuppliers(); this.renderWavePreview(); this.refreshHud();
     const content = $("#content"); if (content) content.scrollTo({ top: 0, behavior: "smooth" });
@@ -559,16 +567,33 @@ const Game = {
     wrap.innerHTML =
       `<div class="wp-head"><span class="wp-title">Vague ${pr}</span>` +
       `<span class="wp-state">${this.waveActive ? "en cours" : "à venir"}</span>` +
-      `<span id="wp-countdown" class="wp-countdown"></span></div>` +
-      `<div class="wp-chips">${chips}</div>`;
+      `<span id="wp-countdown" class="wp-countdown"></span>` +
+      // Le bouton n'existe QUE pendant la prépa : pas de « lancer » à cliquer sur une
+      // vague déjà partie. Le bandeau est reconstruit à chaque bascule de phase.
+      (this.waveActive ? "" : `<button id="wp-skip" class="wp-skip" title="Lancer la vague sans attendre la fin de la préparation">⏭ Lancer</button>`) +
+      `</div><div class="wp-chips">${chips}</div>`;
     this.updateWavePreviewTimer();
   },
   updateWavePreviewTimer() {
     const c = $("#wp-countdown"); if (!c) return;
+    // Le bouton se grise quand safeAssign bloque : il reste cliquable (le clic rappelle
+    // pourquoi ça ne part pas), mais il annonce d'avance qu'il ne partira pas.
+    const skip = $("#wp-skip"); if (skip) skip.classList.toggle("blocked", !!this._assignWarn || this.assignGateBlocking());
     // safeAssign bloque le départ : on remplace le décompte par une consigne rouge.
     if (this._assignWarn) { c.textContent = "⚠ Assigne tes ouvriers"; c.classList.add("imminent"); return; }
     c.textContent = this.waveActive ? "" : "↓ " + Math.max(0, Math.ceil(this.prepTimer)) + "s"; // l'état est dans .wp-state
     c.classList.toggle("imminent", !this.waveActive && this.prepTimer <= 5);
+  },
+
+  // « Skip preparation time » : le joueur déclare qu'il a fini de se préparer. Passe
+  // par EXACTEMENT le même chemin que le chrono qui tombe à 0 (verrou safeAssign
+  // compris) — un raccourci de confort, pas une porte dérobée pour partir le banc plein.
+  skipPrep() {
+    if (this.state !== S.Play || this.waveActive || this.previewWave() == null) return;
+    if (this.assignGateBlocking()) { this.setAssignWarning(true); this.updateWavePreviewTimer(); return; }
+    this.prepTimer = 0;
+    this.setAssignWarning(false);
+    this.startWave();
   },
 
   // ---------- Results (standings) ----------
@@ -647,7 +672,12 @@ $("#automerge-box")?.addEventListener("change", (e) => {
 });
 $("#competitor-close").addEventListener("click", () => Game.closeCompetitor());
 $("#competitor-overlay").addEventListener("click", (e) => { if (e.target.id === "competitor-overlay") Game.closeCompetitor(); });
-$("#wave-preview")?.addEventListener("click", (e) => { const chip = e.target.closest(".wp-chip[data-res]"); if (chip) openResource(chip.dataset.res); });
+// Délégation : le bandeau est reconstruit à chaque phase, un listener posé sur le
+// bouton lui-même mourrait avec lui.
+$("#wave-preview")?.addEventListener("click", (e) => {
+  if (e.target.closest("#wp-skip")) { Game.skipPrep(); return; }
+  const chip = e.target.closest(".wp-chip[data-res]"); if (chip) openResource(chip.dataset.res);
+});
 // Guarded with ?.: if a stale/cached index.html lacks these nodes, the bootstrap must
 // not throw here — otherwise Game.start() below never runs and the game hangs.
 $("#hud-rank")?.addEventListener("click", () => Game.openRankInfo());

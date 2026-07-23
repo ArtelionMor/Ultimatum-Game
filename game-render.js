@@ -425,14 +425,12 @@ export const renderMethods = {
     // fixed order (joueur puis bots), indépendant de l'argent
     this.competitors.forEach((c) => {
       const s = el("div", "counter" + (c.isPlayer ? " me" : "")); c._counter = s;
-      // Deux étages bien distincts : le COMPTOIR (commandes réservées, en attente de
-      // leur client) au-dessus, la RÉSERVE (le stock dormant) en dessous.
-      s.innerHTML = `<img class="counter-avatar" src="${sprite(c.spriteId, c.spriteFolder)}"><div class="counter-name">${c.name}</div><div class="counter-money"><img src="${sprite("Coins", "UI")}"><span class="cmoney">${c.money}</span></div><div class="counter-mkt">📣${c.marketing.toFixed(1)}</div><div class="counter-desk"></div><div class="counter-inv"></div>`;
+      // Le stand ne montre QUE le comptoir : les commandes réservées en attente de leur
+      // client. La réserve (le stock dormant) n'est plus listée ici — celle du joueur est
+      // dans le panneau INVENTAIRE, celle d'un bot dans sa fiche (tap sur le stand).
+      s.innerHTML = `<img class="counter-avatar" src="${sprite(c.spriteId, c.spriteFolder)}"><div class="counter-name">${c.name}</div><div class="counter-money"><img src="${sprite("Coins", "UI")}"><span class="cmoney">${c.money}</span></div><div class="counter-mkt">📣${c.marketing.toFixed(1)}</div><div class="counter-desk"></div>`;
       c._moneyRef = s.querySelector(".cmoney");
       c._deskRef = s.querySelector(".counter-desk");
-      c._invRef = s.querySelector(".counter-inv");
-      chainOverscroll(c._invRef);  // at the stack's top/bottom, keep the swipe scrolling the page
-      this.renderCounterInv(c);
       this.renderCounterDesk(c);   // repose les commandes en attente si le comptoir est reconstruit
       s.onclick = () => this.openCompetitor(c);
       wrap.appendChild(s);
@@ -492,41 +490,12 @@ export const renderMethods = {
     });
     if (!any) inv.appendChild(el("div", "cp-empty", "Inventaire vide"));
   },
-  // Seller inventory on a counter. The player gets a compact per-resource total
-  // (the full per-tier detail lives in the bottom inventory grid); bots show each
-  // non-empty (resource, tier) stack, highest tier first.
-  renderCounterInv(c) {
-    const wrap = c._invRef; if (!wrap) return;
-    wrap.innerHTML = "";
-    const stackFor = (rid, img, n) => {
-      const stack = el("div", "cinv-stack");
-      stack.dataset.res = rid;   // point de départ du vol réserve -> comptoir (reserveRect)
-      stack.append(img, el("span", null, n));
-      stack.onclick = (e) => { e.stopPropagation(); openResource(rid); };  // resource, not the seller
-      return stack;
-    };
-    if (c.isPlayer) {
-      this.cfg.resourceOrder.forEach((rid) => {
-        const n = this.stockOf(this.player, rid); if (n <= 0) return;
-        wrap.appendChild(stackFor(rid, this.tierImg(rid, this.bestTier(this.player, rid) || 1), n));
-      });
-    } else {
-      this.cfg.resourceOrder.forEach((rid) => {
-        const m = c.stock[rid] || {};
-        Object.keys(m).map(Number).sort((a, b) => b - a).forEach((t) => {
-          if (m[t] <= 0) return;
-          wrap.appendChild(stackFor(rid, this.tierImg(rid, t), m[t]));
-        });
-      });
-    }
-    if (!wrap.children.length) wrap.appendChild(el("span", "cinv-empty", "réserve vide")); // nomme l'étage du bas (cf. .counter-desk:empty)
-  },
-  // Update money + inventory in place (keeps the hit/money-pop animations alive).
+  // Update money in place (keeps the hit/money-pop animations alive). Le stand n'affiche
+  // plus le stock : le comptoir se met à jour tout seul, à la pose et au retrait.
   refreshSuppliers() {
     this.competitors.forEach((c) => {
       if (!c._counter) return;
       if (c._moneyRef) c._moneyRef.textContent = c.money;
-      this.renderCounterInv(c);
     });
     if (this._infoC && !$("#competitor-overlay").classList.contains("hidden")) this.renderCompetitorPanel();
   },
@@ -537,14 +506,20 @@ export const renderMethods = {
   // l'objet reste À L'ÉCRAN sur le comptoir : on voit ce qui est déjà promis, et le
   // client repart visiblement avec. Avant, la marchandise s'évaporait à l'apparition.
 
-  // Rectangle de départ du vol : la pile de la réserve pour cette ressource si elle
-  // est encore affichée (la réserve n'est repeinte que toutes les 0,2 s), sinon la
-  // zone réserve entière.
-  reserveRect(c, resId) {
-    const wrap = c._invRef; if (!wrap || !wrap.isConnected) return null;
-    const stack = wrap.querySelector(`.cinv-stack[data-res="${resId}"]`);
-    const r = (stack || wrap).getBoundingClientRect();
-    return r.width ? r : null;
+  // Rectangle de départ du vol. Le stand ne liste plus son stock, il faut donc un
+  // point d'origine crédible :
+  //  - joueur, panneau INVENTAIRE à l'écran -> il part de là. C'est l'exact inverse de
+  //    flyToInventory (l'unité produite y rentre, l'unité vendue en ressort).
+  //  - sinon (inventaire hors écran, ou bot qui n'expose rien) -> de SOUS le stand,
+  //    comme sorti de l'arrière-boutique.
+  reserveRect(c) {
+    if (c === this.player && this._invTiles && this._invTiles.isConnected && this._invVisible) {
+      const r = this._invTiles.getBoundingClientRect();
+      if (r.width) return r;
+    }
+    const s = c._counter; if (!s || !s.isConnected) return null;
+    const r = s.getBoundingClientRect();
+    return r.width ? { left: r.left + r.width / 2 - 13, top: r.bottom + 8, width: 26, height: 26 } : null;
   },
 
   // Un objet qui glisse d'un point à l'autre (lerp CSS : translate interpolé par la
@@ -589,7 +564,7 @@ export const renderMethods = {
       desk.appendChild(chip);
       it._chip = chip;
       if (!flying || !flying.includes(it)) return;
-      const from = this.reserveRect(c, it.resId), to = chip.getBoundingClientRect();
+      const from = this.reserveRect(c), to = chip.getBoundingClientRect();
       if (!from || !to.width) return;                      // comptoir hors écran : pose sèche
       chip.classList.add("landing");                       // caché le temps du trajet
       this.flyItem(it.resId, it.tier, from, to, 420, false, () => {

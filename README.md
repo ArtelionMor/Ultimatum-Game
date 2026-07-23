@@ -210,6 +210,15 @@ demande apparaît en gros **au centre** puis glisse jusqu'au bandeau
 `#wave-preview`. Reste **3 s** (`HOLD`), vol 0,75 s, ressources en **grille
 2 colonnes**. Purement cosmétique (`pointer-events: none`), auto-supprimée.
 
+**Bouton « ⏭ Lancer »** (`skipPrep`, dans le bandeau, seulement pendant la prépa) :
+le joueur déclare qu'il a fini de se préparer. Il passe par **exactement le même
+chemin** que le chrono qui tombe à 0 — verrou `safeAssign` compris : c'est un
+raccourci de confort, pas une porte dérobée pour partir le banc plein. Grisé
+(`.blocked`) quand le verrou refuserait le départ, mais il reste cliquable : le clic
+allume alors l'alerte qui dit ce qui manque. Cette alerte-là (levée chrono **non**
+écoulé) s'éteint d'elle-même dès que le banc est vidé — sans lancer la vague pour
+autant, c'est au joueur de re-cliquer.
+
 **Verrou d'assignation** (`world_level.safeAssign` = TRUE) : la vague **refuse de
 démarrer** tant qu'un ouvrier traîne sur le banc. Le chrono est gelé à 0, le banc
 clignote rouge (`#worker-bar.assign-warn`), le décompte devient « ⚠ Assigne tes
@@ -253,35 +262,50 @@ visaient le même comptoir. Le paquet suivant attend que `pending` soit vide.
 > vise, avant son arrivée. C'est le prix de la garantie « le client arrive devant
 > le shop qu'il va vraiment visiter ».
 
-### Réserve vs comptoir
+### Le comptoir
 
-Le stand d'un concurrent a **deux étages distincts**, et une unité vendue les
-traverse au lieu de s'évaporer :
+Une unité vendue ne s'évapore plus à la réservation : elle **transite par le
+comptoir**, visible, jusqu'à ce que le client vienne la prendre.
 
 ```
-réserve (c.stock, .counter-inv)  --putOnCounter-->  comptoir (c.counterItems, .counter-desk)  --takeFromCounter-->  client
-       ^ à la réservation (apparition du client)              ^ à l'arrivée du client
+stock (c.stock)  --putOnCounter-->  comptoir (c.counterItems, .counter-desk)  --takeFromCounter-->  client
+     ^ à la réservation (apparition du client)          ^ à l'arrivée du client
 ```
 
-- Le **comptoir** (planche de bois, `.counter-desk`) porte les commandes déjà
-  promises : elles restent visibles pendant toute la descente du client. Vide, il
-  s'annonce lui-même (`:empty::before`) — pas d'intitulé en dur, qui coûterait de
-  la hauteur sur l'élément déjà le plus grand du marché épinglé.
-- La **réserve** (`.counter-inv`) est le stock dormant, en piles chiffrées ; vide,
-  elle affiche « réserve vide ».
+- Le stand n'affiche **que** le comptoir (planche de bois, `.counter-desk`) : ni
+  liste de stock, ni intitulé. Le stock du joueur est dans le panneau
+  **INVENTAIRE**, celui d'un bot dans sa **fiche** (tap sur le stand). Le stand
+  reste ainsi à 139 px — le marché épinglé mange déjà 404 px de haut.
 - Les deux trajets sont des **vols interpolés** (`flyItem` : `transform` animé par
-  transition CSS) — réserve → comptoir en 420 ms, comptoir → client en 340 ms avec
+  transition CSS) — vers le comptoir en 420 ms, vers le client en 340 ms avec
   fondu. Le chip destination est créé **avant** le vol et masqué (`.landing`) : il
   donne sa position exacte à l'atterrissage, et rien n'apparaît en double.
+- Origine du vol (`reserveRect`) : le panneau **INVENTAIRE** quand c'est le joueur
+  et qu'il est à l'écran — l'exact inverse de `flyToInventory` (l'unité produite y
+  rentre, l'unité vendue en ressort) — sinon **sous le stand**, comme sortie de
+  l'arrière-boutique.
 - `c.counterItems` est le **modèle** (pas seulement du DOM) : `renderSuppliers`
   peut reconstruire les stands sans perdre les commandes en attente, et
   `clearCounters()` (début de prépa) garantit qu'aucun chip fantôme ne survit à une
   vague.
 
-**Client non servi** (personne n'a la ressource à son apparition) : il prend une
-**ligne au hasard** — le comptoir d'un concurrent tiré au sort — et **rate sa
-cible sur place** (rouge + fondu), sans glisser hors écran. Compté en part de
-marché perdue (`lostUnits` / `lostValue`, valorisé au prix T1).
+**Client parti à vide** (personne n'a la ressource à son apparition) : il n'est
+**pas condamné pour autant**. Il descend sur une **ligne au hasard** mais reste
+inscrit dans `market.waiting`, et `retryWaiting()` (~10×/s, même tick que
+`restackCustomers`) retente sa réservation à chaque passage. Dès qu'un comptoir peut
+le servir — ta machine vient de sortir la pièce — la marchandise part sur ce
+comptoir et le client **glisse vers cette ligne** (transition CSS `left` .55 s). Il
+ne se cogne plus contre un stand vide alors que la commande existe en stock.
+
+La fenêtre se ferme à l'arrivée : le settle pose `order.arrived`, et `retryWaiting`
+ne sert plus une commande dont le client est déjà passé (sinon le stock partait sans
+que personne ne paie). `order` est **mutable** exprès — c'est le seul lien entre le
+tir initial, une réservation tardive et le règlement en bas.
+
+Toujours rien à l'arrivée : il **rate sa cible sur place** (rouge + fondu), sans
+glisser hors écran. Compté en part de marché perdue (`lostUnits` / `lostValue`,
+valorisé au prix T1). Le rattrapage vaut pour **tout le monde**, bots compris : un
+concurrent qui produit pendant la chute peut rafler le client de la même façon.
 
 ### 6.4 Ressources, tiers, raffinage
 

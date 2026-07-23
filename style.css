@@ -138,6 +138,19 @@ img { image-rendering: pixelated; }
 #wave-preview.wp-current .wp-state { background: color-mix(in srgb, var(--accent-2) 18%, transparent); }
 .wp-countdown { margin-left: auto; font-weight: bold; color: var(--wp-accent); }
 .wp-countdown.imminent { color: var(--danger); animation: wpPulse .7s ease-in-out infinite; }
+/* « J'ai fini de me préparer » : lance la vague sans attendre le chrono. N'existe
+   que pendant la prépa (le bandeau est reconstruit à chaque bascule de phase). */
+.wp-skip {
+  flex: 0 0 auto; padding: 3px 9px;
+  font-size: 11px; font-weight: bold; font-family: inherit;
+  color: #1d2330; background: var(--wp-accent);
+  border: none; border-radius: 999px; cursor: pointer;
+  transition: transform .1s, filter .15s, opacity .15s;
+}
+.wp-skip:active { transform: scale(.94); }
+/* Grisé quand le verrou safeAssign refuserait le départ — le bouton reste cliquable,
+   le clic rappelle alors ce qui manque (banc rouge + consigne). */
+.wp-skip.blocked { opacity: .45; filter: grayscale(1); }
 @keyframes wpPulse { 0%,100%{ opacity: 1; } 50%{ opacity: .4; } }
 .wp-chips { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
 .wp-chip {
@@ -516,33 +529,17 @@ button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
 .counter-money { font-size: 14px; color: var(--accent); display: flex; align-items: center; justify-content: center; gap: 3px; font-weight: bold; }
 .counter-money img { width: 14px; height: 14px; }
 .counter-mkt { font-size: 10px; color: var(--text-dim); }
-/* Same problem as the inventory list: with 10-30 resources a tall stack column
-   makes the whole market layout jump. Cap the height to ~1.5 resources so a
-   half-row peeks out (hints it scrolls), scroll internally, and let the page
-   take over at the top/bottom borders (overscroll-behavior: auto). */
-.counter-inv {
-  display: flex; flex-direction: column; align-items: center; gap: 3px;
-  margin-top: 5px; padding-top: 4px; border-top: 1px solid var(--border);
-  max-height: 44px; overflow-y: auto; overscroll-behavior: auto;
-}
-/* Le COMPTOIR : la marchandise déjà réservée par un client en train de descendre.
-   Elle a quitté la RÉSERVE (la liste en dessous) mais reste posée là, visible, jusqu'à
-   ce qu'il la prenne (game-render.putOnCounter / takeFromCounter). Hauteur fixe : le
-   stand ne saute pas quand une commande arrive ou repart. Les deux étages se
-   distinguent par le décor — planche de bois ici, piles chiffrées en dessous — et le
-   comptoir vide s'annonce lui-même, ce qui évite un intitulé qui coûterait 13 px de
-   haut sur l'élément déjà le plus grand du marché épinglé. */
+/* Le COMPTOIR, seul contenu du stand : la marchandise réservée par un client en train
+   de descendre. Elle a quitté le stock mais reste posée là, visible, jusqu'à ce qu'il
+   la prenne (game-render.putOnCounter / takeFromCounter). Hauteur fixe : le stand ne
+   saute pas quand une commande arrive ou repart. Aucun intitulé — la planche de bois
+   vide se lit comme un comptoir vide, et le marché épinglé mange déjà assez de haut. */
 .counter-desk {
   display: flex; align-items: center; justify-content: center; gap: 2px;
   height: 30px; margin-top: 5px; padding: 0 3px; overflow: hidden;
   border-radius: 4px;
   background: linear-gradient(180deg, #4b3b27 0%, #3b2e1f 55%, #2a2116 100%);
   box-shadow: inset 0 2px 0 rgba(255,255,255,.08), inset 0 -3px 4px rgba(0,0,0,.45);
-}
-.counter-desk:empty::before {
-  content: "Comptoir";
-  font-size: 8px; letter-spacing: .5px; text-transform: uppercase;
-  color: rgba(255, 255, 255, .3);
 }
 .desk-chip { flex: 0 0 auto; display: flex; cursor: pointer; }
 .desk-chip img {
@@ -564,14 +561,6 @@ button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
   width: 26px; height: 26px;
   transition-timing-function: cubic-bezier(.3,.7,.35,1);
 }
-.cinv-stack {
-  display: flex; align-items: center; gap: 1px;
-  background: rgba(0,0,0,.28); border-radius: 4px; padding: 1px 3px;
-  font-size: 10px; font-weight: bold; color: var(--text);
-}
-.cinv-stack img { width: 32px; height: 32px; }
-.cinv-empty { font-size: 10px; color: var(--text-dim); opacity: .6; font-style: italic; }
-
 /* floating luck/rarity popup over a producing machine */
 .spawn-pop {
   position: fixed; transform: translate(-50%, 0); z-index: 31;
@@ -743,7 +732,6 @@ button.codex-row:active { border-color: var(--accent); }
 
 /* in-game clickable clients / resources -> codex */
 .customer .bubble, .customer .cust-sprite { cursor: pointer; }
-.cinv-stack { cursor: pointer; }
 .wp-chip { cursor: pointer; }
 .machine-recipe img[data-res] { cursor: pointer; }
 .res-custs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
