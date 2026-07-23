@@ -25,13 +25,14 @@ function pickNeed(marketDef, order) {
   return { resId: res, qty };
 }
 
-// Rabatteurs DEHORS (état "out"/"toClient", voir game-render.tickHawkers) sur les
-// machines en mode "sell" produisant CETTE ressource. Un rabatteur en recharge à
-// la base ou sur le chemin du retour ne compte pas : capter coûte de l'uptime.
+// Rabatteurs DEHORS (état "out"/"toClient", voir game-render.tickHawkers) issus
+// des machines produisant CETTE ressource. L'interrupteur est PAR OUVRIER
+// (w.role) : une machine peut avoir 2 producteurs et 2 crieurs. Un rabatteur en
+// recharge à la base ou sur le retour ne compte pas : capter coûte de l'uptime.
 function hawkersOut(c, resId, game) {
   let n = 0;
   c.machines.forEach((m) => {
-    if (m.mode !== "sell" || game.machineDef(m.id).outputs !== resId) return;
+    if (game.machineDef(m.id).outputs !== resId) return;
     (m._hawkers || []).forEach((h) => { if (h.state === "out" || h.state === "toClient") n++; });
   });
   return n;

@@ -352,12 +352,18 @@ arrive avec son équipe **au complet** (`fillCrew`, taille = `maxWorkers` de son
 niveau — la colonne sera renommée au balancing) et ne la partage plus. Plus de
 banc, plus d'achat d'ouvriers, plus de drag & drop, plus de `safeAssign` actif.
 
-Le verbe du joueur est le **switch de posture** sur chaque carte machine :
+Le verbe du joueur est l'**interrupteur PAR OUVRIER** (`w.role`) : chaque chip
+d'ouvrier sur la carte machine est un bouton — tap = prod ↔ rabatteur. Le dosage
+appartient au joueur : 2/2, 3/1, 0/4… Les deux boutons ⚙/📣 de la carte restent
+comme **raccourci « tout le monde »** (ni l'un ni l'autre n'est allumé sur un
+dosage mixte).
 
-- **⚙ Prod** : l'équipe fabrique (comportement d'avant).
-- **📣 Rabatteur** : l'équipe SORT dans la rue capter les clients. La machine ne
-  produit **rien**, et l'attractivité du stand sur **sa** ressource est
-  multipliée : `attr × (1 + rabatteursDehors × hawkerBoost)` (`general.hawkerBoost`,
+- **⚙ Prod** : l'ouvrier fabrique. La machine ne produit que si ses rôles prod
+  **physiquement à la base** (`prodCrew` — un rabatteur qui rentre ne compte pas
+  encore) atteignent `workersRequired` ; la vitesse ne compte qu'eux aussi.
+- **📣 Rabatteur** : l'ouvrier SORT dans la rue capter les clients.
+  L'attractivité du stand sur **sa** ressource est multipliée :
+  `attr × (1 + rabatteursDehors × hawkerBoost)` (`general.hawkerBoost`,
   défaut 0.75/ouvrier — 2 dehors ≈ ×2.5).
 
 Les rabatteurs sont des **agents physiques** (`tickHawkers`, chaque frame) :
@@ -378,9 +384,9 @@ clients qui veulent autre chose (`.customer.dim`).
   gear partout. Tap sur la chip d'un personnage → sa fiche.
 - Un bot n'a pas de vrais personnages : sa panoplie est **rationalisée en buffs
   plats** (`speed`, `proba2x`, `marketing`) appliqués par-dessus son équipe.
-- `staffBot` ne staffe plus : il décide les **modes** (~1×/s) — Rabatteur quand
-  la ressource se vend et que le stock est confortable
-  (`general.hawkerStockMin`, défaut 4, hystérésis −2), Prod sinon.
+- `staffBot` ne staffe plus : il **dose les rôles** (~1×/s) selon le stock du
+  produit vendu (`general.hawkerStockMin`, défaut 4) — sous `min` tout le monde
+  produit, entre `min` et `2×min` moitié dehors, au-delà tout le monde crie.
 
 ### 6.6 Bots (`game-bots.js`)
 

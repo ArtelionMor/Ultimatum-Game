@@ -14,7 +14,7 @@ import { freeWorkers, addWorker } from "./game-workers.js";
 import { nextMkt, buyMkt, nextStorage, buyStorage, nextMachineLevel, upgradeMachine } from "./game-shop.js";
 import { botPlanRound, staffBot } from "./game-bots.js";
 import { spawnCustomer, restackCustomers, retryWaiting } from "./game-customers.js";
-import { tickProduction, effTime } from "./game-production.js";
+import { tickProduction, fullCrewTime } from "./game-production.js";
 import { renderMethods } from "./game-render.js";
 import { cheatMethods } from "./game-cheats.js";
 import { Tutorial } from "./tutorial.js";
@@ -293,7 +293,7 @@ const Game = {
   // sur le pas de la porte : attractivité boostée sur SA ressource, zéro production).
   giveMachine(p, id) {
     if (p.machines.some((m) => m.id === id)) return;
-    const m = { id, level: 1, crew: [], elapsed: 0, producing: false, mode: "prod" };
+    const m = { id, level: 1, crew: [], elapsed: 0, producing: false };
     p.machines.push(m);
     this.fillCrew(p, m);
   },
@@ -305,7 +305,7 @@ const Game = {
     while (m.crew.length < L.maxWorkers) {
       addWorker(this, p);
       const w = p.workers[p.workers.length - 1];
-      w.machineId = m.id; m.crew.push(w);
+      w.machineId = m.id; w.role = "prod"; m.crew.push(w);
     }
   },
 
@@ -516,7 +516,7 @@ const Game = {
     this.competitors.forEach((c) => {
       if (c.isPlayer) return; // le PIRE bot, pas le joueur
       const machine = c.machines.find((m) => { const d = this.machineDef(m.id); return d && d.outputs === resId; });
-      if (machine) worst = Math.max(worst, effTime(this, c, machine));
+      if (machine) worst = Math.max(worst, fullCrewTime(this, c, machine)); // équipe au complet : les rôles du moment n'entrent pas dans le rythme des vagues
     });
     if (worst === 0) { // aucun bot ne produit cette ressource : temps de base de la machine
       const producer = this.cfg.machines.find((mm) => mm.outputs === resId);
@@ -578,14 +578,14 @@ const Game = {
     document.querySelectorAll("#wave-preview .wp-cov, .demand-float .wp-cov").forEach((n) => {
       const rid = n.dataset.covres;
       const producers = this.player.machines.filter((x) => { const d = this.machineDef(x.id); return d && d.outputs === rid; });
-      // Rework rabatteur : l'équipe est toujours au complet — ce qui arrête une
-      // machine, c'est son MODE. ⚠ = tout ce qui produit cette ressource est en
-      // mode Rabatteur, rien n'en sortira.
-      const producing = producers.some((x) => x.mode !== "sell");
+      // Rework rabatteur (interrupteur par ouvrier) : une machine ne produit que
+      // si assez de rôles "prod" restent à la base. ⚠ = trop d'ouvriers partis
+      // rabattre, rien ne sortira de cette ressource.
+      const producing = producers.some((x) => x.crew.filter((w) => w.role !== "sell").length >= this.lvl(x).workersRequired);
       const hasStock = this.stockOf(this.player, rid) > 0;
       let cls, txt, tip;
       if (producing) { cls = "ok"; txt = "✓"; tip = "Ta machine produit cette ressource"; }
-      else if (producers.length) { cls = "warn"; txt = "⚠"; tip = "Ta machine est en mode Rabatteur : rien ne produira"; }
+      else if (producers.length) { cls = "warn"; txt = "⚠"; tip = "Trop d'ouvriers en Rabatteur : plus assez de producteurs sur cette machine"; }
       else if (hasStock) { cls = "ok"; txt = "✓"; tip = "Tu as du stock (mais aucune machine pour en refaire)"; }
       else { cls = "off"; txt = "–"; tip = "Tu n'es pas positionné sur cette ressource"; }
       n.className = "wp-cov " + cls; n.textContent = txt; n.title = tip;

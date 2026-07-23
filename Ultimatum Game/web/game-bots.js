@@ -142,14 +142,15 @@ function mergeBotStock(game, b) {
 }
 
 // Rework rabatteur : les équipes sont FIXES, le bot ne déplace plus d'ouvriers —
-// il décide le MODE de chaque machine, exactement le verbe du joueur. Appelé une
-// fois par round ET ~1×/s pendant (main.js updatePlay), comme l'ancien staffing.
+// il DOSE les rôles de chaque équipe (w.role, interrupteur par ouvrier), le verbe
+// exact du joueur. Appelé une fois par round ET ~1×/s pendant (main.js updatePlay).
 //
-// Heuristique : une machine passe en Rabatteur quand son produit se VEND (poids
-// de vague > 0) et que son stock est déjà confortable — produire de plus n'ajoute
-// rien, autant sortir crier. Elle repasse en prod dès que le stock retombe. Les
-// convertisseurs et les fournisseurs de chaîne restent en prod (leur sortie ne se
-// vend pas directement, un rabatteur n'y capterait personne).
+// Heuristique : plus le stock du produit vendu est confortable, plus l'équipe
+// bascule en crieurs — produire davantage n'ajoute rien, autant capter.
+//   stock < min          → tout le monde produit
+//   min ≤ stock < 2×min  → moitié dehors (le dosage moit/moit du joueur)
+//   stock ≥ 2×min        → tout le monde dehors
+// Une ressource qui ne se vend pas (poids 0) ou hors vague : tout le monde en prod.
 export function staffBot(game, b) {
   mergeBotStock(game, b); // fold before deciding: merged stock changes the thresholds
   const behavior = botBehavior(b, game.round);
@@ -158,9 +159,11 @@ export function staffBot(game, b) {
     const out = game.machineDef(m.id).outputs;
     const sells = (behavior[out] || 0) > 0;
     const stock = game.stockOf(b, out);
-    // Hystérésis grossière : sortir à `min`, rentrer sous `min - 2` — pas de
-    // flip-flop à chaque unité vendue (le trajet de retour coûte déjà assez).
-    if (m.mode === "sell") { if (!sells || stock < Math.max(1, min - 2)) m.mode = "prod"; }
-    else if (sells && stock >= min && game.waveActive) m.mode = "sell";
+    let sellN = 0;
+    if (sells && game.waveActive) {
+      if (stock >= min * 2) sellN = m.crew.length;
+      else if (stock >= min) sellN = Math.ceil(m.crew.length / 2);
+    }
+    m.crew.forEach((w, i) => { w.role = i < m.crew.length - sellN ? "prod" : "sell"; });
   });
 }

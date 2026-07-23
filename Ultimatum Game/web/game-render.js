@@ -324,7 +324,7 @@ export const renderMethods = {
       const d = this._mdots[i];
       d.classList.toggle("active", i === active);
       d.classList.toggle("producing", !!m.producing);
-      d.classList.toggle("selling", m.mode === "sell");
+      d.classList.toggle("selling", this.machineSells(m));
     });
     // Focus visuel : la machine active du carrousel définit LA ressource dont on
     // parle — les clients qui veulent autre chose s'estompent dans la rue. La
@@ -380,15 +380,23 @@ export const renderMethods = {
     this.updateMachine(m, node); return node;
   },
 
+  // Interrupteur PAR OUVRIER (w.role) : le dosage appartient au joueur — 2/2,
+  // 3/1, 0/4… La chip de l'ouvrier EST le bouton (toggleWorkerRole) ; les deux
+  // boutons du switch machine restent comme raccourci « tout le monde ».
+  // Le trajet fait foi (tickHawkers) : passer en "sell" fait SORTIR l'ouvrier ;
+  // repasser en "prod" le fait RENTRER À PIED — il ne recompte dans la
+  // production qu'une fois à la base (prodCrew, gate dans tickProduction).
   setMachineMode(m, mode) {
-    if (m.mode === mode) return;
-    m.mode = mode;
-    // Le trajet fait foi (tickHawkers) : passer en "sell" fait SORTIR l'équipe un
-    // par un ; repasser en "prod" la fait RENTRER À PIED — la production ne
-    // reprend qu'une fois tout le monde à la base (gate dans tickProduction).
+    m.crew.forEach((w) => { w.role = mode; });
     this.refreshMachineCard(m);
     this.refreshMachineDots();
   },
+  toggleWorkerRole(m, w) {
+    w.role = w.role === "sell" ? "prod" : "sell";
+    this.refreshMachineCard(m);
+    this.refreshMachineDots();
+  },
+  machineSells(m) { return m.crew.some((w) => w.role === "sell"); },
   recipeHtml(def) {
     const ic = (id, cls = "") => `<img class="${cls}" data-res="${id}" src="${this.tierSrc(id, 1)}" title="${this.res(id).displayName}">`;
     const out = ic(def.outputs, "out");
@@ -399,20 +407,24 @@ export const renderMethods = {
   updateMachine(m, node) {
     const def = this.machineDef(m.id), r = m._refs;
     r.name.innerHTML = `${def.displayName} <span class="lvl">Nv.${m.level}</span>`;
-    // L'équipe est fixe (fillCrew) : les chips sont un affichage, plus une gestion.
-    // Un ouvrier DEHORS (rabatteur pas encore rentré) apparaît estompé sur la carte.
+    // Chaque chip est L'INTERRUPTEUR de son ouvrier : tap = prod ↔ rabatteur.
+    // 📣 + bordure dorée = rabatteur ; estompé = dehors (pas encore rentré).
     r.slots.innerHTML = "";
     m.crew.forEach((w) => {
       const chip = this.workerChip(w);
+      chip.classList.toggle("sell", w.role === "sell");
       if (w._hawk) chip.classList.add("away");
+      chip.title = w.role === "sell" ? "Rabatteur — tap : remettre en production" : "En production — tap : envoyer rabattre";
+      chip.onclick = (e) => { e.stopPropagation(); this.toggleWorkerRole(m, w); };
       r.slots.appendChild(chip);
     });
-    r.prodB.classList.toggle("on", m.mode !== "sell");
-    r.sellB.classList.toggle("on", m.mode === "sell");
+    const sells = m.crew.filter((w) => w.role === "sell").length;
+    r.prodB.classList.toggle("on", sells === 0);
+    r.sellB.classList.toggle("on", sells > 0 && sells === m.crew.length);
     const nx = nextMachineLevel(this, m);
     if (nx) { r.up.innerHTML = `⬆ $${nx.cost}`; r.up.disabled = this.player.money < nx.cost; } else { r.up.innerHTML = "⬆ MAX"; r.up.disabled = true; }
     node.classList.toggle("producing", m.producing);
-    node.classList.toggle("selling", m.mode === "sell");
+    node.classList.toggle("selling", sells > 0);
   },
   // Part de marché du joueur sur la ressource de CHAQUE machine (mêmes odds que le
   // tirage), rafraîchie sur le tick 0.2 s : le mode Rabatteur fait bouger CE
@@ -454,8 +466,9 @@ export const renderMethods = {
     this.renderShop();
   },
 
-  // One worker chip: avatar + (for characters) gear badges. Affichage pur — tap
-  // sur un personnage ouvre sa fiche, c'est tout.
+  // One worker chip: avatar + (for characters) gear badges. Le clic appartient à
+  // l'appelant — sur une carte machine, la chip est l'interrupteur prod/rabatteur
+  // (updateMachine) ; la fiche des personnages vit dans le menu collection.
   workerChip(w) {
     const isChar = !!w.charId;
     const ch = isChar ? this.cfg.characters[w.charId] : null;
@@ -463,8 +476,8 @@ export const renderMethods = {
     const chip = el("div", "wchip" + (isChar ? " char" : ""));
     chip.innerHTML =
       `<span class="wava"><img src="${src}" onerror="this.onerror=null;this.src='${sprite("Worker", "UI")}'" draggable="false"></span>` +
-      (isChar ? `<span class="wgears">${gearBadges(w.charId)}</span>` : "");
-    if (isChar) chip.onclick = (e) => { e.stopPropagation(); openCharacterPanel(w.charId); };
+      (isChar ? `<span class="wgears">${gearBadges(w.charId)}</span>` : "") +
+      `<span class="wrole"></span>`;
     return chip;
   },
 
@@ -561,7 +574,7 @@ export const renderMethods = {
       if (!c._counter) return;
       if (c._moneyRef) c._moneyRef.textContent = c.money;
       // Stand illuminé (couleur du concurrent) tant que ses rabatteurs sont dehors.
-      const hawking = c.machines.some((m) => m.mode === "sell" && (m._hawkers || []).some((h) => h.state === "out" || h.state === "toClient"));
+      const hawking = c.machines.some((m) => (m._hawkers || []).some((h) => h.state === "out" || h.state === "toClient"));
       c._counter.classList.toggle("hawking", hawking);
       if (hawking) c._counter.style.setProperty("--hc", this.compColor(c));
       if (c._shareRef) {
@@ -695,17 +708,18 @@ export const renderMethods = {
     const laneRect = lane.getBoundingClientRect(); if (!laneRect.height) return;
     const recharge = Number.isFinite(this.cfg.g.hawkerRecharge) ? this.cfg.g.hawkerRecharge : 1.5;
     this.competitors.forEach((c) => c.machines.forEach((m) => {
-      const selling = m.mode === "sell";
       m._hawkers = m._hawkers || [];
-      if (selling) {
-        m.crew.forEach((w) => {
-          if (w._hawk) return;
-          // Départs étalés : toute l'équipe ne surgit pas à la même frame.
-          w._hawk = { w, c, m, state: "recharge", timer: 0.2 + Math.random() * 0.9 };
-          m._hawkers.push(w._hawk);
-        });
-      }
-      m._hawkers = m._hawkers.filter((h) => !this.tickHawker(h, dt, lane, laneRect, selling, recharge));
+      // Interrupteur PAR OUVRIER : seuls les rôles "sell" sortent — le reste de
+      // l'équipe continue de produire à côté (dosage 2/2, 3/1…).
+      m.crew.forEach((w) => {
+        if (w.role !== "sell" || w._hawk) return;
+        // Départs étalés : toute l'équipe ne surgit pas à la même frame.
+        w._hawk = { w, c, m, state: "recharge", timer: 0.2 + Math.random() * 0.9 };
+        m._hawkers.push(w._hawk);
+      });
+      // `selling` est PAR RABATTEUR (le rôle de SON ouvrier) : chacun rentre ou
+      // ressort selon son propre interrupteur.
+      m._hawkers = m._hawkers.filter((h) => !this.tickHawker(h, dt, lane, laneRect, h.w.role === "sell", recharge));
     }));
     // Balayage défensif : un sprite .hawker que plus aucune entrée vivante ne
     // possède (vague qui a vidé la lane, entrée retirée entre-temps) est enlevé —
@@ -713,7 +727,7 @@ export const renderMethods = {
     lane.querySelectorAll(".hawker").forEach((n) => { if (!n._hawk || n._hawk.el !== n) n.remove(); });
   },
   // Un pas de simulation pour UN rabatteur. Renvoie true quand il a terminé
-  // (rentré + machine plus en mode sell) : son entrée est retirée, w._hawk aussi.
+  // (rentré + son ouvrier repassé en prod) : son entrée est retirée, w._hawk aussi.
   tickHawker(h, dt, lane, laneRect, selling, recharge) {
     const baseX = this.hawkerBaseX(h.c, laneRect), baseY = laneRect.height - 8;
     // La vague a reconstruit la lane (innerHTML = "") : l'élément est orphelin —
@@ -785,7 +799,7 @@ export const renderMethods = {
     const t = custEl && custEl.isConnected ? custEl.getBoundingClientRect() : null;
     if (!t) return null;
     c.machines.forEach((m) => {
-      if (m.mode !== "sell" || this.machineDef(m.id).outputs !== resId) return;
+      if (this.machineDef(m.id).outputs !== resId) return;
       (m._hawkers || []).forEach((h) => {
         if (h.state !== "out" || !h.el) return;
         const r = h.el.getBoundingClientRect();

@@ -11,7 +11,7 @@
  */
 "use strict";
 
-import { crewSpeedBonus, crewProba2x } from "./game-workers.js";
+import { crewSpeedBonus, crewProba2x, prodCrew } from "./game-workers.js";
 
 // A bot's rationalized character loadout (competitors_buffs) lands here: it has no
 // real characters on its crew, so its flat speed/proba2x buffs add on top of what
@@ -27,6 +27,11 @@ const buffProba2x = (p) => (p.buffs ? (p.buffs.proba2x || 0) / 100 : 0);
 export function effTime(game, p, machine) {
   const L = game.lvl(machine);
   return Math.max(0.3, L.productionTime / (1 + crewSpeedBonus(L, machine) + buffSpeed(p)));
+}
+// Le pire temps théorique équipe au complet (firstDemandDelay) : ignore les rôles.
+export function fullCrewTime(game, p, machine) {
+  const L = game.lvl(machine);
+  return Math.max(0.3, L.productionTime / (1 + crewSpeedBonus(L, machine, machine.crew) + buffSpeed(p)));
 }
 function hasInputs(game, p, def) { return def.inputs.every((i) => game.stockOf(p, i.type) >= i.quantity); }
 // Returns the tier of EVERY unit actually taken off the shelf (one entry per unit,
@@ -48,12 +53,13 @@ export function tickProduction(game, dt) {
 function tickOne(game, dt, p) {
   p.machines.forEach((m) => {
     const def = game.machineDef(m.id), L = game.lvl(m);
-    // Rework « rabatteur » : une machine en mode "sell" ne produit RIEN — son
-    // équipe est dehors, à rabattre les clients. Et au retour en mode "prod", la
-    // production ne reprend que l'équipe AU COMPLET À LA BASE (w._hawk pas encore
-    // rentré = machine en pause) : pas de téléportation en switchant les modes.
+    // Rework « rabatteur », interrupteur PAR OUVRIER (w.role) : la machine produit
+    // avec ses seuls rôles "prod" physiquement rentrés (prodCrew — un rabatteur
+    // sur le chemin du retour ne compte pas : le trajet fait foi, pas le switch).
+    // Sous workersRequired de producteurs effectifs, elle ne produit RIEN — le
+    // dosage 2/2, 3/1, 0/4 est un vrai arbitrage, pas un curseur gratuit.
     // Pause = comme le sous-staffing d'avant : elapsed conservé, barre figée.
-    const staffed = m.crew.length >= L.workersRequired && m.mode !== "sell" && !m.crew.some((w) => w._hawk);
+    const staffed = prodCrew(m).length >= L.workersRequired;
     if (!staffed) { m.producing = false; game.setProgress(m, Math.min(1, m.elapsed / (m._cycle || effTime(game, p, m)))); return; }
     const converts = def.inputs.length > 0;
     // A converter pays for its cycle UP FRONT: the ingredients leave the stock when

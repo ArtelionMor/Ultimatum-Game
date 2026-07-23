@@ -290,7 +290,19 @@ img { image-rendering: pixelated; -webkit-user-drag: none; user-drag: none; }
 .machine-share::before { content: "part de marché"; }
 
 /* Ouvrier dehors (rabatteur pas rentré) : sa chip s'estompe sur la carte. */
-.wchip.away { opacity: .35; }
+/* La chip d'ouvrier est un INTERRUPTEUR (tap = prod ↔ rabatteur, toggleWorkerRole). */
+.machine .wchip { cursor: pointer; position: relative; }
+.machine .wchip:active { transform: scale(.92); }
+.wchip.sell { border-color: var(--accent); box-shadow: 0 0 6px rgba(244, 185, 66, .45); }
+.wchip .wrole { display: none; }
+.wchip.sell .wrole {
+  display: block; position: absolute; top: -7px; right: -6px;
+  font-size: 11px; line-height: 1;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.6));
+}
+.wchip.sell .wrole::before { content: "📣"; }
+/* Rabatteur DEHORS (pas encore rentré) : sa chip s'estompe sur la carte. */
+.wchip.away { opacity: .4; }
 .machine-icon {
   grid-row: 1 / -1;
   width: 100%; height: 100%;
