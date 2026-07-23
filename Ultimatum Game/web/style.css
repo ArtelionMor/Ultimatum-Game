@@ -113,6 +113,10 @@ img { image-rendering: pixelated; }
 .pie-leg-val { color: var(--text); }
 .pie-leg-pct { color: var(--text-dim); min-width: 32px; text-align: right; }
 .pie-empty { text-align: center; color: var(--text-dim); font-size: 12px; padding: 8px 0; }
+/* Ventilation des pertes du joueur sous le camembert : combien par CAUSE (rupture
+   vs volé), avec le remède — c'est le conseil du round, pas juste le constat. */
+.pie-note { margin-top: 10px; display: flex; flex-direction: column; gap: 3px; }
+.pn-item { font-size: 11px; color: var(--text-dim); text-align: center; }
 
 /* ---------- Wave banner ---------- */
 /* Un seul bandeau, deux états : la vague À VENIR (prep, doré) et la vague EN COURS
@@ -159,6 +163,12 @@ img { image-rendering: pixelated; }
   padding: 2px 7px 2px 4px; font-size: 13px; font-weight: bold;
 }
 .wp-chip img { width: 44px; height: 44px; }
+/* Couverture de la demande (refreshWaveCoverage) : ✓ ma production est prête,
+   ⚠ machine à l'arrêt (l'actionnable — il pulse), – pas positionné. */
+.wp-cov { font-size: 12px; font-weight: bold; margin-left: 3px; }
+.wp-cov.ok { color: var(--ok); }
+.wp-cov.warn { color: var(--danger); animation: wpPulse 1s ease-in-out infinite; }
+.wp-cov.off { color: var(--text-dim); opacity: .6; }
 
 /* Annonce de la demande : apparaît au centre en « texte flottant » au début de la
    prépa (announceDemand), puis glisse vers le bandeau #wave-preview et se fond dedans.
@@ -511,6 +521,18 @@ button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
 }
 .customer .bubble img { width: 44px; height: 44px; }
 .customer.unserved .bubble { background: var(--danger); color: #fff; }
+/* Pastille « pourquoi ce client n'est pas pour toi » (lossInfo) : 📦 rupture de
+   stock, 📣/⭐ battu à l'attractivité, 🎲 perdu au tirage malgré l'avantage. Collée
+   à droite de la bulle (le .customer fait width:0, right négatif = à droite du
+   centre), au-dessus des sprites mais sous les bulles voisines. */
+.cust-flag {
+  position: absolute; top: -9px; right: -34px; z-index: 3;
+  font-size: 12px; line-height: 1; pointer-events: none;
+  background: var(--bg-panel); border: 1px solid var(--border); border-radius: 999px;
+  padding: 2px 4px; box-shadow: 0 2px 4px rgba(0,0,0,.45);
+}
+.cust-flag.rupture { border-color: var(--danger); }
+.cust-flag.stolen { border-color: var(--accent); }
 
 /* ---------- Market: bottom counters ---------- */
 #suppliers {
@@ -529,6 +551,18 @@ button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
 .counter-money { font-size: 14px; color: var(--accent); display: flex; align-items: center; justify-content: center; gap: 3px; font-weight: bold; }
 .counter-money img { width: 14px; height: 14px; }
 .counter-mkt { font-size: 10px; color: var(--text-dim); }
+/* Part estimée du prochain client (expectedShares) : la loterie chooseShop rendue
+   visible. Coin haut-droit du stand, par-dessus la bordure — un « pion » posé sur le
+   comptoir. Rouge à 0 % : hors course (rupture totale), à corriger AVANT le bilan. */
+.counter-share {
+  position: absolute; top: -9px; right: -5px; z-index: 3;
+  font-size: 11px; font-weight: bold; color: #1d2330;
+  background: var(--accent-2); border-radius: 999px; padding: 1px 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.4);
+  transition: background .2s ease;
+}
+.counter.me .counter-share { background: var(--accent); }
+.counter-share.zero { background: var(--danger); color: #fff; }
 /* Le COMPTOIR, seul contenu du stand : la marchandise réservée par un client en train
    de descendre. Elle a quitté le stock mais reste posée là, visible, jusqu'à ce qu'il
    la prenne (game-render.putOnCounter / takeFromCounter). Hauteur fixe : le stand ne

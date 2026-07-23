@@ -14,6 +14,7 @@ import { openResource } from "./resource.js";
 import { freeWorkers, selectWorker, assignWorker, removeWorker, unassignWorker } from "./game-workers.js";
 import { nextWorker, buyWorker, nextMkt, buyMkt, nextStorage, buyStorage, nextMachineLevel, upgradeMachine } from "./game-shop.js";
 import { botBehavior } from "./game-bots.js";
+import { expectedShares } from "./game-customers.js";
 
 export const renderMethods = {
   refreshHud() {
@@ -428,8 +429,13 @@ export const renderMethods = {
       // Le stand ne montre QUE le comptoir : les commandes réservées en attente de leur
       // client. La réserve (le stock dormant) n'est plus listée ici — celle du joueur est
       // dans le panneau INVENTAIRE, celle d'un bot dans sa fiche (tap sur le stand).
-      s.innerHTML = `<img class="counter-avatar" src="${sprite(c.spriteId, c.spriteFolder)}"><div class="counter-name">${c.name}</div><div class="counter-money"><img src="${sprite("Coins", "UI")}"><span class="cmoney">${c.money}</span></div><div class="counter-mkt">📣${c.marketing.toFixed(1)}</div><div class="counter-desk"></div>`;
+      // .counter-share : la loterie chooseShop rendue visible — part estimée du
+      // prochain client (odds réels : marketing + tier + stock, voir expectedShares).
+      // C'est LA jauge du pilier « voler des clients » : elle bouge à chaque achat
+      // de marketing, montée de tier ou rupture de stock, chez toi comme chez eux.
+      s.innerHTML = `<img class="counter-avatar" src="${sprite(c.spriteId, c.spriteFolder)}"><div class="counter-name">${c.name}</div><div class="counter-money"><img src="${sprite("Coins", "UI")}"><span class="cmoney">${c.money}</span></div><div class="counter-mkt">📣${c.marketing.toFixed(1)}</div><div class="counter-share" title="Part estimée du prochain client (marketing + qualité, si le stock suit)">–</div><div class="counter-desk"></div>`;
       c._moneyRef = s.querySelector(".cmoney");
+      c._shareRef = s.querySelector(".counter-share");
       c._deskRef = s.querySelector(".counter-desk");
       this.renderCounterDesk(c);   // repose les commandes en attente si le comptoir est reconstruit
       s.onclick = () => this.openCompetitor(c);
@@ -493,9 +499,21 @@ export const renderMethods = {
   // Update money in place (keeps the hit/money-pop animations alive). Le stand n'affiche
   // plus le stock : le comptoir se met à jour tout seul, à la pose et au retrait.
   refreshSuppliers() {
+    // Les parts sont recalculées sur le même tick 0.2 s que l'argent : le badge
+    // réagit « en direct » à un achat de marketing, un merge ou une rupture.
+    const es = expectedShares(this);
+    // Le rouge signale « hors course PENDANT que d'autres vendent ». En début de
+    // prépa tout le monde est à 0 (rien n'a encore été produit) : tout colorer en
+    // rouge serait du bruit, pas une alerte.
+    const anyStock = !!es && [...es.shares.values()].some((v) => v > 0);
     this.competitors.forEach((c) => {
       if (!c._counter) return;
       if (c._moneyRef) c._moneyRef.textContent = c.money;
+      if (c._shareRef) {
+        const sh = es ? Math.round((es.shares.get(c) || 0) * 100) : null;
+        c._shareRef.textContent = sh == null ? "–" : sh + "%";
+        c._shareRef.classList.toggle("zero", sh === 0 && anyStock);
+      }
     });
     if (this._infoC && !$("#competitor-overlay").classList.contains("hidden")) this.renderCompetitorPanel();
   },
@@ -678,6 +696,17 @@ export const renderMethods = {
     });
     box.append(pie, legend);
     wrap.appendChild(box);
+    // Ventilation des pertes du JOUEUR : le camembert dit combien, ces deux lignes
+    // disent COMMENT — et donc quoi corriger. Comptées au règlement de chaque client
+    // (game-customers) : rupture = pas de stock au tirage ; volé = battu au tirage
+    // alors que le stock y était.
+    const ru = mkt.ruptureUnits || 0, st = mkt.stolenUnits || 0;
+    if (ru || st) {
+      const note = el("div", "pie-note");
+      if (ru) note.appendChild(el("span", "pn-item", `📦 ×${ru} perdus en rupture de stock — produis / stocke plus`));
+      if (st) note.appendChild(el("span", "pn-item", `📣 ×${st} volés à l'attractivité — marketing ou meilleur tier`));
+      wrap.appendChild(note);
+    }
   },
 
   renderResults(ranked) {

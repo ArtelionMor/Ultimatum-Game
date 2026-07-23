@@ -210,6 +210,12 @@ demande apparaît en gros **au centre** puis glisse jusqu'au bandeau
 `#wave-preview`. Reste **3 s** (`HOLD`), vol 0,75 s, ressources en **grille
 2 colonnes**. Purement cosmétique (`pointer-events: none`), auto-supprimée.
 
+**Couverture de la demande** (`refreshWaveCoverage`, `.wp-cov` sur chaque chip du
+bandeau **et** de l'annonce centrale) : le calcul mental « demande → machine →
+ouvriers » fait par le jeu. ✓ machine staffée (ça produira, ou stock sans machine),
+⚠ machine présente mais à l'arrêt (l'actionnable — il pulse), – pas positionné.
+Rafraîchi sur le tick 0,2 s : réagit à chaque (dé)staff pendant la prépa.
+
 **Bouton « ⏭ Lancer »** (`skipPrep`, dans le bandeau, seulement pendant la prépa) :
 le joueur déclare qu'il a fini de se préparer. Il passe par **exactement le même
 chemin** que le chrono qui tombe à 0 — verrou `safeAssign` compris : c'est un
@@ -241,6 +247,24 @@ sur le temps de base si aucun bot ne la produit.
 `SPAWN_BATCH_GAP` (0.22 s de temps de jeu, donc suit x1/x2/x4). Sans ce décalage,
 deux clients naissaient à la **même frame**, à la même hauteur — superposés s'ils
 visaient le même comptoir. Le paquet suivant attend que `pending` soit vide.
+
+**La loterie est VISIBLE** (lisibilité du pilier « voler des clients ») :
+
+- **Badge de part de marché** (`.counter-share`, coin haut-droit de chaque stand) :
+  part estimée du prochain client, calculée par `expectedShares` — les **vrais odds**
+  de `chooseShop` (marketing + tier + stock), pondérés par la demande de la vague.
+  Rafraîchi sur le tick 0,2 s. Rouge à 0 % **seulement si quelqu'un d'autre est en
+  course** — en début de prépa personne n'a de stock, tout colorer serait du bruit.
+- **Pastille de raison** (`lossInfo` / `.cust-flag`, sur le client qui descend) :
+  pourquoi ce client n'est **pas pour toi**. 📦 rupture de stock au tirage,
+  📣 battu au marketing, ⭐ battu au tier, 🎲 perdu au tirage malgré l'avantage
+  (le plancher `minimalPercentage` existe). Pas de pastille si le joueur ne produit
+  pas la ressource (pas son marché) ou si le client est pour lui. Figée au moment
+  où le vainqueur est tiré — spawn **ou** rattrapage `retryWaiting`.
+- **Ventilation des pertes** (`market.ruptureUnits` / `market.stolenUnits`, comptées
+  au règlement) : sous le camembert de fin de round, « ×N perdus en rupture » /
+  « ×N volés à l'attractivité » — chaque cause pointe son remède. Un client parti
+  bredouille compte en rupture **si** le joueur produit la ressource.
 
 **Chaque client choisit son shop À L'APPARITION**, jamais au dernier moment :
 

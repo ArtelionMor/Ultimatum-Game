@@ -421,7 +421,7 @@ const Game = {
     // while the player watches the machines.
     this.maybeRefreshInventory();
     this._supTimer = (this._supTimer || 0) - dt;
-    if (this._supTimer <= 0) { this.refreshSuppliers(); this.refreshAffordability(); this._supTimer = 0.2; }
+    if (this._supTimer <= 0) { this.refreshSuppliers(); this.refreshAffordability(); this.refreshWaveCoverage(); this._supTimer = 0.2; }
     // Les bots redéploient leurs ouvriers en cours de round, comme tu le fais à la main :
     // une chaîne de conversion ne coule que si on passe l'ouvrier au convertisseur dès que
     // son stock d'intrants est prêt, puis qu'on le rend au fournisseur quand il est à sec.
@@ -504,7 +504,9 @@ const Game = {
     const m = this.marketFor(this.round);
     // Le premier client attend le temps de PRODUIRE la ressource la plus demandée :
     // spawnTimer démarre à ce délai (au lieu de 0), le reste des paquets suit à l'interval.
-    this.market = { def: m, remaining: m.customers, total: m.customers, served: 0, spawnTimer: this.firstDemandDelay(m), pending: 0, batchTimer: 0, waiting: [], active: 0, lostUnits: 0, lostValue: 0 };
+    // stolenUnits / ruptureUnits : les pertes du JOUEUR ventilées par cause (volé au
+    // tirage vs rupture de stock) — comptées dans game-customers, lues par le bilan.
+    this.market = { def: m, remaining: m.customers, total: m.customers, served: 0, spawnTimer: this.firstDemandDelay(m), pending: 0, batchTimer: 0, waiting: [], active: 0, lostUnits: 0, lostValue: 0, stolenUnits: 0, ruptureUnits: 0 };
     $("#customer-lane").innerHTML = "";
     this.renderSuppliers(); this.renderWavePreview(); this.refreshHud();
     const content = $("#content"); if (content) content.scrollTo({ top: 0, behavior: "smooth" });
@@ -562,7 +564,7 @@ const Game = {
     const totalW = order.reduce((s, r) => s + (mk.weights[r] || 0), 0) || 1;
     const chips = order.filter((r) => (mk.weights[r] || 0) > 0)
       .sort((a, b) => (mk.weights[b] || 0) - (mk.weights[a] || 0))
-      .map((r) => `<div class="wp-chip" data-res="${r}"><img src="${this.tierSrc(r, 1)}" title="${this.res(r).displayName}"><span>${Math.round((mk.weights[r] || 0) / totalW * 100)}%</span></div>`)
+      .map((r) => `<div class="wp-chip" data-res="${r}"><img src="${this.tierSrc(r, 1)}" title="${this.res(r).displayName}"><span>${Math.round((mk.weights[r] || 0) / totalW * 100)}%</span><span class="wp-cov" data-covres="${r}"></span></div>`)
       .join("");
     wrap.innerHTML =
       `<div class="wp-head"><span class="wp-title">Vague ${pr}</span>` +
@@ -572,7 +574,30 @@ const Game = {
       // vague déjà partie. Le bandeau est reconstruit à chaque bascule de phase.
       (this.waveActive ? "" : `<button id="wp-skip" class="wp-skip" title="Lancer la vague sans attendre la fin de la préparation">⏭ Lancer</button>`) +
       `</div><div class="wp-chips">${chips}</div>`;
+    this.refreshWaveCoverage();
     this.updateWavePreviewTimer();
+  },
+
+  // ✓ / ⚠ / — sur chaque ressource demandée : « est-ce que MA production est prête ? »
+  // Le calcul mental que la prépa exigeait (demande → machine → ouvriers), fait par
+  // le jeu : ✓ machine staffée (ça produira), ⚠ machine présente mais à l'arrêt,
+  // — pas positionné dessus (pas ton marché, pas une erreur). Rafraîchi sur le tick
+  // 0.2 s : réagit à chaque (dé)staff pendant la prépa. Le sélecteur couvre aussi la
+  // copie des chips dans l'annonce centrale (.demand-float).
+  refreshWaveCoverage() {
+    if (!this.player) return;
+    document.querySelectorAll("#wave-preview .wp-cov, .demand-float .wp-cov").forEach((n) => {
+      const rid = n.dataset.covres;
+      const producers = this.player.machines.filter((x) => { const d = this.machineDef(x.id); return d && d.outputs === rid; });
+      const staffed = producers.some((x) => x.crew.length >= this.lvl(x).workersRequired);
+      const hasStock = this.stockOf(this.player, rid) > 0;
+      let cls, txt, tip;
+      if (staffed) { cls = "ok"; txt = "✓"; tip = "Ta machine est staffée : ça produira"; }
+      else if (producers.length) { cls = "warn"; txt = "⚠"; tip = hasStock ? "Tu as du stock mais la machine est à l'arrêt : assigne des ouvriers" : "Machine à l'arrêt et aucun stock : assigne des ouvriers"; }
+      else if (hasStock) { cls = "ok"; txt = "✓"; tip = "Tu as du stock (mais aucune machine pour en refaire)"; }
+      else { cls = "off"; txt = "–"; tip = "Tu n'es pas positionné sur cette ressource"; }
+      n.className = "wp-cov " + cls; n.textContent = txt; n.title = tip;
+    });
   },
   updateWavePreviewTimer() {
     const c = $("#wp-countdown"); if (!c) return;

@@ -27,7 +27,10 @@ function pickNeed(marketDef, order) {
 
 function attractiveness(game, c, resId) { return c.marketing + game.tierInfo(resId, game.bestTier(c, resId)).influence; }
 
-function chooseShop(game, eligible, resId) {
+// Les probabilités du tirage, séparées du tirage lui-même : c'est LA règle du jeu
+// (marketing + tier ⇒ part du client), donc elle doit être AFFICHABLE, pas seulement
+// jouée en secret. expectedShares() ci-dessous la remonte sur les comptoirs.
+export function shopOdds(game, eligible, resId) {
   const min = game.cfg.g.minimalPercentage;
   const A = eligible.map((c) => attractiveness(game, c, resId));
   const sum = A.reduce((s, x) => s + x, 0);
@@ -36,9 +39,78 @@ function chooseShop(game, eligible, resId) {
   const fixed = p.map((x) => x < min);
   const fixedSum = p.reduce((s, x, i) => s + (fixed[i] ? min : 0), 0);
   const freeSum = p.reduce((s, x, i) => s + (fixed[i] ? 0 : x), 0);
-  p = p.map((x, i) => fixed[i] ? min : (freeSum > 0 ? x / freeSum * (1 - fixedSum) : (1 - fixedSum) / p.length));
+  return p.map((x, i) => fixed[i] ? min : (freeSum > 0 ? x / freeSum * (1 - fixedSum) : (1 - fixedSum) / p.length));
+}
+
+function chooseShop(game, eligible, resId) {
+  const p = shopOdds(game, eligible, resId);
   let r = Math.random(); for (let i = 0; i < eligible.length; i++) { r -= p[i]; if (r <= 0) return eligible[i]; }
   return eligible[eligible.length - 1];
+}
+
+// Part estimée du PROCHAIN client, par concurrent : la loterie chooseShop rendue
+// visible en continu. Pour chaque ressource demandée cette vague, les odds réels
+// (mêmes maths que le tirage, stock compris), pondérés par le poids de la ressource
+// dans la demande. `lost` = la part de demande que PERSONNE ne peut servir.
+// Pendant la prépa on lit le marché du round courant : le badge dit « si la vague
+// partait maintenant » — c'est une info de préparation autant que de vague.
+export function expectedShares(game) {
+  if (!game.levelCfg || !game.competitors || !game.competitors.length) return null;
+  const def = game.waveActive && game.market ? game.market.def
+    : (game.previewWave() != null ? game.marketFor(game.round) : null);
+  if (!def || !def.weights) return null;
+  const order = game.cfg.resourceOrder;
+  const totalW = order.reduce((s, r) => s + (def.weights[r] || 0), 0);
+  if (!totalW) return null;
+  const qty = Math.max(1, def.avg || 1);
+  const shares = new Map(game.competitors.map((c) => [c, 0]));
+  let lost = 0;
+  order.forEach((resId) => {
+    const wr = (def.weights[resId] || 0) / totalW; if (!wr) return;
+    const eligible = game.competitors.filter((c) => game.stockOf(c, resId) >= qty);
+    if (!eligible.length) { lost += wr; return; }
+    const p = shopOdds(game, eligible, resId);
+    eligible.forEach((c, i) => shares.set(c, shares.get(c) + wr * p[i]));
+  });
+  return { shares, lost };
+}
+
+function playerProduces(game, resId) {
+  return game.player.machines.some((m) => { const d = game.machineDef(m.id); return d && d.outputs === resId; });
+}
+
+// Pourquoi le joueur n'a PAS eu ce client — calculé au moment où le vainqueur est
+// tiré (c'est là que la décision se joue), affiché sur le client pendant toute sa
+// chute (flagCustomer) et compté au règlement pour le bilan de round. Trois cas,
+// trois réponses stratégiques différentes :
+//   rupture  → pas de stock au tirage        → produis / stocke plus
+//   stolen ⭐/📣 → battu à l'attractivité      → monte en tier / achète du marketing
+//   stolen 🎲 → devant à l'attractivité mais perdu quand même → c'est un tirage,
+//               ta part n'est jamais garantie (le plancher minimalPercentage existe)
+function lossInfo(game, eligible, winner, resId) {
+  const p = game.player;
+  if (!winner || winner === p) return null;
+  if (eligible.includes(p)) {
+    const dMkt = winner.marketing - p.marketing;
+    const dTier = game.tierInfo(resId, game.bestTier(winner, resId)).influence
+                - game.tierInfo(resId, game.bestTier(p, resId)).influence;
+    if (dMkt <= 0 && dTier <= 0) return { type: "stolen", icon: "🎲", label: `${winner.name} a gagné le tirage — ta part n'est jamais garantie` };
+    return dTier > dMkt
+      ? { type: "stolen", icon: "⭐", label: `${winner.name} vend un meilleur tier — monte en qualité` }
+      : { type: "stolen", icon: "📣", label: `${winner.name} a plus de marketing` };
+  }
+  if (playerProduces(game, resId)) return { type: "rupture", icon: "📦", label: "Tu étais en rupture de stock à son arrivée" };
+  return null; // pas ton marché : rien à apprendre, pas de bruit
+}
+
+// La pastille de raison sur le client qui descend. Posée APRÈS le innerHTML du
+// client (sinon effacée), re-posée si retryWaiting lui trouve un comptoir en route.
+function flagCustomer(cust, info) {
+  const old = cust.querySelector(".cust-flag"); if (old) old.remove();
+  if (!info) return;
+  const f = el("div", "cust-flag " + info.type, info.icon);
+  f.title = info.label;
+  cust.appendChild(f);
 }
 
 // Le client choisit son shop À L'APPARITION et RÉSERVE tout de suite le stock
@@ -130,6 +202,9 @@ export function retryWaiting(game) {
     o.order.sale = reserveSale(game, winner, o.need.resId, o.need.qty);
     game.putOnCounter(winner, o.order.sale);
     aimAtCounter(game, o.cust, winner);
+    // Le vainqueur vient seulement d'être tiré : la raison de la perte aussi.
+    o.order.info = lossInfo(game, eligible, winner, o.need.resId);
+    flagCustomer(o.cust, o.order.info);
     return false;
   });
 }
@@ -148,6 +223,7 @@ export function spawnCustomer(game) {
   // réservation tardive et le règlement en bas.
   const eligible = game.competitors.filter((c) => game.stockOf(c, need.resId) >= need.qty);
   const order = { winner: eligible.length ? chooseShop(game, eligible, need.resId) : null, sale: null, arrived: false };
+  order.info = lossInfo(game, eligible, order.winner, need.resId);
   if (order.winner) {
     order.sale = reserveSale(game, order.winner, need.resId, need.qty);
     game.putOnCounter(order.winner, order.sale);   // la marchandise sort du stock et se pose sur le comptoir
@@ -168,6 +244,7 @@ export function spawnCustomer(game) {
   // tap the bubble to inspect the wanted resource, the sprite to inspect the client
   cust.querySelector(".bubble").onclick = (e) => { e.stopPropagation(); openResource(need.resId); };
   cust.querySelector(".cust-sprite").onclick = (e) => { e.stopPropagation(); const cid = game.customerForResource(need.resId); if (cid) openCodexCustomer(cid); };
+  flagCustomer(cust, order.info); // après le innerHTML, sinon la pastille est effacée
   lane.appendChild(cust);
   requestAnimationFrame(() => cust.classList.add("falling"));
 
@@ -179,6 +256,12 @@ export function spawnCustomer(game) {
       game.takeFromCounter(winner, sale, cust); // le client emporte enfin sa commande posée sur le comptoir
       cust.classList.add("toShop");
       game.flashStall(winner, sale.gain);
+      // Bilan pédagogique du round : COMMENT le joueur a perdu ce client. La raison
+      // (order.info) a été figée au tirage du vainqueur — spawn ou retryWaiting.
+      if (order.info) {
+        if (order.info.type === "stolen") m.stolenUnits = (m.stolenUnits || 0) + sale.units;
+        else if (order.info.type === "rupture") m.ruptureUnits = (m.ruptureUnits || 0) + sale.units;
+      }
     } else {
       cust.classList.add("nobody"); // turns red : il a raté sa cible dans sa ligne
       requestAnimationFrame(() => cust.classList.add("done")); // fond sur place, pas de glissade hors écran
@@ -187,6 +270,9 @@ export function spawnCustomer(game) {
       // minimum que ce client aurait payé.
       m.lostUnits = (m.lostUnits || 0) + need.qty;
       m.lostValue = (m.lostValue || 0) + need.qty * game.tierInfo(need.resId, 1).price;
+      // Personne n'a servi, mais si le joueur produit cette ressource, c'est bien
+      // une rupture DE SA part aussi : il apparaît dans le bilan.
+      if (playerProduces(game, need.resId)) m.ruptureUnits = (m.ruptureUnits || 0) + need.qty;
     }
     setTimeout(() => cust.remove(), 750);
     m.served++; m.active--;
