@@ -5,6 +5,7 @@
 export const BASE_MARKETING = 1.0;        // attractiveness baseline before any marketing purchase
 export const SPAWN_INTERVAL = 0.45;       // seconds between customer BATCHES
 export const SPAWN_BATCH_MAX = 2;         // fallback: up to N customers at once (random 1..N); overridden by general.customerBatch
+export const SPAWN_BATCH_GAP = 0.22;      // seconds between two customers OF THE SAME batch (jamais pile au même instant)
 export const FALL_TIME = 2.6;             // seconds a customer takes to fall
 
 export const S = { Menu: "Menu", Setup: "Setup", Play: "Play", Results: "Results", GameOver: "GameOver" };

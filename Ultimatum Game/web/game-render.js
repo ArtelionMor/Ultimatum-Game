@@ -19,7 +19,8 @@ export const renderMethods = {
   refreshHud() {
     this.player; $("#money").textContent = this.player.money;
     if (this.state === S.Play && this.waveActive) {
-      $("#timer").textContent = "👥 " + (this.market ? this.market.remaining + this.market.active : 0);
+      // remaining = pas encore tirés, pending = paquet en cours d'égrenage, active = en train de tomber
+      $("#timer").textContent = "👥 " + (this.market ? this.market.remaining + (this.market.pending || 0) + this.market.active : 0);
       $("#hud-timer").classList.remove("urgent");
     } else if (this.state === S.Play) {
       const s = Math.max(0, Math.ceil(this.prepTimer)); $("#timer").textContent = s + "s";
@@ -308,8 +309,25 @@ export const renderMethods = {
     const hint = $("#worker-hint");
     hint.textContent = this.selectedWorker ? "Touche une machine (+)" : "";
     hint.classList.toggle("active", !!this.selectedWorker);
+    this.updateBench(document.body.classList.contains("dragging-worker"));
     this.player.machines.forEach((m) => { if (m._node) this.updateMachine(m, m._node); });
     this.renderShop();
+  },
+
+  // Le banc (la « réserve » d'ouvriers) ne s'affiche que s'il y a quelqu'un à
+  // assigner : tous les ouvriers postés, il ne restait qu'une barre vide qui mangeait
+  // ~86 px de haut en permanence.
+  // EXCEPTION pendant un drag : il doit rester la cible du geste « renvoyer l'ouvrier
+  // au banc ». Il revient alors EN SURIMPRESSION (.as-drop, position: fixed) et non
+  // dans le flux — sinon la mise en page se redistribuerait sous le doigt en plein
+  // glissement, déplaçant les machines que le joueur vise.
+  updateBench(dragging) {
+    const bar = $("#worker-bar"); if (!bar || !this.player) return;
+    const has = freeWorkers(this.player).length > 0;
+    const asDrop = !has && !!dragging;
+    bar.style.display = has || asDrop ? "flex" : "none";
+    bar.classList.toggle("as-drop", asDrop);
+    if (asDrop) { const h = $("#worker-hint"); h.textContent = "Relâche ici pour retirer l'ouvrier"; h.classList.add("active"); }
   },
 
   // One worker chip: avatar + (for characters) name, gear badges and level ring.
@@ -350,6 +368,7 @@ export const renderMethods = {
           document.body.appendChild(ghost);
           chip.classList.add("drag-src");
           document.body.classList.add("dragging-worker");
+          this.updateBench(true);   // banc masqué (aucun libre) : il revient en surimpression comme cible de retrait
         }
         if (dragging && ghost) {
           ghost.style.left = ev.clientX + "px"; ghost.style.top = ev.clientY + "px";
@@ -368,6 +387,7 @@ export const renderMethods = {
         const target = this.dropTargetAt(ev);
         if (target === "bar") unassignWorker(this, w);
         else if (target) assignWorker(this, target, w);
+        this.updateBench(false);   // drop dans le vide : le banc de secours se retire aussi
       };
       window.addEventListener("pointermove", move);
       window.addEventListener("pointerup", up);
@@ -405,11 +425,15 @@ export const renderMethods = {
     // fixed order (joueur puis bots), indépendant de l'argent
     this.competitors.forEach((c) => {
       const s = el("div", "counter" + (c.isPlayer ? " me" : "")); c._counter = s;
-      s.innerHTML = `<img class="counter-avatar" src="${sprite(c.spriteId, c.spriteFolder)}"><div class="counter-name">${c.name}</div><div class="counter-money"><img src="${sprite("Coins", "UI")}"><span class="cmoney">${c.money}</span></div><div class="counter-mkt">📣${c.marketing.toFixed(1)}</div><div class="counter-inv"></div>`;
+      // Deux étages bien distincts : le COMPTOIR (commandes réservées, en attente de
+      // leur client) au-dessus, la RÉSERVE (le stock dormant) en dessous.
+      s.innerHTML = `<img class="counter-avatar" src="${sprite(c.spriteId, c.spriteFolder)}"><div class="counter-name">${c.name}</div><div class="counter-money"><img src="${sprite("Coins", "UI")}"><span class="cmoney">${c.money}</span></div><div class="counter-mkt">📣${c.marketing.toFixed(1)}</div><div class="counter-desk"></div><div class="counter-inv"></div>`;
       c._moneyRef = s.querySelector(".cmoney");
+      c._deskRef = s.querySelector(".counter-desk");
       c._invRef = s.querySelector(".counter-inv");
       chainOverscroll(c._invRef);  // at the stack's top/bottom, keep the swipe scrolling the page
       this.renderCounterInv(c);
+      this.renderCounterDesk(c);   // repose les commandes en attente si le comptoir est reconstruit
       s.onclick = () => this.openCompetitor(c);
       wrap.appendChild(s);
     });
@@ -476,6 +500,7 @@ export const renderMethods = {
     wrap.innerHTML = "";
     const stackFor = (rid, img, n) => {
       const stack = el("div", "cinv-stack");
+      stack.dataset.res = rid;   // point de départ du vol réserve -> comptoir (reserveRect)
       stack.append(img, el("span", null, n));
       stack.onclick = (e) => { e.stopPropagation(); openResource(rid); };  // resource, not the seller
       return stack;
@@ -494,7 +519,7 @@ export const renderMethods = {
         });
       });
     }
-    if (!wrap.children.length) wrap.appendChild(el("span", "cinv-empty", "vide"));
+    if (!wrap.children.length) wrap.appendChild(el("span", "cinv-empty", "réserve vide")); // nomme l'étage du bas (cf. .counter-desk:empty)
   },
   // Update money + inventory in place (keeps the hit/money-pop animations alive).
   refreshSuppliers() {
@@ -505,6 +530,102 @@ export const renderMethods = {
     });
     if (this._infoC && !$("#competitor-overlay").classList.contains("hidden")) this.renderCompetitorPanel();
   },
+  // --- comptoir : la marchandise réservée attend son client ---------------------
+  // Cycle de vie d'une unité vendue :
+  //   réserve (c.stock) --putOnCounter--> comptoir (c.counterItems) --takeFromCounter--> client
+  // Le stock est décrémenté dès la réservation (game-customers.reserveSale), mais
+  // l'objet reste À L'ÉCRAN sur le comptoir : on voit ce qui est déjà promis, et le
+  // client repart visiblement avec. Avant, la marchandise s'évaporait à l'apparition.
+
+  // Rectangle de départ du vol : la pile de la réserve pour cette ressource si elle
+  // est encore affichée (la réserve n'est repeinte que toutes les 0,2 s), sinon la
+  // zone réserve entière.
+  reserveRect(c, resId) {
+    const wrap = c._invRef; if (!wrap || !wrap.isConnected) return null;
+    const stack = wrap.querySelector(`.cinv-stack[data-res="${resId}"]`);
+    const r = (stack || wrap).getBoundingClientRect();
+    return r.width ? r : null;
+  },
+
+  // Un objet qui glisse d'un point à l'autre (lerp CSS : translate interpolé par la
+  // transition). `fade` = il se fond à l'arrivée (le client l'emporte).
+  flyItem(resId, tier, from, to, ms, fade, done) {
+    const fly = this.tierImg(resId, tier); fly.className = "fly-res fly-desk";
+    document.body.appendChild(fly);
+    const S = 26;
+    const x0 = from.left + from.width / 2 - S / 2, y0 = from.top + from.height / 2 - S / 2;
+    fly.style.left = x0 + "px"; fly.style.top = y0 + "px";
+    fly.style.transitionDuration = ms + "ms";
+    const dx = to.left + to.width / 2 - (x0 + S / 2), dy = to.top + to.height / 2 - (y0 + S / 2);
+    requestAnimationFrame(() => {
+      fly.style.transform = `translate(${dx}px,${dy}px) scale(${fade ? 1.15 : 1})`;
+      if (fade) fly.style.opacity = "0";
+    });
+    setTimeout(() => { fly.remove(); if (done) done(); }, ms + 30);
+  },
+
+  // Pose les unités vendues sur le comptoir. Le chip est créé tout de suite (il donne
+  // sa place EXACTE au vol) mais reste invisible tant que la marchandise n'est pas
+  // arrivée : pas de doublon à l'écran pendant le trajet.
+  putOnCounter(c, sale) {
+    c.counterItems = c.counterItems || [];
+    sale.items = sale.tiers.map((t) => ({ resId: sale.resId, tier: t }));
+    if (!sale.items.length) return;
+    c.counterItems.push(...sale.items);
+    this.renderCounterDesk(c, sale.items);
+  },
+
+  // (Re)construit le comptoir : chaque item du modèle qui n'a pas (ou plus) de chip
+  // à l'écran en reçoit un. `flying` = ceux qui doivent arriver en volant.
+  renderCounterDesk(c, flying) {
+    const desk = c._deskRef; if (!desk) return;
+    const items = c.counterItems || [];
+    desk.style.setProperty("--chip", items.length > 5 ? "15px" : items.length > 2 ? "19px" : "26px");
+    items.forEach((it) => {
+      if (it._chip && it._chip.isConnected) return;
+      const chip = el("div", "desk-chip");
+      chip.appendChild(this.tierImg(it.resId, it.tier));
+      chip.onclick = (e) => { e.stopPropagation(); openResource(it.resId); }; // comme les piles de la réserve
+      desk.appendChild(chip);
+      it._chip = chip;
+      if (!flying || !flying.includes(it)) return;
+      const from = this.reserveRect(c, it.resId), to = chip.getBoundingClientRect();
+      if (!from || !to.width) return;                      // comptoir hors écran : pose sèche
+      chip.classList.add("landing");                       // caché le temps du trajet
+      this.flyItem(it.resId, it.tier, from, to, 420, false, () => {
+        chip.classList.remove("landing"); chip.classList.add("pop");
+      });
+    });
+  },
+
+  // Le client est arrivé : il emporte sa commande (vol comptoir -> client, fondu).
+  takeFromCounter(c, sale, custEl) {
+    const items = sale.items || []; sale.items = null;
+    if (!items.length) return;
+    c.counterItems = (c.counterItems || []).filter((it) => !items.includes(it));
+    const target = custEl && custEl.querySelector(".cust-sprite");
+    const to = target && target.isConnected ? target.getBoundingClientRect() : null;
+    items.forEach((it) => {
+      const chip = it._chip; it._chip = null;
+      if (!chip || !chip.isConnected) return;
+      const from = chip.getBoundingClientRect();
+      const landing = chip.classList.contains("landing");  // pas encore arrivé : rien à faire voler
+      chip.remove();
+      if (to && from.width && !landing) this.flyItem(it.resId, it.tier, from, to, 340, true);
+    });
+    this.renderCounterDesk(c);   // ré-échelonne les chips restants
+  },
+
+  // Fin/début de vague : plus aucune commande en attente (les clients ont tous été
+  // servis ou perdus). Évite qu'un chip fantôme survive à la reconstruction du marché.
+  clearCounters() {
+    this.competitors.forEach((c) => {
+      (c.counterItems || []).forEach((it) => { if (it._chip) it._chip.remove(); it._chip = null; });
+      c.counterItems = [];
+      if (c._deskRef) c._deskRef.innerHTML = "";
+    });
+  },
+
   flashStall(c, gain) {
     const s = c._counter; if (!s) return;
     s.classList.remove("hit"); void s.offsetWidth; s.classList.add("hit");

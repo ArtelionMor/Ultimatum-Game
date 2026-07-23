@@ -10,6 +10,12 @@
   --text-dim: #9aa3b8;
   --border: #444c66;
   --ok: #57c06b;
+  /* Hauteurs de la file de clients : pleine / condensée au scroll. L'écart est
+     rendu à #content en padding-bas (voir .market-condensed) pour que la hauteur
+     scrollable ne bouge PAS quand le marché rétrécit. */
+  --lane-h: 240px;
+  --lane-h-condensed: 150px;
+  --lane-shrink: 90px;   /* = --lane-h - --lane-h-condensed */
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -177,7 +183,14 @@ img { image-rendering: pixelated; }
      bandeau de vague, sinon l'usine défilante transparaît dans la marge du haut. */
   padding: 0 12px 12px;
   scrollbar-width: thin;
+  /* animée en même temps (et à la même durée) que la hauteur de la lane */
+  transition: padding-bottom .25s ease;
 }
+/* Le marché condensé rend 90 px : on les redonne en bas du scroller. Sans ça, la
+   hauteur scrollable diminuait au moment de condenser ; en bas de page le navigateur
+   re-clampait scrollTop, ce qui repassait sous le seuil, dépliait le marché, rendait
+   la hauteur… et le menu clignotait entre les deux états (boucle de rétroaction). */
+#content.market-condensed { padding-bottom: calc(12px + var(--lane-shrink)); }
 .zone { display: flex; flex-direction: column; gap: 12px; }
 .hidden { display: none !important; }
 
@@ -294,6 +307,19 @@ button.sell { background: var(--ok); color: #03210a; }
 @keyframes benchWarn {
   0%, 100% { background: var(--bg-panel); border-top-color: var(--border); box-shadow: none; }
   50% { background: color-mix(in srgb, var(--danger) 26%, var(--bg-panel)); border-top-color: var(--danger); box-shadow: inset 0 0 0 2px var(--danger); }
+}
+/* Banc de secours pendant un drag alors qu'aucun ouvrier n'est libre (updateBench) :
+   posé PAR-DESSUS l'écran, il ne pousse rien — la mise en page ne bouge pas sous le
+   doigt en plein glissement. Calé sur #app (centré, 480 px max). */
+#worker-bar.as-drop {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 480px; z-index: 40;
+  box-shadow: 0 -8px 22px rgba(0, 0, 0, .5);
+}
+#worker-bar.as-drop #worker-icons {
+  min-height: 54px; align-self: stretch; align-items: center;
+  border: 2px dashed var(--accent); border-radius: 10px;
+  background: rgba(244, 185, 66, .07);
 }
 #worker-icons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 .worker {
@@ -436,7 +462,7 @@ button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
 }  /* anchors #speed-btn */
 
 #customer-lane {
-  position: relative; height: 240px; flex: 0 0 auto; overflow: hidden;
+  position: relative; height: var(--lane-h); flex: 0 0 auto; overflow: hidden;
   background:
     repeating-linear-gradient(180deg, transparent 0 38px, rgba(255,255,255,.025) 38px 40px),
     linear-gradient(180deg, #20283a 0%, #283755 100%);
@@ -446,7 +472,7 @@ button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
   transition: height .25s ease;
 }
 /* Marché épinglé : rétréci dès qu'on scrolle l'usine, pleine taille en haut. */
-#market-zone.condensed #customer-lane { height: 150px; }
+#market-zone.condensed #customer-lane { height: var(--lane-h-condensed); }
 .customer {
   position: absolute; top: -16%; width: 0;
   display: flex; flex-direction: column; align-items: center; gap: 2px;
@@ -496,8 +522,47 @@ button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
    take over at the top/bottom borders (overscroll-behavior: auto). */
 .counter-inv {
   display: flex; flex-direction: column; align-items: center; gap: 3px;
-  margin-top: 6px; padding-top: 5px; border-top: 1px solid var(--border);
-  max-height: 51px; overflow-y: auto; overscroll-behavior: auto;
+  margin-top: 5px; padding-top: 4px; border-top: 1px solid var(--border);
+  max-height: 44px; overflow-y: auto; overscroll-behavior: auto;
+}
+/* Le COMPTOIR : la marchandise déjà réservée par un client en train de descendre.
+   Elle a quitté la RÉSERVE (la liste en dessous) mais reste posée là, visible, jusqu'à
+   ce qu'il la prenne (game-render.putOnCounter / takeFromCounter). Hauteur fixe : le
+   stand ne saute pas quand une commande arrive ou repart. Les deux étages se
+   distinguent par le décor — planche de bois ici, piles chiffrées en dessous — et le
+   comptoir vide s'annonce lui-même, ce qui évite un intitulé qui coûterait 13 px de
+   haut sur l'élément déjà le plus grand du marché épinglé. */
+.counter-desk {
+  display: flex; align-items: center; justify-content: center; gap: 2px;
+  height: 30px; margin-top: 5px; padding: 0 3px; overflow: hidden;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #4b3b27 0%, #3b2e1f 55%, #2a2116 100%);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.08), inset 0 -3px 4px rgba(0,0,0,.45);
+}
+.counter-desk:empty::before {
+  content: "Comptoir";
+  font-size: 8px; letter-spacing: .5px; text-transform: uppercase;
+  color: rgba(255, 255, 255, .3);
+}
+.desk-chip { flex: 0 0 auto; display: flex; cursor: pointer; }
+.desk-chip img {
+  width: var(--chip, 26px); height: var(--chip, 26px);
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,.55));
+}
+.desk-chip.landing { opacity: 0; }                    /* la marchandise est encore en vol */
+.desk-chip.pop { animation: deskPop .26s ease; }      /* elle se pose */
+@keyframes deskPop {
+  0% { transform: translateY(-5px) scale(.65); }
+  60% { transform: translateY(0) scale(1.14); }
+  100% { transform: translateY(0) scale(1); }
+}
+/* Le vol lui-même (réserve -> comptoir, puis comptoir -> client). Sélecteur composé :
+   .fly-res est déclaré PLUS BAS dans la feuille et sa transition raccourcie
+   l'emporterait sinon — sa courbe part en arrière (anticipation), on veut ici un
+   trajet direct, le colis ne recule pas avant de partir. */
+.fly-res.fly-desk {
+  width: 26px; height: 26px;
+  transition-timing-function: cubic-bezier(.3,.7,.35,1);
 }
 .cinv-stack {
   display: flex; align-items: center; gap: 1px;

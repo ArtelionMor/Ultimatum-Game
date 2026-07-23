@@ -29,7 +29,10 @@ l'économie sur des graphiques, et l'outil génère les lignes exactes que le je
    ressource — même bloc, liaisons différentes = variété gratuite. Overrides
    `clients`/`avg` par instance pour dévier du motif sans créer un bloc.
    Glisser-déposer pour réordonner ; ⧉ duplique ; la sélection (carte surlignée)
-   pilote les trois autres onglets.
+   pilote les trois autres onglets. Le champ **👥 (clients par paquet, défaut 2)**
+   dans l'en-tête du niveau fixe combien de clients peuvent arriver **en même
+   temps** — le moteur tire `1..N` à chaque vague de spawn (voir `customerBatch`
+   plus bas).
 3. **Onglet Économie : vérifier.** Demande attendue par ressource (petits
    multiples), valeur du marché par round, **somme cumulée**, parts de marché,
    table des rounds. Formule = celle du moteur, pas une approximation :
@@ -49,7 +52,8 @@ l'économie sur des graphiques, et l'outil génère les lignes exactes que le je
    `autoMerge` (1/0) — toujours émise, un 0 explicite est le seul opt-out (une
    ligne absente = vieux export = le moteur merge).
 5. **Onglet Export : sortir les données.** Lignes `market_config` (id = l'id du
-   niveau — un niveau n'a qu'un seul id, voir plus bas) ;
+   niveau — un niveau n'a qu'un seul id, voir plus bas ; chaque ligne porte aussi
+   `customerBatch`, recopié depuis le champ 👥 du niveau) ;
    `competitors_behavior` **v2** : une ligne par (bot × vague), colonnes
    `config` (id du niveau), `id`, `round`, une colonne par ressource + les 3
    achats — le scope `config` élimine les collisions entre niveaux qui règlent
@@ -68,6 +72,12 @@ upgrades, purshases, unlock_config, **world_config / world_level** (qui
 référencent les ids générés — `world_level.topX` = rang à atteindre pour
 gagner, les impôts ont été coupés du jeu 2026-07-19), competitors (identités),
 customers, rewards, gears, characters, general, outputs…
+
+Colonnes `world_level` ajoutées en 2026-07-23 (voir `web/README.md`) :
+- **`preparationTime`** (secondes) : durée de la phase de prépa **de ce niveau**.
+  Vide = repli sur `general.tycoonPhaseDuration`.
+- **`safeAssign`** (TRUE/FALSE) : si TRUE, la vague refuse de démarrer tant qu'un
+  ouvrier traîne sur le banc (banc clignotant rouge).
 
 ✅ **Le jeu consomme le format v2** (migré 2026-07-16). `normalize()` indexe
 `behaviorProfiles[config][bot][round]` + `buffProfiles[config][bot]` ;
@@ -132,3 +142,8 @@ Câblage des ids — **une seule colonne dans la sheet** :
   La case « ±1 aléatoire » du bloc réactive le tirage historique
   `{avg-1, avg, avg+1}` (min 1) et s'exporte en colonne `qty_spread` (1/0) ;
   la colonne s'appelle `average amount` dans market_config.
+- `customerBatch` (champ 👥, **par niveau**, défaut 2) est recopié à l'identique
+  sur **toutes** les lignes market_config du niveau — il n'y a pas encore de
+  réglage par vague. Les documents créés avant 2026-07-23 sont migrés à 2 au
+  chargement. ⚠️ Tant que `config_levels.json` n'est pas **ré-exporté**, la
+  colonne est absente et le moteur retombe sur son défaut (2) — rien ne casse.
