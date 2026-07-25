@@ -207,12 +207,12 @@ const Game = {
     return img;
   },
 
-  // Fly a freshly produced unit from its machine card into the inventory —
-  // les tuiles si la sheet Stock est ouverte, sinon le BOUTON Stock (la réserve
-  // visible du layout une-page ; l'exact inverse de reserveRect côté vente).
+  // Fly a freshly produced unit from its machine card into the inventory — les
+  // tuiles de la bande INVENTAIRE (toujours à l'écran ; l'exact inverse de
+  // reserveRect côté vente).
   flyToInventory(m, resId, tier) {
     const node = m._node; if (!node) return;
-    const box = (this._invTiles && this._invTiles.isConnected && this._invVisible) ? this._invTiles : $("#stock-btn");
+    const box = (this._invTiles && this._invTiles.isConnected) ? this._invTiles : $("#inventory-bar");
     if (!box || !box.isConnected) return;
     const from = node.getBoundingClientRect(), to = box.getBoundingClientRect();
     if (!to.width) return;
@@ -358,6 +358,7 @@ const Game = {
     this.competitors.forEach((c) => { if (!c.isPlayer) botPlanRound(this, c); });
 
     this.clearCounters();   // vague finie : plus une seule commande en attente sur les comptoirs
+    this._invVisible = true; // la bande inventaire est toujours à l'écran : refresh live
     this.renderInventory(); this.renderShop(); this.renderMachines(); this.renderWorkers();
     this.renderSuppliers(); this.renderWavePreview(); this.refreshHud();
     // Freshly rebuilt machine cards start empty : on ré-affiche la barre figée du
@@ -411,7 +412,7 @@ const Game = {
     // leur trajet gate la reprise de production — voir game-render.tickHawkers).
     this.tickHawkers(dt);
     this._supTimer = (this._supTimer || 0) - dt;
-    if (this._supTimer <= 0) { this.refreshSuppliers(); this.refreshAffordability(); this.refreshWaveCoverage(); this.refreshMachineDots(); this.refreshMachineShares(); this.refreshCustomerDim(); this.refreshStockBtn(); this._supTimer = 0.2; }
+    if (this._supTimer <= 0) { this.refreshSuppliers(); this.refreshAffordability(); this.refreshWaveCoverage(); this.refreshMachineDots(); this.refreshCustomerDim(); this.refreshStockBtn(); this._supTimer = 0.2; }
     // Les bots redéploient leurs ouvriers en cours de round, comme tu le fais à la main :
     // une chaîne de conversion ne coule que si on passe l'ouvrier au convertisseur dès que
     // son stock d'intrants est prêt, puis qu'on le rend au fournisseur quand il est à sec.
@@ -679,11 +680,10 @@ $("#hud-home")?.addEventListener("click", () => {
 $("#quit-confirm")?.addEventListener("click", () => Game.toMenu());
 $("#quit-cancel")?.addEventListener("click", () => $("#quit-overlay").classList.add("hidden"));
 $("#merge-overlay")?.addEventListener("click", (e) => { if (e.target.id === "merge-overlay") Game.closeMerge(); });
-// Sheets Boutique & Stock : ouvertes par la barre du bas, fermées au tap sur le fond.
+// Sheet Boutique : ouverte par la barre du bas, fermée au tap sur le fond.
+// (L'inventaire n'a plus de sheet : c'est une bande permanente de la barre du bas.)
 $("#boutique-btn")?.addEventListener("click", () => Game.openBoutique());
-$("#stock-btn")?.addEventListener("click", () => Game.openStock());
 $("#boutique-overlay")?.addEventListener("click", (e) => { if (e.target.id === "boutique-overlay") Game.closeBoutique(); });
-$("#stock-overlay")?.addEventListener("click", (e) => { if (e.target.id === "stock-overlay") Game.closeStock(); });
 // L'auto-merge est un RÉGLAGE, pas un état de partie : il survit à la fermeture
 // de l'app (même modèle que la meta, clé localStorage à part).
 try { Game.autoMerge = localStorage.getItem("mu_automerge") === "1"; } catch (e) { /* storage bloqué → off */ }

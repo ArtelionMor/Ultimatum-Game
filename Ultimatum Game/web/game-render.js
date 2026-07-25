@@ -5,7 +5,7 @@
  */
 "use strict";
 
-import { $, el, sprite, openOverlay, chainOverscroll } from "./helpers.js";
+import { $, el, sprite, openOverlay } from "./helpers.js";
 import { S } from "./constants.js";
 import { Meta } from "./meta.js";
 import { openCharacterPanel, gearBadges } from "./menu.js";
@@ -13,7 +13,7 @@ import { openBuildingPanel } from "./building.js";
 import { openResource } from "./resource.js";
 import { nextMkt, buyMkt, nextStorage, buyStorage, nextMachineLevel, upgradeMachine } from "./game-shop.js";
 import { botBehavior } from "./game-bots.js";
-import { expectedShares, shopOdds } from "./game-customers.js";
+import { expectedShares, captureCustomer } from "./game-customers.js";
 
 // Couleur FIXE par concurrent (ordre du lineup) — la même partout : camembert de
 // fin de round, rabatteurs dans la rue. C'est elle qui permet de lire « ce
@@ -21,10 +21,12 @@ import { expectedShares, shopOdds } from "./game-customers.js";
 export const COMP_COLORS = ["#f4b942", "#279a86", "#8a6fe3", "#bf5f96"];
 
 // Rythme des rabatteurs (tickHawkers). Les délais de trajet découlent de la
-// vitesse (px/s), donc un grand écran = trajets plus longs, cohérent.
-const HAWK_SPEED = 55;          // balade
-const HAWK_RUN_SPEED = 150;     // course vers un client à livrer
-const HAWK_HOME_SPEED = 110;    // retour à la base
+// vitesse (px/s), donc un grand écran = trajets plus longs, cohérent. Volontairement
+// LENTS : la course vers le client doit être une vraie course contre sa chute vers
+// le comptoir — c'est là qu'est l'enjeu (intercepter à temps, ou pas).
+const HAWK_SPEED = 38;          // balade
+const HAWK_RUN_SPEED = 75;      // course vers un client à livrer (la tension : ~la moitié d'avant)
+const HAWK_HOME_SPEED = 70;     // retour à la base
 
 export const renderMethods = {
   compColor(c) { const i = this.competitors.indexOf(c); return COMP_COLORS[(i < 0 ? 0 : i) % COMP_COLORS.length]; },
@@ -75,23 +77,28 @@ export const renderMethods = {
   // --- inventory: one tile per stored UNIT, background = its tier's color
   // (cfg.tierColors, sheet tab ressources_tier). "7/20" in the header is the
   // storage cap — the tile count IS the stock, no per-cell numbers anymore.
+  // Bande compacte, toujours à l'écran dans la barre du bas : [ INVENTAIRE / 📦x/y ]
+  // à gauche, tuiles qui défilent LATÉRALEMENT au centre, bouton Merge à droite.
   renderInventory() {
     const bar = $("#inventory-bar"); bar.innerHTML = "";
-    const top = el("div", "inv-top");
+    const head = el("div", "inv-top");
     const cap = el("span", "inv-cap", ""); cap.id = "inv-cap";
-    // One Merge entry point for the whole inventory. It glows via
-    // refreshInventory() whenever at least one merge is currently possible.
-    const merge = el("button", "inv-merge-btn", "🔁 Merge"); merge.id = "inv-merge";
-    merge.onclick = () => this.openMerge();
-    if (!Meta.featureUnlocked("merge")) merge.classList.add("hidden");
-    top.append(el("span", "inv-top-label", "Inventaire"), merge, cap);
-    bar.appendChild(top);
+    head.append(el("span", "inv-top-label", "Inventaire"), cap);
+    bar.appendChild(head);
 
     const scroll = el("div", "inv-scroll");
-    chainOverscroll(scroll);  // at the list's top/bottom, keep the swipe scrolling the page
     this._invTiles = el("div", "inv-tiles");
     scroll.appendChild(this._invTiles);
     bar.appendChild(scroll);
+
+    // One Merge entry point for the whole inventory. It glows via
+    // refreshInventory() whenever at least one merge is currently possible.
+    const merge = el("button", "inv-merge-btn", "🔁"); merge.id = "inv-merge";
+    merge.title = "Merge : combiner des ressources";
+    merge.onclick = () => this.openMerge();
+    if (!Meta.featureUnlocked("merge")) merge.classList.add("hidden");
+    bar.appendChild(merge);
+
     this._invSig = null;      // force the first tile build
     this.refreshInventory();
   },
@@ -238,22 +245,11 @@ export const renderMethods = {
   },
   openBoutique() { this.renderShop(); this.refreshAffordability(); this._openSheet("boutique-overlay"); },
   closeBoutique() { this._closeSheet("boutique-overlay"); },
-  // _invVisible pilotait l'IntersectionObserver de l'ancien layout ; il veut
-  // maintenant dire « la sheet Stock est ouverte ». Même contrat pour le reste du
-  // code (maybeRefreshInventory, reserveRect) : l'inventaire hors écran n'écrit
-  // jamais le DOM.
-  openStock() { this._invVisible = true; this.refreshInventory(); this._openSheet("stock-overlay"); },
-  closeStock() { this._invVisible = false; this._closeSheet("stock-overlay"); },
-  // La jauge du bouton Stock vit SANS la sheet : l'inventaire ne réécrit son DOM
-  // que visible, mais « je sature » doit se voir depuis l'écran de jeu. Tick 0.2 s.
-  refreshStockBtn() {
-    if (!this.player) return;
-    const sc = $("#stock-btn-count"); if (!sc) return;
-    const tot = this.stockTotal(this.player), cap = this.player.storageCap;
-    const txt = `${tot}/${cap}`;
-    if (sc.textContent !== txt) sc.textContent = txt;
-    sc.style.color = tot >= cap ? "var(--danger)" : "";
-  },
+  // L'inventaire est désormais une bande TOUJOURS à l'écran (barre du bas) : plus de
+  // sheet Stock. _invVisible reste vrai pendant toute la partie (posé dans enterPlay)
+  // pour que la boucle 0.2 s écrive les tuiles en direct (maybeRefreshInventory).
+  refreshStockBtn() {},   // conservé (appelé par refreshInventory / la boucle) — le
+                          // compteur vit maintenant dans la bande (#inv-cap).
 
   // --- game speed (HUD ×1/×2/×4 toggle, gated by feature_unlock) ---
   availableSpeeds() {
@@ -349,50 +345,37 @@ export const renderMethods = {
     const name = el("div", "machine-name");
     const recipe = el("div", "machine-recipe", this.recipeHtml(def));
     const footer = el("div", "machine-footer");
+    // LE verbe du joueur : la posture de CHAQUE ouvrier. Plus de switch global —
+    // chaque ouvrier porte SON propre sélecteur Produit / Rabatteur (updateMachine).
     const slots = el("div", "worker-slots"); footer.appendChild(slots);
-    const timer = el("span", "machine-timer", ""); footer.appendChild(timer); // décompte de production (setProgress)
-    // LE verbe du joueur : la posture de la machine. Produire (l'équipe fabrique)
-    // ou Rabatteur (l'équipe sort crier dans la rue : attractivité boostée sur SA
-    // ressource, production à l'arrêt). Plus de gestion d'ouvriers.
+    // Ligne du bas : décompte de production (setProgress) + upgrade de la machine.
+    const bottom = el("div", "machine-footer-bottom");
+    const timer = el("span", "machine-timer", "");
     const btns = el("div", "machine-buttons");
-    const modeSeg = el("div", "mode-seg");
-    const prodB = el("button", "mode-btn", "⚙"); prodB.title = "Produire";
-    const sellB = el("button", "mode-btn", "📣"); sellB.title = "Rabatteur : l'équipe sort capter les clients (production à l'arrêt)";
-    modeSeg.append(prodB, sellB);
     const up = el("button", "upgrade");
     if (!Meta.featureUnlocked("upgrade_machine")) up.classList.add("hidden");
-    btns.append(modeSeg, up); footer.appendChild(btns);
-    // Part de marché sur LA ressource de cette machine : l'effet du mode Rabatteur
-    // se lit ici, à côté du produit concerné (icône incluse — pas d'ambiguïté).
-    const share = el("div", "machine-share");
-    share.innerHTML = `<img src="${this.tierSrc(def.outputs, 1)}"><b>–</b>`;
+    btns.append(up);
+    bottom.append(timer, btns); footer.appendChild(bottom);
     const prog = el("div", "progress"); prog.appendChild(el("div"));
-    node.append(icon, name, recipe, footer, share, prog);
-    prodB.onclick = (e) => { e.stopPropagation(); this.setMachineMode(m, "prod"); };
-    sellB.onclick = (e) => { e.stopPropagation(); this.setMachineMode(m, "sell"); };
+    node.append(icon, name, recipe, footer, prog);
     up.onclick = (e) => { e.stopPropagation(); upgradeMachine(this, m); };
     // tap the building sprite -> its detail widget
     icon.style.cursor = "pointer";
     icon.onclick = (e) => { e.stopPropagation(); openBuildingPanel(m.id, { level: m.level }); };
     // tap an ingredient/output icon in the recipe -> its codex page
     recipe.addEventListener("click", (e) => { const img = e.target.closest("img[data-res]"); if (img) { e.stopPropagation(); openResource(img.dataset.res); } });
-    m._refs = { name, slots, up, timer, prodB, sellB, share: share.querySelector("b") };
+    m._refs = { name, slots, up, timer };
     this.updateMachine(m, node); return node;
   },
 
-  // Interrupteur PAR OUVRIER (w.role) : le dosage appartient au joueur — 2/2,
-  // 3/1, 0/4… La chip de l'ouvrier EST le bouton (toggleWorkerRole) ; les deux
-  // boutons du switch machine restent comme raccourci « tout le monde ».
-  // Le trajet fait foi (tickHawkers) : passer en "sell" fait SORTIR l'ouvrier ;
-  // repasser en "prod" le fait RENTRER À PIED — il ne recompte dans la
-  // production qu'une fois à la base (prodCrew, gate dans tickProduction).
-  setMachineMode(m, mode) {
-    m.crew.forEach((w) => { w.role = mode; });
-    this.refreshMachineCard(m);
-    this.refreshMachineDots();
-  },
-  toggleWorkerRole(m, w) {
-    w.role = w.role === "sell" ? "prod" : "sell";
+  // Sélecteur PAR OUVRIER (w.role) : le dosage appartient au joueur — 2/2, 3/1,
+  // 0/4… Chaque ouvrier a son segment Produit / Rabatteur (updateMachine). Plus de
+  // switch global : on dose ouvrier par ouvrier. Le trajet fait foi (tickHawkers) :
+  // passer en "sell" fait SORTIR l'ouvrier ; repasser en "prod" le fait RENTRER À
+  // PIED — il ne recompte dans la production qu'une fois à la base (prodCrew).
+  setWorkerRole(m, w, role) {
+    if (w.role === role) return;
+    w.role = role;
     this.refreshMachineCard(m);
     this.refreshMachineDots();
   },
@@ -407,43 +390,30 @@ export const renderMethods = {
   updateMachine(m, node) {
     const def = this.machineDef(m.id), r = m._refs;
     r.name.innerHTML = `${def.displayName} <span class="lvl">Nv.${m.level}</span>`;
-    // Chaque chip est L'INTERRUPTEUR de son ouvrier : tap = prod ↔ rabatteur.
-    // 📣 + bordure dorée = rabatteur ; estompé = dehors (pas encore rentré).
+    // Chaque ouvrier = une ligne [avatar][ ⚙ Produit | 📣 Rabatteur ]. Le segment
+    // actif est mis en avant ; un tap sur l'autre change le poste de CET ouvrier.
+    // Bordure dorée sur l'avatar quand il est rabatteur.
     r.slots.innerHTML = "";
     m.crew.forEach((w) => {
+      const row = el("div", "worker-row");
       const chip = this.workerChip(w);
       chip.classList.toggle("sell", w.role === "sell");
-      if (w._hawk) chip.classList.add("away");
-      chip.title = w.role === "sell" ? "Rabatteur — tap : remettre en production" : "En production — tap : envoyer rabattre";
-      chip.onclick = (e) => { e.stopPropagation(); this.toggleWorkerRole(m, w); };
-      r.slots.appendChild(chip);
+      const seg = el("div", "wrole-seg");
+      const prodB = el("button", "wrole-btn" + (w.role !== "sell" ? " on" : ""), `⚙<span>Produit</span>`);
+      prodB.title = "Produit : l'ouvrier fabrique à la machine";
+      const sellB = el("button", "wrole-btn sell" + (w.role === "sell" ? " on" : ""), `📣<span>Rabatteur</span>`);
+      sellB.title = "Rabatteur : l'ouvrier sort capter les clients dans la rue";
+      prodB.onclick = (e) => { e.stopPropagation(); this.setWorkerRole(m, w, "prod"); };
+      sellB.onclick = (e) => { e.stopPropagation(); this.setWorkerRole(m, w, "sell"); };
+      seg.append(prodB, sellB);
+      row.append(chip, seg);
+      r.slots.appendChild(row);
     });
     const sells = m.crew.filter((w) => w.role === "sell").length;
-    r.prodB.classList.toggle("on", sells === 0);
-    r.sellB.classList.toggle("on", sells > 0 && sells === m.crew.length);
     const nx = nextMachineLevel(this, m);
     if (nx) { r.up.innerHTML = `⬆ $${nx.cost}`; r.up.disabled = this.player.money < nx.cost; } else { r.up.innerHTML = "⬆ MAX"; r.up.disabled = true; }
     node.classList.toggle("producing", m.producing);
     node.classList.toggle("selling", sells > 0);
-  },
-  // Part de marché du joueur sur la ressource de CHAQUE machine (mêmes odds que le
-  // tirage), rafraîchie sur le tick 0.2 s : le mode Rabatteur fait bouger CE
-  // chiffre-là, à côté de l'icône du produit concerné.
-  refreshMachineShares() {
-    if (!this.player || !this.player.machines) return;
-    this.player.machines.forEach((m) => {
-      if (!m._refs || !m._refs.share || !m._node) return;
-      const resId = this.machineDef(m.id).outputs;
-      const eligible = this.competitors.filter((c) => this.stockOf(c, resId) > 0);
-      let pct = 0;
-      if (eligible.includes(this.player)) {
-        const p = shopOdds(this, eligible, resId);
-        pct = Math.round(p[eligible.indexOf(this.player)] * 100);
-      }
-      const txt = pct + "%";
-      if (m._refs.share.textContent !== txt) m._refs.share.textContent = txt;
-      m._refs.share.parentElement.classList.toggle("zero", pct === 0);
-    });
   },
   // secs (optionnel) = temps restant avant le prochain spawn — affiché au centre
   // du footer de la carte ; vide quand la machine ne tourne pas.
@@ -574,7 +544,7 @@ export const renderMethods = {
       if (!c._counter) return;
       if (c._moneyRef) c._moneyRef.textContent = c.money;
       // Stand illuminé (couleur du concurrent) tant que ses rabatteurs sont dehors.
-      const hawking = c.machines.some((m) => (m._hawkers || []).some((h) => h.state === "out" || h.state === "toClient"));
+      const hawking = c.machines.some((m) => (m._hawkers || []).some((h) => h.state === "hunt" || h.state === "chase"));
       c._counter.classList.toggle("hawking", hawking);
       if (hawking) c._counter.style.setProperty("--hc", this.compColor(c));
       if (c._shareRef) {
@@ -594,20 +564,17 @@ export const renderMethods = {
 
   // Rectangle de départ du vol. Le stand ne liste plus son stock, il faut donc un
   // point d'origine crédible :
-  //  - joueur, panneau INVENTAIRE à l'écran -> il part de là. C'est l'exact inverse de
+  //  - joueur -> la bande INVENTAIRE (toujours à l'écran). C'est l'exact inverse de
   //    flyToInventory (l'unité produite y rentre, l'unité vendue en ressort).
-  //  - sinon (inventaire hors écran, ou bot qui n'expose rien) -> de SOUS le stand,
-  //    comme sorti de l'arrière-boutique.
+  //  - bot (n'expose rien) -> de SOUS le stand, comme sorti de l'arrière-boutique.
   reserveRect(c) {
     if (c === this.player) {
-      // Sheet Stock ouverte : le vol part des tuiles, comme avant. Fermée : il
-      // part du BOUTON Stock — c'est lui, la réserve visible du nouveau layout.
-      if (this._invTiles && this._invTiles.isConnected && this._invVisible) {
+      if (this._invTiles && this._invTiles.isConnected) {
         const r = this._invTiles.getBoundingClientRect();
         if (r.width) return r;
       }
-      const sb = $("#stock-btn");
-      if (sb) { const r = sb.getBoundingClientRect(); if (r.width) return r; }
+      const ib = $("#inventory-bar");
+      if (ib) { const r = ib.getBoundingClientRect(); if (r.width) return r; }
     }
     const s = c._counter; if (!s || !s.isConnected) return null;
     const r = s.getBoundingClientRect();
@@ -665,38 +632,39 @@ export const renderMethods = {
     });
   },
 
-  // Le client est arrivé : il emporte sa commande. Si un rabatteur de la bonne
-  // ressource est dehors, c'est LUI qui court la livrer (dispatchHawker) — sinon
-  // la marchandise vole toute seule comme avant (comptoir -> client, fondu).
+  // Le client est arrivé jusqu'au comptoir : il emporte sa commande (la marchandise
+  // vole du comptoir vers lui, en fondu). Les clients CAPTURÉS en route par un
+  // rabatteur ne passent jamais par ici — ils sont servis sur place (captureCustomer).
   takeFromCounter(c, sale, custEl) {
     const items = sale.items || []; sale.items = null;
     if (!items.length) return;
     c.counterItems = (c.counterItems || []).filter((it) => !items.includes(it));
     const target = custEl && custEl.querySelector(".cust-sprite");
     const to = target && target.isConnected ? target.getBoundingClientRect() : null;
-    const courier = this.dispatchHawker(c, sale.resId, items[0].tier, custEl);
-    items.forEach((it, i) => {
+    items.forEach((it) => {
       const chip = it._chip; it._chip = null;
       if (!chip || !chip.isConnected) return;
       const from = chip.getBoundingClientRect();
       const landing = chip.classList.contains("landing");  // pas encore arrivé : rien à faire voler
       chip.remove();
-      // Le premier colis est dans les mains du livreur ; les suivants volent.
-      if (courier && i === 0) return;
       if (to && from.width && !landing) this.flyItem(it.resId, it.tier, from, to, 340, true);
     });
     this.renderCounterDesk(c);   // ré-échelonne les chips restants
   },
 
-  // --- rabatteurs : des ouvriers PHYSIQUES dans la rue -------------------------
-  // Une machine en mode "sell" envoie son équipe se balader dans la lane, aux
-  // couleurs de son patron (compColor). Cycle de vie d'un rabatteur :
-  //   recharge (à la base, invisible) → out (balade devant le stand, compte dans
-  //   l'attractivité) → toClient (course pour LIVRER un client servi) →
-  //   returning (rentre à pied) → recharge…
-  // Le TRAJET fait foi : repasser la machine en "prod" ne téléporte personne —
-  // tout le monde rentre à pied (returning) et la production ne reprend qu'une
-  // fois l'équipe au complet (gate dans game-production). Pas d'exploit de switch.
+  // --- rabatteurs : des ouvriers PHYSIQUES qui RABATTENT les clients ------------
+  // Un ouvrier en "sell" sort dans la rue prendre de quoi servir un client qui veut
+  // SA ressource (icône + quantité sur la tête) et court le lui livrer AVANT qu'il
+  // n'atteigne un comptoir. Deux usages, offensif ET défensif :
+  //   - VOL : un client qui allait chez un CONCURRENT est servi sur place → il
+  //     repart sans jamais y arriver (captureCustomer rembourse le concurrent et
+  //     crédite le patron du rabatteur). D'où la préférence pour les lignes adverses.
+  //   - SÉCURISATION : un client qui venait déjà chez soi est servi tout de suite,
+  //     hors de portée des rabatteurs adverses.
+  // Cycle : recharge (base) → hunt (cherche une cible, rôde côté adverse) → chase
+  // (fonce dessus, colis en main) → returning (rentre) → recharge. Le TRAJET fait
+  // foi : repasser en "prod" fait rentrer l'ouvrier à pied avant qu'il ne
+  // reproduise (prodCrew gate dans game-production) — pas d'exploit de switch.
   hawkerBaseX(c, laneRect) {
     const s = c._counter;
     if (!s || !s.isConnected) return laneRect.width / 2;
@@ -714,27 +682,26 @@ export const renderMethods = {
       m.crew.forEach((w) => {
         if (w.role !== "sell" || w._hawk) return;
         // Départs étalés : toute l'équipe ne surgit pas à la même frame.
-        w._hawk = { w, c, m, state: "recharge", timer: 0.2 + Math.random() * 0.9 };
+        w._hawk = { w, c, m, state: "recharge", timer: 0.2 + Math.random() * 0.9, target: null };
         m._hawkers.push(w._hawk);
       });
-      // `selling` est PAR RABATTEUR (le rôle de SON ouvrier) : chacun rentre ou
-      // ressort selon son propre interrupteur.
       m._hawkers = m._hawkers.filter((h) => !this.tickHawker(h, dt, lane, laneRect, h.w.role === "sell", recharge));
     }));
     // Balayage défensif : un sprite .hawker que plus aucune entrée vivante ne
-    // possède (vague qui a vidé la lane, entrée retirée entre-temps) est enlevé —
-    // pas de bonshommes fantômes plantés dans la rue.
+    // possède (vague qui a vidé la lane, entrée retirée entre-temps) est enlevé.
     lane.querySelectorAll(".hawker").forEach((n) => { if (!n._hawk || n._hawk.el !== n) n.remove(); });
   },
   // Un pas de simulation pour UN rabatteur. Renvoie true quand il a terminé
   // (rentré + son ouvrier repassé en prod) : son entrée est retirée, w._hawk aussi.
   tickHawker(h, dt, lane, laneRect, selling, recharge) {
     const baseX = this.hawkerBaseX(h.c, laneRect), baseY = laneRect.height - 8;
+    const spdCfg = Number(this.cfg.g.hawkerSpeed); // multiplicateur global (general.hawkerSpeed) — 0.5 = deux fois plus lent
+    const spd = Number.isFinite(spdCfg) && spdCfg > 0 ? spdCfg : 1;
     // La vague a reconstruit la lane (innerHTML = "") : l'élément est orphelin —
     // le bonhomme « est rentré entre les vagues », il repart proprement de la base.
-    if (h.el && !h.el.isConnected) { h.el = null; h.state = "recharge"; h.timer = recharge * Math.random(); }
+    if (h.el && !h.el.isConnected) { h.el = null; h.state = "recharge"; h.timer = recharge * Math.random(); this.dropHawkTarget(h); this.hawkerReturnCarried(h); }
     if (h.state === "recharge") {
-      if (!selling) { h.w._hawk = null; return true; }   // à la base et plus besoin de lui
+      if (!selling) { this.hawkerReturnCarried(h); h.w._hawk = null; return true; }   // rappelé : il rend son paquet
       h.timer -= dt;
       if (h.timer <= 0) {
         h.el = el("div", "hawker");
@@ -745,39 +712,273 @@ export const renderMethods = {
         h.el.innerHTML = `<img class="hw" src="${src}">`;
         lane.appendChild(h.el);
         h.x = baseX; h.y = baseY;
-        h.state = "out"; this.hawkerNewTarget(h, laneRect, baseX);
+        h.state = "hunt";   // il apparaît À LA BOUTIQUE ; le chargement se fait là (hunt, ci-dessous)
       }
       return false;
     }
-    if (h.state === "out") {
-      if (!selling) { h.state = "returning"; }
-      else if (this.hawkerStep(h, dt, HAWK_SPEED)) this.hawkerNewTarget(h, laneRect, baseX);
+    // Ouvrier rappelé en production : il lâche sa cible et rentre à pied.
+    if (!selling && h.state !== "returning") { this.dropHawkTarget(h); h.state = "returning"; }
+
+    if (h.state === "hunt") {
+      // RÈGLE : on ne prend une ressource QU'À LA BOUTIQUE (jamais par magie en pleine
+      // map). Poches vides -> il rentre/attend à la base et ne se charge QUE là, quand
+      // le stock le permet (produit une commande visible, sinon 1 unité par défaut).
+      if (this.carriedCount(h) === 0) {
+        const atBase = Math.hypot(h.x - baseX, h.y - baseY) < 6;
+        if (atBase) { const want = this.hawkerDesiredLoad(h, lane); if (want > 0) this.hawkerSetLoad(h, want); }
+        if (this.carriedCount(h) === 0) {                    // toujours rien à vendre : il attend à la boutique
+          h.tx = baseX; h.ty = baseY;
+          this.hawkerStep(h, dt, HAWK_SPEED * spd);
+          return false;
+        }
+      }
+      if (!h.target || !this.hawkTargetValid(h)) this.acquireHawkTarget(h, lane, laneRect);
+      if (h.target) h.state = "chase";                        // cible verrouillée : à la charge
+      else if (this.hawkerStep(h, dt, HAWK_SPEED * spd)) this.hawkerRoam(h, laneRect, baseX); // rôde avec son paquet
     }
-    if (h.state === "toClient") {
-      const t = h.clientEl && h.clientEl.isConnected ? h.clientEl.getBoundingClientRect() : null;
-      if (t) { h.tx = t.left - laneRect.left + t.width / 2; h.ty = t.top - laneRect.top + t.height / 2; }
-      if (!t || this.hawkerStep(h, dt, HAWK_RUN_SPEED)) {
-        // Livré (ou client disparu) : le colis reste chez le client, retour base.
-        const item = h.el && h.el.querySelector(".hw-item"); if (item) item.remove();
-        h.clientEl = null;
-        h.state = "returning";
+    if (h.state === "chase") {
+      if (!this.hawkTargetValid(h)) { this.dropHawkTarget(h); h.state = "hunt"; this.hawkerRoam(h, laneRect, baseX); }
+      else {
+        const t = h.target.getBoundingClientRect();
+        h.tx = t.left - laneRect.left + t.width / 2;
+        h.ty = t.top - laneRect.top + t.height * 0.6;
+        if (this.hawkerStep(h, dt, HAWK_RUN_SPEED * spd)) {
+          const defense = h.target._order && h.target._order.winner === h.c;
+          if (defense) {
+            // Défense : livre la marchandise du COMPTOIR (garde son paquet de réserve).
+            if (captureCustomer(this, h.c, h.target, null)) { this.finishCapture(h); h.carriedSale = null; this.updateHawkerCarry(h); }
+          } else {
+            // Vol/conversion : DÉPOSE sa part dans l'escrow (complète si l'alliance a réuni la commande).
+            this.depositToOrder(h);
+          }
+          this.dropHawkTarget(h);
+          h.state = "returning";
+        }
       }
     }
     if (h.state === "returning") {
       h.tx = baseX; h.ty = baseY;
-      if (this.hawkerStep(h, dt, HAWK_HOME_SPEED)) {
+      if (this.hawkerStep(h, dt, HAWK_HOME_SPEED * spd)) {
         if (h.el) { h.el.remove(); h.el = null; }
-        if (!selling) { h.w._hawk = null; return true; }  // rentré pour de bon : la machine peut reproduire
-        h.state = "recharge"; h.timer = recharge;         // souffle un coup avant de ressortir
+        if (!selling) { this.hawkerReturnCarried(h); h.w._hawk = null; return true; }  // rentré pour de bon : rend son paquet
+        h.state = "recharge"; h.timer = recharge;         // souffle un coup avant de ressortir (garde son paquet)
       }
     }
     return false;
   },
-  hawkerNewTarget(h, laneRect, baseX) {
-    // Balade dans la MOITIÉ BASSE de la rue, autour de son propre stand (±90 px) :
-    // on lit d'un coup d'œil pour qui il travaille, même dans la mêlée.
-    h.tx = Math.max(14, Math.min(laneRect.width - 14, baseX + (Math.random() * 180 - 90)));
-    h.ty = laneRect.height * (0.45 + Math.random() * 0.45);
+  // Combien charger À LA BOUTIQUE : de quoi couvrir la PLUS GROSSE commande visible de
+  // sa ressource (vol/conversion), sinon 1 unité par défaut — le tout borné par la
+  // réserve. 0 = rien en stock, il attend.
+  hawkerDesiredLoad(h, lane) {
+    const resId = this.machineDef(h.m.id).outputs;
+    const avail = this.stockOf(h.c, resId);
+    if (avail <= 0) return 0;
+    let want = 1;
+    lane.querySelectorAll(".customer").forEach((cust) => {
+      const o = cust._order, need = cust._need;
+      if (!o || !need || need.resId !== resId || o.done || o.arrived) return;
+      if (o.winner === h.c) return;   // ses propres clients = défense (comptoir), pas besoin de charger
+      if (cust.classList.contains("toShop") || cust.classList.contains("done") || cust.classList.contains("nobody")) return;
+      if (need.qty > want) want = need.qty;
+    });
+    return Math.min(avail, want);
+  },
+  // Rôde en attendant une cible : de préférence vers les LIGNES ADVERSES (là où
+  // tombent les clients qu'on peut voler), sinon autour de son propre stand.
+  hawkerRoam(h, laneRect, baseX) {
+    let cx = baseX;
+    const foes = this.competitors.filter((c) => c !== h.c && c._counter && c._counter.isConnected);
+    if (foes.length) {
+      const r = foes[Math.floor(Math.random() * foes.length)]._counter.getBoundingClientRect();
+      cx = r.left - laneRect.left + r.width / 2;
+    }
+    h.tx = Math.max(14, Math.min(laneRect.width - 14, cx + (Math.random() * 120 - 60)));
+    h.ty = laneRect.height * (0.35 + Math.random() * 0.5);
+  },
+  // La cible d'un rabatteur tient-elle encore la route ? (client toujours en chute,
+  // commande pas encore soldée, et — pour un vol — le patron a de quoi le servir.)
+  hawkTargetValid(h) {
+    const t = h.target;
+    if (!t || !t.isConnected) return false;
+    if (t.classList.contains("toShop") || t.classList.contains("done") || t.classList.contains("nobody")) return false;
+    const o = t._order, need = t._need;
+    if (!o || !need || o.done || o.arrived) return false;
+    // Vol/conversion : il doit encore porter au moins 1 unité à déposer (il n'apporte
+    // que SA part de la commande — les autres unités viennent des alliés).
+    if (o.winner !== h.c && this.carriedCount(h) < 1) return false;
+    return true;
+  },
+  // Choisit la meilleure proie : sa ressource, client encore en chute. Priorité :
+  // VOLER un adverse (2) > convertir un client sans preneur (1) > SÉCURISER le sien
+  // (0) ; à égalité, le plus proche. ALLIANCE : sur un vol/conversion, plusieurs
+  // rabatteurs se relaient — chacun rejoint tant que la commande n'est pas ENTIÈREMENT
+  // réservée (o.reserved) et qu'il porte au moins 1 unité. La défense reste solo.
+  acquireHawkTarget(h, lane, laneRect) {
+    const resId = this.machineDef(h.m.id).outputs;
+    let best = null, bestScore = -Infinity;
+    lane.querySelectorAll(".customer").forEach((cust) => {
+      const o = cust._order, need = cust._need;
+      if (!o || !need || need.resId !== resId || o.done || o.arrived) return;
+      if (cust.classList.contains("toShop") || cust.classList.contains("done") || cust.classList.contains("nobody")) return;
+      let cls;
+      if (o.winner === h.c) {
+        // DÉFENSE : un seul rabatteur (marchandise du comptoir).
+        const claim = cust._claim;
+        if (claim && claim !== h && claim.el && (claim.state === "chase" || claim.state === "hunt")) return;
+        cls = 0;
+      } else {
+        // VOL / CONVERSION : il rejoint l'alliance s'il porte de quoi contribuer et
+        // qu'il reste de la place dans la commande. Une commande n'est disputée que par
+        // UN concurrent à la fois (l'escrow ne mélange pas les réserves).
+        if (this.carriedCount(h) < 1) return;
+        if (o.allyOwner && o.allyOwner !== h.c) return;
+        if ((o.reserved || 0) >= need.qty) return;   // déjà couverte par les collègues
+        cls = o.winner ? 2 : 1;
+      }
+      const r = cust.getBoundingClientRect();
+      const cx = r.left - laneRect.left + r.width / 2, cy = r.top - laneRect.top + r.height / 2;
+      const score = cls * 100000 - Math.hypot(cx - h.x, cy - h.y); // classe d'abord, puis le plus proche
+      if (score > bestScore) { bestScore = score; best = cust; }
+    });
+    if (best) this.setHawkTarget(h, best);
+    else h.target = null;
+  },
+  setHawkTarget(h, cust) {
+    this.dropHawkTarget(h);
+    h.target = cust;
+    const o = cust._order, need = cust._need;
+    if (o && o.winner === h.c && o.sale && o.sale.items && o.sale.items.length) {
+      // DÉFENSE (le client est DÉJÀ à lui) : marchandise sur SON comptoir. Il la RAMASSE
+      // pour l'apporter plus tôt et GARDE son paquet de réserve. Un seul rabatteur.
+      cust._claim = h;
+      this.hawkerPickup(h.c, o.sale);
+      h.carriedSale = o.sale;
+    } else if (o && need) {
+      // VOL / CONVERSION (ALLIANCE) : il RÉSERVE sa part de la commande (ce qu'il porte,
+      // borné par ce qu'il reste à couvrir). Il déposera cette part en arrivant.
+      const room = need.qty - (o.reserved || 0);
+      const give = Math.min(this.carriedCount(h), Math.max(0, room));
+      if (give <= 0) { h.target = null; return; }
+      o.reserved = (o.reserved || 0) + give;
+      o.allyOwner = h.c;                 // ce concurrent mène l'assaut sur cette commande
+      h.pledge = give;
+    }
+    this.updateHawkerCarry(h);
+  },
+  dropHawkTarget(h) {
+    const cust = h.target;
+    if (cust) {
+      if (cust._claim === h) cust._claim = null;                       // défense
+      // Part réservée mais PAS encore déposée : on la libère pour d'autres alliés.
+      if (h.pledge && cust._order) {
+        const oo = cust._order;
+        oo.reserved = Math.max(0, (oo.reserved || 0) - h.pledge);
+        if (oo.reserved === 0 && (!oo.escrow || !oo.escrow.tiers.length)) oo.allyOwner = null; // assaut abandonné : libre
+      }
+    }
+    h.pledge = 0;
+    h.target = null;
+    if (h.carriedSale) { this.hawkerRestore(h.c, h.carriedSale); h.carriedSale = null; }
+    this.updateHawkerCarry(h);
+  },
+  // ALLIANCE : le rabatteur arrive et DÉPOSE sa part (h.pledge) dans l'escrow de la
+  // commande — ses unités quittent sa poche et attendent les alliés. Quand l'escrow
+  // atteint la commande, on solde (captureCustomer avec l'escrow comme paquet) et le
+  // client est servi ; le vol du concurrent ne se fait donc QU'À la complétion.
+  depositToOrder(h) {
+    const cust = h.target, o = cust && cust._order, need = cust && cust._need;
+    if (!o || !need || o.done || o.arrived) return;
+    const give = Math.min(this.carriedCount(h), h.pledge || 0);
+    if (give <= 0) return;
+    const resId = h.carried.resId;
+    const tiers = h.carried.tiers.splice(0, give);
+    const gain = tiers.reduce((s, t) => s + this.tierInfo(resId, t).price, 0);
+    h.carried.gain -= gain; if (!h.carried.tiers.length) h.carried = null;
+    h.pledge = 0;                                    // livré : reste compté dans o.reserved (devenu escrow)
+    o.escrow = o.escrow || { resId, tiers: [], gain: 0, owner: h.c };
+    o.escrow.tiers.push(...tiers); o.escrow.gain += gain; o.escrow.owner = h.c;
+    this.updateHawkerCarry(h);
+    // Rafraîchit la bulle du client : ce qu'il reste à réunir.
+    const left = need.qty - o.escrow.tiers.length;
+    const bub = cust.querySelector(".bubble span"); if (bub && left > 0) bub.textContent = left + "×";
+    if (o.escrow.tiers.length >= need.qty) {
+      // Commande réunie : on solde via captureCustomer (l'escrow EST le paquet livré).
+      const bundle = { resId: o.escrow.resId, tiers: o.escrow.tiers, gain: o.escrow.gain };
+      if (captureCustomer(this, o.escrow.owner, cust, bundle)) {
+        // captureCustomer a consommé need.qty ; un éventuel surplus retourne à la réserve.
+        if (bundle.tiers.length) { const m = o.escrow.owner.stock[o.escrow.resId] = o.escrow.owner.stock[o.escrow.resId] || {}; bundle.tiers.forEach((t) => (m[t] = (m[t] || 0) + 1)); if (o.escrow.owner === this.player) this._invDirty = true; }
+        o.escrow = null;
+        this.finishCapture(h);
+      }
+    }
+  },
+  // Nombre d'unités actuellement en poche (paquet sorti de la réserve).
+  carriedCount(h) { return h.carried ? h.carried.tiers.length : 0; },
+  // Modèle "réel" : ajuste le paquet en poche à EXACTEMENT `n` unités du produit de sa
+  // machine — pioche le complément dans la réserve (meilleur tier d'abord) ou y remet
+  // le surplus. Le stock bouge tout de suite (visible dans l'inventaire). Renvoie le
+  // nombre réellement en main (< n si la réserve s'épuise). n=0 = tout reposer.
+  hawkerSetLoad(h, n) {
+    const resId = this.machineDef(h.m.id).outputs;
+    const m = h.c.stock[resId] = h.c.stock[resId] || {};
+    h.carried = h.carried || { resId, tiers: [], gain: 0 };
+    while (h.carried.tiers.length > n) {                       // rend le surplus
+      const t = h.carried.tiers.pop(); m[t] = (m[t] || 0) + 1; h.carried.gain -= this.tierInfo(resId, t).price;
+    }
+    while (h.carried.tiers.length < n) {                       // complète depuis la réserve
+      const t = Object.keys(m).map(Number).filter((x) => m[x] > 0).sort((a, b) => b - a)[0];
+      if (t == null) break;
+      m[t]--; h.carried.tiers.push(t); h.carried.gain += this.tierInfo(resId, t).price;
+    }
+    if (h.c === this.player) this._invDirty = true;
+    const cnt = h.carried.tiers.length;
+    if (!cnt) h.carried = null;
+    this.updateHawkerCarry(h);
+    return cnt;
+  },
+  // Il rentre bredouille (rappelé en prod, vague finie) ou bascule en défense : tout le
+  // paquet RETOURNE à la réserve. Rien n'est perdu.
+  hawkerReturnCarried(h) { this.hawkerSetLoad(h, 0); },
+  // La poche à l'écran = ce que le rabatteur tient PHYSIQUEMENT : la marchandise du
+  // comptoir (défense, carriedSale) sinon l'unité sortie de la réserve (carried), sinon rien.
+  updateHawkerCarry(h) {
+    if (!h.el) return;
+    const old = h.el.querySelector(".hw-carry"); if (old) old.remove();
+    let resId, tier, qty = 1;
+    if (h.carriedSale && h.carriedSale.tiers && h.carriedSale.tiers.length) {
+      resId = h.carriedSale.resId; tier = h.carriedSale.tiers[0]; qty = h.carriedSale.units || h.carriedSale.tiers.length;
+    } else if (h.carried && h.carried.tiers.length) {
+      resId = h.carried.resId; tier = h.carried.tiers[0]; qty = h.carried.tiers.length;
+    } else return;
+    const carry = el("div", "hw-carry");
+    carry.appendChild(this.tierImg(resId, tier));
+    if (qty > 1) carry.appendChild(el("span", "hw-qty", "×" + qty));
+    h.el.appendChild(carry);
+  },
+  // Défense : sort la marchandise réservée du comptoir vers la main du rabatteur.
+  // Le MODÈLE (sale.items) est gardé — seuls les chips à l'écran partent — pour
+  // pouvoir la reposer si le rabatteur ne livre pas.
+  hawkerPickup(c, sale) {
+    if (!sale || !sale.items) return;
+    c.counterItems = (c.counterItems || []).filter((it) => !sale.items.includes(it));
+    sale.items.forEach((it) => { if (it._chip) { it._chip.remove(); it._chip = null; } });
+    this.renderCounterDesk(c);
+  },
+  // Repose sur le comptoir une marchandise ramassée mais jamais livrée (rabatteur
+  // rappelé en prod, lane reconstruite…). No-op si la vente a déjà été soldée.
+  hawkerRestore(c, sale) {
+    if (!sale || !sale.items || !sale.items.length) return;
+    c.counterItems = c.counterItems || [];
+    sale.items.forEach((it) => { if (!c.counterItems.includes(it)) c.counterItems.push(it); });
+    this.renderCounterDesk(c);   // recrée les chips manquants (pas d'animation de vol)
+  },
+  // Livraison réussie : le colis quitte les mains du rabatteur et le client, servi
+  // sur place, s'efface (flashStall a déjà crédité le patron dans captureCustomer).
+  finishCapture(h) {
+    const cust = h.target;
+    if (h.el) { const carry = h.el.querySelector(".hw-carry"); if (carry) carry.remove(); }
+    if (cust && cust.isConnected) { cust.classList.add("captured"); setTimeout(() => cust.remove(), 500); }
+    this.refreshSuppliers();
   },
   // Avance vers (tx,ty) à `speed` px/s. true = arrivé.
   hawkerStep(h, dt, speed) {
@@ -790,29 +991,6 @@ export const renderMethods = {
       h.el.classList.toggle("flip", dx < 0);
     }
     return h.x === h.tx && h.y === h.ty;
-  },
-  // Un client vient d'être servi chez `c` : si un rabatteur de la BONNE ressource
-  // est dehors, c'est LUI qui apporte la commande (course + colis sur la tête).
-  // Sinon, la marchandise vole toute seule comme avant (fallback flyItem).
-  dispatchHawker(c, resId, tier, custEl) {
-    let best = null, bd = Infinity;
-    const t = custEl && custEl.isConnected ? custEl.getBoundingClientRect() : null;
-    if (!t) return null;
-    c.machines.forEach((m) => {
-      if (this.machineDef(m.id).outputs !== resId) return;
-      (m._hawkers || []).forEach((h) => {
-        if (h.state !== "out" || !h.el) return;
-        const r = h.el.getBoundingClientRect();
-        const d = Math.hypot(r.left - t.left, r.top - t.top);
-        if (d < bd) { bd = d; best = h; }
-      });
-    });
-    if (!best) return null;
-    best.state = "toClient";
-    best.clientEl = custEl;
-    const item = this.tierImg(resId, tier); item.className = "hw-item";
-    best.el.appendChild(item);
-    return best;
   },
 
   // Fin/début de vague : plus aucune commande en attente (les clients ont tous été

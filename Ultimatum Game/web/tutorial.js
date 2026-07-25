@@ -229,14 +229,14 @@ export const Tutorial = {
     const hit = document.elementFromPoint(cx, cy);
     return !!hit && (hit === node || node.contains(hit));
   },
-  // Les achats et l'inventaire vivent dans des bottom sheets fermées par défaut :
-  // une cible peut être dans le DOM mais invisible. Un mask a le droit d'OUVRIR la
-  // sheet qui la contient (le tutoriel amène le joueur à l'endroit qu'il enseigne) ;
-  // un red_dot, non — il attend que le joueur ouvre lui-même.
+  // La Boutique vit dans une bottom sheet fermée par défaut : une cible peut être
+  // dans le DOM mais invisible. Un mask a le droit d'OUVRIR la sheet qui la contient
+  // (le tutoriel amène le joueur à l'endroit qu'il enseigne) ; un red_dot, non — il
+  // attend que le joueur ouvre lui-même. (L'inventaire, lui, est toujours visible.)
   ensureSheet(node) {
-    const ov = node.closest("#boutique-overlay, #stock-overlay");
+    const ov = node.closest("#boutique-overlay");
     if (!ov || !ov.classList.contains("hidden")) return false;
-    if (ov.id === "boutique-overlay") this.game.openBoutique(); else this.game.openStock();
+    this.game.openBoutique();
     return true;   // elle s'ouvre (transition .26 s) : re-testé aux frames suivantes
   },
   // A target counts as reachable only when it is laid out, hittable and — for a

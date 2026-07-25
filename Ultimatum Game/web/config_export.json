@@ -2960,6 +2960,10 @@
       "value": 0.4
     },
     {
+      "id": "hawkerSpeed",
+      "value": 1.5
+    },
+    {
       "id": "customerRate",
       "value": 0.05
     },
@@ -2970,6 +2974,20 @@
     {
       "id": "enableCheats",
       "value": true
+    }
+  ],
+  "Sheet44": [
+    {
+      "": 5000
+    },
+    {
+      "": 1750
+    },
+    {
+      "": 21000
+    },
+    {
+      "": 525000
     }
   ],
   "inputs": [

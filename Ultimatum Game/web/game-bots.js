@@ -158,7 +158,12 @@ export function staffBot(game, b) {
   b.machines.forEach((m) => {
     const out = game.machineDef(m.id).outputs;
     const sells = (behavior[out] || 0) > 0;
-    const stock = game.stockOf(b, out);
+    // Modèle "réel" : un rabatteur sort AVEC une unité (stockOf l'exclut déjà). Sans
+    // la recompter, envoyer une équipe dehors ferait chuter le stock perçu sous le
+    // seuil et la ferait aussitôt rappeler (yo-yo → rabatteurs bots inefficaces). Ces
+    // unités restent SON stock, juste dans la rue : on les rajoute pour décider.
+    const carried = (m._hawkers || []).reduce((n, h) => n + (h.carried ? 1 : 0), 0);
+    const stock = game.stockOf(b, out) + carried;
     let sellN = 0;
     if (sells && game.waveActive) {
       if (stock >= min * 2) sellN = m.crew.length;

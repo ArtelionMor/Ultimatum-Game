@@ -268,41 +268,28 @@ img { image-rendering: pixelated; -webkit-user-drag: none; user-drag: none; }
 /* Mode Rabatteur : la carte s'affiche aux couleurs du crieur. */
 .machine.selling { border-color: var(--accent); }
 
-/* Le switch Prod / Rabatteur — LE verbe du joueur sur une machine. */
-.mode-seg { display: flex; border: 2px solid var(--border); border-radius: 10px; overflow: hidden; }
-.mode-btn {
-  border-radius: 0; padding: 7px 11px; font-size: 15px; line-height: 1;
+/* Sélecteur PAR OUVRIER — chaque ouvrier a SA ligne [avatar][ Produit | Rabatteur ].
+   Plus de switch global : le joueur dose le marché ouvrier par ouvrier. Le segment
+   actif est mis en avant (vert = produit, or = rabatteur). */
+.worker-row { display: flex; align-items: center; gap: 8px; }
+.wrole-seg { display: flex; flex: 1; border: 2px solid var(--border); border-radius: 10px; overflow: hidden; }
+/* .wrole-seg prefix : bat le générique button.sell (sinon le segment inactif vire
+   au vert), tout en laissant les variantes .on ci-dessous reprendre la main. */
+.wrole-seg .wrole-btn {
+  flex: 1; border-radius: 0; padding: 4px 6px; line-height: 1.05; font-size: 14px;
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
   background: var(--bg-panel); color: var(--text-dim);
 }
-.mode-btn.on { background: var(--accent); color: #221a00; }
-.mode-btn:first-child { border-right: 2px solid var(--border); }
-.machine.selling .mode-btn.on { animation: wpPulse 1.2s ease-in-out infinite; }
+.wrole-btn span { font-size: 9px; font-weight: bold; letter-spacing: .2px; }
+.wrole-btn:first-child { border-right: 2px solid var(--border); }
+.wrole-btn.on { background: var(--accent-2); color: #06210a; }
+.wrole-btn.sell.on { background: var(--accent); color: #221a00; }
+.machine.selling .wrole-btn.sell.on { animation: wpPulse 1.2s ease-in-out infinite; }
 
-/* Part de marché du joueur sur LA ressource de cette machine (refreshMachineShares) :
-   c'est ce chiffre que le mode Rabatteur fait grimper, icône du produit à l'appui. */
-.machine-share {
-  grid-column: 2; display: flex; align-items: center; gap: 5px;
-  font-size: 12px; color: var(--text-dim);
-}
-.machine-share img { width: 20px; height: 20px; }
-.machine-share b { color: var(--accent-2); font-size: 13px; }
-.machine-share.zero b { color: var(--danger); }
-.machine-share::before { content: "part de marché"; }
-
-/* Ouvrier dehors (rabatteur pas rentré) : sa chip s'estompe sur la carte. */
-/* La chip d'ouvrier est un INTERRUPTEUR (tap = prod ↔ rabatteur, toggleWorkerRole). */
-.machine .wchip { cursor: pointer; position: relative; }
-.machine .wchip:active { transform: scale(.92); }
+/* Avatar de l'ouvrier sur sa ligne : bordure dorée quand il est rabatteur. */
+.machine .wchip { position: relative; flex: 0 0 auto; }
 .wchip.sell { border-color: var(--accent); box-shadow: 0 0 6px rgba(244, 185, 66, .45); }
 .wchip .wrole { display: none; }
-.wchip.sell .wrole {
-  display: block; position: absolute; top: -7px; right: -6px;
-  font-size: 11px; line-height: 1;
-  filter: drop-shadow(0 1px 2px rgba(0,0,0,.6));
-}
-.wchip.sell .wrole::before { content: "📣"; }
-/* Rabatteur DEHORS (pas encore rentré) : sa chip s'estompe sur la carte. */
-.wchip.away { opacity: .4; }
 .machine-icon {
   grid-row: 1 / -1;
   width: 100%; height: 100%;
@@ -316,8 +303,10 @@ img { image-rendering: pixelated; -webkit-user-drag: none; user-drag: none; }
 .machine-recipe img.out { width: 56px; height: 56px; }
 .machine-recipe .arrow { color: var(--accent); font-weight: bold; }
 
-.machine-footer { grid-column: 2; display: flex; align-items: center; gap: 10px; }
-.worker-slots { display: flex; gap: 4px; }
+.machine-footer { grid-column: 2; display: flex; flex-direction: column; align-items: stretch; gap: 6px; }
+.worker-slots { display: flex; flex-direction: column; gap: 5px; }
+.machine-footer-bottom { display: flex; align-items: center; gap: 10px; }
+.machine-footer-bottom .machine-timer { margin-left: 0; }
 .slot {
   width: 20px; height: 24px; border-radius: 4px;
   border: 2px solid var(--border); background: transparent;
@@ -497,38 +486,42 @@ button.sell { background: var(--ok); color: #03210a; }
 @keyframes flash { 0%{ background: var(--accent);} 100%{ background: var(--bg-card);} }
 
 /* ---------- Inventory grid (resources × tiers) ---------- */
+/* Bande INVENTAIRE compacte, toujours à l'écran dans la barre du bas :
+   [ INVENTAIRE / 📦x/y ]  [ tuiles qui défilent latéralement → ]  [ 🔁 ] */
 #inventory-bar {
-  background: var(--bg-panel); border: 2px solid var(--border); border-radius: 12px;
-  padding: 8px 10px; margin-bottom: 2px;
-  display: flex; flex-direction: column; gap: 3px;
+  flex: 1 1 auto; min-width: 0;
+  background: var(--bg-card); border: 2px solid var(--border); border-radius: 12px;
+  padding: 5px 8px; margin: 0;
+  display: flex; flex-direction: row; align-items: center; gap: 8px;
 }
-.inv-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1px; }
-.inv-top-label { font-size: 11px; font-weight: bold; color: var(--text-dim); text-transform: uppercase; letter-spacing: .5px; }
-.inv-cap { font-size: 13px; font-weight: bold; color: var(--text-dim); }
+.inv-top { flex: 0 0 auto; display: flex; flex-direction: column; align-items: flex-start; gap: 1px; }
+.inv-top-label { font-size: 9px; font-weight: bold; color: var(--text-dim); text-transform: uppercase; letter-spacing: .5px; }
+.inv-cap { font-size: 13px; font-weight: bold; color: var(--text-dim); white-space: nowrap; }
 .inv-cap::before { content: "📦"; margin-right: 3px; }
 .inv-cap.full { color: var(--danger); }
 
 /* One tile per stored unit: sprite over its tier's color (cfg.tierColors). */
-.inv-tiles { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; padding: 3px 1px; }
+.inv-tiles { display: flex; flex-wrap: nowrap; gap: 5px; justify-content: flex-start; padding: 1px; }
 .inv-unit {
-  width: 38px; height: 38px; border-radius: 9px;
+  width: 36px; height: 36px; flex: 0 0 auto; border-radius: 9px;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
   box-shadow: inset 0 -3px 0 rgba(0,0,0,.22), 0 1px 0 rgba(0,0,0,.3);
 }
-.inv-unit img { width: 32px; height: 32px; }
-.inv-empty { font-size: 11px; color: var(--text-dim); font-style: italic; text-align: center; padding: 6px 0; }
+.inv-unit img { width: 30px; height: 30px; }
+.inv-empty { font-size: 11px; color: var(--text-dim); font-style: italic; padding: 0 8px; white-space: nowrap; }
 
-/* Tiles region scrolls internally with a capped height, so adding units reflows
-   inside this box only — the machine list below never bumps. */
-.inv-scroll { max-height: 135px; overflow-y: auto; overscroll-behavior: auto; }
+/* Les tuiles défilent LATÉRALEMENT : la bande garde une hauteur fixe, ajouter des
+   unités pousse vers la droite (scroll horizontal), le carrousel machines ne bouge pas. */
+.inv-scroll { flex: 1 1 auto; min-width: 0; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+.inv-scroll::-webkit-scrollbar { display: none; }
 
-/* Merge button in the inventory header (replaces the per-row 🔁 badge, which was
-   absolutely positioned outside its row and clipped on small screens). */
+/* Bouton Merge compact (icône seule) à droite de la bande. */
 .inv-merge-btn {
-  background: var(--bg-card); color: var(--text-dim);
+  flex: 0 0 auto;
+  background: var(--bg-panel); color: var(--text-dim);
   border: 1px solid var(--border); border-radius: 8px;
-  padding: 3px 10px; font-size: 12px; font-weight: bold;
+  padding: 6px 9px; font-size: 15px; font-weight: bold; line-height: 1;
 }
 .inv-merge-btn.glow { color: #04231d; background: var(--accent-2); border-color: var(--accent-2); animation: mergePulse 1.4s ease-in-out infinite; }
 @keyframes mergePulse { 0%,100%{ opacity: .8; } 50%{ opacity: 1; } }
@@ -617,6 +610,19 @@ button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
   position: absolute; left: 2px; top: -44px; width: 20px; height: 20px;
   filter: drop-shadow(0 2px 2px rgba(0,0,0,.5));
 }
+/* la marchandise qu'il PORTE vers sa cible : icône de la ressource + quantité */
+.hawker .hw-carry {
+  position: absolute; left: -13px; top: -52px;
+  display: flex; align-items: center; gap: 1px;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,.5));
+}
+.hawker .hw-carry img { width: 22px; height: 22px; }
+.hawker .hw-qty {
+  font-size: 10px; font-weight: bold; color: #fff; line-height: 14px;
+  background: var(--hc, var(--accent)); border-radius: 6px; padding: 0 3px;
+}
+/* Client capturé en pleine rue par un rabatteur : servi sur place, il s'efface. */
+.customer.captured { transition: transform .45s ease, opacity .45s ease; transform: scale(.42); opacity: 0; }
 .cust-sprite { width: 46px; height: 46px; filter: drop-shadow(0 3px 3px rgba(0,0,0,.4)); position: relative; z-index: 1; }
 .customer .bubble {
   display: flex; align-items: center; gap: 3px;
@@ -753,9 +759,9 @@ button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
 
 /* ---------- Refining (convert) overlay ---------- */
 #convert-list { display: flex; flex-direction: column; gap: 8px; margin: 10px 0 18px; }
-/* ---------- Bottom sheets (merge, boutique, stock) ----------
+/* ---------- Bottom sheets (merge, boutique) ----------
    Même patron pour toutes : glissent du bas, grip, fond assombri. */
-#merge-overlay, #boutique-overlay, #stock-overlay { align-items: flex-end; justify-content: stretch; }
+#merge-overlay, #boutique-overlay { align-items: flex-end; justify-content: stretch; }
 #merge-sheet, .sheet {
   width: 100%;
   max-height: 68vh; overflow-y: auto;
@@ -769,9 +775,6 @@ button.upgrade:disabled { background: #3a4a52; color: #7a8197; }
 #merge-overlay.open #merge-sheet, .overlay.open .sheet { transform: translateY(0); }
 #boutique-sheet { border-top-color: var(--accent); }
 #boutique-sheet .sheet-head h2 { color: var(--accent); }
-/* Dans la sheet, l'inventaire n'a plus besoin de sa propre boîte bordée. */
-#stock-sheet #inventory-bar { border: none; background: transparent; padding: 0; margin: 0; }
-#stock-sheet .inv-scroll { max-height: 46vh; }
 .sheet-grip { width: 44px; height: 4px; border-radius: 2px; background: var(--border); margin: 2px auto 8px; }
 .sheet-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .sheet-head h2 { color: var(--accent-2); font-size: 18px; margin: 0; }

@@ -374,10 +374,11 @@ tête) → returning (rentre à pied) → recharge` (`general.hawkerRecharge`, d
 pied et la production ne reprend que l'équipe au complet (gate dans
 `game-production`) — pas d'exploit de switch. Chaque concurrent a une **couleur
 fixe** (`compColor`, partagée avec le camembert) : plot sous les pieds + halo,
-et le stand s'illumine (`.hawking`) tant que ses rabatteurs sont dehors. La
-carte machine affiche la **part de marché sur SA ressource**
-(`refreshMachineShares`) ; la machine active du carrousel **estompe** les
-clients qui veulent autre chose (`.customer.dim`).
+et le stand s'illumine (`.hawking`) tant que ses rabatteurs sont dehors. Chaque
+ouvrier a **son propre sélecteur Produit / Rabatteur** sur sa ligne de la carte
+machine (`setWorkerRole` — plus de switch global ni de part de marché affichée) ;
+la machine active du carrousel **estompe** les clients qui veulent autre chose
+(`.customer.dim`).
 
 - Les **personnages** embarquent toujours en premier (`Meta.nextRecruit` via
   `addWorker`, appelé par `fillCrew`) ; bonus de vitesse sur **leurs** machines,
@@ -476,19 +477,19 @@ colonne flex fixe :
   or = assignable (un ouvrier est sélectionné). Tap = le carrousel s'y aimante,
   ou y **assigne** l'ouvrier sélectionné. C'est aussi une **cible de drop**
   (`dropTargetAt`) : on peut glisser un ouvrier vers une machine hors écran.
-- **Barre du bas permanente** (`#bottom-bar`) : le banc (`#worker-bar`, scroll
-  horizontal interne) + les boutons **Boutique** et **Stock**.
+- **Barre du bas permanente** (`#bottom-bar`) : la **bande INVENTAIRE**
+  (`#inventory-bar`, toujours à l'écran) + le bouton **Boutique**.
 - **Boutique** (`#boutique-overlay`, sheet) : les achats tycoon (`#shop-bar` y a
   déménagé avec son id — les cibles tutoriel pointent toujours dessus). Le bouton
   porte une pastille `.glow` quand un achat est abordable (`refreshAffordability`).
   L'upgrade de machine reste sur la carte machine (contextuel).
-- **Stock** (`#stock-overlay`, sheet) : l'inventaire (`#inventory-bar`, id
-  conservé, bouton Merge compris). Le bouton affiche la jauge `7/20` en
-  permanence (`refreshStockBtn`, tick 0.2 s). `_invVisible` signifie désormais
-  « la sheet Stock est ouverte » — même contrat qu'avant pour le flush différé
-  (`maybeRefreshInventory`) et les vols : une unité produite vole **vers le
-  bouton Stock** quand la sheet est fermée (`flyToInventory`), une unité vendue
-  en **repart** (`reserveRect`).
+- **Inventaire** (`#inventory-bar`) : une **bande compacte permanente** dans la
+  barre du bas — `[ INVENTAIRE / 📦 x/y ]`, tuiles qui **défilent latéralement**
+  (`.inv-scroll`, une par unité stockée), bouton **Merge** à droite. Plus de sheet
+  Stock : `_invVisible` reste vrai toute la partie (posé dans `enterPlay`) pour que
+  la boucle 0.2 s écrive les tuiles en direct (`maybeRefreshInventory`). Une unité
+  produite y **vole** (`flyToInventory`), une unité vendue en **repart**
+  (`reserveRect`). Le compteur vit dans `#inv-cap` (`refreshStockBtn` est un no-op).
 - Les overlays partagent un z-index ; `openOverlay()` incrémente un compteur pour
   que le dernier ouvert passe au-dessus (une fiche ouverte depuis une autre fiche
   revient bien sur la précédente à la fermeture). Les sheets (merge, boutique,

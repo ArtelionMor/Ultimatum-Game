@@ -33,7 +33,7 @@ function hawkersOut(c, resId, game) {
   let n = 0;
   c.machines.forEach((m) => {
     if (game.machineDef(m.id).outputs !== resId) return;
-    (m._hawkers || []).forEach((h) => { if (h.state === "out" || h.state === "toClient") n++; });
+    (m._hawkers || []).forEach((h) => { if (h.state === "hunt" || h.state === "chase") n++; });
   });
   return n;
 }
@@ -156,6 +156,69 @@ function settleSale(game, c, sale) {
   c.unitsThisRound = (c.unitsThisRound || 0) + sale.units; // parts de marché en volume (camembert de fin de round)
 }
 
+// --- Capture par un rabatteur -------------------------------------------------
+// Rendre une vente réservée : les tiers repartent au stock, la marchandise quitte
+// le comptoir. Utilisé quand un rabatteur ADVERSE vole un client déjà promis à `c`.
+export function unreserveSale(game, c, sale) {
+  if (!sale) return;
+  const m = c.stock[sale.resId] = c.stock[sale.resId] || {};
+  (sale.tiers || []).forEach((t) => { m[t] = (m[t] || 0) + 1; });
+  detachCounter(game, c, sale);
+  if (c === game.player) game._invDirty = true;
+}
+
+// Retire les chips d'une vente du comptoir (sans toucher au stock) : le rabatteur
+// a pris la marchandise EN MAIN (sécurisation d'un client déjà à soi).
+function detachCounter(game, c, sale) {
+  if (!sale || !sale.items) return;
+  c.counterItems = (c.counterItems || []).filter((it) => !sale.items.includes(it));
+  sale.items.forEach((it) => { if (it._chip) { it._chip.remove(); it._chip = null; } });
+  sale.items = null;
+  game.renderCounterDesk(c);
+}
+
+// Un rabatteur de `c` atteint le client `cust` (lien cust._order / cust._need posés
+// à l'apparition) : il le SERT SUR PLACE. Le client repart sans jamais atteindre un
+// comptoir. Retourne true si la capture a eu lieu.
+//   - offense (client promis à un concurrent) : on rembourse ce concurrent et on
+//     réserve la marchandise chez `c` — le vol change le vainqueur de la commande.
+//   - conversion (client sans preneur, en file d'attente) : on le sort de l'attente
+//     et on réserve chez `c`.
+//   - défense (client déjà promis à `c`) : rien à re-réserver, la marchandise est
+//     déjà sur SON comptoir — le rabatteur la prend en main et on solde.
+// Modèle "réel" (choix joueur) : le rabatteur SORT avec un paquet en poche (sorti de
+// la réserve, `carried` = { resId, tiers[], gain }). En verrouillant un vol/conversion
+// il a chargé EXACTEMENT la quantité demandée — c'est ce paquet qu'il livre, plus de
+// réservation au contact. Les commandes en gros passent aussi (il porte 2, 3…).
+export function captureCustomer(game, c, cust, carried) {
+  const order = cust && cust._order, need = cust && cust._need;
+  if (!order || !need || order.done || order.arrived) return false;
+  const qty = need.qty;
+
+  if (order.winner === c) {
+    detachCounter(game, c, order.sale);           // défense : marchandise déjà réservée
+  } else {
+    if (!carried || carried.tiers.length < qty) return false;   // pas assez en main pour la commande
+    if (order.winner && order.sale) unreserveSale(game, order.winner, order.sale); // rembourse l'adverse
+    const mk = game.market;
+    if (mk && mk.waiting) mk.waiting = mk.waiting.filter((o) => o.cust !== cust);   // sort de l'attente
+    order.winner = c;
+    // Consomme EXACTEMENT la commande dans le paquet ; le rabatteur garde le reste.
+    const used = carried.tiers.splice(0, qty);
+    const gain = used.reduce((s, t) => s + game.tierInfo(carried.resId, t).price, 0);
+    carried.gain -= gain;
+    order.sale = { gain, units: qty, resId: carried.resId, tiers: used };
+  }
+  order.done = true; order.arrived = true;         // ferme retryWaiting + le règlement de chute
+  order.info = null;
+
+  settleSale(game, c, order.sale);
+  game.flashStall(c, order.sale.gain);
+  const mk = game.market;
+  if (mk) { mk.served++; mk.active--; }            // le client est traité : compté ici, plus à la chute
+  return true;
+}
+
 // --- Anti-chevauchement des colonnes -----------------------------------------
 // Le jitter aléatoire d'avant (±18 px pour un sprite de 46) laissait deux clients
 // tomber quasiment au même x : côte à côte dans le temps (même paquet, même
@@ -235,6 +298,7 @@ export function spawnCustomer(game) {
   const lane = $("#customer-lane");
   const cust = el("div", "customer");
   cust.dataset.res = need.resId;   // focus visuel : le carrousel estompe les clients hors sujet
+  cust._need = need;               // ce que veut ce client — lu par les rabatteurs (captureCustomer)
 
   // CHOIX DU SHOP DÈS L'APPARITION (plus au dernier moment) : on regarde qui a le
   // stock MAINTENANT, on tire le vainqueur, et on réserve sa marchandise. Le client
@@ -244,6 +308,7 @@ export function spawnCustomer(game) {
   // réservation tardive et le règlement en bas.
   const eligible = game.competitors.filter((c) => game.stockOf(c, need.resId) >= need.qty);
   const order = { winner: eligible.length ? chooseShop(game, eligible, need.resId) : null, sale: null, arrived: false };
+  cust._order = order;             // lien DOM → commande, pour que les rabatteurs puissent la capturer
   order.info = lossInfo(game, eligible, order.winner, need.resId);
   if (order.winner) {
     order.sale = reserveSale(game, order.winner, need.resId, need.qty);
@@ -270,6 +335,16 @@ export function spawnCustomer(game) {
   requestAnimationFrame(() => cust.classList.add("falling"));
 
   setTimeout(() => {
+    if (order.done) return;   // déjà servi SUR PLACE par un rabatteur (captureCustomer) : rien à régler
+    // ALLIANCE inachevée : des alliés ont déposé des unités mais pas assez à temps —
+    // on les REND à la réserve du propriétaire (rien perdu), le client se règle
+    // normalement à son comptoir d'origine (le vol n'a jamais eu lieu).
+    if (order.escrow && order.escrow.tiers.length) {
+      const own = order.escrow.owner, mm = own.stock[order.escrow.resId] = own.stock[order.escrow.resId] || {};
+      order.escrow.tiers.forEach((t) => (mm[t] = (mm[t] || 0) + 1));
+      if (own === game.player) game._invDirty = true;
+      order.escrow = null;
+    }
     order.arrived = true;   // ferme la fenêtre de rattrapage : retryWaiting ne doit plus le servir
     const { winner, sale } = order;
     if (winner && sale) {
