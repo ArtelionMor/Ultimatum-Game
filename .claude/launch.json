@@ -4,14 +4,46 @@
     {
       "name": "ultimatum-web",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8792", "--directory", "Ultimatum Game/web"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8792",
+        "--directory",
+        "Ultimatum Game/web"
+      ],
       "port": 8792
+    },
+    {
+      "name": "donjon-chaton",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8793",
+        "--directory",
+        "/Users/teliausimontroalen/Donjon & Chaton/app"
+      ],
+      "port": 8793
     },
     {
       "name": "level-designer",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["Ultimatum Game/tools/level-designer/serve.py", "8791"],
+      "runtimeArgs": [
+        "Ultimatum Game/tools/level-designer/serve.py",
+        "8791"
+      ],
       "port": 8791
+    },
+    {
+      "name": "colo-web",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--prefix",
+        "/Users/teliausimontroalen/Bidoc/apps/web"
+      ],
+      "port": 5173
     }
   ]
 }
