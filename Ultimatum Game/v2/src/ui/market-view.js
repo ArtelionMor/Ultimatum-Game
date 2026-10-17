@@ -5,7 +5,7 @@
 import { previewPreference, segmentShare, score } from '../market.js';
 import { unitCost } from '../factory.js';
 import { mkOf, sellersOf, shareOf, priceBounds, setPrice, monopolistOf } from '../sim.js';
-import { price as fPrice, pct, stars } from '../format.js';
+import { price as fPrice, pct, stars, money } from '../format.js';
 import { retrigger } from './fx.js';
 import { play } from './sound.js';
 
@@ -34,6 +34,10 @@ export function initMarket(game) {
   holdRepeat($('price-minus'), () => apply(G.st.mk[G.market].you.price - step(), 'btn'));
   holdRepeat($('price-plus'), () => apply(G.st.mk[G.market].you.price + step(), 'btn'));
   $('cards').addEventListener('scroll', paintDots, { passive: true });
+  // Cards are refreshed in place, so "?" clicks are caught on the container.
+  $('cards').addEventListener('click', e => { const b = e.target.closest('[data-help]'); if (b) openHelp(b.dataset.help); });
+  $('help-close').addEventListener('click', () => $('help').classList.add('hidden'));
+  $('help').addEventListener('click', e => { if (e.target.id === 'help') $('help').classList.add('hidden'); });
 }
 
 // Tap = one step; press-and-hold repeats, so ± stays usable on mobile.
@@ -124,8 +128,8 @@ function pie(parts) {
 const row = (s, value, extra = '') =>
   `<div class="${s.id === 'you' ? 'you' : ''}"><i style="background:${s.color}"></i>${s.icon} ${s.name}${extra}<b>${pct(value)}</b></div>`;
 
-function card(title, sub, parts, legend, crown = '') {
-  return `<div class="pcard"><div class="pcard-title">${title}</div><div class="pcard-sub">${sub}</div>
+function card(title, sub, parts, legend, crown = '', help = '') {
+  return `<div class="pcard">${help ? `<button class="pc-help" data-help="${help}" aria-label="Explications">?</button>` : ''}<div class="pcard-title">${title}</div><div class="pcard-sub">${sub}</div>
     <div class="pie-wrap"><div class="pie" style="background:${pie(parts)}"></div>${crown ? `<span class="crown">${crown}</span>` : ''}</div>
     <div class="pleg">${legend}</div></div>`;
 }
@@ -143,7 +147,7 @@ export function renderMarket() {
   const cards = [card('📊 Tout le marché', `Ta part : <b>${pct(sh.you)}</b>`,
     meta.map(s => ({ value: sh[s.id], color: s.color })),
     meta.map(s => row(s, sh[s.id], `<span>${s.id === holder ? '👑 ' : ''}${fPrice(priceOf(s.id))}</span>`)).join(''),
-    holder ? '👑' : '')];
+    holder ? '👑' : '', 'all')];
 
   if (st.unlocked.segments) {
     const pref = previewPreference(mk, sellersOf(st, G.market));
@@ -153,7 +157,7 @@ export function renderMarket() {
       const legend = meta.map(s => row(s, t.by[s.id] / tot)).join('')
         + (lost / tot > 0.02 ? row({ id: 'lost', color: '#3a3f4d', icon: '🚶', name: 'Sans achat' }, lost / tot) : '');
       cards.push(card(`${sg.icon} ${sg.name}`, verdict,
-        [...meta.map(s => ({ value: t.by[s.id], color: s.color })), { value: lost, color: '#3a3f4d' }], legend));
+        [...meta.map(s => ({ value: t.by[s.id], color: s.color })), { value: lost, color: '#3a3f4d' }], legend, '', sg.id));
     }
   }
 
@@ -192,4 +196,79 @@ function refusal(sg, mk) {
   const you = st.mk[G.market].you;
   const atMin = score(sg, { quality: you.quality, price: priceBounds(cfg, st, G.market).min, brand: you.brand }, mk.ref_price);
   return atMin >= sg.refuse_below ? `Les ${sg.name} te trouvent trop cher` : `Les ${sg.name} trouvent ta qualité trop faible`;
+}
+
+// --- "?" help sheet ------------------------------------------------------------------
+
+const SCALE = [
+  { key: 'love', icon: '❤️', name: "t'adorent", what: "50 % ou plus d'entre eux achètent chez toi." },
+  { key: 'like', icon: '🙂', name: "t'apprécient", what: 'Entre 25 et 50 % achètent chez toi.' },
+  { key: 'doubt', icon: '🤔', name: 'hésitent', what: 'Entre 5 et 25 % : un ou plusieurs rivaux leur plaisent plus.' },
+  { key: 'flee', icon: '🏃', name: 'te fuient', what: 'Moins de 5 % : un rival leur plaît bien plus que toi.' },
+  { key: 'refuse', icon: '🚫', name: 'te refusent', what: "Ton offre est sous leur seuil (trop cher ou qualité trop faible) : ils n'achètent rien chez toi." },
+];
+const scaleKey = mine => (mine >= 0.5 ? 'love' : mine >= 0.25 ? 'like' : mine >= 0.05 ? 'doubt' : 'flee');
+const gauge = (v, max) => { const n = v > 0 ? Math.max(1, Math.round(v / max * 4)) : 0; return '●'.repeat(n) + '○'.repeat(4 - n); };
+
+function openHelp(key) {
+  const { cfg, st } = G;
+  const mk = mkOf(cfg, G.market), m = st.mk[G.market], you = m.you;
+  const row = cfg.markets.find(r => r.id === G.market);
+  let title, body;
+  if (key === 'all') {
+    title = `📊 ${row.icon} ${row.name} : tout le marché`;
+    body = `<p>Le camembert montre <b>qui vend</b> sur ce marché, sur les dernières secondes. Ta part = tes ventes ÷ toutes les ventes.</p>
+      <p>Les clients sont de 3 types (fais glisser les cartes) : chacun pèse le <b>prix</b> et la <b>qualité ★</b> à sa façon, puis se répartit entre les vendeurs qu'il accepte. Le meilleur rapport attire le plus, mais pas tout le monde.</p>
+      <p>👑 <b>Monopole</b> : tiens ${pct(cfg.monopoly.share)} du marché pendant ${cfg.monopoly.hold_s} s. Les clients deviennent alors fidèles à toi (bonus d'attrait), et plus le monopole dure, plus il est dur à casser.</p>
+      <p>Ta part est aussi limitée par ta <b>production</b> : si ton stock est vide, les clients vont ailleurs.</p>`;
+  } else {
+    const sg = mk.segments.find(x => x.id === key);
+    const segs = mk.segments, maxA = Math.max(...segs.map(x => x.a)), maxB = Math.max(...segs.map(x => x.b)), maxC = Math.max(...segs.map(x => x.c || 0)) || 1;
+    const sellers = sellersOf(st, G.market), pref = previewPreference(mk, sellers);
+    const sc = s => score(sg, s, mk.ref_price);
+    const t = m.shares.seg[sg.id], mine = segmentShare(m.shares, sg.id, 'you');
+    const refused = pref[sg.id].refused.you;
+    const cur = refused ? 'refuse' : scaleKey(mine);
+    const starWorth = sg.b * mk.ref_price / sg.a;     // $ of price a customer trades for +1★
+    // Their favourite rival right now.
+    let fav = null, favShare = -1;
+    for (const r of m.rivals) { const v = (t.by[r.id] || 0) / (t.demand || 1); if (v > favShare) { favShare = v; fav = r; } }
+    const favDef = fav && cfg.rivals.find(x => x.market === G.market && x.id === fav.id);
+    const bounds = priceBounds(cfg, st, G.market);
+    let tip;
+    if (refused) {
+      // Highest price they accept at your quality, lowest quality they accept at your floor price.
+      const maxP = (sg.b * you.quality + (sg.c || 0) * you.brand - sg.refuse_below) * mk.ref_price / sg.a;
+      const minQ = (sg.refuse_below + sg.a * bounds.min / mk.ref_price - (sg.c || 0) * you.brand) / sg.b;
+      tip = maxP >= bounds.min
+        ? `👉 Ils n'acceptent pas plus de <b>${fPrice(Math.floor(maxP / bounds.step) * bounds.step)}</b> pour ta qualité ${stars(you.quality)} : baisse ton prix sous ce seuil.`
+        : `👉 Même à ton prix le plus bas, il leur faut au moins <b>★${Math.ceil(minQ * 10) / 10}</b> : monte ta qualité avec l'Amélioration.`;
+    } else if (cur === 'love') {
+      tip = '👉 Ils t\'adorent : tu peux essayer de monter un peu ton prix pour gagner plus par vente.';
+    } else if (fav) {
+      const gap = sc(fav) - sc(you);
+      if (gap <= 0) tip = '👉 Tu les intéresses autant que leur favori : produis plus pour ne jamais être en rupture.';
+      else {
+        const dp = gap * mk.ref_price / sg.a, dq = gap / sg.b;
+        const newP = Math.max(0, you.price - dp);
+        const priceWay = newP >= bounds.min ? `baisse ton prix d'environ <b>${fPrice(Math.ceil(dp * 10) / 10)}</b> (→ ${fPrice(Math.floor(newP / bounds.step) * bounds.step)})` : null;
+        const qualWay = `gagne <b>+${(Math.ceil(dq * 10) / 10)}★</b> de qualité`;
+        tip = `👉 Pour faire jeu égal avec ${favDef.icon} ${favDef.name} : ${priceWay ? (sg.a / sg.b > 2 ? `${priceWay}, ou ${qualWay}` : `${qualWay}, ou ${priceWay}`) : `${qualWay} (baisser ton prix ne suffirait pas : tu serais sous ton coût)`}.`;
+      }
+    } else tip = '';
+    title = `${sg.icon} ${sg.name} · ${row.icon} ${row.name}`;
+    body = `<p class="h-lead">${sg.demand_per_min} clients/min sur ce marché.</p>
+      <div class="h-head">Ce qui compte pour eux</div>
+      <div class="h-gauges"><div>💰 Prix bas <b>${gauge(sg.a, maxA)}</b></div><div>⭐ Qualité <b>${gauge(sg.b, maxB)}</b></div><div>👑 Fidélité au monopole <b>${gauge(sg.c || 0, maxC)}</b></div></div>
+      <p>Pour eux, <b>+1★ vaut ${money(starWorth)}</b> de prix en plus.</p>
+      <div class="h-head">Ce que veut dire le verdict</div>
+      <ul class="h-scale">${SCALE.map(x => `<li class="${x.key === cur ? 'on' : ''}"><span>${x.icon}</span><div><b>${x.name}</b><br>${x.what}</div></li>`).join('')}</ul>
+      <div class="h-head">Chez toi maintenant</div>
+      <p><b>${pct(mine)}</b> d'entre eux achètent chez toi, à ${fPrice(you.price)} en ${stars(you.quality)}.${favDef ? ` Leur favori : ${favDef.icon} ${favDef.name} (${fPrice(fav.price)}, ${stars(fav.quality)}, ${pct(favShare)}).` : ''}</p>
+      ${tip ? `<p class="h-tip">${tip}</p>` : ''}`;
+  }
+  $('help-title').textContent = title;
+  $('help-body').innerHTML = body;
+  $('help').classList.remove('hidden');
+  play('tab', 0.25);
 }

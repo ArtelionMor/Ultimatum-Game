@@ -93,11 +93,14 @@ export function migrate(cfg, st) {
     st.stats.sold[row.id] = 0;
     st.stats.delivered[row.id] = 0;
   }
+  // Saves from before quality tiers stored bare stages as items. Only those get
+  // converted — doing it again would turn a lemon (code 1) into a juice (code 9).
+  const preTier = !st.mk[cfg.markets[0].id].you.tiers;
   for (const row of cfg.markets) {
     const y = st.mk[row.id].you;
     if (!y.tiers) y.tiers = [0, y.stock, 0, 0, 0, 0];
   }
-  const up = it => (it === null || it >= 8 ? it : item(it, 1));
+  const up = it => (it === null || !preTier ? it : item(it, 1));
   for (const m of st.grid.machines) {
     const d = machineDef(cfg, m.type);
     if (typeof m.buf === 'number') m.buf = Array.from({ length: m.buf }, () => item(d.input_stage ?? 0, 1));

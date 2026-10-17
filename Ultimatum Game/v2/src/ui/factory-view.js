@@ -27,7 +27,8 @@ import { play } from './sound.js';
 
 const $ = id => document.getElementById(id);
 const ARROWS = ['→', '↓', '←', '↑'];
-const STAGE_COLORS = ['#ffe14a', '#ffa53a', '#3ddc84'];
+// One colour per item stage: lemon, juice, bottle, orange, orange juice, strawberry, jam.
+const STAGE_COLORS = ['#ffe14a', '#ffa53a', '#3ddc84', '#ff8a1f', '#ffc46b', '#ff4d6d', '#b5523b'];
 const TIER_COLORS = [null, null, '#e6ecf5', '#ffcf4a', '#c58cff', '#ff5d8f'];   // ring per ★ (★1 has none)
 const CELL = 34;
 const SLOP = 6;            // px a finger may move before a tap becomes a drag
@@ -190,6 +191,7 @@ const STATUS = {
   ok: '✅ Tourne',
   starved: '💤 Attend sa matière (flèche orange)',
   blocked: '⛔ Sortie bloquée (flèche verte) ou stock plein',
+  wrong: '❌ Le mauvais produit arrive sur son entrée : vérifie tes tapis',
   idle: '…',
 };
 
@@ -678,9 +680,9 @@ function drawMachine(m, now) {
   ctx.fillRect(x + 8, y + s - 11, s - 16, 4);
   ctx.fillStyle = '#ffe9a8';
   ctx.fillRect(x + 8, y + s - 11, (s - 16) * Math.min(1, m.prog), 4);
-  if (m.status === 'starved' || m.status === 'blocked') {
+  if (m.status === 'starved' || m.status === 'blocked' || m.status === 'wrong') {
     ctx.font = `${Math.round(c * 0.42)}px system-ui, "Segoe UI Emoji", sans-serif`;
-    ctx.fillText(m.status === 'starved' ? '💤' : '⛔', x + s - c * 0.42, y + c * 0.42);
+    ctx.fillText(m.status === 'starved' ? '💤' : m.status === 'wrong' ? '❌' : '⛔', x + s - c * 0.42, y + c * 0.42);
   }
   // ports: orange = input, green = output
   const p = ports(m), [dx, dy] = DIRS[m.rot];
@@ -704,11 +706,11 @@ function arrow(cl, dx, dy, color, side) {
 function drawItem(x, y, it) {
   const stage = stageOf(it), ring = TIER_COLORS[tierOf(it)];
   ctx.fillStyle = STAGE_COLORS[stage];
-  if (stage === 2) roundRect(x - 4, y - 7, 8, 14, 3);
+  if (stage === 2 || stage === 6) roundRect(x - 4, y - 7, 8, 14, 3);
   else { ctx.beginPath(); ctx.arc(x, y, stage === 0 ? 6 : 5.5, 0, Math.PI * 2); }
   ctx.fill();
   if (ring) { ctx.lineWidth = 2.5; ctx.strokeStyle = ring; ctx.stroke(); }
-  if (stage === 2) { ctx.fillStyle = '#d9ffe8'; ctx.fillRect(x - 2, y - 10, 4, 4); }
+  if (stage === 2 || stage === 6) { ctx.fillStyle = '#d9ffe8'; ctx.fillRect(x - 2, y - 10, 4, 4); }
 }
 
 function outline(x, y, w, h, color) {

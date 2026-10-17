@@ -4,7 +4,7 @@ Prototype mobile (portrait, 480 px max) : tu construis une usine (citrons, jus, 
 JS vanilla en modules ES, sans build ni dépendance.
 
 ```bash
-python -m http.server 8795 --directory v2
+python v2/tools/serve.py 8795 v2
 ```
 Puis ouvrir http://localhost:8795.
 - **Console de triche** : bouton 🐞 en haut à droite, touche `d`, ou `?debug` dans l'URL. Elle contient la vitesse ×1/×10/×50, la température, a/b par segment, +1K $ et Reset.

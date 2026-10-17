@@ -201,7 +201,9 @@ function accept(cfg, grid, sx, sy, tx, ty, it, ctx) {
   }
   const p = ports(m);
   const cap = Math.max(cfg.grid.machine_buffer, recipeOf(cfg, m).inputs * 2);
-  if (p.in[0] !== sx || p.in[1] !== sy || d.input_stage !== stageOf(it) || m.buf.length >= cap) return false;
+  if (p.in[0] !== sx || p.in[1] !== sy) return false;
+  if (d.input_stage !== stageOf(it)) { m.wrong = stageOf(it); return false; }   // shown as ❌ on the machine
+  if (m.buf.length >= cap) return false;
   m.buf.push(it);
   return true;
 }
@@ -277,9 +279,10 @@ export function stepGrid(cfg, grid, dt, ctx) {
       } else {
         // Waiting for the next item is normal; only flag a real shortage.
         m.wait = (m.wait || 0) + dt;
-        m.status = m.wait > 3 ? 'starved' : 'ok';
+        m.status = m.wrong !== undefined ? 'wrong' : m.wait > 3 ? 'starved' : 'ok';
       }
     }
+    delete m.wrong;
     if (m.out.length) {
       const p = ports(m);
       if (accept(cfg, grid, p.outCell[0], p.outCell[1], p.out[0], p.out[1], m.out[0], ctx)) { m.out.shift(); m.status = 'ok'; }

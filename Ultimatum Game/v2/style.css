@@ -309,3 +309,21 @@ main { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 12px 14px 16px; }
 .rc-empty { color: var(--muted); font-size: 13px; padding: 14px; text-align: center; background: var(--panel); border-radius: 12px; }
 .ew-recipe { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #cfe4ff; }
 .ew-recipe button { padding: 2px 8px; }
+
+/* --- "?" help on pie cards ------------------------------------------------------- */
+.pcard { position: relative; }
+.pc-help { position: absolute; top: 10px; right: 10px; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line);
+  background: var(--panel2); color: var(--text); font-weight: 900; font-size: 15px; cursor: pointer; }
+.pc-help:active { transform: scale(.94); }
+#help-body { overflow-y: auto; padding: 10px 14px 16px; font-size: 13.5px; line-height: 1.45; }
+#help-body p { margin: 6px 0; }
+.h-lead { color: var(--muted); }
+.h-head { margin-top: 12px; font-weight: 800; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .4px; }
+.h-gauges { display: flex; flex-direction: column; gap: 3px; margin-top: 4px; }
+.h-gauges div { display: flex; justify-content: space-between; }
+.h-gauges b { color: var(--gold); letter-spacing: 2px; }
+.h-scale { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.h-scale li { display: flex; gap: 8px; padding: 6px 8px; border-radius: 9px; font-size: 12.5px; color: var(--muted); }
+.h-scale li span { font-size: 18px; }
+.h-scale li.on { background: rgba(255,207,74,.14); box-shadow: 0 0 0 1px var(--gold) inset; color: var(--text); }
+.h-tip { background: rgba(61,220,132,.12); border-radius: 9px; padding: 8px 10px; }
