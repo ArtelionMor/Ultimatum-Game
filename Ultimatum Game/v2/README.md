@@ -28,12 +28,11 @@ Puis ouvrir http://localhost:8795.
    - Le bouton « Aller » d'une tâche emmène là où elle se fait.
 5. **Recettes et enchères** (niveau 3+) :
    - chaque machine suit une recette : par ex. Pressage de base 2 🍋 → 1 🧃, Confiturerie 3 🍓 → 1 🍯, fusion 3 → 1 ★+1 ;
-   - l'onglet **Enchères** met en vente des **recettes alternatives** plus avantageuses (moins d'ingrédients, plus de sorties, plus rapide, ou Cueillette qui sort du ★2), sur des cartes avec rareté (C, PC, R, SR, UR, L), mise et chrono ;
-   - tu enchéris (ta mise est bloquée, et rendue si tu es dépassé) ; les rivaux du marché enchérissent aussi, jusqu'à un maximum secret ;
-   - un rival qui gagne une recette **se renforce** (qualité et production) ; il la remet parfois en vente ;
-   - **Offres** : tu peux proposer un prix à un rival pour lui racheter une recette (il répond après quelques secondes), et les rivaux te font des offres pour les tiennes (Vendre / Refuser) ;
-   - on applique une recette à **toutes** ses machines depuis sa carte (onglet Enchères › Recettes, « Appliquer à mes N … ») ou depuis le widget d'une machine (⇄ puis « Pour toutes ») ;
-   - un **point rouge** signale une recette possédée mais inutilisée (onglet, sous-onglet, carte, machines concernées dans l'usine) ;
+   - les **ventes aux enchères sont un événement** : environ toutes les 9 min (`event_every_s` + durée), quelques recettes alternatives (moins d'ingrédients, plus de sorties, plus rapide, Cueillette ★2) sont mises en vente pendant 2 min. Entre deux, l'onglet affiche un compte à rebours ;
+   - tu enchéris (ta mise est bloquée, et rendue si tu es dépassé) ; les rivaux enchérissent jusqu'à un maximum secret. Un rival qui gagne **se renforce** ;
+   - **📜 Recettes** (bouton en haut, tiroir latéral) : tes recettes (appliquer à toutes tes machines, remettre la base, **mettre aux enchères**) et celles des rivaux (leur faire une offre) ;
+   - **offres de rachat** : une notification reste en bas de l'écran jusqu'à ta réponse (Vendre / Refuser). Un rival refusé revient plus tard, plus offrant. Les rivaux se rachètent aussi des recettes entre eux ;
+   - un **point rouge** signale une recette inutilisée, une seule fois (il s'éteint dès que tu as ouvert le tiroir) ;
    - deux quêtes l'introduisent : « Obtiens une recette alternative » (niv. 4) et « Fais tourner une machine avec une recette alternative » (niv. 6).
 6. **Monopole** (pas d'écran de victoire) : tenir 80 % d'un marché pendant 20 s donne le monopole. Il apporte un effet visuel et un **bonus d'attrait** qui fidélise les clients. Les rivaux peuvent aussi prendre un monopole.
 
@@ -48,10 +47,13 @@ Puis ouvrir http://localhost:8795.
     - appuyer ailleurs (+ glisser) la déplace à cet endroit avec un nouveau sens ;
     - appuyer sur elle et glisser la tourne ;
     - la toucher à nouveau ou ✕ ferme.
+  - **⬚ Sélection** (outil de la barre) : trace un rectangle au doigt pour sélectionner machines et tapis ; glisse ensuite dans la sélection pour déplacer tout le bloc (les tapis gênants sont cassés, les autres machines bloquent), ou vends-la depuis le widget.
+  - **🧱 Agrandir** (à côté des stocks) : +4 colonnes et +4 lignes (à droite et en bas), prix qui double à chaque fois (`grid.expand_*`, max `grid.max_cols`).
   - **Pan** : glisser sur le sol vide sans outil, deux doigts avec n'importe quel outil, clic droit/molette sur PC.
   - Icônes : 💤 = attend sa matière, ⛔ = sortie bloquée (pas de tapis, ou stock plein).
 - **Marché** (débloqué à la 1re vente) : onglets de ressources (👑 = ton monopole, ⚠️ = celui d'un rival), bandeau monopole, prix (± / curseur), marge, qualité, cartes camembert.
-- **Enchères** (niveau 3) : sous-onglets 🔨 Enchères (cartes en cours), 📜 Recettes (les tiennes, et celles des rivaux avec des boutons d'offre), ✉️ Offres (offres reçues).
+- **Enchères** (niveau 3) : sous-onglets 🔨 Enchères (vente en cours, ou compte à rebours) et ✉️ Offres (reçues et envoyées).
+- **En haut** : 📜 Recettes (tiroir) et 📊 Statistiques : courbes de tes ventes ($/min) par produit sur les dernières minutes, et part de chaque produit dans tes revenus.
 - Les nouveautés arrivent une par une, avec une pastille et un toast : Marché → Pressage → Embouteillage → améliorations → stock → cartes segments → Outcomes supplémentaires.
 
 ## Formule de demande (`src/market.js`, `src/monopoly.js`)
@@ -104,7 +106,8 @@ Plancher : `coût unitaire × (1 + price_floor_margin)`, arrondi au pas de prix 
 | `market.temperature` | bas = le meilleur rafle tout ; haut = parts plus partagées |
 | `market.demand_wave_amp` / `_period_s` | heures de pointe (utilité du stock) |
 | `machines[]` | prix (et hausse par exemplaire), vitesse, améliorations, qualité par niveau ; `outcome` = point de vente |
-| `grid.cols` / `rows` / `outcome_x` / `_y` | taille de l'usine et position du 1er Outcome |
+| `grid.cols` / `rows` / `outcome_x` / `_y` | taille de départ de l'usine et position du 1er Outcome |
+| `grid.expand_step` / `expand_cost` / `expand_cost_mult` / `max_cols` | achat de place : cases ajoutées, prix, hausse, taille max |
 | `grid.belt_cost` / `belt_speed` | prix d'un tapis (0 = gratuit), cases/s (débit max ≈ 60 × vitesse /min) |
 | `player.start_money` / `stock_*` | démarrage, stock |
 | `machines[].first_free` | le 1er exemplaire est gratuit (Cueillette) |
@@ -114,7 +117,7 @@ Plancher : `coût unitaire × (1 + price_floor_margin)`, arrondi au pas de prix 
 | `ai.price_interval_s` / `level_tau_s` | nervosité des rivaux, vitesse à laquelle ils rejoignent leur cible |
 | `recipes[]` (`machine`, `base`, `rarity`, `inputs`, `outputs`, `rate_mult`, `out_tier`, `value`) | recettes de base et alternatives ; `value` sert de prix de référence aux enchères et aux offres |
 | `rarities[]` (`color`, `ai_max`) | couleur des cartes et jusqu'où les rivaux peuvent monter (× valeur) |
-| `auction.*` | ouverture (niveau), nombre et fréquence des lots, durée, mise de départ, surenchère minimum, intérêt des rivaux, revente, offres reçues/envoyées, bonus d'un rival par recette possédée |
+| `auction.*` | ouverture (niveau), événements (`event_every_s`, `event_lots`, `first_event_s`, `duration_s`), mise de départ, surenchère, intérêt des rivaux, revente, offres reçues (`offer_every_s`, `retry_s`, `retry_raise`), échanges entre rivaux (`rival_trade_every_s`, `rival_trade_chance`), bonus d'un rival par recette possédée |
 | `levels[]` (`level`, `unlock`, `reward`) | ce que chaque niveau débloque (ids de machines séparés par des espaces) et rapporte |
 | `tasks[]` (`level`, `type`, `param`, `target`, `reward`) | tâches de chaque niveau ; types : `build`, `sell`, `tier`, `upgrade`, `share`, `earn`, `stock`, `monopoly`, `own_recipe`, `use_recipe` |
 | `reveal.*` | rythme de la révélation progressive |
@@ -131,10 +134,10 @@ src/factory.js         stock, coût unitaire, production abstraite des rivaux
 src/ai.js              comportement des rivaux
 src/sim.js             état + tick pur : grille → stocks → 3 marchés ; actions du joueur
 src/progress.js        niveau joueur, tâches, déblocages (pur)
-src/auction.js         enchères de recettes, offres d'achat/vente avec les rivaux (pur)
+src/auction.js         événements d'enchères, offres, ventes de recettes, échanges entre rivaux (pur)
 src/reveal.js          révélation progressive des éléments d'interface
 src/main.js            boucle, onglets, indices, effets de monopole, sauvegarde
-src/ui/*.js            hud, tâches, usine (canvas + pan), marché, enchères, debug, effets, sons
+src/ui/*.js            hud, tâches, usine (canvas + pan), marché, enchères + tiroir recettes + notification d'offre, statistiques, debug, effets, sons
 tools/                 check-market.js, bot-run.js
 assets/kenney/         sous-ensemble des packs Kenney (CC0, voir License.txt)
 ```
@@ -157,6 +160,7 @@ assets/kenney/         sous-ensemble des packs Kenney (CC0, voir License.txt)
 - Les réglages du panneau debug ne sont pas sauvegardés et ne modifient pas `config.json`.
 - **Tâches cumulatives** : « Vends 25 jus » compte toutes les ventes depuis le début, pas seulement celles du niveau.
 - Les **anciennes sauvegardes** sont placées au plus haut niveau dont elles utilisent déjà une machine ; les tâches des niveaux précédents sont considérées faites.
+- **Équilibrage (17/10)** : rivaux +5 % de production par niveau (au lieu de +15 %), température 0,4 ; le seuil de monopole reste à 80 %.
 - Une sauvegarde **impossible à charger** est mise de côté (`mu_v2_save_backup` dans le localStorage) au lieu d'être écrasée.
 - Le bot de `bot-run` ignore les niveaux (il reste niveau 1, donc ses rivaux aussi) et les enchères.
 - **Recette d'une machine à plusieurs entrées** : elle prend les N premiers objets de son tampon ; le produit garde le ★ le plus bas des ingrédients.

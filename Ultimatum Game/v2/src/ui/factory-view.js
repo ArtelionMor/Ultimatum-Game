@@ -12,13 +12,17 @@
 //   rest of the floor greys out and a widget above it offers upgrade / sell.
 //   While editing: press elsewhere (+ drag for the direction) to move it there,
 //   press on it and drag to turn it, tap it again (or ✕) to close.
+// - ⬚ Selection tool: drag a rectangle to select machines + belts; then drag
+//   inside the selection to move the whole block, or sell it from the widget.
 // - Pan: one finger on empty floor with no tool, two fingers anytime,
 //   right/middle mouse or wheel.
 
 import { DIRS, ports, machineAt, beltAt, machineDef, placeCost, canPlaceMachine, canPlaceBelt,
-  setBeltDir, setMachineRot, moveMachine, countOf, stageOf, tierOf, beltsUnder } from '../grid.js';
-import { buyMachine, buyBelt, sellMachine, sellValue, sellBelt, machineInfo, upgradeMachine, stockInfo, buyStock } from '../sim.js';
-import { usableRecipes, applyRecipeAll, idleRecipes } from '../auction.js';
+  setBeltDir, setMachineRot, moveMachine, countOf, stageOf, tierOf, beltsUnder,
+  selectRect, groupBox, groupMoveCheck, moveGroup } from '../grid.js';
+import { buyMachine, buyBelt, sellMachine, sellValue, sellBelt, machineInfo, upgradeMachine, stockInfo, buyStock,
+  expandInfo, buyExpand, sellGroup } from '../sim.js';
+import { usableRecipes, applyRecipeAll, unseenRecipes } from '../auction.js';
 import { recipeOf } from '../grid.js';
 import { recipeText } from './auction-view.js';
 import { money, perMin, fmt, stars } from '../format.js';
@@ -42,12 +46,13 @@ let edit = null;           // { kind: 'machine', m } | { kind: 'belt', x, y }
 let press = null;          // gesture in progress (see onDown)
 let ghost = null;          // { x, y, rot, ok, type, lvl } preview footprint
 let pan = null;            // last pan anchor (screen px)
+let group = null;          // { machines, belts } selected with the ⬚ tool
 const pointers = new Map();
 const flashUntil = new Map();
 
 export function initFactory(game) {
   G = game;
-  edit = null; press = null; ghost = null; tool = null; camReady = false;
+  edit = null; press = null; ghost = null; tool = null; group = null; camReady = false;
   buildToolbar();
   if (bound) return;
   bound = true;
@@ -68,8 +73,8 @@ export function initFactory(game) {
 function buildToolbar() {
   const { cfg } = G;
   const groups = cfg.markets.map(r => `<button class="tool" data-group="${r.id}"><span class="ti">${r.icon}</span><small></small></button>`).join('');
-  const singles = ['outcome', 'belt'].map(id => {
-    const icon = id === 'belt' ? '⇉' : machineDef(cfg, id).icon;
+  const singles = ['outcome', 'belt', 'select'].map(id => {
+    const icon = id === 'belt' ? '⇉' : id === 'select' ? '⬚' : machineDef(cfg, id).icon;
     return `<button class="tool" data-tool="${id}"><span class="ti">${icon}</span><small></small></button>`;
   }).join('');
   const bar = $('toolbar');
@@ -84,7 +89,7 @@ function buildToolbar() {
   }));
   bar.querySelectorAll('[data-tool]').forEach(b => b.addEventListener('click', () => {
     tool = tool === b.dataset.tool ? null : b.dataset.tool;
-    menuGroup = null; edit = null;
+    menuGroup = null; edit = null; group = null;
     play('tick', 0.2);
     G.onAction('tool', tool);
     renderFactory();
@@ -96,7 +101,7 @@ function buildToolbar() {
 const groupOf = id => (id && id !== 'belt' ? machineDef(G.cfg, id)?.group : null) || null;
 const machineUnlocked = d => !!G.st.unlocked[d.id];
 const groupUnlocked = g => G.cfg.machines.some(d => d.group === g && machineUnlocked(d));
-const toolUnlocked = id => id === 'belt' || machineUnlocked(machineDef(G.cfg, id));
+const toolUnlocked = id => id === 'belt' || id === 'select' || machineUnlocked(machineDef(G.cfg, id));
 export const currentTool = () => tool;
 export function openToolMenu(group) { tool = null; edit = null; menuGroup = group; renderFactory(); }
 
@@ -118,6 +123,7 @@ export function renderFactory() {
     const id = b.dataset.tool;
     b.classList.toggle('hidden', !toolUnlocked(id));
     b.classList.toggle('active', id === tool);
+    if (id === 'select') { b.querySelector('small').textContent = 'Sélection'; return; }
     const c = placeCost(cfg, st.grid, id);
     b.querySelector('small').textContent = costLabel(c);
     b.classList.toggle('cant', st.money < c);
@@ -173,6 +179,19 @@ function renderStock() {
   sb.classList.toggle('reco', anyFull && sk.affordable);
   sb.classList.toggle('pulse', !!st.unlocked.stock && !st.seen.stock);
   sb.innerHTML = `📦 ${fmt(sk.nextCap)} · ${money(sk.cost)}`;
+  // Buy more floor.
+  const xb = $('expand-btn'), xi = expandInfo(cfg, st);
+  xb.classList.toggle('hidden', xi.maxed);
+  xb.classList.toggle('cant', !xi.affordable);
+  xb.innerHTML = `🧱 +${xi.step} · ${money(xi.cost)}`;
+  xb.title = `Agrandir l'usine : ${xi.cols}×${xi.rows} → ${xi.cols + xi.step}×${xi.rows + xi.step}`;
+  if (!xb.dataset.bound) {
+    xb.dataset.bound = 1;
+    xb.addEventListener('click', () => {
+      if (buyExpand(G.cfg, G.st)) { play('buy'); floatText(xb, `Usine ${G.st.grid.cols}×${G.st.grid.rows}`, 'gold'); G.onAction('expand'); }
+      else floatText(xb, 'Pas assez d\'argent', 'bad');
+    });
+  }
   if (!sb.dataset.bound) {
     sb.dataset.bound = 1;
     sb.addEventListener('click', () => {
@@ -198,9 +217,22 @@ const STATUS = {
 function renderWidget() {
   const w = $('edit-widget');
   // Hidden while the sell confirmation is open, so the dialog is the only thing to answer.
-  if (!edit || G.tab !== 'factory' || !$('confirm').classList.contains('hidden')) { w.classList.add('hidden'); return; }
+  if (G.tab !== 'factory' || !$('confirm').classList.contains('hidden') || (!edit && !group)) { w.classList.add('hidden'); return; }
   const { cfg, st } = G;
   let html;
+  if (group) {
+    const nm = group.machines.length, nb = group.belts.length;
+    html = `<div class="ew-title">⬚ Sélection</div>
+      <div class="ew-meta">${nm} machine${nm > 1 ? 's' : ''} · ${nb} tapis · glisse la sélection pour la déplacer</div>
+      <div class="ew-btns"><button class="btn small danger" data-act="gsell">Vendre</button><button class="btn small" data-act="gclose">✕</button></div>`;
+    if (w.dataset.html !== html) {
+      w.innerHTML = html; w.dataset.html = html;
+      w.querySelectorAll('[data-act]').forEach(b => b.addEventListener('click', () => onGroupWidget(b.dataset.act)));
+    }
+    w.classList.remove('hidden');
+    placeWidget();
+    return;
+  }
   if (edit.kind === 'belt') {
     if (!beltAt(st.grid, edit.x, edit.y)) { edit = null; w.classList.add('hidden'); return; }
     html = `<div class="ew-title">⇉ Tapis</div>
@@ -223,7 +255,7 @@ function renderWidget() {
       html = `<div class="ew-title">${d.icon} ${d.name} <span class="muted">Niv. ${m.lvl}</span></div>
         <div class="ew-meta">${meta}</div>
         <div class="ew-recipe">📜 ${rec.name} · ${recipeText(cfg, rec)}${usable.length > 1
-          ? ` <button class="btn small ${!m.recipe && idleRecipes(cfg, st).some(r => r.machine === m.type) ? 'red-dot' : ''}" data-act="recipe">⇄</button>
+          ? ` <button class="btn small ${!m.recipe && unseenRecipes(cfg, st).some(r => r.machine === m.type) ? 'red-dot' : ''}" data-act="recipe">⇄</button>
              <button class="btn small" data-act="recipeAll">Pour toutes</button>` : ''}</div>
         <div class="ew-btns">
           <button class="btn small up-mini ${info.affordable ? '' : 'cant'}" data-act="up">⬆ ${perMin(info.nextRate)} · ${money(info.cost)}</button>
@@ -244,11 +276,17 @@ function renderWidget() {
 // Keep the widget above its target (below it near the top edge).
 function placeWidget() {
   const w = $('edit-widget');
-  if (!edit || w.classList.contains('hidden')) return;
+  if ((!edit && !group) || w.classList.contains('hidden')) return;
   const a = $('app').getBoundingClientRect(), r = canvas.getBoundingClientRect();
-  const cx = edit.kind === 'belt' ? (edit.x + 0.5) * CELL : (edit.m.x + 1) * CELL;
-  const top = edit.kind === 'belt' ? edit.y * CELL : edit.m.y * CELL;
-  const bottom = top + (edit.kind === 'belt' ? 1 : 2) * CELL;
+  let cx, top, bottom;
+  if (group) {
+    const bx = groupBox(group);
+    cx = (bx.x0 + bx.x1 + 1) / 2 * CELL; top = bx.y0 * CELL; bottom = (bx.y1 + 1) * CELL;
+  } else {
+    cx = edit.kind === 'belt' ? (edit.x + 0.5) * CELL : (edit.m.x + 1) * CELL;
+    top = edit.kind === 'belt' ? edit.y * CELL : edit.m.y * CELL;
+    bottom = top + (edit.kind === 'belt' ? 1 : 2) * CELL;
+  }
   const sx = r.left - a.left + cx - cam.x;
   let sy = r.top - a.top + top - cam.y - w.offsetHeight - 8;
   if (sy < r.top - a.top) sy = r.top - a.top + bottom - cam.y + 8;
@@ -295,6 +333,23 @@ function onWidget(act, btn) {
     floatText(btn, next.name, 'gold');
   }
   renderFactory();
+}
+
+function onGroupWidget(act) {
+  if (act === 'gclose') { group = null; renderFactory(); return; }
+  const { cfg, st } = G, sel = group;
+  const nm = sel.machines.length, nb = sel.belts.length;
+  $('confirm-text').textContent = `Vendre la sélection (${nm} machine${nm > 1 ? 's' : ''}, ${nb} tapis) ?`;
+  $('confirm').classList.remove('hidden');
+  renderWidget();
+  $('confirm-yes').onclick = () => {
+    $('confirm').classList.add('hidden');
+    const got = sellGroup(cfg, st, sel);
+    floatText($('money'), `+${money(got)}`, 'gold'); play('tick', 0.4);
+    group = null;
+    G.onAction('sell');
+    renderFactory();
+  };
 }
 
 function confirmSell(m) {
@@ -375,6 +430,18 @@ function onDown(e) {
   const m = machineAt(grid, p.x, p.y);
   const sx = e.clientX, sy = e.clientY;
 
+  // A selection is active: press inside it to drag the block, elsewhere to drop it.
+  if (group) {
+    const bx = groupBox(group);
+    if (p.x >= bx.x0 && p.x <= bx.x1 && p.y >= bx.y0 && p.y <= bx.y1) {
+      press = { mode: 'gmove', start: p, d: { dx: 0, dy: 0 }, ok: true, sx, sy };
+      return;
+    }
+    group = null; renderFactory();
+    if (tool !== 'select') { press = { mode: 'empty', cell: p, sx, sy }; return; }
+  }
+  if (tool === 'select') { edit = null; press = { mode: 'rect', a: p, b: p, sx, sy }; return; }
+
   if (edit?.kind === 'machine') {
     const em = edit.m;
     if (m === em) {
@@ -448,6 +515,14 @@ function onMove(e) {
     case 'belt':
       drawBelt(p, e);
       break;
+    case 'rect':
+      press.b = p;
+      break;
+    case 'gmove': {
+      const d = { dx: p.x - press.start.x, dy: p.y - press.start.y };
+      if (d.dx !== press.d.dx || d.dy !== press.d.dy) { press.d = d; press.ok = groupMoveCheck(G.st.grid, group, d.dx, d.dy).ok; }
+      break;
+    }
   }
 }
 
@@ -509,6 +584,25 @@ function onUp(e) {
       } else floatAt(e, r.why === 'money' ? 'Pas assez d\'argent' : 'Place occupée', 'bad');
       break;
     }
+    case 'rect': {
+      const x0 = Math.min(pr.a.x, pr.b.x), x1 = Math.max(pr.a.x, pr.b.x), y0 = Math.min(pr.a.y, pr.b.y), y1 = Math.max(pr.a.y, pr.b.y);
+      const sel = selectRect(grid, x0, y0, x1, y1);
+      if (sel.machines.length || sel.belts.length) { group = sel; play('tick', 0.3); }
+      else floatAt(e, 'Rien à sélectionner ici', 'bad');
+      break;
+    }
+    case 'gmove': {
+      const { dx, dy } = pr.d;
+      if (!dx && !dy) break;
+      const broken = moveGroup(grid, group, dx, dy);
+      if (broken >= 0) {
+        play('buy', 0.3);
+        for (const m of group.machines) flashUntil.set(m, performance.now() + 500);
+        if (broken) floatAt(e, `🔨 ${broken} tapis`, 'gold');
+        G.onAction('move');
+      } else floatAt(e, 'Place occupée', 'bad');
+      break;
+    }
     case 'belt':
       // A tap on an existing belt turns it.
       if (!pr.moved && pr.startedOn) {
@@ -557,7 +651,9 @@ function draw(now) {
   // The view fills the space left between the toolbar and the tabs.
   const main = canvas.closest('main');
   viewW = canvas.parentElement.clientWidth;
-  viewH = Math.max(240, Math.floor(main.clientHeight - canvas.offsetTop + main.offsetTop - 14));
+  // Measured on screen: from the canvas top to the bottom of <main>, minus the stock row and main's padding.
+  const room = main.getBoundingClientRect().bottom - canvas.getBoundingClientRect().top + main.scrollTop;
+  viewH = Math.max(200, Math.floor(room - $('stock-row').offsetHeight - 26));
   canvas.style.width = viewW + 'px';
   canvas.style.height = viewH + 'px';
   if (canvas.width !== Math.round(viewW * dpr) || canvas.height !== Math.round(viewH * dpr)) { canvas.width = Math.round(viewW * dpr); canvas.height = Math.round(viewH * dpr); }
@@ -604,6 +700,33 @@ function draw(now) {
     if (edit?.kind === 'belt') { const b = beltAt(grid, edit.x, edit.y); if (b) drawBelt2(edit.x, edit.y, b, t); outline(edit.x * c, edit.y * c, c, c, '#5aa9ff'); }
   }
   if (moving && !ghost) drawMachine(moving, now);
+
+  // ⬚ rectangle being drawn
+  if (press?.mode === 'rect') {
+    const x0 = Math.min(press.a.x, press.b.x), x1 = Math.max(press.a.x, press.b.x), y0 = Math.min(press.a.y, press.b.y), y1 = Math.max(press.a.y, press.b.y);
+    ctx.fillStyle = 'rgba(90,169,255,.18)';
+    ctx.fillRect(x0 * c, y0 * c, (x1 - x0 + 1) * c, (y1 - y0 + 1) * c);
+    outline(x0 * c, y0 * c, (x1 - x0 + 1) * c, (y1 - y0 + 1) * c, '#5aa9ff');
+  }
+  // Selected block: everything else greys out; while dragging it follows the finger.
+  if (group) {
+    ctx.fillStyle = 'rgba(8,10,14,.62)';
+    ctx.fillRect(0, 0, grid.cols * c, grid.rows * c);
+    const d = press?.mode === 'gmove' ? press.d : { dx: 0, dy: 0 };
+    ctx.save();
+    ctx.translate(d.dx * c, d.dy * c);
+    if (d.dx || d.dy) ctx.globalAlpha = 0.85;
+    for (const k of group.belts) {
+      const b = grid.belts[k]; if (!b) continue;
+      const [x, y] = k.split(',').map(Number);
+      drawBelt2(x, y, b, t);
+      if (b.item !== null) { const [ddx, ddy] = DIRS[b.dir]; drawItem(x * c + c / 2 + ddx * (b.p - 0.5) * c, y * c + c / 2 + ddy * (b.p - 0.5) * c, b.item); }
+    }
+    for (const m of group.machines) drawMachine(m, now);
+    const bx = groupBox(group);
+    outline(bx.x0 * c - 2, bx.y0 * c - 2, (bx.x1 - bx.x0 + 1) * c + 4, (bx.y1 - bx.y0 + 1) * c + 4, press?.mode === 'gmove' && !press.ok ? '#ff5d5d' : '#5aa9ff');
+    ctx.restore();
+  }
 
   if (ghost) {
     ctx.globalAlpha = 0.75;
@@ -709,7 +832,7 @@ function drawMachine(m, now) {
 
 let idleCache = { t: -1, types: new Set() };
 const idleFor = type => {
-  if (idleCache.t !== G.st.t) idleCache = { t: G.st.t, types: new Set(idleRecipes(G.cfg, G.st).map(r => r.machine)) };
+  if (idleCache.t !== G.st.t) idleCache = { t: G.st.t, types: new Set(unseenRecipes(G.cfg, G.st).map(r => r.machine)) };
   return idleCache.types.has(type);
 };
 

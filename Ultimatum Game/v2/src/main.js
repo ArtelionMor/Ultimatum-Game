@@ -10,8 +10,9 @@ import { initHud, renderHud } from './ui/hud.js';
 import { initMarket, renderMarket, openMarkets } from './ui/market-view.js';
 import { initFactory, renderFactory, currentTool, openToolMenu } from './ui/factory-view.js';
 import { initTasks } from './ui/tasks.js';
-import { initAuction, renderAuction, setAuctionSub } from './ui/auction-view.js';
-import { isOpen as auctionOpen, rivalByRef, idleRecipes } from './auction.js';
+import { initAuction, renderAuction, setAuctionSub, renderRecipes, renderOfferNotif, recipesDot, openRecipesDrawer } from './ui/auction-view.js';
+import { initStats, renderStats } from './ui/stats.js';
+import { isOpen as auctionOpen, rivalByRef, eventRunning } from './auction.js';
 import { initDebug } from './ui/debug.js';
 import { toast, floatText } from './ui/fx.js';
 import { play } from './ui/sound.js';
@@ -42,7 +43,7 @@ const G = {
     if (G.cfg.markets.find(m => m.id === t.param) && G.st.unlocked.market) { G.market = t.param; showTab('market'); return; }
     if (t.type === 'stock') showTab('factory');
     if (t.type === 'own_recipe') { setAuctionSub('lots'); showTab('auction'); }
-    if (t.type === 'use_recipe') { setAuctionSub('mine'); showTab('auction'); }
+    if (t.type === 'use_recipe') openRecipesDrawer();
   },
   levelFlash: text => bigFlash(text),
 };
@@ -58,6 +59,7 @@ async function boot() {
   initDebug(G);
   initTasks(G);
   initAuction(G);
+  initStats(G);
   initTabs();
   render();
   startLoop();
@@ -179,7 +181,12 @@ function handle(e) {
   if (e.type === 'outbid') return toast(`⚠️ ${refName(e.by)} te surenchérit sur « ${recipeName(e.recipe)} ». Ta mise t’est rendue.`);
   if (e.type === 'lotWon') { bigFlash('📜 RECETTE GAGNÉE !'); return toast(`🎉 « ${recipeName(e.recipe)} » est à toi : choisis-la dans le widget d’une machine (⇄).`); }
   if (e.type === 'lotLost') return toast(`💸 ${refName(e.by)} remporte « ${recipeName(e.recipe)} » pour ${money(e.price)} et se renforce.`);
-  if (e.type === 'offerIn') return toast(`✉️ ${refName(e.from)} veut racheter ta recette « ${recipeName(e.recipe)} » (onglet Enchères).`);
+  if (e.type === 'offerIn') return play('tab', 0.4);   // the offer itself shows as a notification
+  if (e.type === 'auctionStart') { bigFlash('🔨 VENTE AUX ENCHÈRES !'); return toast(`🔨 ${e.lots} recette${e.lots > 1 ? 's' : ''} aux enchères pendant 2 min (onglet Enchères).`); }
+  if (e.type === 'auctionEnd') return toast('🔨 La vente aux enchères est terminée.');
+  if (e.type === 'lotSold') return toast(`💰 ${refName(e.to)} t’achète « ${recipeName(e.recipe)} » pour ${money(e.price)}. Tes machines qui l’utilisaient repassent en recette de base.`);
+  if (e.type === 'lotKept') return toast(`📜 Personne n’a enchéri sur « ${recipeName(e.recipe)} » : tu la gardes.`);
+  if (e.type === 'rivalTrade') return toast(`🤝 ${refName(e.to)} rachète « ${recipeName(e.recipe)} » à ${refName(e.from)}.`);
   if (e.type === 'offerAccepted') return toast(`🤝 ${refName(e.from)} accepte : « ${recipeName(e.recipe)} » est à toi pour ${money(e.price)}.`);
   if (e.type === 'offerRefused') return toast(`🙅 ${refName(e.from)} refuse ton offre pour « ${recipeName(e.recipe)} ».`);
   if (e.type === 'sale') saleAcc += e.gain;
@@ -230,7 +237,8 @@ function hint() {
     if (b.hold > 0 && !b.active) return `⏱ Garde ${pct(cfg.monopoly.share)} du marché ${r.icon} encore ${Math.ceil(cfg.monopoly.hold_s - b.hold)} s !`;
   }
   // A machine just unlocked by the level and never built.
-  const fresh = cfg.machines.find(d => st.unlocked[d.id] && !d.sink && !n(d.id));
+  const unlockedNow = (cfg.levels.find(l => l.level === st.level)?.unlock || '').split(/\s+/);
+  const fresh = cfg.machines.find(d => unlockedNow.includes(d.id) && !d.sink && !n(d.id));
   if (fresh) {
     const where = cfg.markets.find(m => m.id === fresh.group);
     return fresh.kind === 'refine'
@@ -271,10 +279,19 @@ function render() {
   const open = auctionOpen(G.cfg, st);
   at.classList.toggle('hidden', !open);
   if (open && !st.unlocked.auctionTab) { st.unlocked.auctionTab = true; toast('🔨 L’hôtel des enchères est ouvert : achète des recettes plus avantageuses (onglet Enchères).'); }
-  // Red dot: something to look at in the auction house (new, an offer, or a recipe you own but don't use).
-  const idle = idleRecipes(G.cfg, st).length > 0;
-  at.querySelector('.dot').classList.toggle('hidden', !(open && (!st.seen.auction || st.auc.offersIn.length || idle) && G.tab !== 'auction'));
-  at.querySelector('.dot').classList.toggle('red', idle);
+  // Dot on the auction tab: first visit, an auction running, or an offer waiting.
+  const live = open && eventRunning(st);
+  at.querySelector('.dot').classList.toggle('hidden', !(open && (!st.seen.auction || live || st.auc.offersIn.length) && G.tab !== 'auction'));
+  at.querySelector('.tab-label').textContent = live ? '🔨 En cours !' : '🔨 Enchères';
+  // Recipes button: shown once there is something; red dot until seen once.
+  $('recipes-btn').classList.toggle('hidden', !open);
+  $('recipes-dot').classList.toggle('hidden', !recipesDot());
+  renderOfferNotif();
+  renderRecipes();
+  renderStats();
+  // Bottom dock: the tool bar only on the factory screen; its height places the offer notification.
+  $('tooldock').classList.toggle('hidden', G.tab !== 'factory');
+  $('app').style.setProperty('--dock-h', ($('dock').offsetHeight + $('tabs').offsetHeight) + 'px');
   // Factory overlays belong to the factory screen only.
   if (G.tab !== 'factory') { $('edit-widget').classList.add('hidden'); $('tool-menu').classList.add('hidden'); }
   if (G.tab === 'market') renderMarket();

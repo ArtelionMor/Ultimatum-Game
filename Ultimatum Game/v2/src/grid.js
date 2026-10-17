@@ -163,6 +163,57 @@ export function removeMachine(grid, m) {
   return true;
 }
 
+// --- Bigger floor, groups ---------------------------------------------------------
+
+// The floor grows to the right and downwards, so nothing built moves.
+export function expandGrid(grid, n) { grid.cols += n; grid.rows += n; changed(grid); }
+
+// Machines and belts touching the cell rectangle [x0..x1] × [y0..y1] (inclusive).
+export function selectRect(grid, x0, y0, x1, y1) {
+  const machines = grid.machines.filter(m => m.x <= x1 && m.x + SIZE - 1 >= x0 && m.y <= y1 && m.y + SIZE - 1 >= y0);
+  const belts = Object.keys(grid.belts).filter(k => { const [x, y] = k.split(',').map(Number); return x >= x0 && x <= x1 && y >= y0 && y <= y1; });
+  return { machines, belts };
+}
+
+export function groupBox(sel) {
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const m of sel.machines) { x0 = Math.min(x0, m.x); y0 = Math.min(y0, m.y); x1 = Math.max(x1, m.x + SIZE - 1); y1 = Math.max(y1, m.y + SIZE - 1); }
+  for (const k of sel.belts) { const [x, y] = k.split(',').map(Number); x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); }
+  return { x0, y0, x1, y1 };
+}
+
+// Can the whole group slide by (dx, dy)? Other machines block it; other belts
+// in the way get broken. Returns { ok, broken: [belt keys] }.
+export function groupMoveCheck(grid, sel, dx, dy) {
+  const inSel = new Set(sel.machines), selBelts = new Set(sel.belts), broken = new Set();
+  const cellOk = (x, y) => {
+    if (!inside(grid, x, y)) return false;
+    const m = machineAt(grid, x, y);
+    if (m && !inSel.has(m)) return false;
+    const k = key(x, y);
+    if (grid.belts[k] && !selBelts.has(k)) broken.add(k);
+    return true;
+  };
+  for (const m of sel.machines)
+    for (let ox = 0; ox < SIZE; ox++) for (let oy = 0; oy < SIZE; oy++) if (!cellOk(m.x + dx + ox, m.y + dy + oy)) return { ok: false, broken: [] };
+  for (const k of sel.belts) { const [x, y] = k.split(',').map(Number); if (!cellOk(x + dx, y + dy)) return { ok: false, broken: [] }; }
+  return { ok: true, broken: [...broken] };
+}
+
+// Slide the group; belts keep their direction (and what they carry).
+// Returns the number of belts broken, or -1. `sel.belts` is updated in place.
+export function moveGroup(grid, sel, dx, dy) {
+  const chk = groupMoveCheck(grid, sel, dx, dy);
+  if (!chk.ok) return -1;
+  for (const k of chk.broken) delete grid.belts[k];
+  const moved = sel.belts.map(k => { const [x, y] = k.split(',').map(Number); const b = grid.belts[k]; delete grid.belts[k]; return [key(x + dx, y + dy), b]; });
+  for (const [k, b] of moved) grid.belts[k] = b;
+  sel.belts = moved.map(([k]) => k);
+  for (const m of sel.machines) { m.x += dx; m.y += dy; }
+  changed(grid);
+  return chk.broken.length;
+}
+
 export function setMachineRot(grid, m, rot) {
   if (m.type === 'outcome' || m.rot === rot) return false;
   m.rot = rot;

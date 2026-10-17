@@ -22,15 +22,12 @@
       <div id="money-box"><span class="coin ico-mask" style="--icon:url(assets/kenney/icons/dollar.png)"></span><span id="money">0 $</span></div>
       <div id="income">+0 $/min</div>
     </div>
-    <div id="hint">👉 …</div>
   </header>
 
   <main>
     <section id="screen-factory" class="screen active">
-      <div id="toolbar"></div>
-      <div id="tool-menu" class="hidden"></div>
-      <div id="stock-row"><div id="stock-chips"></div><button class="btn small hidden" id="stock-btn"></button></div>
       <canvas id="floor"></canvas>
+      <div id="stock-row"><div id="stock-chips"></div><button class="btn small hidden" id="stock-btn"></button><button class="btn small" id="expand-btn"></button></div>
     </section>
 
     <section id="screen-market" class="screen">
@@ -58,17 +55,47 @@
     <section id="screen-auction" class="screen">
       <div id="auc-tabs" class="subtabs">
         <button data-sub="lots" class="active">🔨 Enchères</button>
-        <button data-sub="mine">📜 Recettes<span class="dot red hidden" id="auc-mine-dot"></span></button>
         <button data-sub="offers">✉️ Offres<span class="dot hidden" id="auc-offers-dot"></span></button>
       </div>
       <div id="auc-body"></div>
     </section>
   </main>
+
+  <!-- Thumb zone: everything the player taps often sits right above the tabs. -->
+  <div id="dock">
+    <div id="hint">👉 …</div>
+    <div id="tooldock">
+      <div id="tool-menu" class="hidden"></div>
+      <div id="toolbar"></div>
+    </div>
+  </div>
+
+  <div id="side-btns">
+      <button id="recipes-btn" class="hud-icon side" title="Recettes" aria-label="Recettes">📜<span class="dot red hidden" id="recipes-dot"></span></button>
+      <button id="stats-btn" class="hud-icon side" title="Statistiques" aria-label="Statistiques"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="#5aa9ff"/><path d="M10 10 L10 2 A8 8 0 0 1 17.6 12.5 Z" fill="#ffcf4a"/><path d="M10 10 L17.6 12.5 A8 8 0 0 1 6 17 Z" fill="#3ddc84"/></svg></button>
+  </div>
   <div id="edit-widget" class="hidden"></div>
   <div id="confirm" class="overlay hidden">
     <div class="confirm-box">
       <p id="confirm-text"></p>
       <div class="confirm-btns"><button class="btn" id="confirm-no">Annuler</button><button class="btn danger" id="confirm-yes">Vendre</button></div>
+    </div>
+  </div>
+
+  <div id="offer-notif" class="hidden"></div>
+
+  <div id="recipes-drawer" class="drawer hidden">
+    <div class="drawer-panel">
+      <div class="tasks-head"><b>📜 Recettes</b><button class="btn small" id="recipes-close">✕</button></div>
+      <div id="recipes-body"></div>
+      <div class="drawer-foot"><button class="btn" id="recipes-close-bottom">Fermer</button></div>
+    </div>
+  </div>
+
+  <div id="stats" class="overlay hidden">
+    <div class="tasks-box">
+      <div class="tasks-head"><b><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="#5aa9ff"/><path d="M10 10 L10 2 A8 8 0 0 1 17.6 12.5 Z" fill="#ffcf4a"/><path d="M10 10 L17.6 12.5 A8 8 0 0 1 6 17 Z" fill="#3ddc84"/></svg> Statistiques</b><button class="btn small" id="stats-close">✕</button></div>
+      <div id="stats-body"></div>
     </div>
   </div>
 

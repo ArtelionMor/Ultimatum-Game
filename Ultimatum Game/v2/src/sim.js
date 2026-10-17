@@ -8,10 +8,10 @@
 import { marketCfg, stepMarket, createShareTracker, trackShares, marketShares, demandMultiplier } from './market.js';
 import { stockCap, stockCost, unitCost, produce } from './factory.js';
 import { createGrid, stepGrid, placeCost, machineDef, machineRate, upgradeCost, item, stageOf, tierOf,
-  placeMachine, placeBelt, removeMachine, removeBelt, beltAt, countOf } from './grid.js';
+  placeMachine, placeBelt, removeMachine, removeBelt, beltAt, countOf, expandGrid } from './grid.js';
 import { createRival, repriceRival, approachRival } from './ai.js';
 import { initProgress, migrateProgress } from './progress.js';
-import { createAuction, stepAuction, rivalRecipeCount } from './auction.js';
+import { createAuction, stepAuction, rivalRecipeCount, migrateAuction } from './auction.js';
 import { createBrand, stepBrand } from './monopoly.js';
 
 export const SAVE_VERSION = 3;
@@ -43,6 +43,7 @@ export function newGame(cfg, seed = 12345) {
     grid: createGrid(cfg), stockLvl: 1,
     mk: {},
     auc: createAuction(),
+    hist: createHistory(),
     stats: { sold: {}, earned: 0, upgrades: 0, priceChanges: 0, stockFullSeen: false, delivered: {}, built: {}, bestTier: {}, bestShare: {}, monopolies: {} },
     unlocked: {}, seen: {}, lastReveal: -999,
   };
@@ -108,12 +109,29 @@ export function migrate(cfg, st) {
     if (m.recipe === undefined) m.recipe = null;
   }
   for (const k in st.grid.belts) st.grid.belts[k].item = up(st.grid.belts[k].item);
+  st.hist ||= createHistory();
   st.auc ||= createAuction();
+  migrateAuction(st.auc);
   st.stats.bestTier ||= {};
   st.stats.bestShare ||= {};
   st.stats.monopolies ||= {};
   migrateProgress(cfg, st);
   return st;
+}
+
+// Sales history for the stats chart: $/min per market, one point every `every` s.
+export const HISTORY_POINTS = 90;
+export function createHistory() { return { every: 10, accT: 0, acc: {}, rev: {} }; }
+function recordHistory(cfg, st, dt) {
+  const h = st.hist;
+  h.accT += dt;
+  if (h.accT < h.every) return;
+  for (const r of cfg.markets) {
+    const list = (h.rev[r.id] ||= []);
+    list.push((h.acc[r.id] || 0) * 60 / h.accT);
+    if (list.length > HISTORY_POINTS) list.shift();
+  }
+  h.acc = {}; h.accT = 0;
 }
 
 export const sellersOf = (st, id) => [st.mk[id].you, ...st.mk[id].rivals];
@@ -164,6 +182,7 @@ export function step(cfg, st, dt) {
       st.money += gain;
       st.stats.sold[id] += sold;
       st.stats.earned += gain;
+      st.hist.acc[id] = (st.hist.acc[id] || 0) + gain;
       if (Math.floor(st.stats.sold[id]) > before) ev.push({ type: 'sale', market: id, gain });
     }
     for (const r of m.rivals) r.revenue += res.sold[r.id] * r.price;
@@ -196,6 +215,7 @@ export function step(cfg, st, dt) {
         { quality: n * cfg.auction.rival_bonus_quality, prod: n * cfg.auction.rival_bonus_prod });
     });
   }
+  recordHistory(cfg, st, dt);
   ev.push(...stepAuction(cfg, st, dt, rng(st)));
   return ev;
 }
@@ -268,6 +288,30 @@ export function upgradeMachine(cfg, st, m) {
 }
 
 // One stock level for every item.
+// Buy more floor: +expand_step columns and rows, pricier each time.
+export function expandInfo(cfg, st) {
+  const g = cfg.grid, n = st.expandLvl || 0;
+  const cost = Math.ceil(g.expand_cost * Math.pow(g.expand_cost_mult, n));
+  return { step: g.expand_step, cost, affordable: st.money >= cost, maxed: st.grid.cols + g.expand_step > g.max_cols, cols: st.grid.cols, rows: st.grid.rows };
+}
+
+export function buyExpand(cfg, st) {
+  const info = expandInfo(cfg, st);
+  if (info.maxed || !info.affordable) return false;
+  st.money -= info.cost;
+  st.expandLvl = (st.expandLvl || 0) + 1;
+  expandGrid(st.grid, info.step);
+  return true;
+}
+
+// Sell a whole selection (the last Outcome stays). Returns the total refund.
+export function sellGroup(cfg, st, sel) {
+  let total = 0;
+  for (const k of sel.belts) { const [x, y] = k.split(',').map(Number); total += sellBelt(cfg, st, x, y); }
+  for (const m of [...sel.machines]) { const back = sellMachine(cfg, st, m); if (back > 0) total += back; }
+  return total;
+}
+
 export function stockInfo(cfg, st) {
   const cost = stockCost(cfg, st.stockLvl);
   return { lvl: st.stockLvl, cap: stockCap(cfg, st.stockLvl), nextCap: stockCap(cfg, st.stockLvl + 1), cost, affordable: st.money >= cost };

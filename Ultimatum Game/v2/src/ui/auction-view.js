@@ -1,7 +1,13 @@
-// Auction screen (Wiki-Masters style): recipe cards up for auction, the
-// player's recipes and the rivals' (make them an offer), and incoming offers.
+// Recipes UI:
+// - Auction tab: the current auction EVENT (recipe cards, bids, timers) or the
+//   countdown to the next one, and the offers received / sent.
+// - Recipes drawer (📜 in the HUD): the player's recipes (apply to all machines,
+//   back to base) and the rivals' (make them an offer).
+// - Offer notification: a rival's buy offer stays at the bottom of the screen
+//   until the player accepts or refuses it.
 
-import { bid, bidPrice, acceptOffer, refuseOffer, makeOffer, rarityOf, rivalByRef, applyRecipeAll, recipeUse, idleRecipes } from '../auction.js';
+import { bid, bidPrice, acceptOffer, refuseOffer, makeOffer, rarityOf, rivalByRef, applyRecipeAll, recipeUse,
+  unseenRecipes, markRecipesSeen, eventRunning, listRecipe, unlistRecipe, saleState } from '../auction.js';
 import { baseRecipe, machineDef } from '../grid.js';
 import { money } from '../format.js';
 import { floatText } from './fx.js';
@@ -21,9 +27,18 @@ export function initAuction(game) {
     $('auc-body').dataset.html = '';
     renderAuction();
   }));
+  $('recipes-btn').addEventListener('click', openRecipes);
+  $('recipes-close').addEventListener('click', closeRecipes);
+  $('recipes-close-bottom').addEventListener('click', closeRecipes);   // in thumb reach
+  $('recipes-drawer').addEventListener('click', e => { if (e.target.id === 'recipes-drawer') closeRecipes(); });
+  // Rebuilt often: clicks are caught on the containers.
+  $('recipes-body').addEventListener('click', onRecipesClick);
+  $('auc-body').addEventListener('click', onAuctionClick);
+  $('offer-notif').addEventListener('click', onNotifClick);
 }
 
 const iconOfStage = s => G.cfg.markets.find(m => m.stage === s)?.icon || '?';
+const rec = id => G.cfg.recipes.find(r => r.id === id);
 
 // "2 🍋 → 1 🧃 · vitesse ×1.5" — what a recipe does, in one line.
 export function recipeText(cfg, r) {
@@ -40,88 +55,166 @@ export function recipeText(cfg, r) {
 const timeLeft = s => { s = Math.max(0, Math.ceil(s)); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
 const who = ref => { if (ref === 'you') return '🏭 Toi'; const r = rivalByRef(G.cfg, ref); return r ? `${r.icon} ${r.name}` : '—'; };
 
+// The recipe most of the player's machines of that type run (null if none built).
+function equippedOn(type) {
+  const ms = G.st.grid.machines.filter(m => m.type === type);
+  if (!ms.length) return null;
+  const count = {};
+  for (const m of ms) { const id = m.recipe || baseRecipe(G.cfg, type).id; count[id] = (count[id] || 0) + 1; }
+  const id = Object.keys(count).sort((x, y) => count[y] - count[x])[0];
+  return { r: rec(id) || baseRecipe(G.cfg, type), n: count[id], total: ms.length };
+}
+
+// Card: the struck line is what the player runs today (or the base recipe),
+// the green line is this card; a chip says what is equipped.
 function card(r, body) {
-  const { cfg } = G, rar = rarityOf(cfg, r), d = machineDef(cfg, r.machine), base = baseRecipe(cfg, r.machine);
+  const { cfg } = G, rar = rarityOf(cfg, r), d = machineDef(cfg, r.machine);
+  const eq = equippedOn(r.machine), isEq = eq && eq.r.id === r.id;
+  const ref = !eq || isEq ? baseRecipe(cfg, r.machine) : eq.r;
+  const chip = isEq ? `<span class="rc-eq on">✓ Équipée (${eq.n}/${eq.total})</span>`
+    : eq ? `<span class="rc-eq">🔧 Équipé : ${eq.r.name} (${eq.n}/${eq.total})</span>` : '';
   return `<div class="rcard" style="--rar:${rar.color}">
     <div class="rc-top"><span class="rc-rar">${rar.id}</span><span class="rc-machine">${d.icon} ${d.name}</span></div>
-    <div class="rc-name">${r.name}</div>
-    <div class="rc-formula"><s>${recipeText(cfg, base)}</s><b>${recipeText(cfg, r)}</b></div>
+    <div class="rc-namerow"><div class="rc-name">${r.name}</div>${chip}</div>
+    <div class="rc-formula"><s>${recipeText(cfg, ref)}</s><b>${recipeText(cfg, r)}</b></div>
     ${body}</div>`;
 }
+
+// Timers tick in place: rebuilding would swap buttons under the finger.
+function fill(box, html) {
+  const tick = () => box.querySelectorAll('[data-ends]').forEach(el => { el.textContent = '⏱ ' + timeLeft(Number(el.dataset.ends) - G.st.t); });
+  if (box.dataset.html !== html) { box.dataset.html = html; box.innerHTML = html; }
+  tick();
+}
+
+// --- Auction tab -------------------------------------------------------------------
 
 export function renderAuction() {
   const { cfg, st } = G, a = st.auc;
   $('auc-tabs').querySelectorAll('[data-sub]').forEach(b => b.classList.toggle('active', b.dataset.sub === sub));
   $('auc-offers-dot').classList.toggle('hidden', !a.offersIn.length);
-  const idle = idleRecipes(cfg, st);
-  $('auc-mine-dot').classList.toggle('hidden', !idle.length);
-  const rec = id => cfg.recipes.find(r => r.id === id);
-  let html = '';
+  let html;
   if (sub === 'lots') {
-    html = a.lots.length ? a.lots.map(l => {
-      const r = rec(l.recipe), price = bidPrice(l), lead = l.bidder === 'you';
-      return card(r, `<div class="rc-bid"><span>${l.bidder ? `Mise ${money(l.bid)} · ${who(l.bidder)}` : `Mise de départ ${money(l.bid)}`}</span><span class="rc-time" data-ends="${l.ends}"></span></div>
-        ${lead ? '<div class="rc-lead">✓ Tu mènes l’enchère</div>'
-          : `<button class="btn small rc-btn ${st.money < price ? 'cant' : ''}" data-bid="${l.id}">Enchérir ${money(price)}</button>`}
-        ${l.seller ? `<div class="rc-note">Revendue par ${who(l.seller)}</div>` : ''}`);
-    }).join('') : '<div class="rc-empty">Pas d’enchère en cours : une nouvelle carte arrive bientôt.</div>';
-  } else if (sub === 'mine') {
-    const mine = Object.keys(a.owned).map(rec);
-    const theirs = Object.entries(a.rivalOwned).map(([id, ref]) => ({ r: rec(id), ref }));
-    html = '<div class="rc-head">📜 Tes recettes</div>'
-      + (mine.length ? mine.map(r => {
-        const u = recipeUse(st, r), d = machineDef(cfg, r.machine), isIdle = idle.includes(r);
-        const btns = u.total === 0
-          ? `<div class="rc-note">Construis un ${d.icon} ${d.name} pour l’utiliser.</div>`
-          : `<div class="rc-offers">${u.using > 0 ? `<button class="btn small" data-base="${r.machine}">Remettre la base</button>` : ''}${u.using < u.total
-              ? `<button class="btn small rc-btn ${isIdle ? 'red-dot' : ''}" data-apply="${r.id}">Appliquer à mes ${u.total} ${d.icon} ${d.name}</button>` : ''}</div>`;
-        return card(r, `<div class="rc-bid"><span>Utilisée par <b>${u.using}/${u.total}</b> ${d.icon} ${d.name}</span></div>${btns}
-          <div class="rc-note">Ou machine par machine : touche-la dans l’usine, puis ⇄ sur la ligne 📜.</div>`);
-      }).join('')
-        : '<div class="rc-empty">Aucune pour l’instant : gagne une enchère ou rachète-en une à un rival.</div>')
-      + '<div class="rc-head">⚔️ Chez tes rivaux</div>'
-      + (theirs.length ? theirs.map(({ r, ref }) => {
-        const pending = a.offersOut.find(o => o.recipe === r.id);
-        const asks = [1, 1.3, 1.7].map(k => Math.ceil(r.value * k));
-        return card(r, `<div class="rc-bid"><span>Chez ${who(ref)}</span></div>
-          ${pending ? `<div class="rc-lead">⏳ Offre de ${money(pending.amount)} envoyée…</div>`
-            : `<div class="rc-offers">${asks.map(p => `<button class="btn small ${st.money < p ? 'cant' : ''}" data-offer="${r.id}" data-amount="${p}">Offrir ${money(p)}</button>`).join('')}</div>`}`);
-      }).join('') : '<div class="rc-empty">Aucun rival n’a de recette pour l’instant.</div>');
+    if (eventRunning(st)) {
+      const ends = Math.max(...a.lots.map(l => l.ends));
+      html = `<div class="auc-banner live">🔨 Vente aux enchères en cours · fin <span data-ends="${ends}"></span></div>`
+        + a.lots.map(l => {
+          const r = rec(l.recipe), price = bidPrice(l), lead = l.bidder === 'you', mine = l.seller === 'you';
+          return card(r, `<div class="rc-bid"><span><b>${money(l.bid)}</b>${l.bidder ? ` · ${who(l.bidder)}` : ''}</span><span class="rc-time" data-ends="${l.ends}"></span></div>
+            ${mine ? `<div class="rc-lead">📤 Ta recette est en vente${l.bidder ? ` : tu toucheras ${money(l.bid)}` : ' : pas encore d’enchère'}</div>`
+              : lead ? '<div class="rc-lead">✓ Tu mènes l’enchère</div>'
+              : `<button class="btn small rc-btn ${st.money < price ? 'cant' : ''}" data-bid="${l.id}">Enchérir ${money(price)}</button>`}
+            ${l.seller && !mine ? `<div class="rc-note">🔁 ${who(l.seller)}</div>` : ''}`);
+        }).join('');
+    } else {
+      html = `<div class="auc-banner">🔨 Prochaine vente aux enchères dans <b data-ends="${a.eventAt}"></b></div>
+        <div class="rc-empty">Les ventes ont lieu de temps en temps, avec quelques recettes alternatives à la fois. Mets de l’argent de côté !</div>`;
+    }
   } else {
-    html = a.offersIn.length ? a.offersIn.map(o => {
-      const r = rec(o.recipe);
-      return card(r, `<div class="rc-bid"><span>${who(o.from)} t’en offre <b>${money(o.price)}</b></span><span class="rc-time" data-ends="${o.expires}"></span></div>
-        <div class="rc-offers"><button class="btn small danger" data-refuse="${o.id}">Refuser</button><button class="btn small rc-btn" data-accept="${o.id}">Vendre</button></div>
-        <div class="rc-note">Vendue, elle renforce ce rival et tes machines qui l’utilisent repassent en recette de base.</div>`);
-    }).join('') : '<div class="rc-empty">Aucune offre reçue. Les rivaux te feront des offres pour tes recettes.</div>';
+    const ins = a.offersIn.map(o => card(rec(o.recipe), `<div class="rc-bid"><span>${who(o.from)} t’en offre <b>${money(o.price)}</b>${o.retry ? ' (nouvelle offre)' : ''}</span></div>
+      <div class="rc-offers"><button class="btn small danger" data-refuse="${o.id}">Refuser</button><button class="btn small rc-btn" data-accept="${o.id}">Vendre</button></div>
+      <div class="rc-note">Vendue, elle renforce ce rival et tes machines qui l’utilisent repassent en recette de base. Refusée, il reviendra avec plus.</div>`)).join('');
+    const outs = a.offersOut.map(o => `<div class="rc-empty">⏳ Offre de ${money(o.amount)} envoyée à ${who(o.to)} pour « ${rec(o.recipe).name} »…</div>`).join('');
+    html = '<div class="rc-head">✉️ Offres reçues</div>' + (ins || '<div class="rc-empty">Aucune offre reçue pour l’instant.</div>')
+      + (outs ? '<div class="rc-head">📤 Tes offres</div>' + outs : '')
+      + '<div class="rc-note">Pour racheter une recette à un rival : ouvre 📜 Recettes, en haut.</div>';
   }
-  const box = $('auc-body');
-  // Timers tick in place: rebuilding the cards would swap buttons under the finger.
-  const tickTimers = () => box.querySelectorAll('[data-ends]').forEach(el => { el.textContent = '⏱ ' + timeLeft(Number(el.dataset.ends) - st.t); });
-  if (box.dataset.html === html) { tickTimers(); return; }
-  box.dataset.html = html;
-  box.innerHTML = html;
-  tickTimers();
-  box.querySelectorAll('[data-bid]').forEach(b => b.addEventListener('click', () => {
+  fill($('auc-body'), html);
+}
+
+function onAuctionClick(e) {
+  const { cfg, st } = G, b = e.target.closest('button');
+  if (!b) return;
+  if (b.dataset.bid) {
     const r = bid(cfg, st, Number(b.dataset.bid));
     if (r.ok) { play('buy'); floatText(b, `-${money(r.price)}`, 'bad'); G.onAction('bid'); }
     else floatText(b, 'Pas assez d’argent', 'bad');
-  }));
-  box.querySelectorAll('[data-apply]').forEach(b => b.addEventListener('click', () => {
-    const r = cfg.recipes.find(x => x.id === b.dataset.apply);
+  } else if (b.dataset.accept) { if (acceptOffer(cfg, st, Number(b.dataset.accept))) { play('buy'); G.onAction('sellRecipe'); } }
+  else if (b.dataset.refuse) { refuseOffer(cfg, st, Number(b.dataset.refuse)); G.onAction('refuse'); }
+}
+
+// --- Recipes drawer ------------------------------------------------------------------
+
+function openRecipes() {
+  markRecipesSeen(G.st);          // red dots light up only once
+  $('recipes-drawer').classList.remove('hidden');
+  play('tab', 0.25);
+  renderRecipes();
+  G.onAction('recipesSeen');
+}
+const closeRecipes = () => $('recipes-drawer').classList.add('hidden');
+export const openRecipesDrawer = openRecipes;
+
+export function renderRecipes() {
+  if ($('recipes-drawer').classList.contains('hidden')) return;
+  const { cfg, st } = G, a = st.auc;
+  const mine = Object.keys(a.owned).map(rec);
+  const theirs = Object.entries(a.rivalOwned).map(([id, ref]) => ({ r: rec(id), ref }));
+  const html = '<div class="rc-head">📜 Tes recettes</div>'
+    + (mine.length ? mine.map(r => {
+      const u = recipeUse(st, r), d = machineDef(cfg, r.machine), sale = saleState(st, r.id);
+      const sell = sale === 'live' ? '<div class="rc-lead">📤 En vente aux enchères en ce moment</div>'
+        : sale === 'queued' ? `<div class="rc-offers"><span class="rc-note">📤 En vente à la prochaine enchère</span><button class="btn small" data-unlist="${r.id}">Retirer</button></div>`
+        : `<div class="rc-offers"><button class="btn small" data-list="${r.id}">📤 Mettre aux enchères</button></div>`;
+      const btns = u.total === 0
+        ? `<div class="rc-note">Construis un ${d.icon} ${d.name} pour l’utiliser.</div>`
+        : `<div class="rc-offers">${u.using > 0 ? `<button class="btn small" data-base="${r.machine}">Remettre la base</button>` : ''}${u.using < u.total
+            ? `<button class="btn small rc-btn" data-apply="${r.id}">Appliquer à mes ${u.total} ${d.icon} ${d.name}</button>` : ''}</div>`;
+      return card(r, `<div class="rc-bid"><span>Utilisée par <b>${u.using}/${u.total}</b> ${d.icon} ${d.name}</span></div>${btns}${sell}
+        <div class="rc-note">Ou machine par machine : touche-la dans l’usine, puis ⇄ sur la ligne 📜.</div>`);
+    }).join('') : '<div class="rc-empty">Aucune pour l’instant : gagne une enchère ou rachète-en une à un rival.</div>')
+    + '<div class="rc-head">⚔️ Chez tes rivaux</div>'
+    + (theirs.length ? theirs.map(({ r, ref }) => {
+      const pending = a.offersOut.find(o => o.recipe === r.id);
+      const asks = [1, 1.3, 1.7].map(k => Math.ceil(r.value * k));
+      return card(r, `<div class="rc-bid"><span>Chez ${who(ref)}</span></div>
+        ${pending ? `<div class="rc-lead">⏳ Offre de ${money(pending.amount)} envoyée…</div>`
+          : `<div class="rc-offers">${asks.map(p => `<button class="btn small ${st.money < p ? 'cant' : ''}" data-offer="${r.id}" data-amount="${p}">Offrir ${money(p)}</button>`).join('')}</div>`}`);
+    }).join('') : '<div class="rc-empty">Aucun rival n’a de recette pour l’instant.</div>');
+  fill($('recipes-body'), html);
+}
+
+function onRecipesClick(e) {
+  const { cfg, st } = G, b = e.target.closest('button');
+  if (!b) return;
+  if (b.dataset.apply) {
+    const r = rec(b.dataset.apply);
     const n = applyRecipeAll(cfg, st, r.machine, r.id);
     play('buy'); floatText(b, `${n} machine${n > 1 ? 's' : ''} → ${r.name}`, 'gold'); G.onAction('recipe');
-  }));
-  box.querySelectorAll('[data-base]').forEach(b => b.addEventListener('click', () => {
+  } else if (b.dataset.base) {
     const n = applyRecipeAll(cfg, st, b.dataset.base, null);
     play('tick', 0.3); floatText(b, `${n} en recette de base`, 'gold'); G.onAction('recipe');
-  }));
-  box.querySelectorAll('[data-offer]').forEach(b => b.addEventListener('click', () => {
+  } else if (b.dataset.list) {
+    const running = eventRunning(st);
+    if (listRecipe(cfg, st, b.dataset.list)) { play('tick', 0.4); floatText(b, running ? 'En vente maintenant !' : 'À la prochaine enchère', 'gold'); G.onAction('list'); }
+  } else if (b.dataset.unlist) {
+    unlistRecipe(st, b.dataset.unlist); play('tick', 0.3); G.onAction('unlist');
+  } else if (b.dataset.offer) {
     if (makeOffer(cfg, st, b.dataset.offer, Number(b.dataset.amount))) { play('tick', 0.4); G.onAction('offer'); }
     else floatText(b, 'Pas assez d’argent', 'bad');
-  }));
-  box.querySelectorAll('[data-accept]').forEach(b => b.addEventListener('click', () => {
-    if (acceptOffer(cfg, st, Number(b.dataset.accept))) { play('buy'); G.onAction('sellRecipe'); }
-  }));
-  box.querySelectorAll('[data-refuse]').forEach(b => b.addEventListener('click', () => { refuseOffer(st, Number(b.dataset.refuse)); G.onAction('refuse'); }));
+  }
+  renderRecipes();
+}
+
+export const recipesDot = () => unseenRecipes(G.cfg, G.st).length > 0;
+
+// --- Offer notification (stays until answered) ----------------------------------------
+
+export function renderOfferNotif() {
+  const { st } = G, o = st.auc.offersIn[0], box = $('offer-notif');
+  $('app').classList.toggle('has-notif', !!o);
+  if (!o) { box.classList.add('hidden'); box.dataset.html = ''; return; }
+  const r = rec(o.recipe), more = st.auc.offersIn.length - 1;
+  const html = `<div class="on-text">✉️ <b>${who(o.from)}</b> ${o.retry ? 'revient et ' : ''}veut racheter ta recette « ${r.name} » pour <b>${money(o.price)}</b>${more ? ` <span class="muted">(+${more} autre${more > 1 ? 's' : ''})</span>` : ''}</div>
+    <div class="on-btns"><button class="btn small danger" data-refuse="${o.id}">Refuser</button><button class="btn small rc-btn" data-accept="${o.id}">Vendre</button></div>`;
+  fill(box, html);
+  box.classList.remove('hidden');
+}
+
+function onNotifClick(e) {
+  const { cfg, st } = G, b = e.target.closest('button');
+  if (!b) return;
+  if (b.dataset.accept) { if (acceptOffer(cfg, st, Number(b.dataset.accept))) { play('buy'); floatText($('money'), 'Recette vendue', 'gold'); } }
+  else if (b.dataset.refuse) { refuseOffer(cfg, st, Number(b.dataset.refuse)); play('tick', 0.3); }
+  G.onAction('offerAnswer');
 }
