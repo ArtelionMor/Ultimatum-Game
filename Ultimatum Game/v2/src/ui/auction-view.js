@@ -75,6 +75,18 @@ function eqBadge(r) {
     : '<span class="eq-badge" title="Pas équipée">E</span>';
 }
 
+// The one number a recipe card shows, compared with the machine's base recipe:
+// harvests -> speed (outputs/min); transformers -> outputs per input item.
+// A transformer with the same yield but a faster pace shows its speed instead.
+function recipeGain(cfg, r) {
+  const b = baseRecipe(cfg, r.machine), num = x => String(Math.round(x * 100) / 100).replace('.', ',');
+  const speed = (r.outputs * r.rate_mult) / (b.outputs * b.rate_mult);
+  if (!r.inputs) return `⚡ ×${num(speed)}`;
+  const yieldGain = (r.outputs / r.inputs) / (b.outputs / b.inputs);
+  if (Math.abs(yieldGain - 1) < 1e-9 && r.rate_mult !== b.rate_mult) return `⚡ ×${num(r.rate_mult / b.rate_mult)}`;
+  return `♻️ ×${num(yieldGain)} <small>par matière</small>`;
+}
+
 function card(r, body) {
   const { cfg } = G, rar = rarityOf(cfg, r), d = machineDef(cfg, r.machine);
   const eq = equippedOn(r.machine), isEq = eq && eq.r.id === r.id;
@@ -84,17 +96,17 @@ function card(r, body) {
   const tag = x => (x.base ? '<span class="rc-mini base">Base</span>'
     : `<span class="rc-mini" style="--rar:${rarityOf(cfg, x).color}">${x.rarity}</span>`);
   let chip = '';
-  if (isEq) chip = `<span class="rc-eq on">✓ Équipée (${eq.n}/${eq.total})</span>`;
+  if (isEq) chip = '';   // the boxed E next to the name already says it
   else if (eq) {
     const diff = rank(r) - rank(eq.r);
     const verdict = diff > 0 ? '<span class="rc-vs up">⬆ Meilleur rang</span>'
       : diff < 0 ? '<span class="rc-vs down">⬇ Rang inférieur</span>' : '<span class="rc-vs same">= Même rang</span>';
-    chip = `<span class="rc-eq">🔧 Équipé : ${tag(eq.r)} ${eq.r.base ? '' : eq.r.name + ' '}(${eq.n}/${eq.total})</span>${verdict}`;
+    chip = verdict;
   }
   return `<div class="rcard" style="--rar:${rar.color}">
     <div class="rc-top"><span class="rc-rar">${rar.id}</span><span class="rc-machine">${d.icon} ${d.name}</span></div>
     <div class="rc-namerow"><div class="rc-name">${r.name} ${eqBadge(r)}</div>${chip ? `<div class="rc-eqrow">${chip}</div>` : ''}</div>
-    <div class="rc-formula"><s>${recipeText(cfg, ref)}</s><b>${recipeText(cfg, r)}</b></div>
+    <div class="rc-speed">${recipeGain(cfg, r)}</div>
     ${body}</div>`;
 }
 
@@ -115,27 +127,24 @@ export function renderAuction() {
   if (sub === 'lots') {
     if (eventRunning(st)) {
       const ends = Math.max(...a.lots.map(l => l.ends));
-      html = `<div class="auc-banner live">🔨 Vente aux enchères en cours · fin <span data-ends="${ends}"></span></div>`
+      html = `<div class="auc-banner live">🔨 En cours · <span data-ends="${ends}"></span></div>`
         + a.lots.map(l => {
           const r = rec(l.recipe), price = bidPrice(l), lead = l.bidder === 'you', mine = l.seller === 'you';
           return card(r, `<div class="rc-bid"><span><b>${money(l.bid)}</b>${l.bidder ? ` · ${who(l.bidder)}` : ''}</span><span class="rc-time" data-ends="${l.ends}"></span></div>
-            ${mine ? `<div class="rc-lead">📤 Ta recette est en vente${l.bidder ? ` : tu toucheras ${money(l.bid)}` : ' : pas encore d’enchère'}</div>`
-              : lead ? '<div class="rc-lead">✓ Tu mènes l’enchère</div>'
+            ${mine ? `<div class="rc-lead">📤 Ta recette</div>`
+              : lead ? '<div class="rc-lead">✓ Tu mènes</div>'
               : `<button class="btn small rc-btn ${st.money < price ? 'cant' : ''}" data-bid="${l.id}">Enchérir ${money(price)}</button>`}
             ${l.seller && !mine ? `<div class="rc-note">🔁 ${who(l.seller)}</div>` : ''}`);
         }).join('');
     } else {
-      html = `<div class="auc-banner">🔨 Prochaine vente aux enchères dans <b data-ends="${a.eventAt}"></b></div>
-        <div class="rc-empty">Les ventes ont lieu de temps en temps, avec quelques recettes alternatives à la fois. Mets de l’argent de côté !</div>`;
+      html = `<div class="auc-banner">🔨 Prochaine vente <b data-ends="${a.eventAt}"></b></div>`;
     }
   } else {
-    const ins = a.offersIn.map(o => card(rec(o.recipe), `<div class="rc-bid"><span>${who(o.from)} t’en offre <b>${money(o.price)}</b>${o.retry ? ' (nouvelle offre)' : ''}</span></div>
-      <div class="rc-offers"><button class="btn small danger" data-refuse="${o.id}">Refuser</button><button class="btn small rc-btn" data-accept="${o.id}">Vendre</button></div>
-      <div class="rc-note">Vendue, elle renforce ce rival et tes machines qui l’utilisent repassent en recette de base. Refusée, il reviendra avec plus.</div>`)).join('');
-    const outs = a.offersOut.map(o => `<div class="rc-empty">⏳ Offre de ${money(o.amount)} envoyée à ${who(o.to)} pour « ${rec(o.recipe).name} »…</div>`).join('');
-    html = '<div class="rc-head">✉️ Offres reçues</div>' + (ins || '<div class="rc-empty">Aucune offre reçue pour l’instant.</div>')
-      + (outs ? '<div class="rc-head">📤 Tes offres</div>' + outs : '')
-      + '<div class="rc-note">Pour racheter une recette à un rival : ouvre 📜 Recettes, en haut.</div>';
+    const ins = a.offersIn.map(o => card(rec(o.recipe), `<div class="rc-bid"><span>${who(o.from)} · <b>${money(o.price)}</b></span></div>
+      <div class="rc-offers"><button class="btn small danger" data-refuse="${o.id}">Refuser</button><button class="btn small rc-btn" data-accept="${o.id}">Vendre</button></div>`)).join('');
+    const outs = a.offersOut.map(o => `<div class="rc-empty">⏳ ${money(o.amount)} → ${who(o.to)}</div>`).join('');
+    html = '<div class="rc-head">✉️ Offres reçues</div>' + (ins || '<div class="rc-empty">Aucune offre.</div>')
+      + (outs ? '<div class="rc-head">📤 Tes offres</div>' + outs : '');
   }
   fill($('auc-body'), html);
 }
@@ -171,24 +180,23 @@ export function renderRecipes() {
   const html = '<div class="rc-head">📜 Tes recettes</div>'
     + (mine.length ? mine.map(r => {
       const u = recipeUse(st, r), d = machineDef(cfg, r.machine), sale = saleState(st, r.id);
-      const sell = sale === 'live' ? '<div class="rc-lead">📤 En vente aux enchères en ce moment</div>'
-        : sale === 'queued' ? `<div class="rc-offers"><span class="rc-note">📤 En vente à la prochaine enchère</span><button class="btn small" data-unlist="${r.id}">Retirer</button></div>`
-        : `<div class="rc-offers"><button class="btn small" data-list="${r.id}">📤 Mettre aux enchères</button></div>`;
+      const sell = sale === 'live' ? '<div class="rc-lead">📤 En vente</div>'
+        : sale === 'queued' ? `<div class="rc-offers"><span class="rc-note">📤 Prochaine vente</span><button class="btn small" data-unlist="${r.id}">Retirer</button></div>`
+        : `<div class="rc-offers"><button class="btn small" data-list="${r.id}">📤 Vendre aux enchères</button></div>`;
       const btns = u.total === 0
-        ? `<div class="rc-note">Construis un ${d.icon} ${d.name} pour l’utiliser.</div>`
-        : `<div class="rc-offers">${u.using > 0 ? `<button class="btn small" data-base="${r.machine}">Remettre la base</button>` : ''}${u.using < u.total
-            ? `<button class="btn small rc-btn" data-apply="${r.id}">Appliquer à mes ${u.total} ${d.icon} ${d.name}</button>` : ''}</div>`;
-      return card(r, `<div class="rc-bid"><span>Utilisée par <b>${u.using}/${u.total}</b> ${d.icon} ${d.name}</span></div>${btns}${sell}
-        <div class="rc-note">Ou machine par machine : touche-la dans l’usine, puis ⇄ sur la ligne 📜.</div>`);
-    }).join('') : '<div class="rc-empty">Aucune pour l’instant : gagne une enchère ou rachète-en une à un rival.</div>')
+        ? ''
+        : `<div class="rc-offers">${u.using > 0 ? `<button class="btn small" data-base="${r.machine}">Base</button>` : ''}${u.using < u.total
+            ? `<button class="btn small rc-btn" data-apply="${r.id}">Équiper ${d.icon} ×${u.total}</button>` : ''}</div>`;
+      return card(r, `${btns}${sell}`);
+    }).join('') : '<div class="rc-empty">Aucune.</div>')
     + '<div class="rc-head">⚔️ Chez tes rivaux</div>'
     + (theirs.length ? theirs.map(({ r, ref }) => {
       const pending = a.offersOut.find(o => o.recipe === r.id);
       const asks = [1, 1.3, 1.7].map(k => Math.ceil(r.value * k));
       return card(r, `<div class="rc-bid"><span>${who(ref)}</span></div>
-        ${pending ? `<div class="rc-lead">⏳ Offre de ${money(pending.amount)} envoyée…</div>`
+        ${pending ? `<div class="rc-lead">⏳ ${money(pending.amount)}…</div>`
           : `<div class="rc-offers">${asks.map(p => `<button class="btn small ${st.money < p ? 'cant' : ''}" data-offer="${r.id}" data-amount="${p}">Offrir ${money(p)}</button>`).join('')}</div>`}`);
-    }).join('') : '<div class="rc-empty">Aucun rival n’a de recette pour l’instant.</div>');
+    }).join('') : '<div class="rc-empty">Aucune.</div>');
   fill($('recipes-body'), html);
 }
 

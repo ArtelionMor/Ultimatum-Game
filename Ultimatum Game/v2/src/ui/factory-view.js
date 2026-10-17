@@ -19,9 +19,9 @@
 
 import { DIRS, ports, machineAt, beltAt, machineDef, placeCost, canPlaceMachine, canPlaceBelt,
   setBeltDir, setMachineRot, moveMachine, countOf, stageOf, tierOf, beltsUnder,
-  selectRect, groupBox, groupMoveCheck, moveGroup } from '../grid.js';
+  selectRect, groupBox, groupMoveCheck, moveGroup, splitDirs, setSplit, SPLIT_SHAPES, SPLIT_MODES } from '../grid.js';
 import { buyMachine, buyBelt, sellMachine, sellValue, sellBelt, machineInfo, upgradeMachine, stockInfo, buyStock,
-  expandInfo, buyExpand, sellGroup } from '../sim.js';
+  expandInfo, buyExpand, sellGroup, buySplitter } from '../sim.js';
 import { usableRecipes, applyRecipeAll, unseenRecipes, equipRecipe } from '../auction.js';
 import { recipeOf } from '../grid.js';
 import { recipeText } from './auction-view.js';
@@ -38,7 +38,7 @@ const CELL = 34;
 const SLOP = 6;            // px a finger may move before a tap becomes a drag
 
 let G, canvas, ctx, bound = false;
-let tool = null;           // null | machine id | 'belt'
+let tool = null;           // null | machine id | 'belt' | 'splitter' | 'select'
 let menuGroup = null;      // product whose Production / Amélioration menu is open
 let lastRot = 0;           // direction used for the previous build
 let cam = { x: 0, y: 0 }, viewW = 0, viewH = 0, camReady = false;
@@ -73,8 +73,8 @@ export function initFactory(game) {
 function buildToolbar() {
   const { cfg } = G;
   const groups = cfg.markets.map(r => `<button class="tool" data-group="${r.id}"><span class="ti">${r.icon}</span><small></small></button>`).join('');
-  const singles = ['outcome', 'belt', 'select'].map(id => {
-    const icon = id === 'belt' ? '⇉' : id === 'select' ? '⬚' : machineDef(cfg, id).icon;
+  const singles = ['outcome', 'belt', 'splitter', 'select'].map(id => {
+    const icon = id === 'belt' ? '⇉' : id === 'splitter' ? '🔀' : id === 'select' ? '⬚' : machineDef(cfg, id).icon;
     return `<button class="tool" data-tool="${id}"><span class="ti">${icon}</span><small></small></button>`;
   }).join('');
   const bar = $('toolbar');
@@ -101,7 +101,7 @@ function buildToolbar() {
 const groupOf = id => (id && id !== 'belt' ? machineDef(G.cfg, id)?.group : null) || null;
 const machineUnlocked = d => !!G.st.unlocked[d.id];
 const groupUnlocked = g => G.cfg.machines.some(d => d.group === g && machineUnlocked(d));
-const toolUnlocked = id => id === 'belt' || id === 'select' || machineUnlocked(machineDef(G.cfg, id));
+const toolUnlocked = id => id === 'belt' || id === 'splitter' || id === 'select' || machineUnlocked(machineDef(G.cfg, id));
 export const currentTool = () => tool;
 export function openToolMenu(group) { tool = null; edit = null; menuGroup = group; renderFactory(); }
 
@@ -234,8 +234,16 @@ function renderWidget() {
     return;
   }
   if (edit.kind === 'belt') {
-    if (!beltAt(st.grid, edit.x, edit.y)) { edit = null; w.classList.add('hidden'); return; }
-    html = `<div class="ew-title">⇉ Tapis</div>
+    const b = beltAt(st.grid, edit.x, edit.y);
+    if (!b) { edit = null; w.classList.add('hidden'); return; }
+    if (b.split) {
+      const chip = (act, label, on) => `<button class="btn small sp-chip ${on ? 'on' : ''}" data-act="${act}">${label}</button>`;
+      html = `<div class="ew-title">🔀 Splitter</div>
+        <div class="ew-meta">Entrée par l'arrière · <b class="sp-main">━ principal</b> · <b class="sp-second">━ second</b></div>
+        <div class="sp-row">${SPLIT_SHAPES.map(s => chip('shape:' + s, SHAPE_LABEL[s], b.split.shape === s)).join('')}</div>
+        <div class="sp-row">${SPLIT_MODES.map(m => chip('mode:' + m, MODE_LABEL[m], b.split.mode === m)).join('')}</div>
+        <div class="ew-btns"><button class="btn small" data-act="rot">⟳</button><button class="btn small danger" data-act="sell">Vendre</button><button class="btn small" data-act="close">✕</button></div>`;
+    } else html = `<div class="ew-title">⇉ Tapis</div>
       <div class="ew-btns"><button class="btn small" data-act="rot">⟳</button><button class="btn small danger" data-act="sell">Vendre</button><button class="btn small" data-act="close">✕</button></div>`;
   } else {
     const m = edit.m, d = machineDef(cfg, m.type);
@@ -295,11 +303,16 @@ function placeWidget() {
   w.style.top = sy + 'px';
 }
 
+const SHAPE_LABEL = { sl: '↑ + ←', sr: '↑ + →', lr: '← + →' };
+const MODE_LABEL = { 50: '50/50', 30: '30/70', 70: '70/30', prio: 'Principal d’abord' };
+
 function onWidget(act, btn) {
   const { cfg, st } = G;
   if (act === 'close') { edit = null; renderFactory(); return; }
   if (edit.kind === 'belt') {
-    if (act === 'rot') {
+    const [k, v] = act.split(':');
+    if (k === 'shape' || k === 'mode') { setSplit(st.grid, edit.x, edit.y, { [k]: v }); play('tick', 0.3); }
+    else if (act === 'rot') {
       const b = beltAt(st.grid, edit.x, edit.y);
       if (b) setBeltDir(st.grid, edit.x, edit.y, (b.dir + 1) % 4);
       play('tick', 0.3);
@@ -466,6 +479,10 @@ function onDown(e) {
     press = { mode: 'grab', m, sx, sy };
     return;
   }
+  if (tool === 'splitter') {
+    press = { mode: 'split', cell: p, dir: null, sx, sy };
+    return;
+  }
   if (tool === 'belt') {
     const existing = beltAt(grid, p.x, p.y);
     press = { mode: 'belt', last: [p.x, p.y], moved: false, startedOn: !!existing, sx, sy };
@@ -516,6 +533,12 @@ function onMove(e) {
     case 'belt':
       drawBelt(p, e);
       break;
+    case 'split': {
+      // Drag away from the cell to choose where items flow.
+      const dx = p.fx - (press.cell.x + 0.5), dy = p.fy - (press.cell.y + 0.5);
+      press.dir = Math.hypot(dx, dy) < 0.8 ? null : Math.abs(dx) >= Math.abs(dy) ? (dx > 0 ? 0 : 2) : (dy > 0 ? 1 : 3);
+      break;
+    }
     case 'rect':
       press.b = p;
       break;
@@ -604,6 +627,19 @@ function onUp(e) {
       } else floatAt(e, 'Place occupée', 'bad');
       break;
     }
+    case 'split': {
+      const { x, y } = pr.cell, b = beltAt(grid, x, y);
+      if (b?.split) { if (pr.dir !== null) setBeltDir(grid, x, y, pr.dir); edit = { kind: 'belt', x, y }; break; }
+      // On a belt it keeps the belt's direction (unless dragged); a new one opens its settings.
+      const r = buySplitter(G.cfg, G.st, x, y, pr.dir ?? b?.dir ?? lastRot);
+      if (r.ok) {
+        if (pr.dir !== null) { setBeltDir(grid, x, y, pr.dir); lastRot = pr.dir; }
+        play('buy'); floatAt(e, `-${money(r.cost)}`, 'bad');
+        edit = { kind: 'belt', x, y };
+        G.onAction('build', 'splitter');
+      } else floatAt(e, r.why === 'money' ? 'Pas assez d\'argent' : 'Place occupée', 'bad');
+      break;
+    }
     case 'belt':
       // A tap on an existing belt turns it.
       if (!pr.moved && pr.startedOn) {
@@ -686,8 +722,8 @@ function draw(now) {
   for (const k in grid.belts) {
     const b = grid.belts[k];
     if (b.item === null) continue;
-    const [x, y] = k.split(',').map(Number), [dx, dy] = DIRS[b.dir];
-    drawItem(x * c + c / 2 + dx * (b.p - 0.5) * c, y * c + c / 2 + dy * (b.p - 0.5) * c, b.item);
+    const [x, y] = k.split(',').map(Number);
+    drawBeltItem(x, y, b);
   }
 
   const moving = press && (press.mode === 'drag' || press.mode === 'move' || press.mode === 'turn') ? press.m : null;
@@ -721,7 +757,7 @@ function draw(now) {
       const b = grid.belts[k]; if (!b) continue;
       const [x, y] = k.split(',').map(Number);
       drawBelt2(x, y, b, t);
-      if (b.item !== null) { const [ddx, ddy] = DIRS[b.dir]; drawItem(x * c + c / 2 + ddx * (b.p - 0.5) * c, y * c + c / 2 + ddy * (b.p - 0.5) * c, b.item); }
+      if (b.item !== null) drawBeltItem(x, y, b);
     }
     for (const m of group.machines) drawMachine(m, now);
     const bx = groupBox(group);
@@ -754,7 +790,35 @@ function draw(now) {
   placeWidget();
 }
 
+// Items run along the belt; on a splitter they stop at the centre, where the split happens.
+function drawBeltItem(x, y, b) {
+  const c = CELL, [dx, dy] = DIRS[b.dir], f = b.split ? (b.p - 1) / 2 : b.p - 0.5;
+  drawItem(x * c + c / 2 + dx * f * c, y * c + c / 2 + dy * f * c, b.item);
+}
+
+// Splitter: purple tile, entry notch at the back, green arrow = main output, blue = second.
+function drawSplitter(x, y, b) {
+  const c = CELL, cx = x * c + c / 2, cy = y * c + c / 2;
+  ctx.fillStyle = '#3b3354';
+  roundRect(x * c + 2, y * c + 2, c - 4, c - 4, 6); ctx.fill();
+  ctx.strokeStyle = '#8a6fd1'; ctx.lineWidth = 1.5; ctx.stroke();
+  const [bx, by] = DIRS[(b.dir + 2) % 4];
+  ctx.fillStyle = '#8a6fd1';
+  ctx.fillRect(cx + bx * (c / 2 - 5) - 4, cy + by * (c / 2 - 5) - 4, 8, 8);
+  splitDirs(b).forEach((d, i) => {
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(d * Math.PI / 2);
+    ctx.strokeStyle = ctx.fillStyle = i ? '#5aa9ff' : '#3ddc84';
+    ctx.lineWidth = i ? 2.5 : 4;
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(c / 2 - 8, 0); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(c / 2 - 2, 0); ctx.lineTo(c / 2 - 9, -5); ctx.lineTo(c / 2 - 9, 5); ctx.closePath(); ctx.fill();
+    ctx.restore();
+  });
+}
+
 function drawBelt2(x, y, b, t) {
+  if (b.split) return drawSplitter(x, y, b);
   const c = CELL;
   ctx.fillStyle = '#2f3542';
   ctx.fillRect(x * c + 2, y * c + 2, c - 4, c - 4);

@@ -74,8 +74,11 @@ export const countOf = (grid, type) => grid.machines.filter(m => m.type === type
 export const isSink = (cfg, m) => !!machineDef(cfg, m.type)?.sink;
 
 // `first_free`: the first copy of that machine costs nothing (onboarding).
+export const splitterCount = grid => Object.values(grid.belts).filter(b => b.split).length;
+
 export function placeCost(cfg, grid, type) {
   if (type === 'belt') return cfg.grid.belt_cost;
+  if (type === 'splitter') return Math.ceil(cfg.grid.splitter_cost * Math.pow(cfg.grid.splitter_cost_mult, splitterCount(grid)));
   const d = machineDef(cfg, type), n = countOf(grid, type);
   if (d.first_free && n === 0) return 0;
   return Math.ceil(d.cost * Math.pow(d.cost_mult, n));
@@ -138,6 +141,49 @@ export function placeBelt(grid, x, y, dir) {
   grid.belts[key(x, y)] = b;
   changed(grid);
   return b;
+}
+
+// --- Splitters ----------------------------------------------------------------
+// A belt cell with `split`: items enter from behind and leave by two outputs.
+// shape: 'sl' = straight (main) + left, 'sr' = straight (main) + right,
+//        'lr' = left (main) + right. Left/right are seen in the travel direction.
+// mode: '50' / '30' / '70' = share of the main output; 'prio' = main first,
+//        second only when the main one is blocked.
+export const SPLIT_SHAPES = ['sl', 'sr', 'lr'];
+export const SPLIT_MODES = ['50', '30', '70', 'prio'];
+
+// Make the belt at (x, y) a splitter, or place a new one. Returns the belt.
+export function placeSplitter(grid, x, y, dir) {
+  let b = beltAt(grid, x, y);
+  if (b?.split) return null;
+  if (!b) { if (!canPlaceBelt(grid, x, y)) return null; b = grid.belts[key(x, y)] = { dir, item: null, p: 0 }; }
+  b.split = { shape: 'sl', mode: '50', n: [0, 0] };
+  changed(grid);
+  return b;
+}
+
+export function setSplit(grid, x, y, patch) {
+  const b = beltAt(grid, x, y);
+  if (!b?.split) return false;
+  Object.assign(b.split, patch, { n: [0, 0] });
+  changed(grid);
+  return true;
+}
+
+// The two output directions [main, second] of a splitter.
+export function splitDirs(b) {
+  const left = (b.dir + 3) % 4, right = (b.dir + 1) % 4;
+  return b.split.shape === 'sl' ? [b.dir, left] : b.split.shape === 'sr' ? [b.dir, right] : [left, right];
+}
+
+// Output order for the next item: the pattern's pick first, the other as fallback.
+function splitOrder(b) {
+  const s = b.split;
+  if (s.mode === 'prio') return [0, 1];
+  const w = Number(s.mode) / 100, ws = [w, 1 - w];
+  // Smooth weighted round-robin: the output furthest behind its share goes next.
+  const first = (s.n[0] + 1) / ws[0] <= (s.n[1] + 1) / ws[1] ? 0 : 1;
+  return [first, 1 - first];
 }
 
 export function setBeltDir(grid, x, y, dir) {
@@ -239,6 +285,8 @@ function accept(cfg, grid, sx, sy, tx, ty, it, ctx) {
     if (b.item !== null) return false;
     const [dx, dy] = DIRS[b.dir];
     if (tx + dx === sx && ty + dy === sy) return false; // belt points back at the source
+    if (b.split && (tx - dx !== sx || ty - dy !== sy)) return false; // splitters take items from behind only
+    if (b.split && splitDirs(b).some(d => tx + DIRS[d][0] === sx && ty + DIRS[d][1] === sy)) return false;
     b.item = it; b.p = 0;
     return true;
   }
@@ -269,9 +317,13 @@ function beltOrder(grid) {
     if (dist[k] !== undefined) return dist[k];
     dist[k] = 1e9; // cycle guard
     const [x, y] = k.split(',').map(Number);
-    const [dx, dy] = DIRS[grid.belts[k].dir];
-    const nk = key(x + dx, y + dy);
-    return (dist[k] = grid.belts[nk] ? Math.min(1e9, depth(nk) + 1) : 0);
+    const b = grid.belts[k];
+    let best = 0;
+    for (const d of b.split ? splitDirs(b) : [b.dir]) {
+      const nk = key(x + DIRS[d][0], y + DIRS[d][1]);
+      if (grid.belts[nk]) best = Math.max(best, Math.min(1e9, depth(nk) + 1));
+    }
+    return (dist[k] = best);
   };
   const list = Object.keys(grid.belts).map(k => { const [x, y] = k.split(',').map(Number); return { k, x, y, d: depth(k) }; });
   list.sort((a, b) => a.d - b.d);
@@ -309,6 +361,14 @@ export function stepGrid(cfg, grid, dt, ctx) {
     if (!b || b.item === null) continue;
     b.p = Math.min(1, b.p + speed * dt);
     if (b.p < 1) continue;
+    if (b.split) {
+      const dirs = splitDirs(b);
+      for (const i of splitOrder(b)) {
+        const [dx, dy] = DIRS[dirs[i]];
+        if (accept(cfg, grid, x, y, x + dx, y + dy, b.item, ctx)) { b.item = null; b.p = 0; b.split.n[i]++; break; }
+      }
+      continue;
+    }
     const [dx, dy] = DIRS[b.dir];
     if (accept(cfg, grid, x, y, x + dx, y + dy, b.item, ctx)) { b.item = null; b.p = 0; }
   }

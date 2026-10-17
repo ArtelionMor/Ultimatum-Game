@@ -8,7 +8,7 @@
 import { marketCfg, stepMarket, createShareTracker, trackShares, marketShares, demandMultiplier } from './market.js';
 import { stockCap, stockCost, unitCost, produce } from './factory.js';
 import { createGrid, stepGrid, placeCost, machineDef, machineRate, upgradeCost, item, stageOf, tierOf,
-  placeMachine, placeBelt, removeMachine, removeBelt, beltAt, countOf, expandGrid } from './grid.js';
+  placeMachine, placeBelt, placeSplitter, removeMachine, removeBelt, beltAt, countOf, expandGrid } from './grid.js';
 import { createRival, repriceRival, approachRival } from './ai.js';
 import { initProgress, migrateProgress } from './progress.js';
 import { createAuction, stepAuction, rivalRecipeCount, migrateAuction, newMachineRecipe } from './auction.js';
@@ -264,10 +264,22 @@ export function sellMachine(cfg, st, m) {
   return back;
 }
 
+export function buySplitter(cfg, st, x, y, dir) {
+  const cost = placeCost(cfg, st.grid, 'splitter');
+  if (st.money < cost) return { ok: false, why: 'money' };
+  if (!placeSplitter(st.grid, x, y, dir)) return { ok: false, why: 'place' };
+  st.money -= cost;
+  st.stats.built.splitter = (st.stats.built.splitter || 0) + 1;
+  return { ok: true, cost };
+}
+
 export function sellBelt(cfg, st, x, y) {
-  if (!beltAt(st.grid, x, y)) return 0;
+  const b = beltAt(st.grid, x, y);
+  if (!b) return 0;
   removeBelt(st.grid, x, y);
-  const back = Math.floor(cfg.grid.belt_cost * cfg.grid.sell_refund);
+  // A splitter gives back part of what the last one cost.
+  const paid = b.split ? placeCost(cfg, st.grid, 'splitter') : cfg.grid.belt_cost;
+  const back = Math.floor(paid * cfg.grid.sell_refund);
   st.money += back;
   return back;
 }

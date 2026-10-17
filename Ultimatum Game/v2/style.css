@@ -407,3 +407,13 @@ main { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 12px 14px 16px; }
 .eq-badge.on { border-style: solid; border-color: var(--you); background: var(--you); color: #06210f; }
 /* Seller quality next to its price */
 .q { color: #ffcf4a; }
+
+/* Splitter widget */
+.sp-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.sp-chip { padding: 4px 9px; }
+.sp-chip.on { background: var(--you); color: #06210f; }
+.sp-main { color: #3ddc84; }
+.sp-second { color: #5aa9ff; }
+/* Recipe card: speed gain only */
+.rc-speed { font-size: 18px; font-weight: 900; color: var(--you); }
+.rc-speed small { font-size: 11px; font-weight: 700; color: var(--muted); }
