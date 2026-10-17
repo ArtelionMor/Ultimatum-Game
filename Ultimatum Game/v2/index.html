@@ -11,15 +11,12 @@
 <div id="app">
   <header id="hud">
     <div id="goal">
-      <div class="goal-head">
-        <span class="goal-title">🎯 <b id="goal-text">Prends un monopole</b></span>
-        <button id="debug-toggle" title="Debug" aria-label="Debug">🐞</button>
-      </div>
-      <div class="goal-bar" id="goal-bar">
-        <div class="goal-fill" id="goal-fill"></div>
-        <div class="goal-mark" id="goal-mark"></div>
-      </div>
-      <div class="goal-sub"><span id="goal-share">Ta part : 0 %</span><span id="goal-hold"></span></div>
+      <span class="lvl-badge" id="lvl-badge">⭐ 1</span>
+      <button id="tasks-btn" class="tasks-btn">
+        <span class="tasks-label"><span>📋 <b id="tasks-text">Tâches 0/3</b></span><span id="tasks-reward"></span></span>
+        <span class="goal-bar"><span class="goal-fill" id="goal-fill"></span></span>
+      </button>
+      <button id="debug-toggle" title="Debug" aria-label="Debug">🐞</button>
     </div>
     <div class="hud-row">
       <div id="money-box"><span class="coin ico-mask" style="--icon:url(assets/kenney/icons/dollar.png)"></span><span id="money">0 $</span></div>
@@ -63,6 +60,14 @@
     <div class="confirm-box">
       <p id="confirm-text"></p>
       <div class="confirm-btns"><button class="btn" id="confirm-no">Annuler</button><button class="btn danger" id="confirm-yes">Vendre</button></div>
+    </div>
+  </div>
+
+  <div id="tasks" class="overlay hidden">
+    <div class="tasks-box">
+      <div class="tasks-head"><b id="tasks-title">Niveau 1</b><button class="btn small" id="tasks-close">✕</button></div>
+      <div id="tasks-list"></div>
+      <div id="tasks-foot"></div>
     </div>
   </div>
 

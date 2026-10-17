@@ -1,6 +1,6 @@
 # Market Ultimatum v2
 
-Prototype mobile (portrait, 480 px max) : tu construis une usine de citrons → jus → bouteilles et tu te bats sur 3 marchés contre des rivaux, jusqu'au monopole.
+Prototype mobile (portrait, 480 px max) : tu construis une usine (citrons, jus, bouteilles, oranges, fraises, confiture…), tu montes de niveau en remplissant des tâches, et tu te bats sur 7 marchés contre des rivaux, jusqu'au monopole.
 JS vanilla en modules ES, sans build ni dépendance.
 
 ```bash
@@ -20,12 +20,16 @@ Puis ouvrir http://localhost:8795.
      - Chaîner deux Améliorations donne du ★3, etc. ; on sacrifie de la quantité pour de la qualité.
      - Les objets portent leur ★ (anneau : ★2 argent, ★3 or, ★4 violet, ★5 rose) et la gardent dans la chaîne (citron ★3 → jus ★3).
      - La qualité vendue = la moyenne des ★ du stock ; les ventes prennent chaque ★ au prorata.
-2. **Marché** : un onglet par ressource livrée (🍋 Citron, 🧃 Jus, 🍾 Bouteille), chacun avec ses 3 rivaux. Tu règles ton prix ; des cartes camembert montrent les parts (tout le marché, puis chaque type de client).
+2. **Marché** : un onglet par ressource livrée (🍋 Citron, 🧃 Jus, 🍾 Bouteille, 🍊 Orange, 🥤 Jus d'orange, 🍓 Fraise, 🍯 Confiture), chacun avec ses 3 rivaux. Tu règles ton prix ; des cartes camembert montrent les parts (tout le marché, puis chaque type de client).
 3. Les ventes rapportent `prix − coût unitaire`. Pas de revenu passif ; comme la 1re Cueillette et les tapis sont gratuits, on peut toujours relancer une ligne.
-4. **Monopole** (pas d'écran de victoire) : tenir 80 % d'un marché pendant 20 s donne le monopole. Il apporte un effet visuel et un **bonus d'attrait** qui fidélise les clients. Les rivaux peuvent aussi prendre un monopole.
+4. **Niveau et tâches** (façon Chainsaw Juice King) : chaque niveau a 3 ou 4 tâches (construire, vendre, livrer un ★, monter une machine, atteindre une part de marché, gagner X $, agrandir le stock, prendre un monopole).
+   - Une tâche remplie se **valide** dans le panneau 📋 (petite récompense).
+   - Toutes validées → **Niveau suivant**, qui donne une récompense et **débloque** de nouvelles machines et produits.
+   - Le bouton « Aller » d'une tâche emmène là où elle se fait.
+5. **Monopole** (pas d'écran de victoire) : tenir 80 % d'un marché pendant 20 s donne le monopole. Il apporte un effet visuel et un **bonus d'attrait** qui fidélise les clients. Les rivaux peuvent aussi prendre un monopole.
 
 ## Écrans
-- **Haut** : l'objectif « Prends un monopole », la barre de ton meilleur marché (repère à 80 %) avec le chrono, l'argent et le revenu/min, et une ligne « 👉 » qui dit quoi faire maintenant.
+- **Haut** : ⭐ niveau, barre des tâches du niveau (bouton 📋, qui pulse quand une tâche est à valider), argent et revenu/min, et une ligne « 👉 » qui dit quoi faire maintenant (sinon : la prochaine tâche).
 - **Usine** :
   - Barre d'outils : un bouton par produit (🍋 · 🧃 · 🍾), qui ouvre un menu **Production / Amélioration** ; puis 📤 Outcome et ⇉ Tapis. Toucher le produit de l'outil actif le repose. Dessous : les stocks par ressource et le bouton Agrandir.
   - **Poser** : avec un outil machine, appuie là où tu la veux, glisse vers où doit sortir la production (grosse flèche verte), lâche. Poser (ou déplacer) une machine sur des tapis les casse (croix orange en aperçu).
@@ -61,12 +65,19 @@ score(s, v) = b_s × qualité_v − a_s × (prix_v / réf) + c_s × M_v
     | 15 min | 3,4 | 1,9 |
 
 ## Rivaux (`src/ai.js`)
-3 rivaux par marché, avec la même logique de stock et de vente (production abstraite). Toutes les `price_interval_s` :
+3 rivaux par marché, avec la même logique de stock et de vente (production abstraite).
+
+**Ils se calent sur ton niveau** :
+- leur cible au niveau L est `production = prod_per_min × (1 + prod_per_level)^(L−1)` (idem pour le stock) et `qualité = quality + quality_per_level × (L−1)`, plafonnée à `quality_max` ;
+- ils s'en approchent doucement (constante `ai.level_tau_s`, 60 s) ;
+- ils ne prennent donc jamais d'avance tant que tu ne montes pas de niveau.
+
+Toutes les `price_interval_s` :
 - `undercut` : 5 % sous ton prix, jamais au-dessus de son prix de départ.
 - `premium` : baisse si son stock dort, monte s'il est vide (±30 % de son prix de départ).
 - `follow` : copie le prix du leader de parts, à ±5 %.
 
-Plancher : `coût unitaire × (1 + price_floor_margin)`, arrondi au pas de prix du marché. Toutes les `upgrade_interval_s`, chaque rival gagne de la production et de la qualité.
+Plancher : `coût unitaire × (1 + price_floor_margin)`, arrondi au pas de prix du marché.
 
 ## Outils
 - `node tools/check-market.js [--market bottle] [--minutes 5]` : pour chaque marché, 10 min simulées à prix fixes (0,6 / 1 / 1,6 × réf) × 3 qualités, avec les parts par segment.
@@ -89,8 +100,10 @@ Plancher : `coût unitaire × (1 + price_floor_margin)`, arrondi au pas de prix 
 | `machines[].first_free` | le 1er exemplaire est gratuit (Cueillette) |
 | `machines[].kind` / `group` / `merge_n` / `max_tier` | `make` = production, `refine` = Amélioration (fusion `merge_n` → ★+1, jusqu'à `max_tier`) ; `group` = produit du menu |
 | `reveal.refine_after_sold` | ventes avant de débloquer l'Amélioration |
-| `rivals[]` (`market`, `behavior`, prix, qualité, production, croissance) | rivaux de chaque marché |
-| `ai.price_interval_s` / `upgrade_interval_s` | nervosité et progression des rivaux |
+| `rivals[]` (`market`, `behavior`, prix, qualité, production, `prod_per_level`, `quality_per_level`) | rivaux de chaque marché et leur progression par niveau du joueur |
+| `ai.price_interval_s` / `level_tau_s` | nervosité des rivaux, vitesse à laquelle ils rejoignent leur cible |
+| `levels[]` (`level`, `unlock`, `reward`) | ce que chaque niveau débloque (ids de machines séparés par des espaces) et rapporte |
+| `tasks[]` (`level`, `type`, `param`, `target`, `reward`) | tâches de chaque niveau ; types : `build`, `sell`, `tier`, `upgrade`, `share`, `earn`, `stock`, `monopoly` |
 | `reveal.*` | rythme de la révélation progressive |
 
 Les tables sont plates (une ligne = un objet) pour passer facilement à Google Sheets. Changer `meta.version` invalide les sauvegardes.
@@ -104,9 +117,10 @@ src/grid.js            grille : machines 2×2, Outcome, tapis, objets en transit
 src/factory.js         stock, coût unitaire, production abstraite des rivaux
 src/ai.js              comportement des rivaux
 src/sim.js             état + tick pur : grille → stocks → 3 marchés ; actions du joueur
-src/reveal.js          révélation progressive
+src/progress.js        niveau joueur, tâches, déblocages (pur)
+src/reveal.js          révélation progressive des éléments d'interface
 src/main.js            boucle, onglets, indices, effets de monopole, sauvegarde
-src/ui/*.js            hud, usine (canvas + pan), marché, debug, effets, sons
+src/ui/*.js            hud, tâches, usine (canvas + pan), marché, debug, effets, sons
 tools/                 check-market.js, bot-run.js
 assets/kenney/         sous-ensemble des packs Kenney (CC0, voir License.txt)
 ```
@@ -127,4 +141,8 @@ assets/kenney/         sous-ensemble des packs Kenney (CC0, voir License.txt)
 - 1 objet par case de tapis ; les tapis peuvent fusionner ; l'Outcome accepte par tous les côtés.
 - Le dernier Outcome ne peut pas être vendu ; déplacer est gratuit ; revente = 50 % (machine + améliorations).
 - Les réglages du panneau debug ne sont pas sauvegardés et ne modifient pas `config.json`.
+- **Tâches cumulatives** : « Vends 25 jus » compte toutes les ventes depuis le début, pas seulement celles du niveau.
+- Les **anciennes sauvegardes** sont placées au plus haut niveau dont elles utilisent déjà une machine ; les tâches des niveaux précédents sont considérées faites.
+- Une sauvegarde **impossible à charger** est mise de côté (`mu_v2_save_backup` dans le localStorage) au lieu d'être écrasée.
+- Le bot de `bot-run` ignore les niveaux (il reste niveau 1, donc ses rivaux aussi).
 - Textes non polis : une passe de localisation est prévue.

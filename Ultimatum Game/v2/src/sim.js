@@ -9,7 +9,8 @@ import { marketCfg, stepMarket, createShareTracker, trackShares, marketShares, d
 import { stockCap, stockCost, unitCost, produce } from './factory.js';
 import { createGrid, stepGrid, placeCost, machineDef, machineRate, upgradeCost, item, stageOf, tierOf,
   placeMachine, placeBelt, removeMachine, removeBelt, beltAt, countOf } from './grid.js';
-import { createRival, repriceRival, upgradeRival } from './ai.js';
+import { createRival, repriceRival, approachRival } from './ai.js';
+import { initProgress, migrateProgress } from './progress.js';
 import { createBrand, stepBrand } from './monopoly.js';
 
 export const SAVE_VERSION = 3;
@@ -40,7 +41,7 @@ export function newGame(cfg, seed = 12345) {
     t: 0, money: cfg.player.start_money,
     grid: createGrid(cfg), stockLvl: 1,
     mk: {},
-    stats: { sold: {}, earned: 0, upgrades: 0, priceChanges: 0, stockFullSeen: false, delivered: {}, built: {} },
+    stats: { sold: {}, earned: 0, upgrades: 0, priceChanges: 0, stockFullSeen: false, delivered: {}, built: {}, bestTier: {}, bestShare: {}, monopolies: {} },
     unlocked: {}, seen: {}, lastReveal: -999,
   };
   for (const row of cfg.markets) {
@@ -53,11 +54,12 @@ export function newGame(cfg, seed = 12345) {
       you, rivals,
       shares: createShareTracker(mk, ids),
       brands: Object.fromEntries(ids.map(id => [id, createBrand()])),
-      aiPriceT: 0, aiUpT: 0,
+      aiPriceT: 0,
     };
     st.stats.sold[row.id] = 0;
     st.stats.delivered[row.id] = 0;
   }
+  initProgress(cfg, st);
   derive(cfg, st);
   return st;
 }
@@ -82,6 +84,13 @@ export function stockQuality(you) {
 
 // Bring a save from before quality tiers up to date (items were bare stages).
 export function migrate(cfg, st) {
+  // Markets added since the save was made (before anything reads them).
+  const fresh = newGame(cfg, st.seed);
+  for (const row of cfg.markets) if (!st.mk[row.id]) {
+    st.mk[row.id] = fresh.mk[row.id];
+    st.stats.sold[row.id] = 0;
+    st.stats.delivered[row.id] = 0;
+  }
   for (const row of cfg.markets) {
     const y = st.mk[row.id].you;
     if (!y.tiers) y.tiers = [0, y.stock, 0, 0, 0, 0];
@@ -93,6 +102,10 @@ export function migrate(cfg, st) {
     m.out = up(m.out);
   }
   for (const k in st.grid.belts) st.grid.belts[k].item = up(st.grid.belts[k].item);
+  st.stats.bestTier ||= {};
+  st.stats.bestShare ||= {};
+  st.stats.monopolies ||= {};
+  migrateProgress(cfg, st);
   return st;
 }
 
@@ -114,6 +127,7 @@ export function step(cfg, st, dt) {
       const id = marketOfStage(cfg, stageOf(it)).id, you = st.mk[id].you;
       you.stock++;
       you.tiers[tierOf(it)]++;
+      st.stats.bestTier[id] = Math.max(st.stats.bestTier[id] || 0, tierOf(it));
       delivered[id] = (delivered[id] || 0) + 1;
     },
   });
@@ -149,10 +163,11 @@ export function step(cfg, st, dt) {
 
     // Monopoly bonus for every seller of this market.
     const shares = marketShares(m.shares);
+    if (st.stats.delivered[id] > 0) st.stats.bestShare[id] = Math.max(st.stats.bestShare[id] || 0, shares.you);
     for (const s of sellers) {
       const e = stepBrand(cfg.monopoly, m.brands[s.id], shares[s.id], dt);
       s.brand = m.brands[s.id].M;
-      if (e === 'start') ev.push({ type: 'monopolyStart', market: id, id: s.id });
+      if (e === 'start') { ev.push({ type: 'monopolyStart', market: id, id: s.id }); if (s.id === 'you') st.stats.monopolies[id] = true; }
       else if (e === 'lost') ev.push({ type: 'monopolyLost', market: id, id: s.id });
     }
 
@@ -168,12 +183,7 @@ export function step(cfg, st, dt) {
         if (r.price !== old) ev.push({ type: 'rivalPrice', market: id, id: r.id, from: old, to: r.price });
       });
     }
-    m.aiUpT += dt;
-    if (m.aiUpT >= cfg.ai.upgrade_interval_s) {
-      m.aiUpT = 0;
-      defs.forEach((def, i) => upgradeRival(def, m.rivals[i]));
-      ev.push({ type: 'rivalsUpgrade', market: id });
-    }
+    defs.forEach((def, i) => approachRival(def, m.rivals[i], st.level, dt, cfg.ai.level_tau_s));
   }
   return ev;
 }

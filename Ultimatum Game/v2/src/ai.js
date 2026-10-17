@@ -1,7 +1,8 @@
 // Rival factories. Same stock / production / sale rules as the player
 // (simplified): they produce into a capped stock and sell through the market model.
-// Behaviour is scripted: a price rule every `ai.price_interval_s`, and a small
-// upgrade (production + quality) every `ai.upgrade_interval_s`.
+// Behaviour is scripted: a price rule every `ai.price_interval_s`; production,
+// stock and quality drift slowly (time constant `ai.level_tau_s`) towards a
+// target set by the PLAYER's level, so rivals never run away from the player.
 
 import { unitCost } from './factory.js';
 
@@ -40,8 +41,19 @@ export function repriceRival(mk, def, r, ctx) {
   r.price = snap(Math.max(Math.ceil(floor / step - 1e-9) * step, Math.round(p / step) * step));
 }
 
-export function upgradeRival(def, r) {
-  r.prodRate *= 1 + def.prod_growth;
-  r.stockCap *= 1 + def.prod_growth;
-  r.quality = Math.min(def.quality_max, Math.round((r.quality + def.quality_step) * 100) / 100);
+// What a rival aims for when the player is at `level`.
+export function rivalTarget(def, level) {
+  const k = Math.pow(1 + def.prod_per_level, level - 1);
+  return {
+    prodRate: def.prod_per_min * k,
+    stockCap: def.stock_cap * k,
+    quality: Math.min(def.quality_max, def.quality + def.quality_per_level * (level - 1)),
+  };
+}
+
+export function approachRival(def, r, level, dt, tau) {
+  const t = rivalTarget(def, level), k = 1 - Math.exp(-dt / tau);
+  r.prodRate += (t.prodRate - r.prodRate) * k;
+  r.stockCap += (t.stockCap - r.stockCap) * k;
+  r.quality += (t.quality - r.quality) * k;
 }

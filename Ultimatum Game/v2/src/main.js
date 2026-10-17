@@ -1,14 +1,15 @@
-// Boot, game loop, tabs, hints, reveal, monopoly effects, save. The simulation
+// Boot, game loop, tabs, hints, reveal, level/tasks, monopoly effects, save. The simulation
 // lives in sim.js (pure); this file only wires it to the DOM.
 
 import { newGame, step, derive, migrate, SAVE_VERSION, sellersOf, stockInfo, mkOf, totalSold, monopolistOf } from './sim.js';
-import { countOf, stageCapacity } from './grid.js';
+import { countOf, stageCapacity, machineDef } from './grid.js';
 import { unitCost } from './factory.js';
 import { previewPreference } from './market.js';
 import { checkReveal } from './reveal.js';
 import { initHud, renderHud } from './ui/hud.js';
 import { initMarket, renderMarket, openMarkets } from './ui/market-view.js';
-import { initFactory, renderFactory, currentTool } from './ui/factory-view.js';
+import { initFactory, renderFactory, currentTool, openToolMenu } from './ui/factory-view.js';
+import { initTasks } from './ui/tasks.js';
 import { initDebug } from './ui/debug.js';
 import { toast, floatText } from './ui/fx.js';
 import { play } from './ui/sound.js';
@@ -32,6 +33,14 @@ const G = {
     return inc;
   },
   reset,
+  // Jump to where a task gets done.
+  goto(t) {
+    const d = machineDef(G.cfg, t.param);
+    if (d) { showTab('factory'); if (d.group) openToolMenu(d.group); return; }
+    if (G.cfg.markets.find(m => m.id === t.param) && G.st.unlocked.market) { G.market = t.param; showTab('market'); return; }
+    if (t.type === 'stock') showTab('factory');
+  },
+  levelFlash: text => bigFlash(text),
 };
 window.G = G; // handy from the console
 
@@ -43,6 +52,7 @@ async function boot() {
   initMarket(G);
   initFactory(G);
   initDebug(G);
+  initTasks(G);
   initTabs();
   render();
   startLoop();
@@ -57,13 +67,23 @@ function save() {
   try { localStorage.setItem(SAVE_KEY, JSON.stringify(G.st)); } catch { /* private mode: play without saving */ }
 }
 
+// A save that can't be loaded is kept aside (mu_v2_save_backup) instead of
+// being overwritten by the new game's autosave.
 function load() {
   if (NO_SAVE) return null;
+  let raw = null;
+  try { raw = localStorage.getItem(SAVE_KEY); } catch { return null; }
+  if (!raw) return null;
   try {
-    const st = JSON.parse(localStorage.getItem(SAVE_KEY));
+    const st = JSON.parse(raw);
     if (st && st.v === SAVE_VERSION && st.cfgVersion === G.cfg.meta.version) return migrate(G.cfg, st);
-  } catch { /* corrupted or unavailable */ }
-  return null;
+    throw new Error('save version ' + st?.v + '/' + st?.cfgVersion);
+  } catch (err) {
+    console.error('Save not loaded, kept as mu_v2_save_backup:', err);
+    try { localStorage.setItem(SAVE_KEY + '_backup', raw); } catch { /* ignore */ }
+    toast('⚠️ Ta sauvegarde n’a pas pu être chargée ; elle est mise de côté.');
+    return null;
+  }
 }
 
 function reset() {
@@ -154,11 +174,8 @@ function handle(e) {
       const def = G.cfg.rivals.find(c => c.market === e.market && c.id === e.id);
       toast(`${def.icon} ${def.name} passe de ${e.from} $ à ${e.to} $.`);
     }
-  } else if (e.type === 'rivalsUpgrade' && !introduced.upgrade && G.st.seen.market) {
-    introduced.upgrade = true;
-    toast('⚔️ Tes rivaux améliorent leurs usines eux aussi, chaque minute.');
   } else if (e.type === 'monopolyStart') {
-    if (e.id === 'you') { monoFlash(`👑 MONOPOLE ${r.icon} ${r.name.toUpperCase()} !`); play('buy', 0.6); }
+    if (e.id === 'you') { bigFlash(`👑 MONOPOLE ${r.icon} ${r.name.toUpperCase()} !`); play('buy', 0.6); }
     else toast(`⚠️ ${nameOf(e.market, e.id)} a le monopole ${r.icon} ${r.name} : ses clients lui deviennent fidèles.`);
   } else if (e.type === 'monopolyLost') {
     toast(e.id === 'you'
@@ -167,8 +184,8 @@ function handle(e) {
   }
 }
 
-// Big non-blocking banner for the player's monopolies.
-function monoFlash(text) {
+// Big non-blocking banner (monopolies, level ups).
+function bigFlash(text) {
   const d = document.createElement('div');
   d.id = 'mono-flash';
   d.textContent = text;
@@ -176,7 +193,7 @@ function monoFlash(text) {
   setTimeout(() => d.remove(), 2700);
 }
 
-// --- What can I do now? -------------------------------------------------------
+// --- What can I do now? (tip shown under the featured quest; null = none) -------
 
 function hint() {
   const { cfg, st } = G;
@@ -196,10 +213,14 @@ function hint() {
     const b = st.mk[r.id].brands.you;
     if (b.hold > 0 && !b.active) return `⏱ Garde ${pct(cfg.monopoly.share)} du marché ${r.icon} encore ${Math.ceil(cfg.monopoly.hold_s - b.hold)} s !`;
   }
-  if (st.unlocked.refine && !n('refine_fruit') && !n('refine_juice') && !n('refine_bottle'))
-    return '👉 Essaie l’Amélioration : touche 🍋 puis « Amélioration », et fais passer tes citrons dedans avant l’📤 Outcome.';
-  if (st.unlocked.press && !n('press')) return '👉 Pose un ⚙️ Pressage : citrons → jus, qui se vend plus cher. Relie-le à l’📤 Outcome.';
-  if (st.unlocked.bottle && !n('bottle')) return '👉 Pose un 🍾 Embouteillage : jus → bouteilles, le produit le plus cher.';
+  // A machine just unlocked by the level and never built.
+  const fresh = cfg.machines.find(d => st.unlocked[d.id] && !d.sink && !n(d.id));
+  if (fresh) {
+    const where = cfg.markets.find(m => m.id === fresh.group);
+    return fresh.kind === 'refine'
+      ? `👉 Nouveau : ${fresh.name}. Touche ${where.icon} puis « Amélioration » : 3 objets de même ★ → 1 ★ supérieur.`
+      : `👉 Nouveau : ${fresh.icon} ${fresh.name}. Touche ${where.icon} dans la barre puis « Production ».`;
+  }
   const sk = stockInfo(cfg, st);
   const fullMk = openMarkets(cfg, st).find(r => st.mk[r.id].you.stock >= st.mk[r.id].you.stockCap - 1e-6);
   if (fullMk && st.unlocked.stock && sk.affordable) return `👉 Stock ${fullMk.icon} plein : agrandis le stock (${money(sk.cost)}).`;
@@ -217,7 +238,7 @@ function hint() {
   }
   const rivalMono = openMarkets(cfg, st).find(r => { const h = monopolistOf(st, r.id); return h && h !== 'you'; });
   if (rivalMono) return `👉 ${nameOf(rivalMono.id, monopolistOf(st, rivalMono.id))} tient le monopole ${rivalMono.icon} : casse-le avant qu’il ne s’installe.`;
-  return '👉 Vise un monopole : le marché où ta part est la plus haute.';
+  return null;
 }
 
 // --- Render -------------------------------------------------------------------

@@ -87,11 +87,14 @@ function buildToolbar() {
   }));
 }
 
+// Machines unlock with the player level (st.unlocked[machine id]); a product
+// shows up in the toolbar once one of its machines is unlocked.
 const groupOf = id => (id && id !== 'belt' ? machineDef(G.cfg, id)?.group : null) || null;
-const groupUnlocked = g => g === 'fruit' || (g === 'juice' && !!G.st.unlocked.press) || (g === 'bottle' && !!G.st.unlocked.bottle);
-const machineUnlocked = d => groupUnlocked(d.group) && (d.kind !== 'refine' || !!G.st.unlocked.refine);
-const toolUnlocked = id => id === 'belt' || (id === 'outcome' ? !!G.st.unlocked.outcome : machineUnlocked(machineDef(G.cfg, id)));
+const machineUnlocked = d => !!G.st.unlocked[d.id];
+const groupUnlocked = g => G.cfg.machines.some(d => d.group === g && machineUnlocked(d));
+const toolUnlocked = id => id === 'belt' || machineUnlocked(machineDef(G.cfg, id));
 export const currentTool = () => tool;
+export function openToolMenu(group) { tool = null; edit = null; menuGroup = group; renderFactory(); }
 
 const costLabel = c => (c === 0 ? 'Gratuit' : money(c));
 
@@ -128,8 +131,9 @@ function renderMenu() {
   const html = cfg.machines.filter(d => d.group === menuGroup).map(d => {
     const open = machineUnlocked(d), c = placeCost(cfg, st.grid, d.id);
     const what = d.kind === 'refine' ? `Amélioration · fusion ${d.merge_n} → ★+1` : 'Production';
+    const lock = G.cfg.levels.find(l => (l.unlock || '').split(/\s+/).includes(d.id));
     return `<button class="tm-item ${open ? '' : 'locked'} ${st.money < c ? 'cant' : ''}" data-pick="${open ? d.id : ''}">
-      <span class="tm-icon">${d.icon}</span><span class="tm-text"><b>${d.name}</b><small>${open ? what : '🔒 Bientôt'}</small></span>
+      <span class="tm-icon">${d.icon}</span><span class="tm-text"><b>${d.name}</b><small>${open ? what : `🔒 Niveau ${lock ? lock.level : '?'}`}</small></span>
       <span class="tm-cost">${open ? costLabel(c) : ''}</span></button>`;
   }).join('');
   if (menu.dataset.html !== html) {
