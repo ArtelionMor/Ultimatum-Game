@@ -5,6 +5,7 @@ import { newGame, step, derive, SAVE_VERSION, productOf } from './sim.js';
 import { unitCost } from './factory.js';
 import { initHud, renderHud } from './ui/hud.js';
 import { initMarket, renderMarket, flashRival } from './ui/market-view.js';
+import { initFactory, renderFactory, saleCoin } from './ui/factory-view.js';
 import { toast, floatText } from './ui/fx.js';
 import { money } from './format.js';
 
@@ -24,6 +25,8 @@ async function boot() {
   derive(G.cfg, G.st);
   initHud(G);
   initMarket(G);
+  initFactory(G);
+  G.st.unlocked.upgrades = G.st.unlocked.stock = true;
   initTabs();
   startLoop();
 }
@@ -64,13 +67,14 @@ function tick() {
 }
 
 function handle(e) {
-  if (e.type === 'sale') saleAcc += e.gain;
+  if (e.type === 'sale') { saleAcc += e.gain; saleCoin(); }
   else if (e.type === 'rivalPrice') flashRival(e.id);
 }
 
 function render() {
   renderHud('👉 Fixe ton prix');
   if (G.tab === 'market') renderMarket();
+  else renderFactory();
 }
 
 boot();
