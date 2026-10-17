@@ -19,9 +19,10 @@
 
 import { DIRS, ports, machineAt, beltAt, machineDef, placeCost, canPlaceMachine, canPlaceBelt,
   setBeltDir, setMachineRot, moveMachine, countOf, stageOf, tierOf, beltsUnder,
-  selectRect, groupBox, groupMoveCheck, moveGroup, splitDirs, setSplit, SPLIT_SHAPES, SPLIT_MODES, canPlaceTunnel, tunnelPartner } from '../grid.js';
+  selectRect, groupBox, groupMoveCheck, moveGroup, splitDirs, setSplit, SPLIT_SHAPES, SPLIT_MODES, pipeAt, pipeNet, exitsFrom, setTunnelStage,
+  canMoveBelt, moveBelt, beltKind, setCross, CROSS_MODES, CROSS_PRIOS } from '../grid.js';
 import { buyMachine, buyBelt, sellMachine, sellValue, sellBelt, machineInfo, upgradeMachine, stockInfo, buyStock,
-  expandInfo, buyExpand, sellGroup, buySplitter, buyCrossing, buyTunnel } from '../sim.js';
+  expandInfo, buyExpand, sellGroup, buySplitter, buyCrossing, buyTunnelEnd, buyPipe, sellPipe } from '../sim.js';
 import { usableRecipes, applyRecipeAll, unseenRecipes, equipRecipe } from '../auction.js';
 import { recipeOf } from '../grid.js';
 import { recipeText } from './auction-view.js';
@@ -41,6 +42,7 @@ let G, canvas, ctx, bound = false;
 let tool = null;           // null | machine id | 'belt' | 'splitter' | 'select'
 let menuGroup = null;      // product whose Production / Amélioration menu is open
 let lastRot = 0;           // direction used for the previous build
+let pipeStage = 0;         // resource layer the pipe tool draws on
 let cam = { x: 0, y: 0 }, viewW = 0, viewH = 0, camReady = false;
 let edit = null;           // { kind: 'machine', m } | { kind: 'belt', x, y }
 let press = null;          // gesture in progress (see onDown)
@@ -103,8 +105,12 @@ const BELT_TOOLS = [
   { id: 'belt', icon: '⇉', name: 'Tapis', what: 'Glisse pour tracer' },
   { id: 'splitter', icon: '🔀', name: 'Splitter', what: 'Partage un tapis en deux' },
   { id: 'crossing', icon: '➕', name: 'Croisement', what: 'Deux tapis se croisent' },
-  { id: 'tunnel', icon: '🚇', name: 'Tunnel', what: 'Glisse : passe sous ce qui est entre' },
+  { id: 'tunnel_in', icon: '🕳️', name: 'Entrée de tunnel', what: 'Envoie chaque ressource sous terre' },
+  { id: 'tunnel_out', icon: '🚇', name: 'Sortie de tunnel', what: 'Fait ressortir une ressource' },
+  { id: 'pipe', icon: '〰️', name: 'Tuyaux', what: 'Réseau souterrain, un par ressource' },
 ];
+const toolCost = id => (id === 'pipe' ? G.cfg.grid.pipe_cost : placeCost(G.cfg, G.st.grid, id.startsWith('tunnel') ? 'tunnel' : id));
+const stageMarket = st => G.cfg.markets.find(m => m.stage === st);
 const groupOf = id => (BELT_TOOLS.some(t => t.id === id) ? 'belts' : id ? machineDef(G.cfg, id)?.group : null) || null;
 const machineUnlocked = d => !!G.st.unlocked[d.id];
 const groupUnlocked = g => G.cfg.machines.some(d => d.group === g && machineUnlocked(d));
@@ -150,10 +156,11 @@ export function renderFactory() {
 // Production / Amélioration choice under the product button.
 function renderMenu() {
   const menu = $('tool-menu');
+  if (!menuGroup && tool === 'pipe' && G.tab === 'factory') return renderPipeBar(menu);
   if (!menuGroup || G.tab !== 'factory') { menu.classList.add('hidden'); return; }
   const { cfg, st } = G;
   const html = menuGroup === 'belts' ? BELT_TOOLS.map(t => {
-    const c = placeCost(cfg, st.grid, t.id);
+    const c = toolCost(t.id);
     return `<button class="tm-item ${st.money < c ? 'cant' : ''}" data-pick="${t.id}">
       <span class="tm-icon">${t.icon}</span><span class="tm-text"><b>${t.name}</b><small>${t.what}</small></span>
       <span class="tm-cost">${costLabel(c)}</span></button>`;
@@ -181,6 +188,20 @@ function renderMenu() {
   // Under its button, kept on screen even when the toolbar is scrolled.
   const box = menu.offsetParent.getBoundingClientRect(), br = btn.getBoundingClientRect();
   menu.style.left = Math.max(4, Math.min(box.width - menu.offsetWidth - 4, br.left - box.left)) + 'px';
+}
+
+// Pipe tool: pick the resource layer to draw (glisse = poser, toucher un tuyau = l'enlever).
+function renderPipeBar(menu) {
+  const html = `<div class="pipe-bar"><div class="ew-meta">〰️ Tuyaux · ${money(G.cfg.grid.pipe_cost)}/case · touche un tuyau pour l'enlever</div>
+    <div class="sp-row">${G.cfg.markets.map(m => `<button class="btn small sp-chip ${m.stage === pipeStage ? 'on' : ''}" data-stage="${m.stage}">${m.icon}</button>`).join('')}</div></div>`;
+  if (menu.dataset.html !== html) {
+    menu.innerHTML = html;
+    menu.dataset.html = html;
+    menu.querySelectorAll('[data-stage]').forEach(b => b.addEventListener('click', () => { pipeStage = Number(b.dataset.stage); play('tick', 0.25); renderFactory(); }));
+  }
+  menu.classList.remove('hidden');
+  const box = menu.offsetParent.getBoundingClientRect();
+  menu.style.left = Math.max(4, (box.width - menu.offsetWidth) / 2) + 'px';
 }
 
 // One line: each item's stock + the shared "grow storage" button.
@@ -264,9 +285,26 @@ function renderWidget() {
         <div class="sp-row">${SPLIT_SHAPES.map(s => chip('shape:' + s, SHAPE_LABEL[s], b.split.shape === s)).join('')}</div>
         <div class="sp-row">${SPLIT_MODES.map(m => chip('mode:' + m, MODE_LABEL[m], b.split.mode === m)).join('')}</div>
         <div class="ew-btns"><button class="btn small" data-act="rot">⟳</button><button class="btn small danger" data-act="sell">Vendre</button><button class="btn small" data-act="close">✕</button></div>`;
-    } else if (b.cross || b.tunnel) {
-      html = `<div class="ew-title">${b.cross ? '➕ Croisement' : '🚇 Tunnel'}</div>
+    } else if (b.cross) {
+      const chip = (act, label, on) => `<button class="btn small sp-chip ${on ? 'on' : ''}" data-act="${act}">${label}</button>`;
+      const o = { mode: b.cross.mode || 'cross', out: b.cross.out ?? 0, prio: b.cross.prio || 'alt' };
+      html = `<div class="ew-title">➕ Croisement</div>
+        <div class="sp-row">${CROSS_MODES.map(m => chip('cmode:' + m, m === 'cross' ? '✚ Croisement' : '⤵ Fusion', o.mode === m)).join('')}</div>
+        ${o.mode === 'merge' ? `<div class="ew-meta">Sortie</div>
+          <div class="sp-row">${ARROWS.map((a, d) => chip('cout:' + d, a, o.out === d)).join('')}</div>
+          <div class="ew-meta">Priorité</div>
+          <div class="sp-row">${CROSS_PRIOS.map(p => chip('cprio:' + p, PRIO_LABEL[p], o.prio === p)).join('')}</div>` : ''}
         <div class="ew-btns"><button class="btn small danger" data-act="sell">Vendre</button><button class="btn small" data-act="close">✕</button></div>`;
+    } else if (b.tunnel) {
+      const chip = (act, label, on) => `<button class="btn small sp-chip ${on ? 'on' : ''}" data-act="${act}">${label}</button>`;
+      const isOut = b.tunnel.role === 'out';
+      // Which layers this end is plugged into, and where they lead.
+      const links = G.cfg.markets.filter(m => pipeAt(st.grid, m.stage, edit.x, edit.y)).map(m =>
+        isOut ? m.icon : `${m.icon}→${exitsFrom(st.grid, m.stage, edit.x, edit.y).length}`).join(' ');
+      html = `<div class="ew-title">${isOut ? '🚇 Sortie de tunnel' : '🕳️ Entrée de tunnel'}</div>
+        <div class="ew-meta">${links ? 'Réseaux : ' + links : 'Aucun tuyau ici : trace-en avec 〰️'}</div>
+        ${isOut ? `<div class="sp-row">${chip('tstage:any', 'Tout', b.tunnel.stage === null)}${G.cfg.markets.map(m => chip('tstage:' + m.stage, m.icon, b.tunnel.stage === m.stage)).join('')}</div>` : ''}
+        <div class="ew-btns"><button class="btn small" data-act="pipes">〰️ Tuyaux</button><button class="btn small" data-act="rot">⟳</button><button class="btn small danger" data-act="sell">Vendre</button><button class="btn small" data-act="close">✕</button></div>`;
     } else html = `<div class="ew-title">⇉ Tapis</div>
       <div class="ew-btns"><button class="btn small" data-act="rot">⟳</button><button class="btn small danger" data-act="sell">Vendre</button><button class="btn small" data-act="close">✕</button></div>`;
   } else {
@@ -329,6 +367,7 @@ function placeWidget() {
 
 const SHAPE_LABEL = { sl: '↑ + ←', sr: '↑ + →', lr: '← + →' };
 const MODE_LABEL = { 50: '50/50', 30: '30/70', 70: '70/30', prio: 'Principal d’abord' };
+const PRIO_LABEL = { h: '↔ d’abord', v: '↕ d’abord', alt: 'Alterné' };
 
 function onWidget(act, btn) {
   const { cfg, st } = G;
@@ -336,6 +375,18 @@ function onWidget(act, btn) {
   if (edit.kind === 'belt') {
     const [k, v] = act.split(':');
     if (k === 'shape' || k === 'mode') { setSplit(st.grid, edit.x, edit.y, { [k]: v }); play('tick', 0.3); }
+    else if (k === 'tstage') { setTunnelStage(st.grid, edit.x, edit.y, v === 'any' ? null : Number(v)); play('tick', 0.3); }
+    else if (act === 'pipes') {
+      // Draw on the layer this end lets out (or the first one it touches).
+      const b = beltAt(st.grid, edit.x, edit.y);
+      const on = G.cfg.markets.find(m => pipeAt(st.grid, m.stage, edit.x, edit.y));
+      pipeStage = b?.tunnel?.stage ?? on?.stage ?? pipeStage;
+      tool = 'pipe'; edit = null;
+    }
+    else if (k === 'cmode' || k === 'cout' || k === 'cprio') {
+      setCross(st.grid, edit.x, edit.y, { [k.slice(1) === 'mode' ? 'mode' : k.slice(1)]: k === 'cout' ? Number(v) : v });
+      play('tick', 0.3);
+    }
     else if (act === 'rot') {
       const b = beltAt(st.grid, edit.x, edit.y);
       if (b) setBeltDir(st.grid, edit.x, edit.y, (b.dir + 1) % 4);
@@ -479,6 +530,12 @@ function onDown(e) {
     if (tool !== 'select') { press = { mode: 'empty', cell: p, sx, sy }; return; }
   }
   if (tool === 'select') { edit = null; press = { mode: 'rect', a: p, b: p, sx, sy }; return; }
+  if (tool === 'pipe') {
+    // Pipes run under everything, machines included.
+    press = { mode: 'pipe', last: [p.x, p.y], had: pipeAt(grid, pipeStage, p.x, p.y), moved: false, spent: 0, sx, sy };
+    if (!press.had) layPipe(p.x, p.y, e);
+    return;
+  }
 
   if (edit?.kind === 'machine') {
     const em = edit.m;
@@ -508,7 +565,7 @@ function onDown(e) {
     return;
   }
   if (tool === 'crossing') { press = { mode: 'cross', cell: p, sx, sy }; return; }
-  if (tool === 'tunnel') { press = { mode: 'tun', cell: p, dir: 0, len: 0, sx, sy }; return; }
+  if (tool === 'tunnel_in' || tool === 'tunnel_out') { press = { mode: 'tend', cell: p, dir: null, sx, sy }; return; }
   if (tool === 'belt') {
     const existing = beltAt(grid, p.x, p.y);
     press = { mode: 'belt', last: [p.x, p.y], moved: false, startedOn: !!existing, sx, sy };
@@ -518,7 +575,8 @@ function onDown(e) {
     press = { mode: 'place', sx, sy };
     ghost = makeGhost(f.x, f.y, lastRot, tool, 1, null);
   } else {
-    press = { mode: beltAt(grid, p.x, p.y) ? 'beltTap' : 'empty', cell: p, sx, sy };
+    const b = beltAt(grid, p.x, p.y);
+    press = { mode: b ? 'beltTap' : 'empty', special: !!b && beltKind(b) !== 'belt', cell: p, sx, sy };
   }
 }
 
@@ -537,7 +595,12 @@ function onMove(e) {
   switch (press.mode) {
     case 'empty':
     case 'beltTap':
+      // Splitters, crossings, tunnel ends follow the finger; plain belts pan.
+      if (far && press.special) { press = { mode: 'bdrag', cell: press.cell, to: p, sx: press.sx, sy: press.sy }; edit = null; break; }
       if (far) { pan = { x: press.sx, y: press.sy }; press = null; onMove(e); }
+      break;
+    case 'bdrag':
+      press.to = p;
       break;
     case 'grab': {
       const m = press.m;
@@ -559,14 +622,18 @@ function onMove(e) {
     case 'belt':
       drawBelt(p, e);
       break;
-    case 'tun': {
-      // Drag from the entrance to the exit, in a straight line.
-      const dx = p.x - press.cell.x, dy = p.y - press.cell.y;
-      press.dir = Math.abs(dx) >= Math.abs(dy) ? (dx >= 0 ? 0 : 2) : (dy > 0 ? 1 : 3);
-      press.len = Math.max(Math.abs(dx), Math.abs(dy));
-      press.ok = canPlaceTunnel(G.cfg, G.st.grid, press.cell.x, press.cell.y, press.dir, press.len);
+    case 'pipe': {
+      // Walk cell by cell towards the finger so fast swipes leave no gaps.
+      let [cx, cy] = press.last;
+      while (cx !== p.x || cy !== p.y) {
+        if (Math.abs(p.x - cx) >= Math.abs(p.y - cy)) cx += Math.sign(p.x - cx); else cy += Math.sign(p.y - cy);
+        if (!layPipe(cx, cy, e)) break;
+        press.moved = true;
+      }
+      press.last = [cx, cy];
       break;
     }
+    case 'tend':
     case 'split': {
       // Drag away from the cell to choose where items flow.
       const dx = p.fx - (press.cell.x + 0.5), dy = p.fy - (press.cell.y + 0.5);
@@ -614,6 +681,12 @@ function onUp(e) {
   switch (pr.mode) {
     case 'empty': edit = null; break;
     case 'beltTap': { const c = pr.cell; edit = { kind: 'belt', x: c.x, y: c.y }; break; }
+    case 'bdrag': {
+      const { x, y } = pr.cell, t = pr.to;
+      if (moveBelt(grid, x, y, t.x, t.y)) { play('buy', 0.3); G.onAction('move'); }
+      else floatAt(e, 'Place occupée', 'bad');
+      break;
+    }
     case 'tap': break;
     case 'grab': edit = { kind: 'machine', m: pr.m }; play('tick', 0.2); break;
     case 'drag': {
@@ -669,13 +742,23 @@ function onUp(e) {
       else floatAt(e, r.why === 'money' ? 'Pas assez d\'argent' : 'Place occupée', 'bad');
       break;
     }
-    case 'tun': {
-      const { x, y } = pr.cell, b = beltAt(grid, x, y);
-      if (!pr.len) { if (b?.tunnel) edit = { kind: 'belt', x, y }; else floatAt(e, 'Glisse jusqu\'à la sortie', 'bad'); break; }
-      const r = buyTunnel(G.cfg, G.st, x, y, pr.dir, pr.len);
-      if (r.ok) { lastRot = pr.dir; play('buy'); floatAt(e, `-${money(r.cost)}`, 'bad'); G.onAction('build', 'tunnel'); }
-      else floatAt(e, r.why === 'money' ? 'Pas assez d\'argent'
-        : pr.len > G.cfg.grid.tunnel_max_gap + 1 ? `${G.cfg.grid.tunnel_max_gap} cases max entre les deux` : pr.len < 2 ? 'Trop court' : 'Place occupée', 'bad');
+    case 'pipe': {
+      // A tap on an existing pipe of this layer removes it.
+      if (pr.had && !pr.moved) { const c = toCell(e); if (sellPipe(G.cfg, G.st, pipeStage, c.x, c.y)) { play('tick', 0.3); G.onAction('sell'); } }
+      if (pr.spent) floatAt(e, `-${money(pr.spent)}`, 'bad');
+      break;
+    }
+    case 'tend': {
+      const { x, y } = pr.cell, b = beltAt(grid, x, y), role = tool === 'tunnel_in' ? 'in' : 'out';
+      if (b?.tunnel) { if (pr.dir !== null) setBeltDir(grid, x, y, pr.dir); edit = { kind: 'belt', x, y }; break; }
+      // Exits start on the layer the pipe tool last used; the widget changes it.
+      const r = buyTunnelEnd(G.cfg, G.st, x, y, pr.dir ?? b?.dir ?? lastRot, role, role === 'out' ? pipeStage : null);
+      if (r.ok) {
+        if (pr.dir !== null) { setBeltDir(grid, x, y, pr.dir); lastRot = pr.dir; }
+        play('buy'); floatAt(e, `-${money(r.cost)}`, 'bad');
+        edit = { kind: 'belt', x, y };
+        G.onAction('build', 'tunnel');
+      } else floatAt(e, r.why === 'money' ? 'Pas assez d\'argent' : 'Place occupée', 'bad');
       break;
     }
     case 'split': {
@@ -707,6 +790,15 @@ function dropped(m) {
   play('buy', 0.3);
   flashUntil.set(m, performance.now() + 500);
   G.onAction('move');
+}
+
+// Lay one pipe on the current layer (already there: fine). False stops the stroke.
+function layPipe(x, y, e) {
+  if (pipeAt(G.st.grid, pipeStage, x, y)) return true;
+  const r = buyPipe(G.cfg, G.st, pipeStage, x, y);
+  if (r.ok) { press.spent += r.cost; play('tick', 0.15); return true; }
+  if (r.why === 'money') floatAt(e, 'Pas assez d\'argent', 'bad');
+  return false;
 }
 
 function tryBelt(x, y, dir, e) {
@@ -786,16 +878,17 @@ function draw(now) {
     if (edit?.kind === 'belt') { const b = beltAt(grid, edit.x, edit.y); if (b) drawBelt2(edit.x, edit.y, b, t); outline(edit.x * c, edit.y * c, c, c, '#5aa9ff'); }
   }
   if (moving && !ghost) drawMachine(moving, now);
-
-  // Tunnel being drawn: entrance, exit and the hidden path.
-  if (press?.mode === 'tun' && press.len) {
-    const [dx, dy] = DIRS[press.dir], { x, y } = press.cell, col = press.ok ? '#3ddc84' : '#ff5d5d';
-    ctx.save(); ctx.setLineDash([4, 4]); ctx.strokeStyle = col; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo((x + 0.5) * c, (y + 0.5) * c); ctx.lineTo((x + dx * press.len + 0.5) * c, (y + dy * press.len + 0.5) * c); ctx.stroke();
-    ctx.restore();
-    outline(x * c, y * c, c, c, col);
-    outline((x + dx * press.len) * c, (y + dy * press.len) * c, c, c, col);
+  if (press?.mode === 'bdrag') {
+    const { x, y } = press.cell, b = beltAt(grid, x, y), t = press.to;
+    if (b) {
+      ctx.globalAlpha = 0.8; drawBelt2(t.x, t.y, b, now / 1000); ctx.globalAlpha = 1;
+      outline(t.x * c, t.y * c, c, c, canMoveBelt(grid, x, y, t.x, t.y) ? '#3ddc84' : '#ff5d5d');
+    }
   }
+
+  // Underground view: pipe tool, or a tunnel end being edited.
+  const editEnd = edit?.kind === 'belt' && beltAt(grid, edit.x, edit.y)?.tunnel ? edit : null;
+  if (tool === 'pipe' || editEnd) drawUnderground(grid, editEnd);
 
   // ⬚ rectangle being drawn
   if (press?.mode === 'rect') {
@@ -888,7 +981,7 @@ function drawSplitter(x, y, b) {
 }
 
 // Crossing: a plus of two belts with a hub in the middle.
-function drawCrossing(x, y) {
+function drawCrossing(x, y, b) {
   const c = CELL, cx = x * c + c / 2, cy = y * c + c / 2;
   ctx.fillStyle = '#2f3542';
   ctx.fillRect(x * c + 2, y * c + 2, c - 4, c - 4);
@@ -897,20 +990,52 @@ function drawCrossing(x, y) {
   ctx.fillRect(cx - 5, y * c + 2, 10, c - 4);
   ctx.fillStyle = '#e6ecf5';
   ctx.fillRect(cx - 3, cy - 3, 6, 6);
-}
-
-// Tunnel end: dark mouth; the entrance draws the dotted path to its exit.
-function drawTunnelEnd(x, y, b) {
-  const c = CELL, cx = x * c + c / 2, cy = y * c + c / 2;
-  const o = tunnelPartner(G.st.grid, x, y, b);
-  if (b.tunnel.role === 'in' && o) {
-    ctx.save(); ctx.setLineDash([3, 5]); ctx.strokeStyle = 'rgba(184,160,255,.45)'; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(o.x * c + c / 2, o.y * c + c / 2); ctx.stroke();
+  if (b?.cross?.mode === 'merge') {
+    ctx.save(); ctx.translate(cx, cy); ctx.rotate((b.cross.out ?? 0) * Math.PI / 2);
+    ctx.fillStyle = '#3ddc84';
+    ctx.beginPath(); ctx.moveTo(c / 2 - 2, 0); ctx.lineTo(c / 2 - 10, -6); ctx.lineTo(c / 2 - 10, 6); ctx.closePath(); ctx.fill();
     ctx.restore();
   }
+}
+
+// Underground: greyed factory, pipes in their resource colour. With `focus` (a
+// tunnel end) only the networks plugged into it are lit; with the pipe tool,
+// the layer being drawn.
+function drawUnderground(grid, focus) {
+  const c = CELL, n = G.cfg.markets.length;
+  if (!focus) { ctx.fillStyle = 'rgba(8,10,14,.62)'; ctx.fillRect(0, 0, grid.cols * c, grid.rows * c); }
+  for (let st = 0; st < n; st++) {
+    const layer = grid.under[st]; if (!layer) continue;
+    const lit = focus ? pipeNet(grid, st, focus.x, focus.y) : null;
+    const off = (st - (n - 1) / 2) * 2.5;   // layers side by side when they share cells
+    ctx.strokeStyle = ctx.fillStyle = STAGE_COLORS[st];
+    ctx.lineWidth = 4; ctx.lineCap = 'round';
+    for (const k in layer) {
+      const on = focus ? lit.has(k) : st === pipeStage;
+      ctx.globalAlpha = on ? 1 : 0.18;
+      const [x, y] = k.split(',').map(Number), cx = x * c + c / 2 + off, cy = y * c + c / 2 + off;
+      ctx.beginPath(); ctx.arc(cx, cy, 3, 0, Math.PI * 2); ctx.fill();
+      for (const [dx, dy] of [[1, 0], [0, 1]]) if (layer[(x + dx) + ',' + (y + dy)]) {
+        ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + dx * c, cy + dy * c); ctx.stroke();
+      }
+    }
+  }
+  ctx.globalAlpha = 1; ctx.lineCap = 'butt';
+  // Tunnel ends on top so they read as the plugs of the network.
+  for (const k in grid.belts) { const b = grid.belts[k]; if (b.tunnel) { const [x, y] = k.split(',').map(Number); drawTunnelEnd(x, y, b); } }
+  if (focus) outline(focus.x * c, focus.y * c, c, c, '#5aa9ff');
+}
+
+// Tunnel end: dark mouth; an exit shows the colour of what it lets out.
+function drawTunnelEnd(x, y, b) {
+  const c = CELL, cx = x * c + c / 2, cy = y * c + c / 2;
   ctx.fillStyle = '#2a2438';
   roundRect(x * c + 2, y * c + 2, c - 4, c - 4, 6); ctx.fill();
-  ctx.strokeStyle = o ? '#b8a0ff' : '#ff5d5d'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.strokeStyle = '#b8a0ff'; ctx.lineWidth = 1.5; ctx.stroke();
+  if (b.tunnel.role === 'out') {
+    ctx.fillStyle = b.tunnel.stage === null ? '#e6ecf5' : STAGE_COLORS[b.tunnel.stage];
+    ctx.beginPath(); ctx.arc(x * c + 8, y * c + 8, 4, 0, Math.PI * 2); ctx.fill();
+  }
   ctx.save();
   ctx.translate(cx, cy);
   ctx.rotate(b.dir * Math.PI / 2);
@@ -925,7 +1050,7 @@ function drawTunnelEnd(x, y, b) {
 
 function drawBelt2(x, y, b, t) {
   if (b.split) return drawSplitter(x, y, b);
-  if (b.cross) return drawCrossing(x, y);
+  if (b.cross) return drawCrossing(x, y, b);
   if (b.tunnel) return drawTunnelEnd(x, y, b);
   const c = CELL;
   ctx.fillStyle = '#2f3542';

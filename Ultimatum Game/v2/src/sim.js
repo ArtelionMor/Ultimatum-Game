@@ -8,7 +8,8 @@
 import { marketCfg, stepMarket, createShareTracker, trackShares, marketShares, demandMultiplier } from './market.js';
 import { stockCap, stockCost, unitCost, produce } from './factory.js';
 import { createGrid, stepGrid, placeCost, machineDef, machineRate, upgradeCost, item, stageOf, tierOf,
-  placeMachine, placeBelt, placeSplitter, placeCrossing, placeTunnel, beltKind, removeMachine, removeBelt, beltAt, countOf, expandGrid } from './grid.js';
+  placeMachine, placeBelt, placeSplitter, placeCrossing, placeTunnelEnd, placePipe, removePipe, migrateUnderground, beltKind,
+  removeMachine, removeBelt, beltAt, countOf, expandGrid } from './grid.js';
 import { createRival, repriceRival, approachRival } from './ai.js';
 import { initProgress, migrateProgress } from './progress.js';
 import { createAuction, stepAuction, rivalRecipeCount, migrateAuction, newMachineRecipe } from './auction.js';
@@ -109,6 +110,7 @@ export function migrate(cfg, st) {
     if (m.recipe === undefined) m.recipe = null;
   }
   for (const k in st.grid.belts) st.grid.belts[k].item = up(st.grid.belts[k].item);
+  migrateUnderground(st.grid, cfg.markets.length);
   st.hist ||= createHistory();
   st.auc ||= createAuction();
   migrateAuction(st.auc);
@@ -282,21 +284,37 @@ export function buyCrossing(cfg, st, x, y) {
   return { ok: true, cost };
 }
 
-// Entrance at (x, y), exit `len` cells away in `dir`; one price for the pair.
-export function buyTunnel(cfg, st, x, y, dir, len) {
+// A tunnel entrance (role 'in') or exit ('out', letting out `stage`; null = any).
+export function buyTunnelEnd(cfg, st, x, y, dir, role, stage = null) {
   const cost = placeCost(cfg, st.grid, 'tunnel');
   if (st.money < cost) return { ok: false, why: 'money' };
-  if (!placeTunnel(cfg, st.grid, x, y, dir, len)) return { ok: false, why: 'place' };
+  if (!placeTunnelEnd(st.grid, x, y, dir, role, stage)) return { ok: false, why: 'place' };
   st.money -= cost;
   st.stats.built.tunnel = (st.stats.built.tunnel || 0) + 1;
   return { ok: true, cost };
+}
+
+// Underground pipe of one resource layer.
+export function buyPipe(cfg, st, stage, x, y) {
+  const cost = cfg.grid.pipe_cost;
+  if (st.money < cost) return { ok: false, why: 'money' };
+  if (!placePipe(st.grid, stage, x, y)) return { ok: false, why: 'place' };
+  st.money -= cost;
+  return { ok: true, cost };
+}
+
+export function sellPipe(cfg, st, stage, x, y) {
+  if (!removePipe(st.grid, stage, x, y)) return 0;
+  const back = Math.floor(cfg.grid.pipe_cost * cfg.grid.sell_refund);
+  st.money += back;
+  return back;
 }
 
 export function sellBelt(cfg, st, x, y) {
   const b = beltAt(st.grid, x, y);
   if (!b) return 0;
   removeBelt(st.grid, x, y);
-  // Special cells give back part of what the last one cost (a tunnel pair once).
+  // Special cells give back part of what the last one cost.
   const kind = beltKind(b);
   const paid = kind === 'belt' ? cfg.grid.belt_cost : placeCost(cfg, st.grid, kind);
   const back = Math.floor(paid * cfg.grid.sell_refund);

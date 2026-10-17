@@ -34,7 +34,7 @@ export const recipesFor = (cfg, type) => cfg.recipes.filter(r => r.machine === t
 
 export function createGrid(cfg) {
   const g = cfg.grid;
-  const grid = { cols: g.cols, rows: g.rows, machines: [], belts: {}, nextId: 1, v: 0 };
+  const grid = { cols: g.cols, rows: g.rows, machines: [], belts: {}, under: {}, transit: [], nextId: 1, v: 0 };
   grid.machines.push({ id: 0, type: 'outcome', x: g.outcome_x, y: g.outcome_y, rot: 3, lvl: 1, buf: [], out: [], prog: 0, status: 'ok' });
   return grid;
 }
@@ -74,10 +74,10 @@ export const countOf = (grid, type) => grid.machines.filter(m => m.type === type
 export const isSink = (cfg, m) => !!machineDef(cfg, m.type)?.sink;
 
 // `first_free`: the first copy of that machine costs nothing (onboarding).
-// Special belt cells: splitter, crossing, tunnel (counted by entrance: a pair is one).
+// Special belt cells: splitter, crossing, tunnel end (entrance or exit).
 export const beltKind = b => (b.split ? 'splitter' : b.cross ? 'crossing' : b.tunnel ? 'tunnel' : 'belt');
 export const kindCount = (grid, kind) =>
-  Object.values(grid.belts).filter(b => beltKind(b) === kind && (kind !== 'tunnel' || b.tunnel.role === 'in')).length;
+  Object.values(grid.belts).filter(b => beltKind(b) === kind).length;
 
 export function placeCost(cfg, grid, type) {
   if (type === 'belt') return cfg.grid.belt_cost;
@@ -184,34 +184,114 @@ export function placeCrossing(grid, x, y) {
   if (b && (b.split || b.cross || b.tunnel)) return null;
   if (!b) { if (!canPlaceBelt(grid, x, y)) return null; b = grid.belts[key(x, y)] = { dir: 0, item: null, p: 0 }; }
   b.item = null; b.p = 0;
-  b.cross = { h: null, v: null };
+  b.cross = { h: null, v: null, mode: 'cross', out: 0, prio: 'alt', last: 'v' };
   changed(grid);
   return b;
 }
 
-// --- Tunnel ---------------------------------------------------------------------
-// Entrance at (x, y), exit `len` cells further in `dir`; items jump from one to
-// the other, under whatever lies between. Ends store the offset to each other.
-export function canPlaceTunnel(cfg, grid, x, y, dir, len) {
-  if (len < 2 || len > cfg.grid.tunnel_max_gap + 1) return false;
-  const [dx, dy] = DIRS[dir], ex = x + dx * len, ey = y + dy * len;
-  const free = (cx, cy) => { const b = beltAt(grid, cx, cy); return inside(grid, cx, cy) && !machineAt(grid, cx, cy) && (!b || beltKind(b) === 'belt'); };
-  return free(x, y) && free(ex, ey);
+// mode 'cross': each flow goes straight on. mode 'merge': both flows leave by
+// `out`; prio 'h' / 'v' = that flow first, 'alt' = one each.
+export const CROSS_MODES = ['cross', 'merge'];
+export const CROSS_PRIOS = ['h', 'v', 'alt'];
+export function setCross(grid, x, y, patch) {
+  const b = beltAt(grid, x, y);
+  if (!b?.cross) return false;
+  Object.assign(b.cross, patch);
+  changed(grid);
+  return true;
 }
+const crossOpts = c => ({ mode: c.mode || 'cross', out: c.out ?? 0, prio: c.prio || 'alt' });
 
-export function placeTunnel(cfg, grid, x, y, dir, len) {
-  if (!canPlaceTunnel(cfg, grid, x, y, dir, len)) return null;
-  const [dx, dy] = DIRS[dir], ex = x + dx * len, ey = y + dy * len;
-  grid.belts[key(x, y)] = { dir, item: null, p: 0, tunnel: { role: 'in', dx: ex - x, dy: ey - y } };
-  grid.belts[key(ex, ey)] = { dir, item: null, p: 0, tunnel: { role: 'out', dx: x - ex, dy: y - ey } };
+// --- Underground ----------------------------------------------------------------
+// One pipe layer per resource stage: grid.under[stage] = { "x,y": 1 }. Layers
+// never mix, so a lemon pipe and a juice pipe can share a cell.
+// Tunnel ends sit on the surface (belt cells) and plug into every layer that has
+// a pipe on their cell:
+// - entrance { role: 'in' }: takes any item and sends it into its own layer;
+// - exit { role: 'out', stage }: lets out items of that stage (null = any).
+// Items travel underground at belt speed (grid.transit).
+export const pipeAt = (grid, stage, x, y) => !!grid.under[stage]?.[key(x, y)];
+
+export function placePipe(grid, stage, x, y) {
+  if (!inside(grid, x, y) || pipeAt(grid, stage, x, y)) return false;
+  (grid.under[stage] ||= {})[key(x, y)] = 1;
   changed(grid);
   return true;
 }
 
-// The other end, or null if the pair got broken (one end moved or built over).
-export function tunnelPartner(grid, x, y, b) {
-  const ox = x + b.tunnel.dx, oy = y + b.tunnel.dy, o = beltAt(grid, ox, oy);
-  return o?.tunnel && o.tunnel.role !== b.tunnel.role && ox + o.tunnel.dx === x && oy + o.tunnel.dy === y ? { x: ox, y: oy, b: o } : null;
+export function removePipe(grid, stage, x, y) {
+  if (!pipeAt(grid, stage, x, y)) return false;
+  delete grid.under[stage][key(x, y)];
+  changed(grid);
+  return true;
+}
+
+export const pipeCount = grid => Object.values(grid.under).reduce((n, l) => n + Object.keys(l).length, 0);
+
+export function placeTunnelEnd(grid, x, y, dir, role, stage = null) {
+  let b = beltAt(grid, x, y);
+  if (b && beltKind(b) !== 'belt') return null;
+  if (!b) { if (!canPlaceBelt(grid, x, y)) return null; b = grid.belts[key(x, y)] = { dir, item: null, p: 0 }; }
+  b.tunnel = role === 'in' ? { role } : { role, stage };
+  changed(grid);
+  return b;
+}
+
+export function setTunnelStage(grid, x, y, stage) {
+  const b = beltAt(grid, x, y);
+  if (b?.tunnel?.role !== 'out') return false;
+  b.tunnel.stage = stage;
+  changed(grid);
+  return true;
+}
+
+// Cells of one layer's network reached from (x, y), with their distance.
+const netCache = new WeakMap();
+export function pipeNet(grid, stage, x, y) {
+  let c = netCache.get(grid);
+  if (!c || c.v !== grid.v) netCache.set(grid, (c = { v: grid.v, nets: {} }));
+  const id = stage + '|' + key(x, y);
+  if (c.nets[id]) return c.nets[id];
+  const dist = new Map();
+  if (pipeAt(grid, stage, x, y)) {
+    dist.set(key(x, y), 0);
+    const queue = [[x, y]];
+    while (queue.length) {
+      const [cx, cy] = queue.shift(), d = dist.get(key(cx, cy));
+      for (const [dx, dy] of DIRS) {
+        const nx = cx + dx, ny = cy + dy, k = key(nx, ny);
+        if (!dist.has(k) && pipeAt(grid, stage, nx, ny)) { dist.set(k, d + 1); queue.push([nx, ny]); }
+      }
+    }
+  }
+  return (c.nets[id] = dist);
+}
+
+// Exits an item of `stage` entering at (x, y) can reach: [{ k, d }].
+export function exitsFrom(grid, stage, x, y) {
+  const out = [];
+  for (const [k, d] of pipeNet(grid, stage, x, y)) {
+    const b = grid.belts[k];
+    if (b?.tunnel?.role === 'out' && (b.tunnel.stage === null || b.tunnel.stage === undefined || b.tunnel.stage === stage)) out.push({ k, d });
+  }
+  return out;
+}
+
+// Older saves: tunnels were entrance/exit pairs. Give them a straight pipe on every
+// layer and an exit open to everything.
+export function migrateUnderground(grid, stages) {
+  grid.under ||= {};
+  grid.transit ||= [];
+  for (const k in grid.belts) {
+    const b = grid.belts[k];
+    if (b.tunnel?.role !== 'in' || b.tunnel.dx === undefined) continue;
+    const [x, y] = k.split(',').map(Number), n = Math.abs(b.tunnel.dx) + Math.abs(b.tunnel.dy);
+    const sx = Math.sign(b.tunnel.dx), sy = Math.sign(b.tunnel.dy), o = beltAt(grid, x + b.tunnel.dx, y + b.tunnel.dy);
+    for (let i = 0; i <= n; i++) for (let s = 0; s < stages; s++) (grid.under[s] ||= {})[key(x + sx * i, y + sy * i)] = 1;
+    if (o?.tunnel) o.tunnel = { role: 'out', stage: null };
+    b.tunnel = { role: 'in' };
+  }
+  for (const k in grid.belts) { const t = grid.belts[k].tunnel; if (t) { delete t.dx; delete t.dy; if (t.role === 'out' && t.stage === undefined) t.stage = null; } }
 }
 
 // The two output directions [main, second] of a splitter.
@@ -242,9 +322,8 @@ export function removeBelt(grid, x, y) {
   const b = beltAt(grid, x, y);
   if (!b) return false;
   delete grid.belts[key(x, y)];
-  // A tunnel goes as a pair.
-  const o = b.tunnel && tunnelPartner(grid, x, y, b);
-  if (o) delete grid.belts[key(o.x, o.y)];
+  // Items on their way to a removed exit are lost.
+  if (b.tunnel?.role === 'out') grid.transit = grid.transit.filter(t => t.to !== key(x, y));
   changed(grid);
   return true;
 }
@@ -294,6 +373,25 @@ export function groupMoveCheck(grid, sel, dx, dy) {
   return { ok: true, broken: [...broken] };
 }
 
+// Move one special belt cell (splitter, crossing, tunnel end) to an empty cell
+// or onto a plain belt (replaced). Items heading to a moved exit follow it.
+export function canMoveBelt(grid, x, y, nx, ny) {
+  const b = beltAt(grid, x, y), t = beltAt(grid, nx, ny);
+  if (!b || (nx === x && ny === y) || !inside(grid, nx, ny) || machineAt(grid, nx, ny)) return false;
+  if (t && beltKind(t) !== 'belt') return false;
+  return true;
+}
+
+export function moveBelt(grid, x, y, nx, ny) {
+  if (!canMoveBelt(grid, x, y, nx, ny)) return false;
+  const b = beltAt(grid, x, y);
+  delete grid.belts[key(x, y)];
+  grid.belts[key(nx, ny)] = b;
+  for (const t of grid.transit) if (t.to === key(x, y)) t.to = key(nx, ny);
+  changed(grid);
+  return true;
+}
+
 // Slide the group; belts keep their direction (and what they carry).
 // Returns the number of belts broken, or -1. `sel.belts` is updated in place.
 export function moveGroup(grid, sel, dx, dy) {
@@ -333,10 +431,12 @@ function accept(cfg, grid, sx, sy, tx, ty, it, ctx) {
     if (b.cross) {
       const d = DIRS.findIndex(([dx, dy]) => tx - sx === dx && ty - sy === dy), lane = d % 2 ? 'v' : 'h';
       if (d < 0 || b.cross[lane]) return false;
+      const o = crossOpts(b.cross);
+      if (o.mode === 'merge' && d === (o.out + 2) % 4) return false;   // nothing comes in by the exit
       b.cross[lane] = { item: it, p: 0, dir: d };
       return true;
     }
-    if (b.tunnel?.role === 'out') return false;   // fed by its entrance only
+    if (b.tunnel?.role === 'out') return false;   // fed from underground only
     if (b.item !== null) return false;
     const [dx, dy] = DIRS[b.dir];
     if (tx + dx === sx && ty + dy === sy) return false; // belt points back at the source
@@ -375,7 +475,7 @@ function beltOrder(grid) {
     const b = grid.belts[k];
     let best = 0;
     if (b.cross) return (dist[k] = 0);
-    if (b.tunnel?.role === 'in') { const o = tunnelPartner(grid, x, y, b); return (dist[k] = o ? Math.min(1e9, depth(key(o.x, o.y)) + 1) : 0); }
+    if (b.tunnel?.role === 'in') return (dist[k] = 0);
     for (const d of b.split ? splitDirs(b) : [b.dir]) {
       const nk = key(x + DIRS[d][0], y + DIRS[d][1]);
       if (grid.belts[nk]) best = Math.max(best, Math.min(1e9, depth(nk) + 1));
@@ -416,13 +516,17 @@ export function stepGrid(cfg, grid, dt, ctx) {
   for (const { x, y, k } of beltOrder(grid)) {
     const b = grid.belts[k];
     if (b?.cross) {
-      for (const lane of ['h', 'v']) {
+      const o = crossOpts(b.cross);
+      // Merge: the priority flow tries first ('alt': whoever didn't go last time).
+      const first = o.mode !== 'merge' ? 'h' : o.prio === 'alt' ? (b.cross.last === 'h' ? 'v' : 'h') : o.prio;
+      for (const lane of [first, first === 'h' ? 'v' : 'h']) {
         const c = b.cross[lane];
         if (!c) continue;
         c.p = Math.min(1, c.p + speed * dt);
         if (c.p < 1) continue;
-        const [dx, dy] = DIRS[c.dir];
-        if (accept(cfg, grid, x, y, x + dx, y + dy, c.item, ctx)) b.cross[lane] = null;
+        const [dx, dy] = DIRS[o.mode === 'merge' ? o.out : c.dir];
+        if (accept(cfg, grid, x, y, x + dx, y + dy, c.item, ctx)) { b.cross[lane] = null; b.cross.last = lane; }
+        else if (o.mode === 'merge' && o.prio !== 'alt' && lane === o.prio) break;   // strict priority: the other waits
       }
       continue;
     }
@@ -430,9 +534,16 @@ export function stepGrid(cfg, grid, dt, ctx) {
     b.p = Math.min(1, b.p + speed * dt);
     if (b.p < 1) continue;
     if (b.tunnel?.role === 'in') {
-      // Jump to the exit as soon as it is free.
-      const o = tunnelPartner(grid, x, y, b);
-      if (o && o.b.item === null) { o.b.item = b.item; o.b.p = 0; b.item = null; b.p = 0; }
+      // Down into the item's own layer, towards the next exit (in turn) with room.
+      const exits = exitsFrom(grid, stageOf(b.item), x, y);
+      for (let i = 0; i < exits.length; i++) {
+        const e = exits[(b.rr = ((b.rr || 0) + 1) % exits.length)];
+        const inFlight = grid.transit.filter(t => t.to === e.k).length;
+        if (inFlight > e.d) continue;   // about one item per pipe cell
+        grid.transit.push({ item: b.item, to: e.k, t: e.d / speed });
+        b.item = null; b.p = 0;
+        break;
+      }
       continue;
     }
     if (b.split) {
@@ -446,6 +557,17 @@ export function stepGrid(cfg, grid, dt, ctx) {
     const [dx, dy] = DIRS[b.dir];
     if (accept(cfg, grid, x, y, x + dx, y + dy, b.item, ctx)) { b.item = null; b.p = 0; }
   }
+  // Underground: items come up at their exit once it is free (first sent, first out).
+  for (const t of grid.transit) t.t -= dt;
+  const busy = new Set();
+  grid.transit = grid.transit.filter(t => {
+    if (t.t > 0 || busy.has(t.to)) return true;
+    const e = grid.belts[t.to];
+    if (!e?.tunnel) return false;   // exit gone: lost
+    if (e.item !== null) { busy.add(t.to); return true; }
+    e.item = t.item; e.p = 0; busy.add(t.to);
+    return false;
+  });
   for (const m of grid.machines) {
     const d = machineDef(cfg, m.type);
     if (d.sink) continue;
