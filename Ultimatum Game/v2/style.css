@@ -327,3 +327,10 @@ main { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 12px 14px 16px; }
 .h-scale li span { font-size: 18px; }
 .h-scale li.on { background: rgba(255,207,74,.14); box-shadow: 0 0 0 1px var(--gold) inset; color: var(--text); }
 .h-tip { background: rgba(61,220,132,.12); border-radius: 9px; padding: 8px 10px; }
+
+/* --- Red dots (unused recipe) ------------------------------------------------------ */
+.dot.red, .subtabs .dot.red { background: #ff3b3b; animation: pulse-red 1.2s infinite; }
+.red-dot { position: relative; }
+.red-dot::after { content: ""; position: absolute; top: -4px; right: -4px; width: 10px; height: 10px; border-radius: 50%; background: #ff3b3b;
+  border: 1.5px solid #fff; animation: pulse-red 1.2s infinite; }
+@keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(255,59,59,.7); } 70% { box-shadow: 0 0 0 8px rgba(255,59,59,0); } 100% { box-shadow: 0 0 0 0 rgba(255,59,59,0); } }

@@ -27,6 +27,8 @@ export function taskValue(cfg, st, t) {
     case 'share': return s.bestShare?.[t.param] || 0;
     case 'earn': return Math.floor(s.earned);
     case 'stock': return st.stockLvl;
+    case 'own_recipe': return Object.keys(st.auc?.owned || {}).length;
+    case 'use_recipe': return st.grid.machines.filter(m => m.recipe).length;
     case 'monopoly': {
       const mono = s.monopolies || {};
       return t.param === 'any' ? (Object.keys(mono).length ? 1 : 0) : (mono[t.param] ? 1 : 0);

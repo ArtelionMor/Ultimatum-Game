@@ -18,7 +18,7 @@
 import { DIRS, ports, machineAt, beltAt, machineDef, placeCost, canPlaceMachine, canPlaceBelt,
   setBeltDir, setMachineRot, moveMachine, countOf, stageOf, tierOf, beltsUnder } from '../grid.js';
 import { buyMachine, buyBelt, sellMachine, sellValue, sellBelt, machineInfo, upgradeMachine, stockInfo, buyStock } from '../sim.js';
-import { usableRecipes } from '../auction.js';
+import { usableRecipes, applyRecipeAll, idleRecipes } from '../auction.js';
 import { recipeOf } from '../grid.js';
 import { recipeText } from './auction-view.js';
 import { money, perMin, fmt, stars } from '../format.js';
@@ -189,8 +189,8 @@ function renderStock() {
 
 const STATUS = {
   ok: '✅ Tourne',
-  starved: '💤 Attend sa matière (flèche orange)',
-  blocked: '⛔ Sortie bloquée (flèche verte) ou stock plein',
+  starved: '💤 Attend sa matière (entrée = triangle creux)',
+  blocked: '⛔ Sortie bloquée (sortie = triangle plein) ou stock plein',
   wrong: '❌ Le mauvais produit arrive sur son entrée : vérifie tes tapis',
   idle: '…',
 };
@@ -222,7 +222,9 @@ function renderWidget() {
       const rec = recipeOf(cfg, m), usable = usableRecipes(cfg, st, m.type);
       html = `<div class="ew-title">${d.icon} ${d.name} <span class="muted">Niv. ${m.lvl}</span></div>
         <div class="ew-meta">${meta}</div>
-        <div class="ew-recipe">📜 ${rec.name} · ${recipeText(cfg, rec)}${usable.length > 1 ? ' <button class="btn small" data-act="recipe">⇄</button>' : ''}</div>
+        <div class="ew-recipe">📜 ${rec.name} · ${recipeText(cfg, rec)}${usable.length > 1
+          ? ` <button class="btn small ${!m.recipe && idleRecipes(cfg, st).some(r => r.machine === m.type) ? 'red-dot' : ''}" data-act="recipe">⇄</button>
+             <button class="btn small" data-act="recipeAll">Pour toutes</button>` : ''}</div>
         <div class="ew-btns">
           <button class="btn small up-mini ${info.affordable ? '' : 'cant'}" data-act="up">⬆ ${perMin(info.nextRate)} · ${money(info.cost)}</button>
           <button class="btn small danger" data-act="sell">Vendre</button>
@@ -276,6 +278,13 @@ function onWidget(act, btn) {
       G.onAction('upgrade');
     } else floatText(btn, 'Pas assez d\'argent', 'bad');
   } else if (act === 'sell') confirmSell(m);
+  else if (act === 'recipeAll') {
+    // Give every machine of this type the recipe this one runs.
+    const n = applyRecipeAll(cfg, st, m.type, m.recipe);
+    play('buy', 0.4);
+    floatText(btn, `${n} autre${n > 1 ? 's' : ''} → ${recipeOf(cfg, m).name}`, 'gold');
+    G.onAction('recipe');
+  }
   else if (act === 'recipe') {
     // Next recipe this machine can run (base + the player's alternates).
     const list = usableRecipes(cfg, st, m.type), cur = recipeOf(cfg, m);
@@ -684,21 +693,43 @@ function drawMachine(m, now) {
     ctx.font = `${Math.round(c * 0.42)}px system-ui, "Segoe UI Emoji", sans-serif`;
     ctx.fillText(m.status === 'starved' ? '💤' : m.status === 'wrong' ? '❌' : '⛔', x + s - c * 0.42, y + c * 0.42);
   }
-  // ports: orange = input, green = output
+  // Ports, coloured like the item that goes in / comes out:
+  // input = hollow triangle pointing into the machine, output = filled triangle pointing out.
   const p = ports(m), [dx, dy] = DIRS[m.rot];
-  if (d.input_stage !== null) arrow(p.inCell, dx, dy, '#ffa53a', -1);
-  arrow(p.outCell, dx, dy, '#3ddc84', 1);
+  if (d.input_stage !== null) portArrow(p.inCell, dx, dy, STAGE_COLORS[d.input_stage], false);
+  if (d.output_stage !== null) portArrow(p.outCell, dx, dy, STAGE_COLORS[d.output_stage], true);
+  // Red dot: an owned alternate recipe could run here.
+  if (!m.recipe && m.id !== undefined && G.st.auc && idleFor(m.type)) {
+    ctx.fillStyle = '#ff3b3b';
+    ctx.beginPath(); ctx.arc(x + s - 7, y + s - 16, 4.5, 0, Math.PI * 2); ctx.fill();
+    ctx.lineWidth = 1.5; ctx.strokeStyle = '#fff'; ctx.stroke();
+  }
   if (m.out?.length) drawItem(p.outCell[0] * c + c / 2 + dx * c * 0.2, p.outCell[1] * c + c / 2 + dy * c * 0.2, m.out[0]);
 }
 
-// Triangle on the machine edge of cell `cl`, pointing along the flow.
-function arrow(cl, dx, dy, color, side) {
+let idleCache = { t: -1, types: new Set() };
+const idleFor = type => {
+  if (idleCache.t !== G.st.t) idleCache = { t: G.st.t, types: new Set(idleRecipes(G.cfg, G.st).map(r => r.machine)) };
+  return idleCache.types.has(type);
+};
+
+// Triangle on the machine edge of cell `cl`, pointing along the flow: filled
+// (output, on the far edge) or hollow (input, on the near edge).
+function portArrow(cl, dx, dy, color, out) {
+  const side = out ? 1 : -1;
   const cx = cl[0] * CELL + CELL / 2 + dx * (CELL / 2 - 6) * side;
   const cy = cl[1] * CELL + CELL / 2 + dy * (CELL / 2 - 6) * side;
   ctx.save();
   ctx.translate(cx, cy); ctx.rotate(Math.atan2(dy, dx));
-  ctx.fillStyle = color;
-  ctx.beginPath(); ctx.moveTo(6, 0); ctx.lineTo(-4, -7); ctx.lineTo(-4, 7); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(6, 0); ctx.lineTo(-5, -7.5); ctx.lineTo(-5, 7.5); ctx.closePath();
+  ctx.lineJoin = 'round';
+  if (out) {
+    ctx.fillStyle = color; ctx.fill();
+    ctx.lineWidth = 1.5; ctx.strokeStyle = 'rgba(0,0,0,.6)'; ctx.stroke();
+  } else {
+    ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.fill();
+    ctx.lineWidth = 2.5; ctx.strokeStyle = color; ctx.stroke();
+  }
   ctx.restore();
 }
 

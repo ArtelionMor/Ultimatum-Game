@@ -12,7 +12,7 @@ Puis ouvrir http://localhost:8795.
 
 ## La boucle
 1. **Usine** : une grille vue de dessus, plus grande que l'écran.
-   - Tu achètes et poses des machines 2×2 : 🍋 Cueillette (crée des citrons), ⚙️ Pressage (citron → jus), 🍾 Embouteillage (jus → bouteille). Chaque machine a une entrée (flèche orange) et une sortie (flèche verte).
+   - Tu achètes et poses des machines 2×2 : 🍋 Cueillette (crée des citrons), ⚙️ Pressage (citron → jus), 🍾 Embouteillage (jus → bouteille). Chaque machine a une entrée (triangle creux, de la couleur du produit qu'elle prend) et une sortie (triangle plein, de la couleur du produit qu'elle rend).
    - Tu les relies avec des tapis jusqu'à un **📤 Outcome**, qui envoie à la vente tout ce qui y entre, par tous les côtés.
    - Chaque machine s'améliore (+30 % de vitesse, niveau affiché dans une bulle), se tourne, se déplace gratuitement ou se revend (avec confirmation).
    - La 1re Cueillette et les tapis sont gratuits.
@@ -32,14 +32,16 @@ Puis ouvrir http://localhost:8795.
    - tu enchéris (ta mise est bloquée, et rendue si tu es dépassé) ; les rivaux du marché enchérissent aussi, jusqu'à un maximum secret ;
    - un rival qui gagne une recette **se renforce** (qualité et production) ; il la remet parfois en vente ;
    - **Offres** : tu peux proposer un prix à un rival pour lui racheter une recette (il répond après quelques secondes), et les rivaux te font des offres pour les tiennes (Vendre / Refuser) ;
-   - on choisit la recette d'une machine dans son widget (⇄).
+   - on applique une recette à **toutes** ses machines depuis sa carte (onglet Enchères › Recettes, « Appliquer à mes N … ») ou depuis le widget d'une machine (⇄ puis « Pour toutes ») ;
+   - un **point rouge** signale une recette possédée mais inutilisée (onglet, sous-onglet, carte, machines concernées dans l'usine) ;
+   - deux quêtes l'introduisent : « Obtiens une recette alternative » (niv. 4) et « Fais tourner une machine avec une recette alternative » (niv. 6).
 6. **Monopole** (pas d'écran de victoire) : tenir 80 % d'un marché pendant 20 s donne le monopole. Il apporte un effet visuel et un **bonus d'attrait** qui fidélise les clients. Les rivaux peuvent aussi prendre un monopole.
 
 ## Écrans
 - **Haut** : ⭐ niveau, barre des tâches du niveau (bouton 📋, qui pulse quand une tâche est à valider), argent et revenu/min, et une ligne « 👉 » qui dit quoi faire maintenant (sinon : la prochaine tâche).
 - **Usine** :
   - Barre d'outils : un bouton par produit (🍋 · 🧃 · 🍾), qui ouvre un menu **Production / Amélioration** ; puis 📤 Outcome et ⇉ Tapis. Toucher le produit de l'outil actif le repose. Dessous : les stocks par ressource et le bouton Agrandir.
-  - **Poser** : avec un outil machine, appuie là où tu la veux, glisse vers où doit sortir la production (grosse flèche verte), lâche. Poser (ou déplacer) une machine sur des tapis les casse (croix orange en aperçu).
+  - **Poser** : avec un outil machine, appuie là où tu la veux, glisse vers où doit sortir la production (grosse flèche), lâche. Poser (ou déplacer) une machine sur des tapis les casse (croix orange en aperçu).
   - **Tapis** : glisse le doigt pour tracer ; toucher un tapis existant le tourne.
   - **Déplacer** : appuie sur une machine et fais-la glisser (elle garde son sens).
   - **Éditer** : touche une machine. Le reste de l'usine se grise et un widget au-dessus propose ⬆ Améliorer et Vendre (avec « Êtes-vous sûr ? »). En mode édition :
@@ -114,7 +116,7 @@ Plancher : `coût unitaire × (1 + price_floor_margin)`, arrondi au pas de prix 
 | `rarities[]` (`color`, `ai_max`) | couleur des cartes et jusqu'où les rivaux peuvent monter (× valeur) |
 | `auction.*` | ouverture (niveau), nombre et fréquence des lots, durée, mise de départ, surenchère minimum, intérêt des rivaux, revente, offres reçues/envoyées, bonus d'un rival par recette possédée |
 | `levels[]` (`level`, `unlock`, `reward`) | ce que chaque niveau débloque (ids de machines séparés par des espaces) et rapporte |
-| `tasks[]` (`level`, `type`, `param`, `target`, `reward`) | tâches de chaque niveau ; types : `build`, `sell`, `tier`, `upgrade`, `share`, `earn`, `stock`, `monopoly` |
+| `tasks[]` (`level`, `type`, `param`, `target`, `reward`) | tâches de chaque niveau ; types : `build`, `sell`, `tier`, `upgrade`, `share`, `earn`, `stock`, `monopoly`, `own_recipe`, `use_recipe` |
 | `reveal.*` | rythme de la révélation progressive |
 
 Les tables sont plates (une ligne = un objet) pour passer facilement à Google Sheets. Changer `meta.version` invalide les sauvegardes.

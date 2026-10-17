@@ -148,5 +148,24 @@ export function makeOffer(cfg, st, recipeId, amount) {
 export const usableRecipes = (cfg, st, type) =>
   cfg.recipes.filter(r => r.machine === type && (r.base || st.auc.owned[r.id]));
 
+// Run `recipeId` (or the base recipe if null) on every machine of `type`.
+// Ingredients waiting for the old recipe are lost. Returns how many changed.
+export function applyRecipeAll(cfg, st, type, recipeId) {
+  let n = 0;
+  for (const m of st.grid.machines) if (m.type === type && m.recipe !== recipeId) { m.recipe = recipeId; m.buf = []; n++; }
+  return n;
+}
+
+export const recipeUse = (st, r) => ({
+  using: st.grid.machines.filter(m => m.recipe === r.id).length,
+  total: st.grid.machines.filter(m => m.type === r.machine).length,
+});
+
+// Owned alternates that no machine runs although some machine could.
+export function idleRecipes(cfg, st) {
+  return Object.keys(st.auc?.owned || {}).map(id => cfg.recipes.find(r => r.id === id))
+    .filter(r => r && !st.grid.machines.some(m => m.recipe === r.id) && st.grid.machines.some(m => m.type === r.machine));
+}
+
 // Number of recipes a rival owns (each one makes it stronger).
 export const rivalRecipeCount = (st, ref) => Object.values(st.auc.rivalOwned).filter(x => x === ref).length;

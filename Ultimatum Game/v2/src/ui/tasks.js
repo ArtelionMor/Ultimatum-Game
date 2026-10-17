@@ -34,6 +34,8 @@ export function taskLabel(t) {
     case 'share': return `Atteins ${pct(t.target)} du marché ${m.icon} ${m.name}`;
     case 'earn': return `Gagne ${money(t.target)} au total`;
     case 'stock': return `Agrandis le stock au niveau ${t.target}`;
+    case 'own_recipe': return t.target > 1 ? `Obtiens ${t.target} recettes alternatives (enchère ou rachat)` : 'Obtiens une recette alternative (enchère ou rachat)';
+    case 'use_recipe': return t.target > 1 ? `Fais tourner ${t.target} machines avec une recette alternative` : 'Fais tourner une machine avec une recette alternative';
     case 'monopoly': return t.param === 'any' ? 'Prends un monopole, sur n’importe quel marché' : `Prends le monopole ${m.icon} ${m.name}`;
     default: return t.type;
   }

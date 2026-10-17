@@ -10,8 +10,8 @@ import { initHud, renderHud } from './ui/hud.js';
 import { initMarket, renderMarket, openMarkets } from './ui/market-view.js';
 import { initFactory, renderFactory, currentTool, openToolMenu } from './ui/factory-view.js';
 import { initTasks } from './ui/tasks.js';
-import { initAuction, renderAuction } from './ui/auction-view.js';
-import { isOpen as auctionOpen, rivalByRef } from './auction.js';
+import { initAuction, renderAuction, setAuctionSub } from './ui/auction-view.js';
+import { isOpen as auctionOpen, rivalByRef, idleRecipes } from './auction.js';
 import { initDebug } from './ui/debug.js';
 import { toast, floatText } from './ui/fx.js';
 import { play } from './ui/sound.js';
@@ -41,6 +41,8 @@ const G = {
     if (d) { showTab('factory'); if (d.group) openToolMenu(d.group); return; }
     if (G.cfg.markets.find(m => m.id === t.param) && G.st.unlocked.market) { G.market = t.param; showTab('market'); return; }
     if (t.type === 'stock') showTab('factory');
+    if (t.type === 'own_recipe') { setAuctionSub('lots'); showTab('auction'); }
+    if (t.type === 'use_recipe') { setAuctionSub('mine'); showTab('auction'); }
   },
   levelFlash: text => bigFlash(text),
 };
@@ -218,8 +220,8 @@ function hint() {
     ? '👉 Appuie sur la grille, glisse vers où doivent sortir les citrons, puis lâche.'
     : '👉 Touche 🍋 dans la barre, puis « Cueillette » (gratuite).';
   if (!totalSold(st) && !Object.values(st.stats.delivered).some(Boolean)) {
-    if (tool !== 'belt') return '👉 Choisis ⇉ Tapis (gratuit) et glisse le doigt de la sortie verte jusqu’à l’📤 Outcome.';
-    if (g.machines.find(m => m.status === 'blocked')) return '👉 Tire un tapis depuis la sortie verte de la Cueillette jusqu’à l’📤 Outcome.';
+    if (tool !== 'belt') return '👉 Choisis ⇉ Tapis (gratuit) et glisse le doigt de la sortie (triangle plein) jusqu’à l’📤 Outcome.';
+    if (g.machines.find(m => m.status === 'blocked')) return '👉 Tire un tapis depuis la sortie de la Cueillette (triangle plein) jusqu’à l’📤 Outcome.';
     return '👉 Termine le tapis jusqu’à l’📤 Outcome (deux doigts pour déplacer la vue).';
   }
   if (st.unlocked.market && !st.seen.market) return '👉 Ouvre l’onglet Marché, en bas.';
@@ -269,7 +271,10 @@ function render() {
   const open = auctionOpen(G.cfg, st);
   at.classList.toggle('hidden', !open);
   if (open && !st.unlocked.auctionTab) { st.unlocked.auctionTab = true; toast('🔨 L’hôtel des enchères est ouvert : achète des recettes plus avantageuses (onglet Enchères).'); }
-  at.querySelector('.dot').classList.toggle('hidden', !(open && (!st.seen.auction || st.auc.offersIn.length) && G.tab !== 'auction'));
+  // Red dot: something to look at in the auction house (new, an offer, or a recipe you own but don't use).
+  const idle = idleRecipes(G.cfg, st).length > 0;
+  at.querySelector('.dot').classList.toggle('hidden', !(open && (!st.seen.auction || st.auc.offersIn.length || idle) && G.tab !== 'auction'));
+  at.querySelector('.dot').classList.toggle('red', idle);
   // Factory overlays belong to the factory screen only.
   if (G.tab !== 'factory') { $('edit-widget').classList.add('hidden'); $('tool-menu').classList.add('hidden'); }
   if (G.tab === 'market') renderMarket();

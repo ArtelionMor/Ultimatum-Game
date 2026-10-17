@@ -1,7 +1,7 @@
 // Auction screen (Wiki-Masters style): recipe cards up for auction, the
 // player's recipes and the rivals' (make them an offer), and incoming offers.
 
-import { bid, bidPrice, acceptOffer, refuseOffer, makeOffer, rarityOf, rivalByRef } from '../auction.js';
+import { bid, bidPrice, acceptOffer, refuseOffer, makeOffer, rarityOf, rivalByRef, applyRecipeAll, recipeUse, idleRecipes } from '../auction.js';
 import { baseRecipe, machineDef } from '../grid.js';
 import { money } from '../format.js';
 import { floatText } from './fx.js';
@@ -9,6 +9,8 @@ import { play } from './sound.js';
 
 const $ = id => document.getElementById(id);
 let G, sub = 'lots', bound = false;
+
+export function setAuctionSub(s) { sub = s; if ($('auc-body')) $('auc-body').dataset.html = ''; }
 
 export function initAuction(game) {
   G = game;
@@ -51,6 +53,8 @@ export function renderAuction() {
   const { cfg, st } = G, a = st.auc;
   $('auc-tabs').querySelectorAll('[data-sub]').forEach(b => b.classList.toggle('active', b.dataset.sub === sub));
   $('auc-offers-dot').classList.toggle('hidden', !a.offersIn.length);
+  const idle = idleRecipes(cfg, st);
+  $('auc-mine-dot').classList.toggle('hidden', !idle.length);
   const rec = id => cfg.recipes.find(r => r.id === id);
   let html = '';
   if (sub === 'lots') {
@@ -65,7 +69,15 @@ export function renderAuction() {
     const mine = Object.keys(a.owned).map(rec);
     const theirs = Object.entries(a.rivalOwned).map(([id, ref]) => ({ r: rec(id), ref }));
     html = '<div class="rc-head">📜 Tes recettes</div>'
-      + (mine.length ? mine.map(r => card(r, '<div class="rc-note">Choisis-la dans le widget d’une machine (⇄).</div>')).join('')
+      + (mine.length ? mine.map(r => {
+        const u = recipeUse(st, r), d = machineDef(cfg, r.machine), isIdle = idle.includes(r);
+        const btns = u.total === 0
+          ? `<div class="rc-note">Construis un ${d.icon} ${d.name} pour l’utiliser.</div>`
+          : `<div class="rc-offers">${u.using > 0 ? `<button class="btn small" data-base="${r.machine}">Remettre la base</button>` : ''}${u.using < u.total
+              ? `<button class="btn small rc-btn ${isIdle ? 'red-dot' : ''}" data-apply="${r.id}">Appliquer à mes ${u.total} ${d.icon} ${d.name}</button>` : ''}</div>`;
+        return card(r, `<div class="rc-bid"><span>Utilisée par <b>${u.using}/${u.total}</b> ${d.icon} ${d.name}</span></div>${btns}
+          <div class="rc-note">Ou machine par machine : touche-la dans l’usine, puis ⇄ sur la ligne 📜.</div>`);
+      }).join('')
         : '<div class="rc-empty">Aucune pour l’instant : gagne une enchère ou rachète-en une à un rival.</div>')
       + '<div class="rc-head">⚔️ Chez tes rivaux</div>'
       + (theirs.length ? theirs.map(({ r, ref }) => {
@@ -94,6 +106,15 @@ export function renderAuction() {
     const r = bid(cfg, st, Number(b.dataset.bid));
     if (r.ok) { play('buy'); floatText(b, `-${money(r.price)}`, 'bad'); G.onAction('bid'); }
     else floatText(b, 'Pas assez d’argent', 'bad');
+  }));
+  box.querySelectorAll('[data-apply]').forEach(b => b.addEventListener('click', () => {
+    const r = cfg.recipes.find(x => x.id === b.dataset.apply);
+    const n = applyRecipeAll(cfg, st, r.machine, r.id);
+    play('buy'); floatText(b, `${n} machine${n > 1 ? 's' : ''} → ${r.name}`, 'gold'); G.onAction('recipe');
+  }));
+  box.querySelectorAll('[data-base]').forEach(b => b.addEventListener('click', () => {
+    const n = applyRecipeAll(cfg, st, b.dataset.base, null);
+    play('tick', 0.3); floatText(b, `${n} en recette de base`, 'gold'); G.onAction('recipe');
   }));
   box.querySelectorAll('[data-offer]').forEach(b => b.addEventListener('click', () => {
     if (makeOffer(cfg, st, b.dataset.offer, Number(b.dataset.amount))) { play('tick', 0.4); G.onAction('offer'); }
