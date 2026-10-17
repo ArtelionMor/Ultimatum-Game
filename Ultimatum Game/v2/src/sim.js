@@ -2,11 +2,12 @@
 // No DOM, so the UI only renders and the tools can run whole games in Node.
 
 import { stepMarket, createShareTracker, trackShares, marketShares, demandMultiplier } from './market.js';
-import { stationsOf, stationRate, stationCost, throughput, bottleneck, playerQuality,
-  stockCap, stockCost, unitCost, produce } from './factory.js';
+import { stockCap, stockCost, unitCost, produce } from './factory.js';
+import { createGrid, stepGrid, gridQuality, placeCost, machineDef, machineRate, upgradeCost,
+  placeMachine, placeBelt, removeMachine, removeBelt, beltAt } from './grid.js';
 import { createRival, repriceRival, upgradeRival } from './ai.js';
 
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;
 
 // Small seeded RNG (mulberry32) whose state lives in the save.
 function rng(st) {
@@ -22,30 +23,26 @@ export const productOf = cfg => cfg.product[0];
 
 export function newGame(cfg, seed = 12345) {
   const product = productOf(cfg);
-  const levels = {};
-  for (const st of stationsOf(cfg, product.id)) levels[st.id] = 1;
   const you = { id: 'you', price: product.start_price, quality: 1, stock: 0, stockCap: 0, prodRate: 0 };
   const rivals = cfg.competitors.map(createRival);
   const st = {
     v: SAVE_VERSION, cfgVersion: cfg.meta.version, seed,
     t: 0, money: cfg.player.start_money,
-    levels, stockLvl: 1,
+    grid: createGrid(cfg), stockLvl: 1,
     you, rivals,
     shares: createShareTracker(cfg, ['you', ...rivals.map(r => r.id)]),
     aiPriceT: 0, aiUpT: 0,
     goal: { hold: 0, won: false, wonAt: 0 },
-    stats: { sold: 0, earned: 0, upgrades: 0, priceChanges: 0, stockFullSeen: false },
+    stats: { sold: 0, earned: 0, upgrades: 0, priceChanges: 0, stockFullSeen: false, delivered: 0, built: {} },
     unlocked: {}, seen: {}, lastReveal: -999,
   };
   derive(cfg, st);
   return st;
 }
 
-// Recompute what depends on levels (call after any purchase / load).
+// Recompute what depends on the layout / levels (call after any purchase / load).
 export function derive(cfg, st) {
-  const pid = productOf(cfg).id;
-  st.you.quality = playerQuality(cfg, pid, st.levels);
-  st.you.prodRate = throughput(cfg, pid, st.levels);
+  st.you.quality = gridQuality(cfg, st.grid);
   st.you.stockCap = stockCap(cfg, st.stockLvl);
   const b = priceBounds(cfg, st);
   if (st.you.price < b.min) st.you.price = b.min;
@@ -63,7 +60,15 @@ export function step(cfg, st, dt) {
 
   // Production
   const wasFull = st.you.stock >= st.you.stockCap - 1e-6;
-  for (const s of sellers) produce(s, dt);
+  for (const r of st.rivals) produce(r, dt);
+  let delivered = 0;
+  stepGrid(cfg, st.grid, dt, {
+    room: () => st.you.stockCap - st.you.stock,
+    deliver: () => { st.you.stock++; delivered++; },
+  });
+  if (delivered) { st.stats.delivered += delivered; ev.push({ type: 'delivered', units: delivered }); }
+  // Measured output (units/min), smoothed over ~10 s.
+  st.you.prodRate += (delivered * 60 / dt - st.you.prodRate) * (1 - Math.exp(-dt / 10));
   if (!wasFull && st.you.stock >= st.you.stockCap - 1e-6) {
     st.stats.stockFullSeen = true;
     ev.push({ type: 'stockFull' });
@@ -120,21 +125,57 @@ export function step(cfg, st, dt) {
 
 // --- Player actions (return true when something happened) -------------------
 
-export function upgradeInfo(cfg, st, stationId) {
-  const s = cfg.stations.find(x => x.id === stationId);
-  const lvl = st.levels[stationId];
-  return {
-    station: s, lvl,
-    rate: stationRate(s, lvl), nextRate: stationRate(s, lvl + 1),
-    cost: stationCost(s, lvl), affordable: st.money >= stationCost(s, lvl),
-  };
+// Build a machine (type from cfg.machines) with its top-left corner at (x, y).
+export function buyMachine(cfg, st, type, x, y, rot) {
+  const cost = placeCost(cfg, st.grid, type);
+  if (st.money < cost) return { ok: false, why: 'money' };
+  if (!placeMachine(st.grid, type, x, y, rot)) return { ok: false, why: 'place' };
+  st.money -= cost;
+  st.stats.built[type] = (st.stats.built[type] || 0) + 1;
+  derive(cfg, st);
+  return { ok: true, cost };
 }
 
-export function buyStation(cfg, st, stationId) {
-  const info = upgradeInfo(cfg, st, stationId);
+export function buyBelt(cfg, st, x, y, dir) {
+  const cost = placeCost(cfg, st.grid, 'belt');
+  if (st.money < cost) return { ok: false, why: 'money' };
+  if (!placeBelt(st.grid, x, y, dir)) return { ok: false, why: 'place' };
+  st.money -= cost;
+  st.stats.built.belt = (st.stats.built.belt || 0) + 1;
+  return { ok: true, cost };
+}
+
+// Selling refunds part of the build price (and of the upgrades).
+export function sellMachine(cfg, st, m) {
+  const d = machineDef(cfg, m.type);
+  if (!d || !removeMachine(st.grid, m)) return 0;
+  let spent = Math.ceil(d.cost * Math.pow(d.cost_mult, st.grid.machines.filter(o => o.type === m.type).length));
+  for (let l = 1; l < m.lvl; l++) spent += upgradeCost(d, l);
+  const back = Math.floor(spent * cfg.grid.sell_refund);
+  st.money += back;
+  derive(cfg, st);
+  return back;
+}
+
+export function sellBelt(cfg, st, x, y) {
+  if (!beltAt(st.grid, x, y)) return 0;
+  removeBelt(st.grid, x, y);
+  const back = Math.floor(cfg.grid.belt_cost * cfg.grid.sell_refund);
+  st.money += back;
+  return back;
+}
+
+export function machineInfo(cfg, st, m) {
+  const d = machineDef(cfg, m.type);
+  const cost = upgradeCost(d, m.lvl);
+  return { def: d, lvl: m.lvl, rate: machineRate(d, m.lvl), nextRate: machineRate(d, m.lvl + 1), cost, affordable: st.money >= cost };
+}
+
+export function upgradeMachine(cfg, st, m) {
+  const info = machineInfo(cfg, st, m);
   if (!info.affordable) return false;
   st.money -= info.cost;
-  st.levels[stationId]++;
+  m.lvl++;
   st.stats.upgrades++;
   derive(cfg, st);
   return true;
@@ -171,4 +212,3 @@ export function setPrice(cfg, st, price) {
   return true;
 }
 
-export const currentBottleneck = (cfg, st) => bottleneck(cfg, productOf(cfg).id, st.levels);

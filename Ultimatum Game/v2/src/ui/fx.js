@@ -26,13 +26,13 @@ export function retrigger(el, cls) {
 
 const queue = [];
 let showing = 0;
-// One toast at a time on screen (max 2 stacked), each ~4s.
+// One toast at a time on screen, each ~4s, so the factory floor stays visible.
 export function toast(text) {
   queue.push(text);
   pump();
 }
 function pump() {
-  if (showing >= 2 || !queue.length) return;
+  if (showing >= 1 || !queue.length) return;
   const d = document.createElement('div');
   d.className = 'toast';
   d.textContent = queue.shift();

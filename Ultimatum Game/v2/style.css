@@ -159,3 +159,40 @@ main { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 12px 14px 16px; }
 @keyframes hintpop { 0% { transform: scale(1.03); background-color: rgba(255,207,74,.35); } 100% { transform: none; background-color: rgba(90,169,255,.12); } }
 @keyframes hintflash { 0% { background-color: rgba(255,207,74,.35); } 100% { background-color: transparent; } }
 @keyframes cardflash { 0% { box-shadow: 0 0 0 3px var(--you); } 100% { box-shadow: 0 0 0 0 transparent; } }
+
+/* --- Factory grid ---------------------------------------------------------- */
+#toolbar { display: flex; gap: 6px; margin-bottom: 8px; overflow-x: auto; }
+.tool { position: relative; flex: 1 0 auto; min-width: 48px; border: 0; border-radius: 12px; background: var(--panel); padding: 5px 4px 4px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 1px; border: 2px solid transparent; }
+.tool .ti { font-size: 22px; line-height: 1.1; }
+.tool small { font-size: 11px; color: var(--muted); font-weight: 700; }
+.tool.active { border-color: var(--you); background: var(--panel2); }
+.tool.cant small { color: var(--bad); }
+#floor { display: block; margin: 0 auto 12px; border-radius: 10px; border: 1px solid var(--line); background: #1a1e27; }
+.muted { color: var(--muted); font-weight: 400; }
+.small { font-size: 12px; }
+#sel-panel { position: absolute; left: 10px; right: 10px; bottom: 72px; z-index: 30; background: #232837; border: 1px solid var(--accent);
+  border-radius: 14px; padding: 12px; box-shadow: 0 -6px 24px rgba(0,0,0,.5); display: flex; flex-direction: column; gap: 8px; animation: toastin .2s ease; }
+.sel-title { font-weight: 800; font-size: 16px; }
+.sel-meta { font-size: 13px; color: var(--muted); }
+.sel-btns { display: flex; gap: 6px; justify-content: flex-end; }
+
+/* --- Market pie cards ----------------------------------------------------- */
+.cards { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 2px; border-radius: var(--radius); }
+.cards::-webkit-scrollbar { display: none; }
+.pcard { flex: 0 0 100%; scroll-snap-align: center; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; text-align: center; }
+.pcard-title { font-weight: 800; font-size: 17px; }
+.pcard-sub { color: var(--muted); font-size: 13px; margin: 2px 0 10px; min-height: 18px; }
+.pcard-sub b { color: var(--you); }
+.pie { width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 12px; box-shadow: 0 6px 16px rgba(0,0,0,.35); transition: background .4s; }
+.pleg { display: flex; flex-direction: column; gap: 4px; text-align: left; font-size: 14px; }
+.pleg div { display: flex; align-items: center; gap: 6px; }
+.pleg div.you { font-weight: 800; }
+.pleg i { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+.pleg span { margin-left: auto; color: var(--muted); font-size: 13px; }
+.pleg b { min-width: 44px; text-align: right; margin-left: 8px; }
+.pleg span + b { margin-left: 10px; }
+.pleg div:not(:has(span)) b { margin-left: auto; }
+.dots { display: flex; justify-content: center; gap: 6px; margin-top: 8px; }
+.dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--line); }
+.dots i.on { background: var(--you); }

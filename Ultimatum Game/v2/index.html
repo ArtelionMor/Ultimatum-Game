@@ -30,16 +30,17 @@
 
   <main>
     <section id="screen-factory" class="screen active">
-      <canvas id="floor" height="180"></canvas>
+      <div id="toolbar"></div>
+      <canvas id="floor"></canvas>
       <div class="card" id="stock-card">
         <div class="row">
           <span class="label">📦 Entrepôt</span>
           <span id="stock-text">0 / 30</span>
         </div>
         <div class="bar"><div class="bar-fill" id="stock-fill"></div></div>
+        <div class="row muted small"><span id="prod-text"></span></div>
         <button class="btn up hidden" id="stock-btn"></button>
       </div>
-      <div id="stations"></div>
     </section>
 
     <section id="screen-market" class="screen">
@@ -54,34 +55,15 @@
           <button class="btn round" id="price-plus" aria-label="Monter le prix">+</button>
         </div>
         <div class="kv">
-          <span>Coût <b id="unit-cost">3 $</b></span>
           <span>Marge <b id="margin">+5 $</b></span>
           <span>Qualité <b id="quality">★1</b></span>
         </div>
-        <div class="kv">
-          <span>Ventes <b id="sales-rate">0/min</b></span>
-          <span>Part prévue <b id="pred-share">0 %</b></span>
-        </div>
-        <div id="price-advice" class="advice"></div>
       </div>
-
-      <div class="card" id="share-card">
-        <div class="label">📊 Parts de marché</div>
-        <div class="stack" id="share-stack"></div>
-        <div class="legend" id="share-legend"></div>
-      </div>
-
-      <div class="card hidden" id="seg-card">
-        <div class="label">👥 Qui achète chez toi ?</div>
-        <div id="segments"></div>
-      </div>
-
-      <div class="card" id="rivals-card">
-        <div class="label">⚔️ Tes rivaux</div>
-        <div id="rivals"></div>
-      </div>
+      <div id="cards" class="cards"></div>
+      <div id="card-dots" class="dots hidden"></div>
     </section>
   </main>
+  <div id="sel-panel" class="hidden"></div>
 
   <nav id="tabs">
     <button class="tab active" data-tab="factory">🏭 Usine</button>

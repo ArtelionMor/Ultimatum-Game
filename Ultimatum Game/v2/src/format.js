@@ -16,7 +16,7 @@ export function fmt(n, smallDecimals = 0) {
   return (neg ? '-' : '') + s;
 }
 
-export const money = n => fmt(n, n < 100 ? 1 : 0) + ' $';
+export const money = n => fmt(n, n < 100 && n % 1 ? 1 : 0) + ' $';
 export const price = n => n.toFixed(n % 1 ? 1 : 0) + ' $';
 export const pct = x => Math.round(x * 100) + ' %';
 export const perMin = n => fmt(n) + '/min';

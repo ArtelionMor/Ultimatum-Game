@@ -1,21 +1,23 @@
 // Boot, game loop, tabs, hints, reveal, win, save. The simulation lives in
 // sim.js (pure); this file only wires it to the DOM.
 
-import { newGame, step, derive, SAVE_VERSION, productOf, sellersOf, upgradeInfo, stockInfo, currentBottleneck } from './sim.js';
+import { newGame, step, derive, SAVE_VERSION, productOf, sellersOf, stockInfo } from './sim.js';
+import { placeCost, countOf } from './grid.js';
 import { unitCost } from './factory.js';
 import { previewPreference } from './market.js';
 import { checkReveal } from './reveal.js';
 import { initHud, renderHud } from './ui/hud.js';
-import { initMarket, renderMarket, flashRival } from './ui/market-view.js';
-import { initFactory, renderFactory, saleCoin } from './ui/factory-view.js';
+import { initMarket, renderMarket } from './ui/market-view.js';
+import { initFactory, renderFactory, currentTool } from './ui/factory-view.js';
 import { initDebug } from './ui/debug.js';
 import { toast, floatText, retrigger } from './ui/fx.js';
 import { play } from './ui/sound.js';
 import { money, perMin, pct } from './format.js';
 
 const $ = id => document.getElementById(id);
-const DT = 0.1;                       // fixed simulation step (s)
+const DT = 0.05;                      // fixed simulation step (s)
 const SAVE_KEY = 'mu_v2_save';
+const NO_SAVE = new URLSearchParams(location.search).has('nosave'); // test sessions
 
 const G = {
   cfg: null, st: null, speed: 1, tab: 'factory',
@@ -45,10 +47,12 @@ async function boot() {
 // --- Save -------------------------------------------------------------------
 
 function save() {
+  if (NO_SAVE) return;
   try { localStorage.setItem(SAVE_KEY, JSON.stringify(G.st)); } catch { /* private mode: play without saving */ }
 }
 
 function load() {
+  if (NO_SAVE) return null;
   try {
     const st = JSON.parse(localStorage.getItem(SAVE_KEY));
     if (st && st.v === SAVE_VERSION && st.cfgVersion === G.cfg.meta.version) return st;
@@ -131,9 +135,8 @@ function tick() {
 }
 
 function handle(e) {
-  if (e.type === 'sale') { saleAcc += e.gain; saleCoin(); }
+  if (e.type === 'sale') saleAcc += e.gain;
   else if (e.type === 'rivalPrice') {
-    flashRival(e.id);
     if (!rivalIntroduced[e.id] && G.st.unlocked.market) {
       rivalIntroduced[e.id] = true;
       const def = G.cfg.competitors.find(c => c.id === e.id);
@@ -164,29 +167,47 @@ function showWin() {
 function hint() {
   const { cfg, st } = G;
   if (st.goal.won) return '👑 Marché contrôlé !';
-  const bn = currentBottleneck(cfg, st);
-  const up = upgradeInfo(cfg, st, bn.id);
-  const sk = stockInfo(cfg, st);
-  const full = st.you.stock >= st.you.stockCap - 1e-6;
-  if (st.unlocked.market && !st.seen.market) return '👉 Ouvre l\'onglet Marché, en bas.';
+  const g = st.grid, n = type => countOf(g, type);
+  const tool = currentTool();
+  // Build order first: one line from fruit to warehouse.
+  if (!n('harvest')) return tool === 'harvest'
+    ? `👉 Touche la grille pour poser la Cueillette (${money(placeCost(cfg, g, 'harvest'))}). ⟳ change son sens.`
+    : '👉 Choisis 🍋 Cueillette dans la barre, puis touche la grille.';
+  if (!n('press')) return st.unlocked.press ? '👉 Pose un ⚙️ Pressage : il transforme les citrons en jus.' : '👉 Ta Cueillette produit des citrons…';
+  if (!n('bottle')) return st.unlocked.bottle ? '👉 Pose un 🍾 Embouteillage : il met le jus en bouteille.' : '👉 …';
+  if (!st.stats.delivered) {
+    const starved = g.machines.find(m => m.status === 'starved'), blocked = g.machines.find(m => m.status === 'blocked');
+    if (tool !== 'belt') return '👉 Choisis ⇉ Tapis et glisse le doigt : sortie verte → entrée orange → … → 📦 Entrepôt.';
+    if (blocked) return '👉 Une sortie (flèche verte) est bloquée : tire un tapis depuis elle.';
+    if (starved) return '👉 Une machine attend (💤) : amène un tapis jusqu’à son entrée (flèche orange).';
+    return '👉 Relie la dernière machine à l’📦 Entrepôt avec des tapis.';
+  }
+  if (st.unlocked.market && !st.seen.market) return '👉 Ouvre l’onglet Marché, en bas.';
   if (st.goal.hold > 0) return `⏱ Garde ta part au-dessus de ${pct(cfg.goal.share_target)} encore ${Math.ceil(cfg.goal.hold_s - st.goal.hold)} s !`;
   let want = 0;
   if (st.unlocked.market) {
     const pref = previewPreference(cfg, productOf(cfg), sellersOf(st));
     for (const sg of cfg.segments) want += sg.demand_per_min * pref[sg.id].probs.you;
-    if (want < 1) return '👉 Personne n\'accepte ton prix : baisse-le dans le Marché.';
+    if (want < 1) return '👉 Personne n’accepte ton prix : baisse-le dans le Marché.';
   }
+  const sk = stockInfo(cfg, st);
+  const full = st.you.stock >= st.you.stockCap - 1e-6;
   if (full && st.unlocked.stock && sk.affordable) return `👉 Entrepôt plein : agrandis-le (${money(sk.cost)}).`;
-  if (up.affordable) return `👉 Améliore ${bn.name} : c'est ton goulot (${perMin(up.rate)} → ${perMin(up.nextRate)}).`;
-  if (st.unlocked.segments && !st.seen.segments) return '👉 Regarde quels clients achètent chez toi (Marché).';
-  if (st.unlocked.market && full && want < st.you.prodRate * 0.75) return '👉 Ton stock dort : baisse ton prix dans le Marché.';
-  if (st.unlocked.market && want > st.you.prodRate * 1.5 && st.stats.priceChanges > 0) return `👉 On t'en demande plus que tu n'en produis : monte ton prix, ou améliore ${bn.name}.`;
-  return `👉 Économise pour améliorer ${bn.name} (${money(up.cost)}).`;
+  if (full && st.unlocked.market) return '👉 Ton stock dort : baisse ton prix dans le Marché.';
+  const blocked = g.machines.find(m => m.status === 'blocked');
+  if (blocked) return '👉 Une machine est bloquée (⛔) : vérifie ses tapis de sortie.';
+  if (st.unlocked.segments && !st.seen.segments) return '👉 Fais glisser les cartes du Marché pour voir chaque type de client.';
+  if (want > st.you.prodRate * 1.3) {
+    const lineCost = ['harvest', 'press', 'bottle'].reduce((a, t) => a + placeCost(cfg, g, t), 0);
+    return st.unlocked.upgrades
+      ? `👉 On t'en demande ${perMin(want)}, tu en livres ${perMin(st.you.prodRate)} : améliore une machine (✋) ou construis une 2e ligne (~${money(lineCost)}).`
+      : `👉 On t'en demande ${perMin(want)}, tu en livres ${perMin(st.you.prodRate)} : construis une 2e ligne (~${money(lineCost)}).`;
+  }
+  return '👉 Ajuste ton prix ou agrandis ton usine.';
 }
 
 // --- Render -------------------------------------------------------------------
 
-let segSeenT = 0;
 function render() {
   const st = G.st;
   renderHud(hint());
@@ -194,9 +215,6 @@ function render() {
   mt.classList.toggle('locked', !st.unlocked.market);
   mt.querySelector('.tab-label').textContent = st.unlocked.market ? '📈 Marché' : '🔒 Marché';
   mt.querySelector('.dot').classList.toggle('hidden', !(st.unlocked.market && !st.seen.market) && !(st.unlocked.segments && !st.seen.segments && G.tab !== 'market'));
-  $('seg-card').classList.toggle('hidden', !st.unlocked.segments);
-  $('seg-card').classList.toggle('pulse', !!st.unlocked.segments && !st.seen.segments);
-  if (G.tab === 'market' && st.unlocked.segments && !st.seen.segments && (segSeenT += 0.2) > 4) st.seen.segments = true;
   if (G.tab === 'market') renderMarket();
   else renderFactory();
 }

@@ -1,80 +1,88 @@
-// Factory screen: top-down conveyor on a canvas + one card per station.
-// The canvas is purely visual — the real production numbers come from sim.js.
+// Factory screen: a top-down grid where the player buys and places 2×2
+// machines and draws conveyor belts. Tools: ✋ manage, one per machine, belt, ⟳.
 
-import { stationsOf } from '../factory.js';
-import { productOf, upgradeInfo, buyStation, stockInfo, buyStock, currentBottleneck } from '../sim.js';
+import { DIRS, ports, machineAt, beltAt, machineDef, placeCost, canPlaceMachine, canPlaceBelt,
+  setBeltDir, rotateMachine } from '../grid.js';
+import { buyMachine, buyBelt, sellMachine, sellBelt, machineInfo, upgradeMachine, stockInfo, buyStock } from '../sim.js';
 import { money, perMin, fmt, stars } from '../format.js';
 import { floatText, retrigger } from './fx.js';
 import { play } from './sound.js';
 
 const $ = id => document.getElementById(id);
-let G, bound = false, cards = {}, canvas, ctx, items = [], coins = [], spawnAcc = 0, beltOff = 0, lastT = 0;
-const flashUntil = {};
-const BELT_SPEED = 55; // px/s
+const ARROWS = ['→', '↓', '←', '↑'];
+const STAGE_COLORS = ['#ffe14a', '#ffa53a', '#3ddc84'];
+
+let G, canvas, ctx, bound = false;
+let tool = 'hand', rot = 0, cell = 34;
+let ghost = null;          // { x, y, ok } machine preview while the finger is down
+let drag = null;           // belt drawing: { last: [x, y], moved, startedOn }
+let sel = null;            // { kind: 'machine', m } | { kind: 'belt', x, y }
+const flashUntil = new Map();
 
 export function initFactory(game) {
   G = game;
-  const box = $('stations');
-  box.innerHTML = '';
-  for (const st of stationsOf(G.cfg, productOf(G.cfg).id)) {
-    const d = document.createElement('div');
-    d.className = 'card station';
-    d.innerHTML = `<div class="ico">${st.icon}</div>
-      <div class="name">${st.name}<span class="tag bn hidden">GOULOT</span>${st.quality_per_level ? '<span class="tag q">QUALITÉ</span>' : ''}</div>
-      <div class="meta"></div>
-      <button class="btn up"></button>`;
-    d.querySelector('.btn').addEventListener('click', () => {
-      if (buyStation(G.cfg, G.st, st.id)) {
-        play('buy');
-        flashUntil[st.id] = performance.now() + 600;
-        retrigger(d, 'flash');
-        const info = upgradeInfo(G.cfg, G.st, st.id);
-        floatText(d.querySelector('.btn'), `${st.name} ${perMin(info.rate)}`, 'gold');
-        if (st.quality_per_level) setTimeout(() => floatText(d.querySelector('.ico'), `Qualité ${stars(G.st.you.quality)}`, 'gold'), 250);
-        G.onAction('upgrade', st.id);
-        renderFactory();
-      } else floatText(d.querySelector('.btn'), 'Pas assez d\'argent', 'bad');
-    });
-    box.appendChild(d);
-    cards[st.id] = d;
-  }
+  sel = null; tool = 'hand';
+  buildToolbar();
   if (bound) return;
   bound = true;
-  $('stock-btn').addEventListener('click', () => {
-    if (buyStock(G.cfg, G.st)) {
-      play('buy');
-      retrigger($('stock-card'), 'flash');
-      floatText($('stock-btn'), `Entrepôt ${fmt(G.st.you.stockCap)}`, 'gold');
-      G.onAction('stock');
-      renderFactory();
-    } else floatText($('stock-btn'), 'Pas assez d\'argent', 'bad');
-  });
   canvas = $('floor');
   ctx = canvas.getContext('2d');
+  canvas.addEventListener('pointerdown', onDown);
+  canvas.addEventListener('pointermove', onMove);
+  canvas.addEventListener('pointerup', onUp);
+  canvas.addEventListener('pointercancel', () => { ghost = null; drag = null; });
+  $('stock-btn').addEventListener('click', doBuyStock);
   requestAnimationFrame(draw);
 }
 
+// --- Toolbar ------------------------------------------------------------------
+
+function buildToolbar() {
+  const bar = $('toolbar');
+  const tools = [{ id: 'hand', icon: '✋', label: 'Gérer' },
+    ...G.cfg.machines.map(m => ({ id: m.id, icon: m.icon })), { id: 'belt', icon: '⇉' }];
+  bar.innerHTML = tools.map(t => `<button class="tool" data-tool="${t.id}"><span class="ti">${t.icon}</span><small>${t.label || ''}</small></button>`).join('')
+    + `<button class="tool" id="rotate-btn" title="Tourner"><span class="ti">⟳</span><small>${ARROWS[rot]}</small></button>`;
+  bar.querySelectorAll('[data-tool]').forEach(b => b.addEventListener('click', () => {
+    tool = b.dataset.tool; sel = null; play('tick', 0.2);
+    G.onAction('tool', tool);
+    renderFactory();
+  }));
+  $('rotate-btn').addEventListener('click', () => {
+    rot = (rot + 1) % 4; play('tick', 0.2);
+    $('rotate-btn').querySelector('small').textContent = ARROWS[rot];
+  });
+}
+
+const toolUnlocked = id => id === 'hand' || id === 'belt' || id === 'harvest' || !!G.st.unlocked[id];
+export const currentTool = () => tool;
+
 export function renderFactory() {
   const { cfg, st } = G;
-  const bn = currentBottleneck(cfg, st);
-  const allOpen = !!st.unlocked.upgrades;
-  for (const s of stationsOf(cfg, productOf(cfg).id)) {
-    const d = cards[s.id], info = upgradeInfo(cfg, st, s.id);
-    const isBn = s.id === bn.id;
-    d.querySelector('.tag.bn').classList.toggle('hidden', !isBn);
-    d.querySelector('.meta').textContent = `Niv. ${info.lvl} · ${perMin(info.rate)}` + (s.quality_per_level ? ` · qualité ${stars(st.you.quality)}` : '');
-    const btn = d.querySelector('.btn');
-    btn.classList.toggle('hidden', !allOpen && !isBn);
-    btn.classList.toggle('cant', !info.affordable);
-    btn.classList.toggle('reco', isBn && info.affordable);
-    btn.classList.toggle('pulse', allOpen ? !isBn && !st.seen.upgrades : isBn);
-    btn.innerHTML = `<span>Améliorer → ${perMin(info.nextRate)}${s.quality_per_level ? ' ★+' + s.quality_per_level : ''}</span><span>${money(info.cost)}</span>`;
-  }
+  document.querySelectorAll('#toolbar [data-tool]').forEach(b => {
+    const id = b.dataset.tool;
+    b.classList.toggle('hidden', !toolUnlocked(id));
+    b.classList.toggle('active', id === tool);
+    b.classList.toggle('pulse', toolUnlocked(id) && id !== 'hand' && id !== 'belt' && !st.seen['tool_' + id]);
+    if (id !== 'hand') {
+      const c = placeCost(cfg, st.grid, id);
+      b.querySelector('small').textContent = money(c);
+      b.classList.toggle('cant', st.money < c);
+    }
+  });
+  $('rotate-btn').classList.toggle('hidden', tool === 'hand');
+  renderStock();
+  renderSelection();
+}
+
+function renderStock() {
+  const { cfg, st } = G;
   const sk = stockInfo(cfg, st);
   const fill = st.you.stock / st.you.stockCap;
   $('stock-text').textContent = `${fmt(Math.floor(st.you.stock))} / ${fmt(st.you.stockCap)}` + (fill >= 0.999 ? ' · PLEIN' : '');
   $('stock-fill').style.width = (fill * 100).toFixed(1) + '%';
   $('stock-fill').classList.toggle('full', fill >= 0.999);
+  $('prod-text').textContent = `Production ${perMin(st.you.prodRate)}`;
   const sb = $('stock-btn');
   sb.classList.toggle('hidden', !st.unlocked.stock);
   sb.classList.toggle('cant', !sk.affordable);
@@ -83,122 +91,312 @@ export function renderFactory() {
   sb.innerHTML = `<span>Agrandir → ${fmt(sk.nextCap)}</span><span>${money(sk.cost)}</span>`;
 }
 
-export function saleCoin() { if (coins.length < 12) coins.push({ t: 0, dx: Math.random() * 20 - 10 }); }
-
-// --- Canvas ---------------------------------------------------------------
-
-function layout(w) {
-  const right = w - 64;                       // warehouse starts here
-  const n = 3, x0 = 46, span = right - 30 - x0;
-  return { right, xs: Array.from({ length: n }, (_, i) => x0 + i * span / (n - 1)), beltY: 98 };
+function doBuyStock() {
+  if (buyStock(G.cfg, G.st)) {
+    play('buy');
+    retrigger($('stock-card'), 'flash');
+    floatText($('stock-btn'), `Entrepôt ${fmt(G.st.you.stockCap)}`, 'gold');
+    G.onAction('stock');
+  } else floatText($('stock-btn'), 'Pas assez d\'argent', 'bad');
 }
+
+// --- Selection sheet ------------------------------------------------------------
+
+const STATUS = {
+  ok: '✅ Tourne',
+  starved: '💤 Attend sa matière : amène un tapis sur son entrée (flèche orange).',
+  blocked: '⛔ Sortie bloquée : pose un tapis sur sa sortie (flèche verte).',
+  idle: '…',
+};
+
+function renderSelection() {
+  const panel = $('sel-panel');
+  if (!sel || G.tab !== 'factory') { panel.classList.add('hidden'); return; }
+  const { cfg, st } = G;
+  const close = '<button class="btn small" data-act="close">✕</button>';
+  let html;
+  if (sel.kind === 'machine' && sel.m.type === 'warehouse') {
+    html = `<div class="sel-title">📦 Entrepôt</div>
+      <div class="sel-meta">Stock ${fmt(Math.floor(st.you.stock))} / ${fmt(st.you.stockCap)} · reçoit les bouteilles 🍾 par tous les côtés.</div>
+      <div class="sel-btns">${close}</div>`;
+  } else if (sel.kind === 'machine') {
+    const m = sel.m, info = machineInfo(cfg, st, m);
+    html = `<div class="sel-title">${info.def.icon} ${info.def.name} <span class="muted">Niv. ${m.lvl}</span></div>
+      <div class="sel-meta">${perMin(info.rate)}${info.def.quality_per_level ? ' · qualité ' + stars(st.you.quality) : ''} · ${STATUS[m.status]}</div>
+      ${st.unlocked.upgrades ? `<button class="btn up ${info.affordable ? '' : 'cant'}" data-act="up"><span>Améliorer → ${perMin(info.nextRate)}</span><span>${money(info.cost)}</span></button>` : ''}
+      <div class="sel-btns">
+        <button class="btn small" data-act="rot">⟳ Tourner</button>
+        <button class="btn small danger" data-act="sell">Vendre</button>
+        ${close}
+      </div>`;
+  } else {
+    const b = beltAt(st.grid, sel.x, sel.y);
+    if (!b) { sel = null; panel.classList.add('hidden'); return; }
+    html = `<div class="sel-title">⇉ Tapis <span class="muted">${ARROWS[b.dir]}</span></div>
+      <div class="sel-btns">
+        <button class="btn small" data-act="rot">⟳ Tourner</button>
+        <button class="btn small danger" data-act="sell">Vendre</button>
+        ${close}
+      </div>`;
+  }
+  if (panel.dataset.html !== html) {
+    panel.innerHTML = html;
+    panel.dataset.html = html;
+    panel.querySelectorAll('[data-act]').forEach(b => b.addEventListener('click', () => onSelAction(b.dataset.act, b)));
+  }
+  panel.classList.remove('hidden');
+}
+
+function onSelAction(act, btn) {
+  const { cfg, st } = G;
+  if (act === 'close') sel = null;
+  else if (sel.kind === 'machine') {
+    const m = sel.m;
+    if (act === 'up') {
+      if (upgradeMachine(cfg, st, m)) {
+        play('buy');
+        flashUntil.set(m, performance.now() + 600);
+        floatText(btn, perMin(machineInfo(cfg, st, m).rate), 'gold');
+        G.onAction('upgrade');
+      } else floatText(btn, 'Pas assez d\'argent', 'bad');
+    } else if (act === 'rot') { rotateMachine(st.grid, m); play('tick', 0.3); }
+    else if (act === 'sell') { const back = sellMachine(cfg, st, m); floatText(btn, `+${money(back)}`, 'gold'); sel = null; G.onAction('sell'); }
+  } else if (act === 'rot') {
+    const b = beltAt(st.grid, sel.x, sel.y);
+    if (b) setBeltDir(st.grid, sel.x, sel.y, (b.dir + 1) % 4);
+    play('tick', 0.3);
+  } else if (act === 'sell') { sellBelt(cfg, st, sel.x, sel.y); sel = null; G.onAction('sell'); }
+  renderFactory();
+}
+
+// --- Pointer input --------------------------------------------------------------
+
+function toCell(e) {
+  const r = canvas.getBoundingClientRect();
+  const fx = (e.clientX - r.left) / cell, fy = (e.clientY - r.top) / cell;
+  return { fx, fy, x: Math.floor(fx), y: Math.floor(fy) };
+}
+
+// The 2×2 footprint is centred on the finger.
+function machineGhost(p) {
+  const { cols, rows } = G.st.grid;
+  const x = Math.max(0, Math.min(cols - 2, Math.round(p.fx - 1)));
+  const y = Math.max(0, Math.min(rows - 2, Math.round(p.fy - 1)));
+  return { x, y, ok: canPlaceMachine(G.st.grid, x, y) };
+}
+
+function onDown(e) {
+  if (G.st.goal.won) return;
+  const p = toCell(e);
+  if (tool === 'hand') {
+    const m = machineAt(G.st.grid, p.x, p.y);
+    if (m) sel = { kind: 'machine', m };
+    else if (beltAt(G.st.grid, p.x, p.y)) sel = { kind: 'belt', x: p.x, y: p.y };
+    else sel = null;
+    renderFactory();
+    return;
+  }
+  canvas.setPointerCapture(e.pointerId);
+  if (tool === 'belt') {
+    const existing = beltAt(G.st.grid, p.x, p.y);
+    drag = { last: [p.x, p.y], moved: false, startedOn: !!existing };
+    if (!existing) tryBelt(p.x, p.y, rot, e);
+  } else ghost = machineGhost(p);
+}
+
+function onMove(e) {
+  if (!ghost && !drag) return;
+  const p = toCell(e);
+  if (ghost) { ghost = machineGhost(p); return; }
+  const [lx, ly] = drag.last;
+  if (p.x === lx && p.y === ly) return;
+  // Walk one cell at a time towards the finger so fast swipes leave no holes;
+  // each belt points to the next one.
+  let cx = lx, cy = ly;
+  while (cx !== p.x || cy !== p.y) {
+    const step = Math.abs(p.x - cx) >= Math.abs(p.y - cy) ? [Math.sign(p.x - cx), 0] : [0, Math.sign(p.y - cy)];
+    const dir = DIRS.findIndex(d => d[0] === step[0] && d[1] === step[1]);
+    setBeltDir(G.st.grid, cx, cy, dir);
+    const nx = cx + step[0], ny = cy + step[1];
+    if (!beltAt(G.st.grid, nx, ny) && !tryBelt(nx, ny, dir, e)) break;
+    setBeltDir(G.st.grid, nx, ny, dir);
+    cx = nx; cy = ny;
+    rot = dir;
+  }
+  $('rotate-btn').querySelector('small').textContent = ARROWS[rot];
+  drag.last = [cx, cy];
+  drag.moved = true;
+}
+
+function onUp(e) {
+  if (ghost) {
+    const g = ghost; ghost = null;
+    const r = buyMachine(G.cfg, G.st, tool, g.x, g.y, rot);
+    if (r.ok) {
+      play('buy');
+      flashUntil.set(machineAt(G.st.grid, g.x, g.y), performance.now() + 600);
+      floatAt(e, `-${money(r.cost)}`, 'bad');
+      G.st.seen['tool_' + tool] = true;
+      G.onAction('build', tool);
+    } else floatAt(e, r.why === 'money' ? 'Pas assez d\'argent' : 'Place occupée', 'bad');
+  } else if (drag) {
+    // A tap on an existing belt turns it.
+    if (!drag.moved && drag.startedOn) {
+      const p = toCell(e), b = beltAt(G.st.grid, p.x, p.y);
+      if (b) { setBeltDir(G.st.grid, p.x, p.y, (b.dir + 1) % 4); play('tick', 0.3); }
+    }
+    drag = null;
+    G.onAction('build', 'belt');
+  }
+  renderFactory();
+}
+
+function tryBelt(x, y, dir, e) {
+  if (!canPlaceBelt(G.st.grid, x, y)) return false;
+  const r = buyBelt(G.cfg, G.st, x, y, dir);
+  if (!r.ok) { if (r.why === 'money') floatAt(e, 'Pas assez d\'argent', 'bad'); return false; }
+  play('tick', 0.15);
+  return true;
+}
+
+function floatAt(e, text, cls) {
+  const a = $('app').getBoundingClientRect();
+  const d = document.createElement('div');
+  d.className = 'float ' + cls;
+  d.textContent = text;
+  d.style.left = (e.clientX - a.left) + 'px';
+  d.style.top = (e.clientY - a.top - 20) + 'px';
+  $('fx').appendChild(d);
+  setTimeout(() => d.remove(), 1150);
+}
+
+// --- Canvas -------------------------------------------------------------------
 
 function draw(now) {
   requestAnimationFrame(draw);
-  if (!G || G.tab !== 'factory' || !canvas.offsetParent) { lastT = now; return; }
-  const dpr = window.devicePixelRatio || 1;
-  const w = canvas.clientWidth, h = 180;
-  if (canvas.width !== Math.round(w * dpr)) { canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); }
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  const dt = Math.min(0.1, (now - (lastT || now)) / 1000) * Math.min(G.speed, 3);
-  lastT = now;
-
+  if (!G || G.tab !== 'factory' || !canvas.offsetParent) return;
   const { cfg, st } = G;
-  const stations = stationsOf(cfg, productOf(cfg).id);
-  const L = layout(w);
-  const full = st.you.stock >= st.you.stockCap - 1e-6;
-  const bn = currentBottleneck(cfg, st);
-  const running = !full;
+  const grid = st.grid;
+  const dpr = window.devicePixelRatio || 1;
+  cell = Math.floor(canvas.parentElement.clientWidth / grid.cols);
+  const W = cell * grid.cols, H = cell * grid.rows;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  if (canvas.width !== Math.round(W * dpr) || canvas.height !== Math.round(H * dpr)) { canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); }
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  canvas.style.touchAction = tool === 'hand' ? 'pan-y' : 'none';
 
   // floor
-  ctx.clearRect(0, 0, w, h);
   ctx.fillStyle = '#1a1e27';
-  ctx.fillRect(0, 0, w, h);
-  ctx.strokeStyle = 'rgba(255,255,255,.035)';
-  for (let x = 0; x < w; x += 24) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
-  for (let y = 0; y < h; y += 24) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#1e232d';
+  for (let x = 0; x < grid.cols; x++) for (let y = 0; y < grid.rows; y++) if ((x + y) % 2) ctx.fillRect(x * cell, y * cell, cell, cell);
 
-  // belt
-  if (running) beltOff = (beltOff + BELT_SPEED * dt) % 16;
-  ctx.fillStyle = '#2c313d';
-  ctx.fillRect(8, L.beltY - 12, L.right - 8, 24);
-  ctx.strokeStyle = '#3c4354';
+  // belts
+  const t = now / 1000;
+  for (const k in grid.belts) {
+    const [x, y] = k.split(',').map(Number), b = grid.belts[k];
+    ctx.fillStyle = '#2f3542';
+    ctx.fillRect(x * cell + 2, y * cell + 2, cell - 4, cell - 4);
+    ctx.save();
+    ctx.translate(x * cell + cell / 2, y * cell + cell / 2);
+    ctx.rotate(b.dir * Math.PI / 2);
+    ctx.strokeStyle = '#4f586d';
+    ctx.lineWidth = 2;
+    const off = (t * cfg.grid.belt_speed * cell * 0.5) % (cell / 2);
+    for (let i = -1; i < 2; i++) {
+      const sx = -cell / 4 + off + i * cell / 2;
+      if (sx < -cell / 2 + 3 || sx > cell / 2 - 8) continue;
+      ctx.beginPath(); ctx.moveTo(sx, -cell / 4); ctx.lineTo(sx + 5, 0); ctx.lineTo(sx, cell / 4); ctx.stroke();
+    }
+    ctx.restore();
+    if (sel && sel.kind === 'belt' && sel.x === x && sel.y === y) outline(x * cell, y * cell, cell, cell, '#5aa9ff');
+  }
+  for (const k in grid.belts) {
+    const b = grid.belts[k];
+    if (b.item === null) continue;
+    const [x, y] = k.split(',').map(Number), [dx, dy] = DIRS[b.dir];
+    drawItem(x * cell + cell / 2 + dx * (b.p - 0.5) * cell, y * cell + cell / 2 + dy * (b.p - 0.5) * cell, b.item);
+  }
+
+  for (const m of grid.machines) drawMachine(m, now);
+
+  if (ghost) {
+    ctx.globalAlpha = 0.6;
+    drawMachine({ type: tool, x: ghost.x, y: ghost.y, rot, lvl: 1, prog: 0, status: 'ok', out: null }, now);
+    ctx.globalAlpha = 1;
+    outline(ghost.x * cell, ghost.y * cell, cell * 2, cell * 2, ghost.ok ? '#3ddc84' : '#ff5d5d');
+  }
+}
+
+function drawMachine(m, now) {
+  const { cfg, st } = G;
+  const x = m.x * cell, y = m.y * cell, s = cell * 2;
+  const isWh = m.type === 'warehouse';
+  const d = isWh ? null : machineDef(cfg, m.type);
+  const flashing = (flashUntil.get(m) || 0) > now;
+  ctx.fillStyle = flashing ? '#3d6b4d' : isWh ? '#3a3f52' : d.color;
+  roundRect(x + 3, y + 3, s - 6, s - 6, 9); ctx.fill();
   ctx.lineWidth = 2;
-  for (let x = 8 + beltOff; x < L.right; x += 16) {
-    ctx.beginPath(); ctx.moveTo(x, L.beltY - 8); ctx.lineTo(x + 5, L.beltY); ctx.lineTo(x, L.beltY + 8); ctx.stroke();
-  }
+  ctx.strokeStyle = sel && sel.m === m ? '#5aa9ff' : 'rgba(255,255,255,.18)';
+  roundRect(x + 3, y + 3, s - 6, s - 6, 9); ctx.stroke();
 
-  // items: spawned at the first station at the chain's throughput (capped for readability)
-  if (running) {
-    spawnAcc += dt * Math.min(5, st.you.prodRate / 60);
-    while (spawnAcc >= 1) { spawnAcc -= 1; items.push({ x: L.xs[0] }); }
-    for (const it of items) it.x += BELT_SPEED * dt;
-  }
-  items = items.filter(it => it.x < L.right + 6);
-  for (const it of items) {
-    const stage = it.x < L.xs[1] ? 0 : it.x < L.xs[2] ? 1 : 2;
-    drawItem(it.x, L.beltY, stage);
-  }
-
-  // stations
-  ctx.textAlign = 'center';
-  stations.forEach((s, i) => {
-    const x = L.xs[i], y = L.beltY;
-    const flashing = (flashUntil[s.id] || 0) > now;
-    const bob = running ? Math.sin(now / 120 + i) * 1.5 : 0;
-    ctx.fillStyle = flashing ? '#3d6b4d' : '#323849';
-    roundRect(x - 27, y - 27 + bob, 54, 54, 12); ctx.fill();
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = s.id === bn.id ? '#ff5d5d' : '#4a5266';
-    roundRect(x - 27, y - 27 + bob, 54, 54, 12); ctx.stroke();
-    ctx.font = '26px system-ui, "Segoe UI Emoji", "Apple Color Emoji", sans-serif';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(s.icon, x, y + bob + 1);
-    ctx.font = 'bold 11px system-ui, sans-serif';
-    ctx.fillStyle = '#cfd6e4';
-    ctx.fillText(`Niv. ${st.levels[s.id]}`, x, y + 42);
-    ctx.fillStyle = s.id === bn.id ? '#ff9c9c' : '#9aa3b5';
-    ctx.fillText(perMin(upgradeInfo(cfg, st, s.id).rate), x, y - 40);
-  });
-
-  // warehouse
-  const wx = L.right + 4, wy = L.beltY - 40, ww = w - wx - 8, wh = 80;
-  ctx.fillStyle = '#323849';
-  roundRect(wx, wy, ww, wh, 10); ctx.fill();
-  const fill = st.you.stock / st.you.stockCap;
-  ctx.fillStyle = full ? '#ff5d5d' : '#5aa9ff';
-  roundRect(wx + 6, wy + 6 + (wh - 12) * (1 - fill), ww - 12, (wh - 12) * fill, 6); ctx.fill();
-  ctx.font = '22px system-ui, "Segoe UI Emoji", sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.font = `${Math.round(cell * 0.8)}px system-ui, "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
   ctx.fillStyle = '#fff';
-  ctx.fillText('📦', wx + ww / 2, wy + wh / 2 - 6);
-  ctx.font = 'bold 11px system-ui, sans-serif';
-  ctx.fillText(fmt(Math.floor(st.you.stock)), wx + ww / 2, wy + wh / 2 + 16);
-  if (full) {
-    ctx.fillStyle = '#ff5d5d';
-    ctx.font = 'bold 12px system-ui, sans-serif';
-    ctx.fillText('PLEIN', wx + ww / 2, wy + wh + 14);
+  if (isWh) {
+    const fill = st.you.stock / st.you.stockCap;
+    ctx.fillStyle = fill >= 0.999 ? '#ff5d5d' : '#5aa9ff';
+    ctx.fillRect(x + 8, y + s - 12, (s - 16) * fill, 5);
+    ctx.fillStyle = '#fff';
+    ctx.fillText('📦', x + s / 2, y + s / 2 - 5);
+    ctx.font = `bold ${Math.round(cell * 0.32)}px system-ui, sans-serif`;
+    ctx.fillText(fmt(Math.floor(st.you.stock)), x + s / 2, y + s / 2 + cell * 0.45);
+    return;
   }
-
-  // coins leaving the warehouse on each sale
-  ctx.font = '14px system-ui, "Segoe UI Emoji", sans-serif';
-  for (const c of coins) {
-    c.t += dt / Math.max(1, Math.min(G.speed, 3));
-    ctx.globalAlpha = Math.max(0, 1 - c.t);
-    ctx.fillText('🪙', wx + ww / 2 + c.dx, wy - 4 - c.t * 40);
+  const bob = m.status === 'ok' ? Math.sin(now / 140 + m.x) * 1.2 : 0;
+  ctx.fillText(d.icon, x + s / 2, y + s / 2 + bob - 3);
+  // level badge + progress bar
+  ctx.font = `bold ${Math.round(cell * 0.3)}px system-ui, sans-serif`;
+  ctx.fillStyle = 'rgba(0,0,0,.45)';
+  roundRect(x + 6, y + 6, cell * 0.6, cell * 0.38, 4); ctx.fill();
+  ctx.fillStyle = '#fff';
+  ctx.fillText(`${m.lvl}`, x + 6 + cell * 0.3, y + 6 + cell * 0.2);
+  ctx.fillStyle = 'rgba(0,0,0,.35)';
+  ctx.fillRect(x + 8, y + s - 11, s - 16, 4);
+  ctx.fillStyle = '#ffe9a8';
+  ctx.fillRect(x + 8, y + s - 11, (s - 16) * Math.min(1, m.prog), 4);
+  if (m.status === 'starved' || m.status === 'blocked') {
+    ctx.font = `${Math.round(cell * 0.42)}px system-ui, "Segoe UI Emoji", sans-serif`;
+    ctx.fillText(m.status === 'starved' ? '💤' : '⛔', x + s - cell * 0.42, y + cell * 0.42);
   }
-  ctx.globalAlpha = 1;
-  coins = coins.filter(c => c.t < 1);
+  // ports: orange = input, green = output
+  const p = ports(m), [dx, dy] = DIRS[m.rot];
+  if (d.input_stage !== null) arrow(p.inCell, dx, dy, '#ffa53a', -1);
+  arrow(p.outCell, dx, dy, '#3ddc84', 1);
+  if (m.out !== null) drawItem(p.outCell[0] * cell + cell / 2 + dx * cell * 0.2, p.outCell[1] * cell + cell / 2 + dy * cell * 0.2, m.out);
+}
 
-  ctx.textAlign = 'left';
-  ctx.fillStyle = '#9aa3b5';
-  ctx.font = '12px system-ui, sans-serif';
-  ctx.fillText(`Production : ${perMin(st.you.prodRate)}`, 10, 16);
+// Triangle on the machine edge of cell `c`, pointing along the flow.
+function arrow(c, dx, dy, color, side) {
+  const cx = c[0] * cell + cell / 2 + dx * (cell / 2 - 6) * side;
+  const cy = c[1] * cell + cell / 2 + dy * (cell / 2 - 6) * side;
+  ctx.save();
+  ctx.translate(cx, cy); ctx.rotate(Math.atan2(dy, dx));
+  ctx.fillStyle = color;
+  ctx.beginPath(); ctx.moveTo(6, 0); ctx.lineTo(-4, -7); ctx.lineTo(-4, 7); ctx.closePath(); ctx.fill();
+  ctx.restore();
 }
 
 function drawItem(x, y, stage) {
-  if (stage === 0) { ctx.fillStyle = '#ffe14a'; ctx.beginPath(); ctx.ellipse(x, y, 6, 5, 0, 0, Math.PI * 2); ctx.fill(); }
-  else if (stage === 1) { ctx.fillStyle = '#ffa53a'; ctx.beginPath(); ctx.arc(x, y, 5.5, 0, Math.PI * 2); ctx.fill(); }
-  else { ctx.fillStyle = '#3ddc84'; roundRect(x - 4, y - 8, 8, 16, 3); ctx.fill(); ctx.fillStyle = '#d9ffe8'; ctx.fillRect(x - 2, y - 11, 4, 4); }
+  ctx.fillStyle = STAGE_COLORS[stage];
+  if (stage === 2) { roundRect(x - 4, y - 7, 8, 14, 3); ctx.fill(); ctx.fillStyle = '#d9ffe8'; ctx.fillRect(x - 2, y - 10, 4, 4); }
+  else { ctx.beginPath(); ctx.arc(x, y, stage === 0 ? 6 : 5.5, 0, Math.PI * 2); ctx.fill(); }
+}
+
+function outline(x, y, w, h, color) {
+  ctx.lineWidth = 2; ctx.strokeStyle = color;
+  roundRect(x + 1, y + 1, w - 2, h - 2, 8); ctx.stroke();
 }
 
 function roundRect(x, y, w, h, r) {

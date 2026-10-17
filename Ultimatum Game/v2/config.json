@@ -1,5 +1,5 @@
 {
-  "meta": { "version": 1 },
+  "meta": { "version": 2 },
   "product": [
     { "id": "juice", "name": "Jus", "icon": "🧃", "ref_price": 10, "start_price": 8, "price_min": 1, "price_max": 40, "price_step": 0.5, "unit_cost_base": 3, "unit_cost_per_quality": 0.5 }
   ],
@@ -9,12 +9,13 @@
     { "id": "std",  "name": "Standards", "icon": "🙂", "demand_per_min": 220, "a": 2.5, "b": 1.0, "refuse_below": -1.5 },
     { "id": "prem", "name": "Premium",  "icon": "💎", "demand_per_min": 130, "a": 0.6, "b": 1.5, "refuse_below": 2.5 }
   ],
-  "stations": [
-    { "id": "harvest", "product": "juice", "order": 1, "name": "Cueillette",    "icon": "🍋", "base_rate": 40, "rate_mult": 1.3, "base_cost": 25, "cost_mult": 1.38, "quality_per_level": 0 },
-    { "id": "press",   "product": "juice", "order": 2, "name": "Pressage",      "icon": "⚙️", "base_rate": 32, "rate_mult": 1.3, "base_cost": 30, "cost_mult": 1.38, "quality_per_level": 0 },
-    { "id": "bottle",  "product": "juice", "order": 3, "name": "Embouteillage", "icon": "🍾", "base_rate": 24, "rate_mult": 1.3, "base_cost": 20, "cost_mult": 1.38, "quality_per_level": 0.25 }
+  "grid": { "cols": 10, "rows": 13, "warehouse_x": 4, "warehouse_y": 11, "belt_cost": 2, "belt_speed": 4, "machine_buffer": 2, "final_stage": 2, "sell_refund": 0.5 },
+  "machines": [
+    { "id": "harvest", "product": "juice", "name": "Cueillette",    "icon": "🍋", "color": "#7a8a2e", "input_stage": null, "output_stage": 0, "cost": 20, "cost_mult": 1.45, "base_rate": 24, "rate_mult": 1.3, "up_cost": 15, "up_cost_mult": 1.35, "quality_per_level": 0 },
+    { "id": "press",   "product": "juice", "name": "Pressage",      "icon": "⚙️", "color": "#8a5a2e", "input_stage": 0,    "output_stage": 1, "cost": 30, "cost_mult": 1.45, "base_rate": 30, "rate_mult": 1.3, "up_cost": 20, "up_cost_mult": 1.35, "quality_per_level": 0 },
+    { "id": "bottle",  "product": "juice", "name": "Embouteillage", "icon": "🍾", "color": "#2e6a8a", "input_stage": 1,    "output_stage": 2, "cost": 40, "cost_mult": 1.45, "base_rate": 30, "rate_mult": 1.3, "up_cost": 25, "up_cost_mult": 1.35, "quality_per_level": 0.4 }
   ],
-  "player": { "start_money": 10, "start_quality": 1, "quality_max": 5, "stock_base": 30, "stock_mult": 1.5, "stock_base_cost": 40, "stock_cost_mult": 1.6 },
+  "player": { "start_money": 130, "start_quality": 1, "quality_max": 5, "stock_base": 30, "stock_mult": 1.5, "stock_base_cost": 40, "stock_cost_mult": 1.6 },
   "competitors": [
     { "id": "cheap",   "name": "Le Casseur de prix", "icon": "🪓", "color": "#e8833a", "desc": "Toujours moins cher que toi. Qualité bof.", "behavior": "undercut", "start_price": 6,  "price_floor_margin": 0.1, "behavior_param": 0.05, "quality": 1.0, "quality_step": 0.05, "quality_max": 1.5, "prod_per_min": 250, "prod_growth": 0.06, "stock_cap": 200 },
     { "id": "premium", "name": "Le Premium",         "icon": "🎩", "color": "#9b6bdf", "desc": "Cher, mais une qualité au top.",           "behavior": "premium",  "start_price": 18, "price_floor_margin": 0.3, "behavior_param": 0.03, "quality": 4.0, "quality_step": 0.05, "quality_max": 4.5, "prod_per_min": 120, "prod_growth": 0.06, "stock_cap": 80 },

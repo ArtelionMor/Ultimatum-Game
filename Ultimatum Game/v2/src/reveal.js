@@ -3,14 +3,18 @@
 // Pure: reads/writes st.unlocked and st.lastReveal only.
 
 export const REVEALS = [
+  { id: 'press',    when: st => (st.stats.built.harvest || 0) >= 1,
+    toast: '⚙️ Nouveau : le Pressage transforme les citrons en jus.' },
+  { id: 'bottle',   when: st => (st.stats.built.press || 0) >= 1,
+    toast: '🍾 Nouveau : l’Embouteillage met le jus en bouteille. Sa qualité monte avec son niveau.' },
   { id: 'market',   when: st => st.stats.sold >= 1,
-    toast: '📈 Premier client ! L\'onglet Marché est ouvert.' },
-  { id: 'upgrades', when: st => st.stats.upgrades >= 1,
-    toast: '🔧 Tous les postes sont améliorables. Le goulot (en rouge) freine toute la chaîne.' },
+    toast: '📈 Premier client ! L’onglet Marché est ouvert.' },
+  { id: 'upgrades', when: st => st.seen.market && st.stats.sold >= 5,
+    toast: '🔧 Touche une machine (outil ✋) pour l’améliorer.' },
   { id: 'stock',    when: (st, cfg) => st.stats.stockFullSeen || st.t >= cfg.reveal.stock_hint_after_s,
     toast: '📦 Ton entrepôt est petit : agrandis-le pour vendre aux heures de pointe.' },
   { id: 'segments', when: st => st.seen.market && st.stats.priceChanges >= 1,
-    toast: '👥 Nouveau sur le Marché : quels clients achètent chez toi.' },
+    toast: '👥 Nouveau sur le Marché : fais glisser les cartes pour voir chaque type de client.' },
 ];
 
 export function checkReveal(cfg, st) {
