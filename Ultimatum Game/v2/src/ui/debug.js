@@ -1,6 +1,8 @@
 // Debug panel (🐞 or ?debug): sim speed, live a/b/temperature, +money, reset.
 // Edits change the in-memory config only (not saved, not written to config.json).
 
+import { mkOf } from '../sim.js';
+
 const $ = id => document.getElementById(id);
 
 export function initDebug(G) {
@@ -18,15 +20,21 @@ export function initDebug(G) {
 
   const temp = $('dbg-temp');
   temp.value = G.cfg.market.temperature;
-  temp.addEventListener('change', () => { const v = Number(temp.value); if (v > 0) G.cfg.market.temperature = v; });
+  temp.addEventListener('change', () => {
+    const v = Number(temp.value);
+    if (!(v > 0)) return;
+    G.cfg.market.temperature = v;
+    for (const r of G.cfg.markets) mkOf(G.cfg, r.id).temperature = v;   // cached market configs
+  });
 
-  $('dbg-segments').innerHTML = G.cfg.segments.map(sg => `<div class="row"><span style="white-space:nowrap">${sg.icon} ${sg.name}</span>
+  // One row per segment type; an edit applies to that segment in every market.
+  const segTypes = G.cfg.segments.filter((sg, i, all) => all.findIndex(o => o.id === sg.id) === i);
+  $('dbg-segments').innerHTML = segTypes.map(sg => `<div class="row"><span style="white-space:nowrap">${sg.icon} ${sg.name}</span>
     <span>a <input type="number" step="0.1" data-seg="${sg.id}" data-k="a" value="${sg.a}">
     b <input type="number" step="0.1" data-seg="${sg.id}" data-k="b" value="${sg.b}"></span></div>`).join('');
   $('dbg-segments').querySelectorAll('input').forEach(inp => inp.addEventListener('change', () => {
-    const sg = G.cfg.segments.find(s => s.id === inp.dataset.seg);
     const v = Number(inp.value);
-    if (isFinite(v)) sg[inp.dataset.k] = v;
+    if (isFinite(v)) G.cfg.segments.filter(s => s.id === inp.dataset.seg).forEach(sg => { sg[inp.dataset.k] = v; });
   }));
 
   $('dbg-money').addEventListener('click', () => { G.st.money += 1000; });

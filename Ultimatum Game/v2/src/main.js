@@ -1,16 +1,16 @@
-// Boot, game loop, tabs, hints, reveal, win, save. The simulation lives in
-// sim.js (pure); this file only wires it to the DOM.
+// Boot, game loop, tabs, hints, reveal, monopoly effects, save. The simulation
+// lives in sim.js (pure); this file only wires it to the DOM.
 
-import { newGame, step, derive, SAVE_VERSION, productOf, sellersOf, stockInfo } from './sim.js';
-import { placeCost, countOf } from './grid.js';
+import { newGame, step, derive, SAVE_VERSION, sellersOf, stockInfo, mkOf, totalSold, monopolistOf } from './sim.js';
+import { countOf, stageCapacity } from './grid.js';
 import { unitCost } from './factory.js';
 import { previewPreference } from './market.js';
 import { checkReveal } from './reveal.js';
 import { initHud, renderHud } from './ui/hud.js';
-import { initMarket, renderMarket } from './ui/market-view.js';
+import { initMarket, renderMarket, openMarkets } from './ui/market-view.js';
 import { initFactory, renderFactory, currentTool } from './ui/factory-view.js';
 import { initDebug } from './ui/debug.js';
-import { toast, floatText, retrigger } from './ui/fx.js';
+import { toast, floatText } from './ui/fx.js';
 import { play } from './ui/sound.js';
 import { money, perMin, pct } from './format.js';
 
@@ -20,9 +20,17 @@ const SAVE_KEY = 'mu_v2_save';
 const NO_SAVE = new URLSearchParams(location.search).has('nosave'); // test sessions
 
 const G = {
-  cfg: null, st: null, speed: 1, tab: 'factory',
+  cfg: null, st: null, speed: 1, tab: 'factory', market: 'fruit',
   onAction,
-  incomePerMin: () => G.st.shares.flow.you * 60 * (G.st.you.price - unitCost(productOf(G.cfg), G.st.you.quality)),
+  // Sales margin of every market + base income.
+  incomePerMin: () => {
+    let inc = (G.cfg.player.base_income_per_s || 0) * 60;
+    for (const r of G.cfg.markets) {
+      const m = G.st.mk[r.id];
+      inc += m.shares.flow.you * 60 * (m.you.price - unitCost(r, m.you.quality));
+    }
+    return inc;
+  },
   reset,
 };
 window.G = G; // handy from the console
@@ -36,8 +44,6 @@ async function boot() {
   initFactory(G);
   initDebug(G);
   initTabs();
-  $('win-replay').addEventListener('click', () => reset());
-  if (G.st.goal.won) showWin();
   render();
   startLoop();
   addEventListener('visibilitychange', save);
@@ -64,7 +70,6 @@ function reset() {
   try { localStorage.removeItem(SAVE_KEY); } catch { /* ignore */ }
   G.st = newGame(G.cfg, (Math.random() * 2 ** 31) | 0);
   derive(G.cfg, G.st);
-  $('win').classList.add('hidden');
   initMarket(G);
   initFactory(G);
   showTab('factory');
@@ -75,7 +80,7 @@ function reset() {
 function initTabs() {
   document.querySelectorAll('.tab').forEach(btn => btn.addEventListener('click', () => {
     if (btn.dataset.tab === 'market' && !G.st.unlocked.market) {
-      toast('🔒 Vends ton premier jus pour ouvrir le Marché.');
+      toast('🔒 Amène ta première production à l’📤 Outcome pour ouvrir le Marché.');
       return;
     }
     if (btn.dataset.tab !== G.tab) play('tab', 0.3);
@@ -95,16 +100,14 @@ function showTab(tab) {
 // --- Player actions -----------------------------------------------------------
 
 function onAction(kind) {
-  const st = G.st;
-  if (kind === 'upgrade') st.seen.upgrades = st.stats.upgrades >= 2 || st.seen.upgrades;
-  if (kind === 'stock') st.seen.stock = true;
+  if (kind === 'stock') G.st.seen.stock = true;
   render();
 }
 
 // --- Loop: fixed-step sim on a timer (keeps running in background tabs) ------
 
 let acc = 0, last = 0, saleAcc = 0, saleT = 0, saveT = 0;
-const rivalIntroduced = {};
+const introduced = {};
 
 function startLoop() {
   last = performance.now();
@@ -117,13 +120,16 @@ function tick() {
   acc += Math.min(2, (now - last) / 1000) * G.speed;
   last = now;
   let steps = 0;
-  while (acc >= DT && steps++ < 2000) {
+  while (acc >= DT && steps++ < 4000) {
     acc -= DT;
-    const wasHolding = G.st.goal.hold > 0;
+    const wasHolding = holdingMarkets();
     for (const e of step(G.cfg, G.st, DT)) handle(e);
-    if (!wasHolding && G.st.goal.hold > 0) toast(`⏱ Tu dépasses ${pct(G.cfg.goal.share_target)} ! Tiens ${G.cfg.goal.hold_s} s.`);
+    for (const id of holdingMarkets()) if (!wasHolding.includes(id)) {
+      const r = G.cfg.markets.find(m => m.id === id);
+      toast(`⏱ ${pct(G.cfg.monopoly.share)} du marché ${r.icon} ${r.name} ! Tiens ${G.cfg.monopoly.hold_s} s pour le monopole.`);
+    }
     const r = checkReveal(G.cfg, G.st);
-    if (r) onReveal(r);
+    if (r) { toast(r.toast); render(); }
   }
   saleT += 0.05;
   if (saleT >= 0.7 && saleAcc > 0.5) {
@@ -134,76 +140,82 @@ function tick() {
   if (saveT >= 3) { saveT = 0; save(); }
 }
 
+const holdingMarkets = () => G.cfg.markets.filter(r => { const b = G.st.mk[r.id].brands.you; return b.hold > 0 && !b.active; }).map(r => r.id);
+
+const nameOf = (market, id) => id === 'you' ? 'Tu' : G.cfg.rivals.find(r => r.market === market && r.id === id)?.name;
+
 function handle(e) {
+  const r = e.market && G.cfg.markets.find(m => m.id === e.market);
   if (e.type === 'sale') saleAcc += e.gain;
   else if (e.type === 'rivalPrice') {
-    if (!rivalIntroduced[e.id] && G.st.unlocked.market) {
-      rivalIntroduced[e.id] = true;
-      const def = G.cfg.competitors.find(c => c.id === e.id);
+    const key = e.market + e.id;
+    if (!introduced[key] && G.st.seen.market && G.market === e.market) {
+      introduced[key] = true;
+      const def = G.cfg.rivals.find(c => c.market === e.market && c.id === e.id);
       toast(`${def.icon} ${def.name} passe de ${e.from} $ à ${e.to} $.`);
     }
-  }
-  else if (e.type === 'rivalsUpgrade' && !rivalIntroduced.upgrade && G.st.unlocked.market) {
-    rivalIntroduced.upgrade = true;
+  } else if (e.type === 'rivalsUpgrade' && !introduced.upgrade && G.st.seen.market) {
+    introduced.upgrade = true;
     toast('⚔️ Tes rivaux améliorent leurs usines eux aussi, chaque minute.');
+  } else if (e.type === 'monopolyStart') {
+    if (e.id === 'you') { monoFlash(`👑 MONOPOLE ${r.icon} ${r.name.toUpperCase()} !`); play('buy', 0.6); }
+    else toast(`⚠️ ${nameOf(e.market, e.id)} a le monopole ${r.icon} ${r.name} : ses clients lui deviennent fidèles.`);
+  } else if (e.type === 'monopolyLost') {
+    toast(e.id === 'you'
+      ? `😬 Tu as perdu le monopole ${r.icon} ${r.name}. Ton bonus d'attrait s'effrite lentement.`
+      : `💥 ${nameOf(e.market, e.id)} a perdu le monopole ${r.icon} ${r.name} !`);
   }
-  else if (e.type === 'holdLost') { toast('😬 Ta part est retombée : le chrono repart à zéro.'); retrigger($('goal-bar'), 'flash'); }
-  else if (e.type === 'win') { save(); showWin(); }
 }
 
-function onReveal(r) {
-  toast(r.toast);
-  render();
-}
-
-function showWin() {
-  const st = G.st, m = Math.floor(st.goal.wonAt / 60), s = Math.floor(st.goal.wonAt % 60);
-  $('win-text').textContent = `Tu as tenu ${pct(G.cfg.goal.share_target)} du marché pendant ${G.cfg.goal.hold_s} s, en ${m} min ${String(s).padStart(2, '0')} de jeu.`;
-  $('win').classList.remove('hidden');
+// Big non-blocking banner for the player's monopolies.
+function monoFlash(text) {
+  const d = document.createElement('div');
+  d.id = 'mono-flash';
+  d.textContent = text;
+  $('app').appendChild(d);
+  setTimeout(() => d.remove(), 2700);
 }
 
 // --- What can I do now? -------------------------------------------------------
 
 function hint() {
   const { cfg, st } = G;
-  if (st.goal.won) return '👑 Marché contrôlé !';
   const g = st.grid, n = type => countOf(g, type);
   const tool = currentTool();
-  // Build order first: one line from fruit to warehouse.
+  // Onboarding: one harvester wired to the Outcome sells lemons.
   if (!n('harvest')) return tool === 'harvest'
-    ? `👉 Touche la grille pour poser la Cueillette (${money(placeCost(cfg, g, 'harvest'))}). ⟳ change son sens.`
+    ? '👉 Touche la grille pour poser la Cueillette. ⟳ change son sens (flèche verte = sortie).'
     : '👉 Choisis 🍋 Cueillette dans la barre, puis touche la grille.';
-  if (!n('press')) return st.unlocked.press ? '👉 Pose un ⚙️ Pressage : il transforme les citrons en jus.' : '👉 Ta Cueillette produit des citrons…';
-  if (!n('bottle')) return st.unlocked.bottle ? '👉 Pose un 🍾 Embouteillage : il met le jus en bouteille.' : '👉 …';
-  if (!st.stats.delivered) {
-    const starved = g.machines.find(m => m.status === 'starved'), blocked = g.machines.find(m => m.status === 'blocked');
-    if (tool !== 'belt') return '👉 Choisis ⇉ Tapis et glisse le doigt : sortie verte → entrée orange → … → 📦 Entrepôt.';
-    if (blocked) return '👉 Une sortie (flèche verte) est bloquée : tire un tapis depuis elle.';
-    if (starved) return '👉 Une machine attend (💤) : amène un tapis jusqu’à son entrée (flèche orange).';
-    return '👉 Relie la dernière machine à l’📦 Entrepôt avec des tapis.';
+  if (!totalSold(st) && !Object.values(st.stats.delivered).some(Boolean)) {
+    if (tool !== 'belt') return '👉 Choisis ⇉ Tapis et glisse le doigt de la sortie verte jusqu’à l’📤 Outcome.';
+    if (g.machines.find(m => m.status === 'blocked')) return '👉 Tire un tapis depuis la sortie verte de la Cueillette jusqu’à l’📤 Outcome.';
+    return '👉 Termine le tapis jusqu’à l’📤 Outcome (glisse ✋ pour déplacer la vue).';
   }
   if (st.unlocked.market && !st.seen.market) return '👉 Ouvre l’onglet Marché, en bas.';
-  if (st.goal.hold > 0) return `⏱ Garde ta part au-dessus de ${pct(cfg.goal.share_target)} encore ${Math.ceil(cfg.goal.hold_s - st.goal.hold)} s !`;
-  let want = 0;
-  if (st.unlocked.market) {
-    const pref = previewPreference(cfg, productOf(cfg), sellersOf(st));
-    for (const sg of cfg.segments) want += sg.demand_per_min * pref[sg.id].probs.you;
-    if (want < 1) return '👉 Personne n’accepte ton prix : baisse-le dans le Marché.';
+  for (const r of openMarkets(cfg, st)) {
+    const b = st.mk[r.id].brands.you;
+    if (b.hold > 0 && !b.active) return `⏱ Garde ${pct(cfg.monopoly.share)} du marché ${r.icon} encore ${Math.ceil(cfg.monopoly.hold_s - b.hold)} s !`;
   }
+  if (st.unlocked.press && !n('press')) return '👉 Pose un ⚙️ Pressage : citrons → jus, qui se vend plus cher. Relie-le à l’📤 Outcome.';
+  if (st.unlocked.bottle && !n('bottle')) return '👉 Pose un 🍾 Embouteillage : jus → bouteilles, le produit le plus cher.';
   const sk = stockInfo(cfg, st);
-  const full = st.you.stock >= st.you.stockCap - 1e-6;
-  if (full && st.unlocked.stock && sk.affordable) return `👉 Entrepôt plein : agrandis-le (${money(sk.cost)}).`;
-  if (full && st.unlocked.market) return '👉 Ton stock dort : baisse ton prix dans le Marché.';
-  const blocked = g.machines.find(m => m.status === 'blocked');
-  if (blocked) return '👉 Une machine est bloquée (⛔) : vérifie ses tapis de sortie.';
+  const fullMk = openMarkets(cfg, st).find(r => st.mk[r.id].you.stock >= st.mk[r.id].you.stockCap - 1e-6);
+  if (fullMk && st.unlocked.stock && sk.affordable) return `👉 Stock ${fullMk.icon} plein : agrandis le stock (${money(sk.cost)}).`;
+  if (fullMk) return `👉 Ton stock ${fullMk.icon} dort : baisse ton prix ${fullMk.icon} dans le Marché.`;
+  if (g.machines.find(m => m.status === 'blocked')) return '👉 Une machine est bloquée (⛔) : vérifie ses tapis de sortie.';
   if (st.unlocked.segments && !st.seen.segments) return '👉 Fais glisser les cartes du Marché pour voir chaque type de client.';
-  if (want > st.you.prodRate * 1.3) {
-    const lineCost = ['harvest', 'press', 'bottle'].reduce((a, t) => a + placeCost(cfg, g, t), 0);
-    return st.unlocked.upgrades
-      ? `👉 On t'en demande ${perMin(want)}, tu en livres ${perMin(st.you.prodRate)} : améliore une machine (✋) ou construis une 2e ligne (~${money(lineCost)}).`
-      : `👉 On t'en demande ${perMin(want)}, tu en livres ${perMin(st.you.prodRate)} : construis une 2e ligne (~${money(lineCost)}).`;
+  // Market where the player sells least compared with what customers would take.
+  for (const r of openMarkets(cfg, st)) {
+    const pref = previewPreference(mkOf(cfg, r.id), sellersOf(st, r.id));
+    let want = 0;
+    for (const sg of mkOf(cfg, r.id).segments) want += sg.demand_per_min * pref[sg.id].probs.you;
+    if (want < 1) return `👉 Personne n’accepte ton prix ${r.icon} : baisse-le dans le Marché.`;
+    const cap = stageCapacity(cfg, g, r.stage);
+    if (want > cap * 1.5 && cap > 0) return `👉 Les clients veulent ${perMin(want)} de ${r.icon}, tu en fais ${perMin(cap)} : améliore ou ajoute des machines.`;
   }
-  return '👉 Ajuste ton prix ou agrandis ton usine.';
+  const rivalMono = openMarkets(cfg, st).find(r => { const h = monopolistOf(st, r.id); return h && h !== 'you'; });
+  if (rivalMono) return `👉 ${nameOf(rivalMono.id, monopolistOf(st, rivalMono.id))} tient le monopole ${rivalMono.icon} : casse-le avant qu’il ne s’installe.`;
+  return '👉 Vise un monopole : le marché où ta part est la plus haute.';
 }
 
 // --- Render -------------------------------------------------------------------

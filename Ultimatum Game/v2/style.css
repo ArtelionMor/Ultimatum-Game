@@ -196,3 +196,26 @@ main { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 12px 14px 16px; }
 .dots { display: flex; justify-content: center; gap: 6px; margin-top: 8px; }
 .dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--line); }
 .dots i.on { background: var(--you); }
+
+/* --- Multi-market ------------------------------------------------------------ */
+#stock-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+#stock-chips { display: flex; gap: 6px; flex: 1; flex-wrap: wrap; }
+.schip { background: var(--panel); border-radius: 8px; padding: 4px 8px; font-size: 13px; font-weight: 700; }
+.schip.full { color: var(--bad); box-shadow: 0 0 0 1px var(--bad) inset; }
+#floor { width: 100%; border-radius: 10px; cursor: grab; touch-action: none; }
+#market-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
+.mtab { flex: 1; border: 2px solid transparent; border-radius: 12px; background: var(--panel); padding: 8px 4px; font-weight: 800; cursor: pointer; position: relative; }
+.mtab.active { border-color: var(--you); background: var(--panel2); }
+.mtab .crown { position: absolute; top: -9px; right: 4px; font-size: 15px; }
+.mono { border-radius: 12px; padding: 8px 12px; margin-bottom: 10px; font-size: 13px; background: var(--panel); border: 1px solid var(--line); }
+.mono:empty { display: none; }
+.mono.you { background: linear-gradient(90deg, rgba(255,207,74,.25), rgba(255,207,74,.05)); border-color: var(--gold); color: var(--gold); font-weight: 800; }
+.mono.rival { border-color: #ff9c9c; color: #ffc4c4; }
+.mono .bar { margin: 6px 0 0; height: 6px; }
+.pie-wrap { position: relative; width: 150px; margin: 0 auto 12px; }
+.pie-wrap .pie { margin: 0; }
+.pie-wrap .crown { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); font-size: 26px; filter: drop-shadow(0 2px 4px #000); }
+#mono-flash { position: absolute; left: 0; right: 0; top: 38%; z-index: 45; text-align: center; pointer-events: none;
+  font: 900 28px "KFuture", system-ui, sans-serif; color: var(--gold); text-shadow: 0 4px 16px #000, 0 0 30px rgba(255,207,74,.6);
+  animation: monoflash 2.6s ease forwards; }
+@keyframes monoflash { 0% { opacity: 0; transform: scale(.6); } 15% { opacity: 1; transform: scale(1.1); } 25% { transform: scale(1); } 80% { opacity: 1; } 100% { opacity: 0; transform: translateY(-30px); } }

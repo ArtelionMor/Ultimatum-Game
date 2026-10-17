@@ -1,106 +1,117 @@
 # Market Ultimatum v2
 
-Prototype mobile (portrait, 480 px max) : une usine de jus face à 3 usines rivales, jusqu'au monopole.
+Prototype mobile (portrait, 480 px max) : tu construis une usine de citrons → jus → bouteilles et tu te bats sur 3 marchés contre des rivaux, jusqu'au monopole.
 JS vanilla en modules ES, sans build ni dépendance.
 
 ```bash
 python -m http.server 8795 --directory v2
 ```
-Puis ouvrir http://localhost:8795 (`?debug` ouvre directement le panneau debug ; touche `d` ou 🐞 pour le basculer).
+Puis ouvrir http://localhost:8795.
+- **Console de triche** : bouton 🐞 en haut à droite, touche `d`, ou `?debug` dans l'URL. Elle contient la vitesse ×1/×10/×50, la température, a/b par segment, +1K $ et Reset.
+- `?nosave` : partie de test non sauvegardée.
 
 ## La boucle
-1. **Usine** : une grille vue de dessus. Tu achètes et poses des machines 2×2 (🍋 Cueillette → ⚙️ Pressage → 🍾 Embouteillage) et tu les relies avec des tapis jusqu'à l'📦 Entrepôt (fixe). Chaque machine a une entrée (flèche orange) et une sortie (flèche verte) ; ⟳ change leur sens. Plusieurs lignes en parallèle = plus de production ; chaque machine s'améliore (+30 % de vitesse), et le niveau moyen des Embouteillages donne la **qualité**. L'entrepôt plein bloque les tapis.
-2. **Marché** : tu fixes ton prix (± / curseur) ; tu vois ta marge et ta qualité, puis des cartes camembert à faire glisser : tout le marché (avec le prix de chaque rival), puis une carte par type de client.
-3. Les ventes rapportent `prix − coût unitaire` ; tu réinvestis dans l'usine.
-4. **Objectif** (toujours visible en haut) : tenir 60 % du marché pendant 60 s d'affilée → écran « Marché contrôlé », bouton Rejouer.
+1. **Usine** : une grille vue de dessus, plus grande que l'écran.
+   - Tu achètes et poses des machines 2×2 : 🍋 Cueillette (crée des citrons), ⚙️ Pressage (citron → jus), 🍾 Embouteillage (jus → bouteille). Chaque machine a une entrée (flèche orange) et une sortie (flèche verte).
+   - Tu les relies avec des tapis jusqu'à un **📤 Outcome**, qui envoie à la vente tout ce qui y entre, par tous les côtés.
+   - Chaque machine s'améliore (+30 % de vitesse), se tourne, se déplace gratuitement ou se revend.
+   - La qualité d'une ressource = le niveau moyen des machines qui la produisent.
+2. **Marché** : un onglet par ressource livrée (🍋 Citron, 🧃 Jus, 🍾 Bouteille), chacun avec ses 3 rivaux. Tu règles ton prix ; des cartes camembert montrent les parts (tout le marché, puis chaque type de client).
+3. Les ventes rapportent `prix − coût unitaire`, plus un **revenu de base** de 1 $/s : on n'est jamais bloqué.
+4. **Monopole** (pas d'écran de victoire) : tenir 80 % d'un marché pendant 20 s donne le monopole. Il apporte un effet visuel et un **bonus d'attrait** qui fidélise les clients. Les rivaux peuvent aussi prendre un monopole.
 
 ## Écrans
-- **Haut** : objectif + barre de part (repère à 60 %) + chrono de tenue, argent et revenu/min, et une ligne « 👉 » qui dit quoi faire maintenant (elle guide la construction de la première ligne pas à pas).
-- **Usine** : barre d'outils ✋ Gérer · 🍋 · ⚙️ · 🍾 · ⇉ Tapis · ⟳ sens. Machine : touche la grille (on peut glisser pour ajuster avant de lâcher). Tapis : glisse le doigt pour tracer, chaque tapis pointe vers le suivant ; toucher un tapis existant le tourne. ✋ + toucher une machine ouvre son panneau (Améliorer, Tourner, Vendre). Icônes : 💤 = attend sa matière, ⛔ = sortie bloquée.
-- **Marché** (débloqué à la 1re vente) : prix, marge, qualité, cartes camembert (les cartes par segment arrivent après le 1er changement de prix).
-- Les nouveautés arrivent une par une (au moins 5 s d'écart) avec une pastille qui pulse et un toast : Pressage → Embouteillage → Marché → améliorations → entrepôt → cartes segments.
+- **Haut** : l'objectif « Prends un monopole », la barre de ton meilleur marché (repère à 80 %) avec le chrono, l'argent et le revenu/min, et une ligne « 👉 » qui dit quoi faire maintenant.
+- **Usine** :
+  - Barre d'outils : ✋ Gérer · 🍋 · ⚙️ · 🍾 · 📤 · ⇉ Tapis · ⟳ sens. Dessous, les stocks par ressource et le bouton Agrandir.
+  - Machine : touche la grille ; on peut glisser pour ajuster avant de lâcher.
+  - Tapis : glisse le doigt pour tracer ; toucher un tapis existant le tourne.
+  - ✋ + toucher une machine ouvre son panneau : Améliorer, Déplacer, Tourner, Vendre.
+  - **Pan** : glisser avec ✋, deux doigts avec n'importe quel outil, clic droit/molette sur PC.
+  - Icônes : 💤 = attend sa matière, ⛔ = sortie bloquée (pas de tapis, ou stock plein).
+- **Marché** (débloqué à la 1re vente) : onglets de ressources (👑 = ton monopole, ⚠️ = celui d'un rival), bandeau monopole, prix (± / curseur), marge, qualité, cartes camembert.
+- Les nouveautés arrivent une par une, avec une pastille et un toast : Marché → Pressage → Embouteillage → améliorations → stock → cartes segments → Outcomes supplémentaires.
 
-## Formule de demande (`src/market.js`)
-Pour un client du segment *s* et un vendeur *v* :
+## Formule de demande (`src/market.js`, `src/monopoly.js`)
+Pour un client du segment *s* et un vendeur *v*, sur un marché de prix de référence *réf* :
 
 ```
-score(s, v) = b_s × qualité_v − a_s × (prix_v / prix_de_référence)
+score(s, v) = b_s × qualité_v − a_s × (prix_v / réf) + c_s × M_v
 ```
 - Un vendeur est **refusé** par le segment si `score < refuse_below_s`, ou s'il n'a pas de stock.
-- Les autres se partagent les clients selon `softmax(score / température)`.
-- Personne d'acceptable → le client repart sans acheter.
-- La demande arrive en flux continu (`demand_per_min`) modulé par des heures de pointe (sinus). Un vendeur à court de stock sert chaque segment au prorata ; ses clients non servis rechoisissent parmi les autres.
-- La part de marché = moyenne glissante (constante `share_smoothing_s`) des ventes de chacun.
+- Les autres se partagent les clients selon `softmax(score / température)`. Personne d'acceptable → le client repart sans acheter.
+- La demande est un flux continu (`demand_per_min`), modulé par des heures de pointe (sinus).
+- **Bonus de monopole M** :
+  - Pendant le monopole : `M = ln(1 + D / grow_tau_s)`, où D est la durée du monopole.
+  - Après la perte : `M = M0 × (1 + t / decay_tau_s)^(−decay_k / M0)`. Un monopole long (M0 grand) s'effrite lentement, donc il est dur à casser.
+  - Ordres de grandeur avec la config actuelle :
+
+    | Durée du monopole | M0 | M une minute après la perte |
+    |---|---|---|
+    | 1 min | 1,1 | 0,17 |
+    | 5 min | 2,4 | 1,0 |
+    | 15 min | 3,4 | 1,9 |
 
 ## Rivaux (`src/ai.js`)
-Même stock / production / vente que le joueur. Toutes les `price_interval_s` :
-- **Casseur de prix** (`undercut`) : 5 % sous ton prix, jamais au-dessus de son prix de départ.
-- **Premium** (`premium`) : baisse de 3 % si son stock dort (> 80 %), monte s'il est vide (< 20 %), dans ±30 % de son prix de départ.
-- **Suiveur** (`follow`) : copie le prix du leader de parts, à ±5 %.
+3 rivaux par marché, avec la même logique de stock et de vente (production abstraite). Toutes les `price_interval_s` :
+- `undercut` : 5 % sous ton prix, jamais au-dessus de son prix de départ.
+- `premium` : baisse si son stock dort, monte s'il est vide (±30 % de son prix de départ).
+- `follow` : copie le prix du leader de parts, à ±5 %.
 
-Plancher pour tous : `coût unitaire × (1 + price_floor_margin)`. Toutes les `upgrade_interval_s`, chacun gagne `prod_growth` de production et `quality_step` de qualité (jusqu'à `quality_max`).
+Plancher : `coût unitaire × (1 + price_floor_margin)`, arrondi au pas de prix du marché. Toutes les `upgrade_interval_s`, chaque rival gagne de la production et de la qualité.
 
 ## Outils
-- `node tools/check-market.js` : 10 min simulées à prix fixes (bas 6 $, moyen 10 $, haut 16 $) × 3 qualités, parts par segment, et verdicts.
-- `node tools/bot-run.js` : une partie complète jouée par un bot (4 lignes types, améliore la machine la plus lente, prix au plus rentable puis « monopole »). Actuellement ≈ 19 min : **premier calage, à affiner**.
-
-**Résultat actuel de check-market** : à qualité égale, le prix le plus bas gagne presque toujours la part *brute* (c'est mathématique : le score baisse avec le prix). Mais ce n'est pas une stratégie dominante : le prix **le plus rentable** dépend du segment (q2.5 : Économes 7 $, Standards 8,5 $, Premium 16,5 $), le prix ne peut pas descendre sous le coût unitaire, et le Casseur te suit. Chaque segment a un favori naturel : Économes → Casseur, Standards → Suiveur, Premium → Premium.
-Réglages faits pour y arriver : qualité du Suiveur 2 → 2,5 (il était à égalité avec le Premium chez les Standards), mix de demande 300/200/100 → 250/220/130, température 0,6 → 0,5, coût de la qualité 1 → 0,5 $/★, et progression des rivaux ralentie (sinon le monopole était impossible).
+- `node tools/check-market.js [--market bottle] [--minutes 5]` : pour chaque marché, 10 min simulées à prix fixes (0,6 / 1 / 1,6 × réf) × 3 qualités, avec les parts par segment.
+  - Résultat actuel : sur les 3 marchés, le prix le plus rentable dépend du segment (pas de stratégie dominante), et chaque segment a un rival favori différent.
+- `node tools/bot-run.js` : un bot construit jusqu'à 4 lignes de bouteilles et vise le monopole Bouteille. Il l'obtient à ≈ 16 min. **Premier calage, à affiner.**
 
 ## Paramètres de `config.json` à toucher pour le fun
 | Clé | Effet |
 |---|---|
-| `segments[].a` / `.b` | sensibilité au prix / à la qualité de chaque segment |
-| `segments[].refuse_below` | seuil « prix injuste » : plus haut = segment plus exigeant |
-| `segments[].demand_per_min` | taille de chaque segment |
+| `markets[]` | prix de référence, prix de départ, pas de prix, coût unitaire de chaque ressource |
+| `segments[]` (`market`, `a`, `b`, `c`, `refuse_below`, `demand_per_min`) | clients de chaque marché : sensibilité au prix, à la qualité, au monopole ; seuil de refus ; volume |
+| `monopoly.share` / `hold_s` | ce qu'il faut tenir pour un monopole |
+| `monopoly.grow_tau_s` / `decay_tau_s` / `decay_k` | vitesse de croissance et de décroissance du bonus |
 | `market.temperature` | bas = le meilleur rafle tout ; haut = parts plus partagées |
-| `market.demand_wave_amp` / `_period_s` | force et durée des heures de pointe (utilité du stock) |
-| `market.share_smoothing_s` | réactivité de la barre de part |
-| `machines[].cost` / `cost_mult` | prix d'une machine, et hausse à chaque exemplaire déjà posé |
-| `machines[].base_rate` / `rate_mult` / `up_cost` / `up_cost_mult` | vitesse et améliorations de chaque machine |
-| `machines[].quality_per_level` | qualité gagnée par niveau (seul l'Embouteillage en donne) |
-| `grid.cols` / `rows` / `warehouse_x` / `_y` | taille de l'usine et place de l'entrepôt |
-| `grid.belt_cost` / `belt_speed` | prix d'un tapis, cases/s (débit max d'un tapis ≈ 60 × vitesse /min) |
-| `grid.sell_refund` | part remboursée à la revente |
-| `product[].unit_cost_base` / `unit_cost_per_quality` | marge et coût de la qualité |
-| `player.start_money`, `stock_*` | démarrage et entrepôt |
-| `competitors[]` | prix de départ, qualité, production, croissance, comportement |
-| `ai.price_interval_s` / `upgrade_interval_s` | nervosité et vitesse de progression des rivaux |
-| `goal.share_target` / `hold_s` | difficulté de l'objectif |
-| `reveal.min_gap_s` / `stock_hint_after_s` | rythme de la révélation progressive |
+| `market.demand_wave_amp` / `_period_s` | heures de pointe (utilité du stock) |
+| `machines[]` | prix (et hausse par exemplaire), vitesse, améliorations, qualité par niveau ; `outcome` = point de vente |
+| `grid.cols` / `rows` / `outcome_x` / `_y` | taille de l'usine et position du 1er Outcome |
+| `grid.belt_cost` / `belt_speed` | prix d'un tapis, cases/s (débit max ≈ 60 × vitesse /min) |
+| `player.start_money` / `base_income_per_s` / `stock_*` | démarrage, revenu de base, stock |
+| `rivals[]` (`market`, `behavior`, prix, qualité, production, croissance) | rivaux de chaque marché |
+| `ai.price_interval_s` / `upgrade_interval_s` | nervosité et progression des rivaux |
+| `reveal.*` | rythme de la révélation progressive |
 
 Les tables sont plates (une ligne = un objet) pour passer facilement à Google Sheets. Changer `meta.version` invalide les sauvegardes.
 
 ## Architecture
 ```
 config.json            tout l'équilibrage
-src/market.js          modèle de demande pur (Node + navigateur)
+src/market.js          modèle de demande pur, par marché
+src/monopoly.js        bonus de monopole (pur)
+src/grid.js            grille : machines 2×2, Outcome, tapis, objets en transit (pur)
 src/factory.js         stock, coût unitaire, production abstraite des rivaux
-src/grid.js            grille : machines 2×2, tapis, objets en transit (pur)
 src/ai.js              comportement des rivaux
-src/sim.js             état + tick pur (événements), actions du joueur
+src/sim.js             état + tick pur : grille → stocks → 3 marchés ; actions du joueur
 src/reveal.js          révélation progressive
-src/main.js            boucle, onglets, indices, victoire, sauvegarde
-src/ui/*.js            hud, usine (canvas), marché, debug, effets, sons
+src/main.js            boucle, onglets, indices, effets de monopole, sauvegarde
+src/ui/*.js            hud, usine (canvas + pan), marché, debug, effets, sons
 tools/                 check-market.js, bot-run.js
 assets/kenney/         sous-ensemble des packs Kenney (CC0, voir License.txt)
 ```
-Plusieurs produits plus tard : `product` est une table et `machines[].product` relie une machine à son produit ; aujourd'hui seul `product[0]` est joué.
 
 ## Décisions à valider
-- **Flux continu** plutôt que tirage aléatoire client par client : la part de marché est l'espérance du tirage softmax, donc lisse et reproductible.
-- **Refus par vendeur** : un segment refuse chaque vendeur sous son seuil (pas seulement quand le meilleur est sous le seuil). Ça couvre la règle demandée et rend « les Économes te fuient » littéral.
-- **Prix plancher = coût unitaire** (pas de revente à perte) : sinon le dumping gagnait le monopole sans réfléchir.
-- **Chrono de tenue remis à zéro** dès que la part repasse sous l'objectif.
-- **Coût payé à la vente** (marge = prix − coût), pas à la production.
-- **Machines 2×2, entrée et sortie sur la même file** (rangée/colonne 0 de la machine) ; une machine peut aussi livrer directement dans la suivante si elles sont collées et alignées.
-- **Qualité = niveau moyen des Embouteillages** (pas par bouteille).
-- **1 objet par case de tapis** ; les tapis peuvent fusionner ; l'entrepôt accepte par tous les côtés.
-- Revente : 50 % du prix (machine + améliorations).
-- `?nosave` dans l'URL : partie de test non sauvegardée.
-- **Heures de pointe** (demande ±50 % sur 40 s) ajoutées pour que l'entrepôt serve à quelque chose.
-- **Le Casseur ne réagit qu'à toi**, pas aux autres rivaux (sinon guerre des prix en spirale entre IA).
-- Demande totale **fixe** dans le temps ; seuls les rivaux progressent.
-- Produit : du jus (🍋 → ⚙️ → 🍾), placeholders emoji pour l'usine.
+- **Flux continu** plutôt que tirage client par client : la part = l'espérance du tirage softmax, lisse et reproductible.
+- **Refus par vendeur** : un segment refuse chaque vendeur sous son seuil.
+- **Prix plancher = coût unitaire** (pas de revente à perte).
+- **Pas de victoire** : le monopole est un état (effet visuel + bonus), qu'on peut perdre ; le jeu continue.
+- Le monopole exige d'abord **80 % pendant 20 s** ; la croissance de son bonus démarre à ce moment-là.
+- Reprendre un monopole pendant que l'ancien bonus décroît repart du bonus restant (courbe continue).
+- **Mêmes 3 types de clients** sur chaque marché (volumes différents) ; rivaux différents par marché.
+- **Un seul niveau de stock** pour toutes les ressources (chaque ressource a son propre stock, de même capacité).
+- **Qualité = niveau moyen des machines** qui produisent la ressource.
+- Machines 2×2, entrée et sortie sur la même file ; une machine peut livrer directement dans la suivante si elles sont collées et alignées.
+- 1 objet par case de tapis ; les tapis peuvent fusionner ; l'Outcome accepte par tous les côtés.
+- Le dernier Outcome ne peut pas être vendu ; déplacer est gratuit ; revente = 50 % (machine + améliorations).
 - Les réglages du panneau debug ne sont pas sauvegardés et ne modifient pas `config.json`.
 - Textes non polis : une passe de localisation est prévue.

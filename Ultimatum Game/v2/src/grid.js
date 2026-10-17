@@ -3,7 +3,8 @@
 //
 // Item stages: 0 = fruit, 1 = juice, 2 = bottle. A machine takes items of its
 // `input_stage` on its input port and pushes `output_stage` items out of its
-// output port. The warehouse (2×2, fixed) takes bottles from any side.
+// output port. An Outcome (`sink: true`, 2×2, movable, one placed at start)
+// takes any item from any side and sends it to that item's market.
 //
 // Rotation r = flow direction: 0 → right, 1 → down, 2 → left, 3 → up.
 // A machine at (x, y) with r = 0 takes from (x-1, y) and outputs to (x+2, y);
@@ -18,7 +19,7 @@ export function machineDef(cfg, type) { return cfg.machines.find(m => m.id === t
 export function createGrid(cfg) {
   const g = cfg.grid;
   const grid = { cols: g.cols, rows: g.rows, machines: [], belts: {}, nextId: 1, v: 0 };
-  grid.machines.push({ id: 0, type: 'warehouse', x: g.warehouse_x, y: g.warehouse_y, rot: 3, lvl: 1, buf: 0, out: null, prog: 0, status: 'ok' });
+  grid.machines.push({ id: 0, type: 'outcome', x: g.outcome_x, y: g.outcome_y, rot: 3, lvl: 1, buf: 0, out: null, prog: 0, status: 'ok' });
   return grid;
 }
 
@@ -54,6 +55,7 @@ const changed = grid => { grid.v++; };
 // --- Costs -----------------------------------------------------------------
 
 export const countOf = (grid, type) => grid.machines.filter(m => m.type === type).length;
+export const isSink = (cfg, m) => !!machineDef(cfg, m.type)?.sink;
 
 export function placeCost(cfg, grid, type) {
   if (type === 'belt') return cfg.grid.belt_cost;
@@ -66,11 +68,21 @@ export const upgradeCost = (d, lvl) => Math.ceil(d.up_cost * Math.pow(d.up_cost_
 
 // --- Edits (caller pays; these only check the layout) -------------------------
 
-export function canPlaceMachine(grid, x, y) {
+// `ignore`: a machine being moved doesn't block its own new spot.
+export function canPlaceMachine(grid, x, y, ignore = null) {
   for (let dx = 0; dx < SIZE; dx++) for (let dy = 0; dy < SIZE; dy++) {
     const cx = x + dx, cy = y + dy;
-    if (!inside(grid, cx, cy) || machineAt(grid, cx, cy) || beltAt(grid, cx, cy)) return false;
+    const m = inside(grid, cx, cy) ? machineAt(grid, cx, cy) : null;
+    if (!inside(grid, cx, cy) || (m && m !== ignore) || beltAt(grid, cx, cy)) return false;
   }
+  return true;
+}
+
+// Move a machine (Outcome included) for free; keeps its level and contents.
+export function moveMachine(grid, m, x, y) {
+  if (!canPlaceMachine(grid, x, y, m)) return false;
+  m.x = x; m.y = y;
+  changed(grid);
   return true;
 }
 
@@ -109,8 +121,9 @@ export function removeBelt(grid, x, y) {
   return true;
 }
 
+// The last Outcome can't go: nothing could be sold any more.
 export function removeMachine(grid, m) {
-  if (m.type === 'warehouse') return false;
+  if (m.type === 'outcome' && countOf(grid, 'outcome') <= 1) return false;
   grid.machines = grid.machines.filter(o => o !== m);
   changed(grid);
   return true;
@@ -118,7 +131,7 @@ export function removeMachine(grid, m) {
 
 // Rotate in place (the footprint doesn't move, only the ports).
 export function rotateMachine(grid, m) {
-  if (m.type === 'warehouse') return false;
+  if (m.type === 'outcome') return false;
   m.rot = (m.rot + 1) % 4;
   m.out = null;
   changed(grid);
@@ -140,12 +153,12 @@ function accept(cfg, grid, sx, sy, tx, ty, stage, ctx) {
   }
   const m = machineAt(grid, tx, ty);
   if (!m) return false;
-  if (m.type === 'warehouse') {
-    if (stage !== cfg.grid.final_stage || ctx.room() <= 0) return false;
-    ctx.deliver();
+  const d = machineDef(cfg, m.type);
+  if (d.sink) {
+    if (ctx.room(stage) <= 0) return false;
+    ctx.deliver(stage);
     return true;
   }
-  const d = machineDef(cfg, m.type);
   const p = ports(m);
   if (p.in[0] !== sx || p.in[1] !== sy || d.input_stage !== stage || m.buf >= cfg.grid.machine_buffer) return false;
   m.buf++;
@@ -172,7 +185,7 @@ function beltOrder(grid) {
   return list;
 }
 
-// ctx = { room: () => free warehouse slots, deliver: () => void }
+// ctx = { room: stage => free stock for that item, deliver: stage => void }
 export function stepGrid(cfg, grid, dt, ctx) {
   const speed = cfg.grid.belt_speed;
   for (const { x, y, k } of beltOrder(grid)) {
@@ -184,8 +197,8 @@ export function stepGrid(cfg, grid, dt, ctx) {
     if (accept(cfg, grid, x, y, x + dx, y + dy, b.item, ctx)) { b.item = null; b.p = 0; }
   }
   for (const m of grid.machines) {
-    if (m.type === 'warehouse') continue;
     const d = machineDef(cfg, m.type);
+    if (d.sink) continue;
     if (m.out === null) {
       const fed = d.input_stage === null || m.buf > 0;
       if (fed) {
@@ -211,27 +224,23 @@ export function stepGrid(cfg, grid, dt, ctx) {
   }
 }
 
-// Upper bound of the floor's output (units/min): the weakest stage, summing the
-// machines of each type. Ignores belts, so it is what a well-wired floor gives.
-export function gridCapacity(cfg, grid) {
-  let cap = Infinity;
-  for (const d of cfg.machines) {
-    let sum = 0;
-    for (const m of grid.machines) if (m.type === d.id) sum += machineRate(d, m.lvl);
-    cap = Math.min(cap, sum);
+// Output of the machines making `stage` (units/min), ignoring belts.
+export function stageCapacity(cfg, grid, stage) {
+  let sum = 0;
+  for (const m of grid.machines) {
+    const d = machineDef(cfg, m.type);
+    if (!d.sink && d.output_stage === stage) sum += machineRate(d, m.lvl);
   }
-  return isFinite(cap) ? cap : 0;
+  return sum;
 }
 
-// Quality of the bottles: average level of the machines that add quality.
-export function gridQuality(cfg, grid) {
-  let q = cfg.player.start_quality, n = 0, sum = 0;
+// Quality of an item: start quality + average level bonus of the machines making it.
+export function gridQuality(cfg, grid, stage) {
+  let n = 0, sum = 0;
   for (const m of grid.machines) {
-    if (m.type === 'warehouse') continue;
     const d = machineDef(cfg, m.type);
-    if (!d.quality_per_level) continue;
+    if (d.sink || d.output_stage !== stage) continue;
     n++; sum += d.quality_per_level * (m.lvl - 1);
   }
-  if (n) q += sum / n;
-  return Math.min(cfg.player.quality_max, q);
+  return Math.min(cfg.player.quality_max, cfg.player.start_quality + (n ? sum / n : 0));
 }

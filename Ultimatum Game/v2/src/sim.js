@@ -1,13 +1,18 @@
 // Pure game simulation: state + config + dt → new state and a list of events.
 // No DOM, so the UI only renders and the tools can run whole games in Node.
+//
+// One factory floor (grid.js) feeds several markets — one per item (fruit,
+// juice, bottle). Each market has its own price, stock, rivals, shares and
+// monopoly bonuses.
 
-import { stepMarket, createShareTracker, trackShares, marketShares, demandMultiplier } from './market.js';
+import { marketCfg, stepMarket, createShareTracker, trackShares, marketShares, demandMultiplier } from './market.js';
 import { stockCap, stockCost, unitCost, produce } from './factory.js';
 import { createGrid, stepGrid, gridQuality, placeCost, machineDef, machineRate, upgradeCost,
   placeMachine, placeBelt, removeMachine, removeBelt, beltAt } from './grid.js';
 import { createRival, repriceRival, upgradeRival } from './ai.js';
+import { createBrand, stepBrand } from './monopoly.js';
 
-export const SAVE_VERSION = 2;
+export const SAVE_VERSION = 3;
 
 // Small seeded RNG (mulberry32) whose state lives in the save.
 function rng(st) {
@@ -19,111 +24,133 @@ function rng(st) {
   };
 }
 
-export const productOf = cfg => cfg.product[0];
+const mkCache = new WeakMap();
+// Market config (row + segments), cached per cfg object.
+export function mkOf(cfg, id) {
+  let c = mkCache.get(cfg);
+  if (!c) { c = {}; mkCache.set(cfg, c); }
+  return c[id] || (c[id] = marketCfg(cfg, id));
+}
+export const marketOfStage = (cfg, stage) => cfg.markets.find(m => m.stage === stage);
+const rivalDefs = (cfg, id) => cfg.rivals.filter(r => r.market === id);
 
 export function newGame(cfg, seed = 12345) {
-  const product = productOf(cfg);
-  const you = { id: 'you', price: product.start_price, quality: 1, stock: 0, stockCap: 0, prodRate: 0 };
-  const rivals = cfg.competitors.map(createRival);
   const st = {
     v: SAVE_VERSION, cfgVersion: cfg.meta.version, seed,
     t: 0, money: cfg.player.start_money,
     grid: createGrid(cfg), stockLvl: 1,
-    you, rivals,
-    shares: createShareTracker(cfg, ['you', ...rivals.map(r => r.id)]),
-    aiPriceT: 0, aiUpT: 0,
-    goal: { hold: 0, won: false, wonAt: 0 },
-    stats: { sold: 0, earned: 0, upgrades: 0, priceChanges: 0, stockFullSeen: false, delivered: 0, built: {} },
+    mk: {},
+    stats: { sold: {}, earned: 0, upgrades: 0, priceChanges: 0, stockFullSeen: false, delivered: {}, built: {} },
     unlocked: {}, seen: {}, lastReveal: -999,
   };
+  for (const row of cfg.markets) {
+    const mk = mkOf(cfg, row.id);
+    const you = { id: 'you', price: row.start_price, quality: 1, stock: 0, stockCap: 0, prodRate: 0, brand: 0 };
+    const rivals = rivalDefs(cfg, row.id).map(createRival);
+    const ids = ['you', ...rivals.map(r => r.id)];
+    st.mk[row.id] = {
+      you, rivals,
+      shares: createShareTracker(mk, ids),
+      brands: Object.fromEntries(ids.map(id => [id, createBrand()])),
+      aiPriceT: 0, aiUpT: 0,
+    };
+    st.stats.sold[row.id] = 0;
+    st.stats.delivered[row.id] = 0;
+  }
   derive(cfg, st);
   return st;
 }
 
 // Recompute what depends on the layout / levels (call after any purchase / load).
 export function derive(cfg, st) {
-  st.you.quality = gridQuality(cfg, st.grid);
-  st.you.stockCap = stockCap(cfg, st.stockLvl);
-  const b = priceBounds(cfg, st);
-  if (st.you.price < b.min) st.you.price = b.min;
+  for (const row of cfg.markets) {
+    const m = st.mk[row.id];
+    m.you.quality = gridQuality(cfg, st.grid, row.stage);
+    m.you.stockCap = stockCap(cfg, st.stockLvl);
+    const b = priceBounds(cfg, st, row.id);
+    if (m.you.price < b.min) m.you.price = b.min;
+  }
 }
 
-export const sellersOf = st => [st.you, ...st.rivals];
-export const shareOf = st => marketShares(st.shares);
+export const sellersOf = (st, id) => [st.mk[id].you, ...st.mk[id].rivals];
+export const shareOf = (st, id) => marketShares(st.mk[id].shares);
+export const monopolistOf = (st, id) => Object.keys(st.mk[id].brands).find(k => st.mk[id].brands[k].active) || null;
+export const totalSold = st => Object.values(st.stats.sold).reduce((a, b) => a + b, 0);
 
 export function step(cfg, st, dt) {
   const ev = [];
-  if (st.goal.won) return ev;
-  const product = productOf(cfg);
-  const sellers = sellersOf(st);
   st.t += dt;
+  st.money += (cfg.player.base_income_per_s || 0) * dt;   // never stuck broke
+  const mult = demandMultiplier(cfg, st.t);
 
-  // Production
-  const wasFull = st.you.stock >= st.you.stockCap - 1e-6;
-  for (const r of st.rivals) produce(r, dt);
-  let delivered = 0;
+  // Factory floor → one stock per item.
+  const delivered = {};
   stepGrid(cfg, st.grid, dt, {
-    room: () => st.you.stockCap - st.you.stock,
-    deliver: () => { st.you.stock++; delivered++; },
+    room: stage => { const m = st.mk[marketOfStage(cfg, stage).id]; return m.you.stockCap - m.you.stock; },
+    deliver: stage => {
+      const id = marketOfStage(cfg, stage).id;
+      st.mk[id].you.stock++;
+      delivered[id] = (delivered[id] || 0) + 1;
+    },
   });
-  if (delivered) { st.stats.delivered += delivered; ev.push({ type: 'delivered', units: delivered }); }
-  // Measured output (units/min), smoothed over ~10 s.
-  st.you.prodRate += (delivered * 60 / dt - st.you.prodRate) * (1 - Math.exp(-dt / 10));
-  if (!wasFull && st.you.stock >= st.you.stockCap - 1e-6) {
-    st.stats.stockFullSeen = true;
-    ev.push({ type: 'stockFull' });
-  }
 
-  // Market
-  const res = stepMarket(cfg, product, sellers, dt, demandMultiplier(cfg, st.t));
-  trackShares(st.shares, res, dt, cfg.market.share_smoothing_s);
-  const sold = res.sold.you;
-  if (sold > 0) {
-    const gain = sold * (st.you.price - unitCost(product, st.you.quality));
-    const before = Math.floor(st.stats.sold);
-    st.money += gain;
-    st.stats.sold += sold;
-    st.stats.earned += gain;
-    if (Math.floor(st.stats.sold) > before) ev.push({ type: 'sale', units: sold, gain });
-  }
-  for (const r of st.rivals) r.revenue += res.sold[r.id] * r.price;
-
-  // Rivals
-  const shares = shareOf(st);
-  st.aiPriceT += dt;
-  if (st.aiPriceT >= cfg.ai.price_interval_s) {
-    st.aiPriceT = 0;
-    const ctx = { you: st.you, sellers, shares, rng: rng(st) };
-    cfg.competitors.forEach((def, i) => {
-      const r = st.rivals[i], old = r.price;
-      repriceRival(product, def, r, ctx);
-      if (r.price !== old) ev.push({ type: 'rivalPrice', id: r.id, from: old, to: r.price });
-    });
-  }
-  st.aiUpT += dt;
-  if (st.aiUpT >= cfg.ai.upgrade_interval_s) {
-    st.aiUpT = 0;
-    cfg.competitors.forEach((def, i) => upgradeRival(def, st.rivals[i]));
-    ev.push({ type: 'rivalsUpgrade' });
-  }
-
-  // Goal: hold the target share for hold_s seconds in a row.
-  const g = cfg.goal;
-  if (shares.you >= g.share_target) {
-    st.goal.hold += dt;
-    if (st.goal.hold >= g.hold_s) {
-      st.goal.won = true;
-      st.goal.wonAt = st.t;
-      ev.push({ type: 'win' });
+  for (const row of cfg.markets) {
+    const id = row.id, m = st.mk[id], mk = mkOf(cfg, id), you = m.you;
+    const d = delivered[id] || 0;
+    if (d) {
+      st.stats.delivered[id] += d;
+      ev.push({ type: 'delivered', market: id, units: d });
+      if (you.stock >= you.stockCap - 1e-6) st.stats.stockFullSeen = true;
     }
-  } else if (st.goal.hold > 0) {
-    st.goal.hold = 0;
-    ev.push({ type: 'holdLost' });
+    you.prodRate += (d * 60 / dt - you.prodRate) * (1 - Math.exp(-dt / 10));   // measured, ~10 s smoothing
+
+    for (const r of m.rivals) produce(r, dt);
+    const sellers = sellersOf(st, id);
+    const res = stepMarket(mk, sellers, dt, mult);
+    trackShares(m.shares, res, dt, cfg.market.share_smoothing_s);
+    const sold = res.sold.you;
+    if (sold > 0) {
+      const gain = sold * (you.price - unitCost(row, you.quality));
+      const before = Math.floor(st.stats.sold[id]);
+      st.money += gain;
+      st.stats.sold[id] += sold;
+      st.stats.earned += gain;
+      if (Math.floor(st.stats.sold[id]) > before) ev.push({ type: 'sale', market: id, gain });
+    }
+    for (const r of m.rivals) r.revenue += res.sold[r.id] * r.price;
+
+    // Monopoly bonus for every seller of this market.
+    const shares = marketShares(m.shares);
+    for (const s of sellers) {
+      const e = stepBrand(cfg.monopoly, m.brands[s.id], shares[s.id], dt);
+      s.brand = m.brands[s.id].M;
+      if (e === 'start') ev.push({ type: 'monopolyStart', market: id, id: s.id });
+      else if (e === 'lost') ev.push({ type: 'monopolyLost', market: id, id: s.id });
+    }
+
+    // Rivals
+    const defs = rivalDefs(cfg, id);
+    m.aiPriceT += dt;
+    if (m.aiPriceT >= cfg.ai.price_interval_s) {
+      m.aiPriceT = 0;
+      const ctx = { you, sellers, shares, rng: rng(st) };
+      defs.forEach((def, i) => {
+        const r = m.rivals[i], old = r.price;
+        repriceRival(row, def, r, ctx);
+        if (r.price !== old) ev.push({ type: 'rivalPrice', market: id, id: r.id, from: old, to: r.price });
+      });
+    }
+    m.aiUpT += dt;
+    if (m.aiUpT >= cfg.ai.upgrade_interval_s) {
+      m.aiUpT = 0;
+      defs.forEach((def, i) => upgradeRival(def, m.rivals[i]));
+      ev.push({ type: 'rivalsUpgrade', market: id });
+    }
   }
   return ev;
 }
 
-// --- Player actions (return true when something happened) -------------------
+// --- Player actions ------------------------------------------------------------
 
 // Build a machine (type from cfg.machines) with its top-left corner at (x, y).
 export function buyMachine(cfg, st, type, x, y, rot) {
@@ -145,10 +172,10 @@ export function buyBelt(cfg, st, x, y, dir) {
   return { ok: true, cost };
 }
 
-// Selling refunds part of the build price (and of the upgrades).
+// Selling refunds part of the build price (and of the upgrades). Returns the refund, or -1.
 export function sellMachine(cfg, st, m) {
   const d = machineDef(cfg, m.type);
-  if (!d || !removeMachine(st.grid, m)) return 0;
+  if (!d || !removeMachine(st.grid, m)) return -1;
   let spent = Math.ceil(d.cost * Math.pow(d.cost_mult, st.grid.machines.filter(o => o.type === m.type).length));
   for (let l = 1; l < m.lvl; l++) spent += upgradeCost(d, l);
   const back = Math.floor(spent * cfg.grid.sell_refund);
@@ -173,7 +200,7 @@ export function machineInfo(cfg, st, m) {
 
 export function upgradeMachine(cfg, st, m) {
   const info = machineInfo(cfg, st, m);
-  if (!info.affordable) return false;
+  if (info.def.sink || !info.affordable) return false;
   st.money -= info.cost;
   m.lvl++;
   st.stats.upgrades++;
@@ -181,6 +208,7 @@ export function upgradeMachine(cfg, st, m) {
   return true;
 }
 
+// One stock level for every item.
 export function stockInfo(cfg, st) {
   const cost = stockCost(cfg, st.stockLvl);
   return { lvl: st.stockLvl, cap: stockCap(cfg, st.stockLvl), nextCap: stockCap(cfg, st.stockLvl + 1), cost, affordable: st.money >= cost };
@@ -197,18 +225,19 @@ export function buyStock(cfg, st) {
 }
 
 // Price can't go under the unit cost (resale at a loss is not allowed).
-export function priceBounds(cfg, st) {
-  const product = productOf(cfg);
-  const min = Math.max(product.price_min, Math.ceil(unitCost(product, st.you.quality) / product.price_step) * product.price_step);
-  return { min, max: product.price_max, step: product.price_step };
+export function priceBounds(cfg, st, id) {
+  const row = cfg.markets.find(m => m.id === id);
+  const step = row.price_step;
+  const min = Math.max(row.price_min, Math.ceil(unitCost(row, st.mk[id].you.quality) / step - 1e-9) * step);
+  return { min: Math.round(min * 100) / 100, max: row.price_max, step };
 }
 
-export function setPrice(cfg, st, price) {
-  const b = priceBounds(cfg, st);
-  const p = Math.round(Math.max(b.min, Math.min(b.max, price)) / b.step) * b.step;
-  if (p === st.you.price) return false;
-  st.you.price = p;
+export function setPrice(cfg, st, id, price) {
+  const b = priceBounds(cfg, st, id);
+  const p = Math.round(Math.round(Math.max(b.min, Math.min(b.max, price)) / b.step) * b.step * 100) / 100;
+  const you = st.mk[id].you;
+  if (p === you.price) return false;
+  you.price = p;
   st.stats.priceChanges++;
   return true;
 }
-

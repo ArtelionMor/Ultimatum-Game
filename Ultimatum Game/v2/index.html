@@ -12,7 +12,7 @@
   <header id="hud">
     <div id="goal">
       <div class="goal-head">
-        <span class="goal-title">🎯 <b id="goal-text">Contrôle 60 % du marché pendant 60 s</b></span>
+        <span class="goal-title">🎯 <b id="goal-text">Prends un monopole</b></span>
         <button id="debug-toggle" title="Debug" aria-label="Debug">🐞</button>
       </div>
       <div class="goal-bar" id="goal-bar">
@@ -31,19 +31,13 @@
   <main>
     <section id="screen-factory" class="screen active">
       <div id="toolbar"></div>
+      <div id="stock-row"><div id="stock-chips"></div><button class="btn small hidden" id="stock-btn"></button></div>
       <canvas id="floor"></canvas>
-      <div class="card" id="stock-card">
-        <div class="row">
-          <span class="label">📦 Entrepôt</span>
-          <span id="stock-text">0 / 30</span>
-        </div>
-        <div class="bar"><div class="bar-fill" id="stock-fill"></div></div>
-        <div class="row muted small"><span id="prod-text"></span></div>
-        <button class="btn up hidden" id="stock-btn"></button>
-      </div>
     </section>
 
     <section id="screen-market" class="screen">
+      <div id="market-tabs"></div>
+      <div id="mono-banner" class="mono"></div>
       <div class="card" id="price-card">
         <div class="row">
           <span class="label">🏷️ Ton prix</span>
@@ -90,14 +84,6 @@
     </div>
   </div>
 
-  <div id="win" class="overlay hidden">
-    <div class="win-box">
-      <div class="win-crown"><span class="ico-mask" style="--icon:url(assets/kenney/icons/crown_a.png)"></span></div>
-      <h1>Marché contrôlé</h1>
-      <p id="win-text"></p>
-      <button class="btn primary" id="win-replay">Rejouer</button>
-    </div>
-  </div>
 </div>
 <script type="module" src="src/main.js"></script>
 </body>

@@ -1,12 +1,21 @@
 // Pure market model — no DOM, no globals. Shared by the game (sim.js) and
 // tools/check-market.js. A "seller" is any object with
-// { id, price, quality, stock }.
+// { id, price, quality, stock, brand? }.
+//
+// A market config `mk` = one row of cfg.markets plus its segments and the
+// softmax temperature (see marketCfg).
 
 const EPS = 1e-6;
 
-// How much a customer of segment `seg` likes `seller`.
+export function marketCfg(cfg, id) {
+  const row = cfg.markets.find(m => m.id === id);
+  return { ...row, temperature: cfg.market.temperature, segments: cfg.segments.filter(s => s.market === id) };
+}
+
+// How much a customer of segment `seg` likes `seller`. `brand` is the
+// monopoly bonus (see monopoly.js).
 export function score(seg, seller, refPrice) {
-  return seg.b * seller.quality - seg.a * (seller.price / refPrice);
+  return seg.b * seller.quality - seg.a * (seller.price / refPrice) + (seg.c || 0) * (seller.brand || 0);
 }
 
 // One segment's choice: softmax(score / T) over the sellers it accepts.
@@ -41,12 +50,12 @@ export function segmentChoice(seg, sellers, refPrice, temperature, needStock = t
 // have stock.
 // `demandMult` scales every segment's demand (rush hours).
 // Returns { sold: {id: units}, seg: {segId: {by: {id: units}, refused, noStock, demand}} }.
-export function stepMarket(cfg, product, sellers, dt, demandMult = 1) {
-  const T = cfg.market.temperature, ref = product.ref_price;
+export function stepMarket(mk, sellers, dt, demandMult = 1) {
+  const T = mk.temperature, ref = mk.ref_price;
   const out = { sold: {}, seg: {} };
   const left = {};
   for (const s of sellers) out.sold[s.id] = 0;
-  for (const seg of cfg.segments) {
+  for (const seg of mk.segments) {
     const row = { by: {}, refused: 0, noStock: 0, demand: seg.demand_per_min * demandMult * dt / 60 };
     for (const s of sellers) row.by[s.id] = 0;
     out.seg[seg.id] = row;
@@ -56,7 +65,7 @@ export function stepMarket(cfg, product, sellers, dt, demandMult = 1) {
     const wants = {}, totalWant = {};
     for (const s of sellers) totalWant[s.id] = 0;
     let any = false;
-    for (const seg of cfg.segments) {
+    for (const seg of mk.segments) {
       if (left[seg.id] <= EPS) continue;
       const ch = segmentChoice(seg, sellers, ref, T, true);
       if (!ch.anyone) continue;
@@ -67,7 +76,7 @@ export function stepMarket(cfg, product, sellers, dt, demandMult = 1) {
     if (!any) break;
     const ratio = {};
     for (const s of sellers) ratio[s.id] = totalWant[s.id] > s.stock ? s.stock / totalWant[s.id] : 1;
-    for (const seg of cfg.segments) {
+    for (const seg of mk.segments) {
       const probs = wants[seg.id];
       if (!probs) continue;
       let unserved = 0;
@@ -83,7 +92,7 @@ export function stepMarket(cfg, product, sellers, dt, demandMult = 1) {
     }
     for (const s of sellers) s.stock = Math.max(0, s.stock - totalWant[s.id] * ratio[s.id]);
   }
-  for (const seg of cfg.segments) {
+  for (const seg of mk.segments) {
     if (left[seg.id] <= EPS) continue;
     // Nobody acceptable at all → refusal; acceptable sellers but all empty → no stock.
     const acceptable = sellers.some(s => score(seg, s, ref) >= seg.refuse_below);
@@ -94,9 +103,9 @@ export function stepMarket(cfg, product, sellers, dt, demandMult = 1) {
 
 // Instant preference (ignores stock): what share of each segment would pick each
 // seller if everybody could deliver. Used for the live "part prévue" while dragging the price.
-export function previewPreference(cfg, product, sellers) {
+export function previewPreference(mk, sellers) {
   const res = {};
-  for (const seg of cfg.segments) res[seg.id] = segmentChoice(seg, sellers, product.ref_price, cfg.market.temperature, false);
+  for (const seg of mk.segments) res[seg.id] = segmentChoice(seg, sellers, mk.ref_price, mk.temperature, false);
   return res;
 }
 
@@ -108,10 +117,10 @@ export function demandMultiplier(cfg, t) {
 
 // --- Share tracking: exponential moving average of sales flows --------------
 
-export function createShareTracker(cfg, ids) {
+export function createShareTracker(mk, ids) {
   const tr = { flow: {}, seg: {} };
   for (const id of ids) tr.flow[id] = 0;
-  for (const seg of cfg.segments) {
+  for (const seg of mk.segments) {
     tr.seg[seg.id] = { by: {}, refused: 0, noStock: 0, demand: 0 };
     for (const id of ids) tr.seg[seg.id].by[id] = 0;
   }

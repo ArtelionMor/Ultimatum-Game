@@ -10,16 +10,15 @@ export function createRival(def) {
     id: def.id, isAI: true,
     price: def.start_price, quality: def.quality,
     stock: def.stock_cap / 2, stockCap: def.stock_cap, prodRate: def.prod_per_min,
-    revenue: 0,
+    revenue: 0, brand: 0,
   };
 }
 
 const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x));
-const round05 = x => Math.round(x * 2) / 2;
 
 // `ctx` = { you, sellers, shares, rng }
-export function repriceRival(product, def, r, ctx) {
-  const floor = unitCost(product, r.quality) * (1 + def.price_floor_margin);
+export function repriceRival(mk, def, r, ctx) {
+  const floor = unitCost(mk, r.quality) * (1 + def.price_floor_margin);
   let p = r.price;
   if (def.behavior === 'undercut') {
     // Always a bit under the player, never above its own list price.
@@ -36,7 +35,9 @@ export function repriceRival(product, def, r, ctx) {
     for (const s of ctx.sellers) if (s.id !== r.id && (ctx.shares[s.id] || 0) > best) { best = ctx.shares[s.id] || 0; leader = s; }
     if (leader) p = leader.price * (1 + (ctx.rng() * 2 - 1) * def.behavior_param);
   }
-  r.price = Math.max(Math.ceil(floor * 2) / 2, round05(p));
+  // Snap to the market's price step; never under the floor.
+  const step = mk.price_step, snap = x => Math.round(x * 100) / 100;
+  r.price = snap(Math.max(Math.ceil(floor / step - 1e-9) * step, Math.round(p / step) * step));
 }
 
 export function upgradeRival(def, r) {
