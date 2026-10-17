@@ -26,7 +26,14 @@ Puis ouvrir http://localhost:8795.
    - Une tâche remplie se **valide** dans le panneau 📋 (petite récompense).
    - Toutes validées → **Niveau suivant**, qui donne une récompense et **débloque** de nouvelles machines et produits.
    - Le bouton « Aller » d'une tâche emmène là où elle se fait.
-5. **Monopole** (pas d'écran de victoire) : tenir 80 % d'un marché pendant 20 s donne le monopole. Il apporte un effet visuel et un **bonus d'attrait** qui fidélise les clients. Les rivaux peuvent aussi prendre un monopole.
+5. **Recettes et enchères** (niveau 3+) :
+   - chaque machine suit une recette : par ex. Pressage de base 2 🍋 → 1 🧃, Confiturerie 3 🍓 → 1 🍯, fusion 3 → 1 ★+1 ;
+   - l'onglet **Enchères** met en vente des **recettes alternatives** plus avantageuses (moins d'ingrédients, plus de sorties, plus rapide, ou Cueillette qui sort du ★2), sur des cartes avec rareté (C, PC, R, SR, UR, L), mise et chrono ;
+   - tu enchéris (ta mise est bloquée, et rendue si tu es dépassé) ; les rivaux du marché enchérissent aussi, jusqu'à un maximum secret ;
+   - un rival qui gagne une recette **se renforce** (qualité et production) ; il la remet parfois en vente ;
+   - **Offres** : tu peux proposer un prix à un rival pour lui racheter une recette (il répond après quelques secondes), et les rivaux te font des offres pour les tiennes (Vendre / Refuser) ;
+   - on choisit la recette d'une machine dans son widget (⇄).
+6. **Monopole** (pas d'écran de victoire) : tenir 80 % d'un marché pendant 20 s donne le monopole. Il apporte un effet visuel et un **bonus d'attrait** qui fidélise les clients. Les rivaux peuvent aussi prendre un monopole.
 
 ## Écrans
 - **Haut** : ⭐ niveau, barre des tâches du niveau (bouton 📋, qui pulse quand une tâche est à valider), argent et revenu/min, et une ligne « 👉 » qui dit quoi faire maintenant (sinon : la prochaine tâche).
@@ -42,6 +49,7 @@ Puis ouvrir http://localhost:8795.
   - **Pan** : glisser sur le sol vide sans outil, deux doigts avec n'importe quel outil, clic droit/molette sur PC.
   - Icônes : 💤 = attend sa matière, ⛔ = sortie bloquée (pas de tapis, ou stock plein).
 - **Marché** (débloqué à la 1re vente) : onglets de ressources (👑 = ton monopole, ⚠️ = celui d'un rival), bandeau monopole, prix (± / curseur), marge, qualité, cartes camembert.
+- **Enchères** (niveau 3) : sous-onglets 🔨 Enchères (cartes en cours), 📜 Recettes (les tiennes, et celles des rivaux avec des boutons d'offre), ✉️ Offres (offres reçues).
 - Les nouveautés arrivent une par une, avec une pastille et un toast : Marché → Pressage → Embouteillage → améliorations → stock → cartes segments → Outcomes supplémentaires.
 
 ## Formule de demande (`src/market.js`, `src/monopoly.js`)
@@ -102,6 +110,9 @@ Plancher : `coût unitaire × (1 + price_floor_margin)`, arrondi au pas de prix 
 | `reveal.refine_after_sold` | ventes avant de débloquer l'Amélioration |
 | `rivals[]` (`market`, `behavior`, prix, qualité, production, `prod_per_level`, `quality_per_level`) | rivaux de chaque marché et leur progression par niveau du joueur |
 | `ai.price_interval_s` / `level_tau_s` | nervosité des rivaux, vitesse à laquelle ils rejoignent leur cible |
+| `recipes[]` (`machine`, `base`, `rarity`, `inputs`, `outputs`, `rate_mult`, `out_tier`, `value`) | recettes de base et alternatives ; `value` sert de prix de référence aux enchères et aux offres |
+| `rarities[]` (`color`, `ai_max`) | couleur des cartes et jusqu'où les rivaux peuvent monter (× valeur) |
+| `auction.*` | ouverture (niveau), nombre et fréquence des lots, durée, mise de départ, surenchère minimum, intérêt des rivaux, revente, offres reçues/envoyées, bonus d'un rival par recette possédée |
 | `levels[]` (`level`, `unlock`, `reward`) | ce que chaque niveau débloque (ids de machines séparés par des espaces) et rapporte |
 | `tasks[]` (`level`, `type`, `param`, `target`, `reward`) | tâches de chaque niveau ; types : `build`, `sell`, `tier`, `upgrade`, `share`, `earn`, `stock`, `monopoly` |
 | `reveal.*` | rythme de la révélation progressive |
@@ -118,9 +129,10 @@ src/factory.js         stock, coût unitaire, production abstraite des rivaux
 src/ai.js              comportement des rivaux
 src/sim.js             état + tick pur : grille → stocks → 3 marchés ; actions du joueur
 src/progress.js        niveau joueur, tâches, déblocages (pur)
+src/auction.js         enchères de recettes, offres d'achat/vente avec les rivaux (pur)
 src/reveal.js          révélation progressive des éléments d'interface
 src/main.js            boucle, onglets, indices, effets de monopole, sauvegarde
-src/ui/*.js            hud, tâches, usine (canvas + pan), marché, debug, effets, sons
+src/ui/*.js            hud, tâches, usine (canvas + pan), marché, enchères, debug, effets, sons
 tools/                 check-market.js, bot-run.js
 assets/kenney/         sous-ensemble des packs Kenney (CC0, voir License.txt)
 ```
@@ -144,5 +156,10 @@ assets/kenney/         sous-ensemble des packs Kenney (CC0, voir License.txt)
 - **Tâches cumulatives** : « Vends 25 jus » compte toutes les ventes depuis le début, pas seulement celles du niveau.
 - Les **anciennes sauvegardes** sont placées au plus haut niveau dont elles utilisent déjà une machine ; les tâches des niveaux précédents sont considérées faites.
 - Une sauvegarde **impossible à charger** est mise de côté (`mu_v2_save_backup` dans le localStorage) au lieu d'être écrasée.
-- Le bot de `bot-run` ignore les niveaux (il reste niveau 1, donc ses rivaux aussi).
+- Le bot de `bot-run` ignore les niveaux (il reste niveau 1, donc ses rivaux aussi) et les enchères.
+- **Recette d'une machine à plusieurs entrées** : elle prend les N premiers objets de son tampon ; le produit garde le ★ le plus bas des ingrédients.
+- Changer de recette vide le tampon de la machine (les ingrédients en attente sont perdus).
+- Les rivaux n'ont pas d'argent modélisé : ils enchérissent jusqu'à leur maximum secret.
+- Une recette vendue à un rival remet tes machines qui l'utilisaient en recette de base.
+- Les recettes alternatives ne sont mises en vente que pour des machines que tu as déjà débloquées.
 - Textes non polis : une passe de localisation est prévue.

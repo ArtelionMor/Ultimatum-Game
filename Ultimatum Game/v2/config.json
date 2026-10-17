@@ -52,6 +52,45 @@
     {"id":"refine_jam","group":"jam","kind":"refine","name":"Confiture du chef","icon":"✨","color":"#6e5424","input_stage":6,"output_stage":6,"merge_n":3,"max_tier":5,"cost":700,"cost_mult":1.6,"base_rate":20,"rate_mult":1.3,"up_cost":420,"up_cost_mult":1.4},
     {"id":"outcome","group":null,"kind":"sink","name":"Outcome","icon":"📤","color":"#3a3f52","sink":true,"input_stage":null,"output_stage":null,"cost":60,"cost_mult":2,"base_rate":0,"rate_mult":1,"up_cost":0,"up_cost_mult":1}
   ],
+  "recipes": [
+    {"id":"b_harvest","machine":"harvest","name":"Cueillette","base":true,"rarity":"","inputs":0,"outputs":1,"rate_mult":1,"out_tier":1,"value":0},
+    {"id":"b_press","machine":"press","name":"Pressage","base":true,"rarity":"","inputs":2,"outputs":1,"rate_mult":1,"out_tier":1,"value":0},
+    {"id":"b_bottle","machine":"bottle","name":"Embouteillage","base":true,"rarity":"","inputs":1,"outputs":1,"rate_mult":1,"out_tier":1,"value":0},
+    {"id":"b_harvest_orange","machine":"harvest_orange","name":"Orangeraie","base":true,"rarity":"","inputs":0,"outputs":1,"rate_mult":1,"out_tier":1,"value":0},
+    {"id":"b_press_orange","machine":"press_orange","name":"Presse-agrumes","base":true,"rarity":"","inputs":2,"outputs":1,"rate_mult":1,"out_tier":1,"value":0},
+    {"id":"b_harvest_berry","machine":"harvest_berry","name":"Fraiseraie","base":true,"rarity":"","inputs":0,"outputs":1,"rate_mult":1,"out_tier":1,"value":0},
+    {"id":"b_jam","machine":"jam","name":"Confiturerie","base":true,"rarity":"","inputs":3,"outputs":1,"rate_mult":1,"out_tier":1,"value":0},
+    {"id":"b_refine_fruit","machine":"refine_fruit","name":"Fusion ×3","base":true,"rarity":"","inputs":3,"outputs":1,"rate_mult":1,"out_tier":1,"value":0},
+    {"id":"b_refine_juice","machine":"refine_juice","name":"Fusion ×3","base":true,"rarity":"","inputs":3,"outputs":1,"rate_mult":1,"out_tier":1,"value":0},
+    {"id":"b_refine_bottle","machine":"refine_bottle","name":"Fusion ×3","base":true,"rarity":"","inputs":3,"outputs":1,"rate_mult":1,"out_tier":1,"value":0},
+    {"id":"b_refine_orange","machine":"refine_orange","name":"Fusion ×3","base":true,"rarity":"","inputs":3,"outputs":1,"rate_mult":1,"out_tier":1,"value":0},
+    {"id":"b_refine_ojuice","machine":"refine_ojuice","name":"Fusion ×3","base":true,"rarity":"","inputs":3,"outputs":1,"rate_mult":1,"out_tier":1,"value":0},
+    {"id":"b_refine_berry","machine":"refine_berry","name":"Fusion ×3","base":true,"rarity":"","inputs":3,"outputs":1,"rate_mult":1,"out_tier":1,"value":0},
+    {"id":"b_refine_jam","machine":"refine_jam","name":"Fusion ×3","base":true,"rarity":"","inputs":3,"outputs":1,"rate_mult":1,"out_tier":1,"value":0},
+    {"id":"a_press_fine","machine":"press","name":"Pressage fin","base":false,"rarity":"R","inputs":3,"outputs":2,"rate_mult":1,"out_tier":1,"value":120},
+    {"id":"a_press_full","machine":"press","name":"Presse intégrale","base":false,"rarity":"SR","inputs":1,"outputs":1,"rate_mult":1,"out_tier":1,"value":260},
+    {"id":"a_harvest_turbo","machine":"harvest","name":"Cueillette au peigne","base":false,"rarity":"PC","inputs":0,"outputs":1,"rate_mult":1.5,"out_tier":1,"value":70},
+    {"id":"a_harvest_bio","machine":"harvest","name":"Citrons bio","base":false,"rarity":"UR","inputs":0,"outputs":1,"rate_mult":0.8,"out_tier":2,"value":520},
+    {"id":"a_bottle_fast","machine":"bottle","name":"Cadence double","base":false,"rarity":"R","inputs":1,"outputs":1,"rate_mult":2,"out_tier":1,"value":200},
+    {"id":"a_bottle_magnum","machine":"bottle","name":"Magnum partagé","base":false,"rarity":"SR","inputs":2,"outputs":3,"rate_mult":1,"out_tier":1,"value":340},
+    {"id":"a_refine_fruit","machine":"refine_fruit","name":"Tri expert","base":false,"rarity":"UR","inputs":2,"outputs":1,"rate_mult":1,"out_tier":1,"value":450},
+    {"id":"a_refine_juice","machine":"refine_juice","name":"Affinage express","base":false,"rarity":"SR","inputs":3,"outputs":1,"rate_mult":2,"out_tier":1,"value":300},
+    {"id":"a_orange_turbo","machine":"harvest_orange","name":"Orangers greffés","base":false,"rarity":"C","inputs":0,"outputs":1,"rate_mult":1.3,"out_tier":1,"value":90},
+    {"id":"a_press_orange","machine":"press_orange","name":"Presse à froid","base":false,"rarity":"SR","inputs":1,"outputs":1,"rate_mult":1,"out_tier":1,"value":380},
+    {"id":"a_refine_orange","machine":"refine_orange","name":"Calibrage laser","base":false,"rarity":"UR","inputs":2,"outputs":1,"rate_mult":1,"out_tier":1,"value":600},
+    {"id":"a_berry_bio","machine":"harvest_berry","name":"Fraises de plein champ","base":false,"rarity":"R","inputs":0,"outputs":1,"rate_mult":0.7,"out_tier":2,"value":500},
+    {"id":"a_jam_light","machine":"jam","name":"Confiture allégée","base":false,"rarity":"SR","inputs":2,"outputs":1,"rate_mult":1,"out_tier":1,"value":700},
+    {"id":"a_jam_grandma","machine":"jam","name":"Recette de mamie","base":false,"rarity":"L","inputs":2,"outputs":2,"rate_mult":1,"out_tier":1,"value":1600},
+    {"id":"a_refine_jam","machine":"refine_jam","name":"Cuisson lente","base":false,"rarity":"L","inputs":2,"outputs":1,"rate_mult":1.3,"out_tier":1,"value":1800}
+  ],
+  "rarities": [
+    {"id":"C","name":"Commune","color":"#8fa0b5","ai_max":1},
+    {"id":"PC","name":"Peu commune","color":"#5aa9ff","ai_max":1.1},
+    {"id":"R","name":"Rare","color":"#9b6bdf","ai_max":1.2},
+    {"id":"SR","name":"Super rare","color":"#e05a8a","ai_max":1.3},
+    {"id":"UR","name":"Ultra rare","color":"#e8833a","ai_max":1.45},
+    {"id":"L","name":"Légendaire","color":"#ffcf4a","ai_max":1.6}
+  ],
   "player": {"start_money":60,"start_quality":1,"quality_max":5,"stock_base":30,"stock_mult":1.5,"stock_base_cost":40,"stock_cost_mult":1.6},
   "rivals": [
     {"market":"fruit","id":"orchard","name":"Le Verger Géant","icon":"🌳","color":"#e8833a","desc":"Des citrons à la tonne, moins chers que les tiens.","behavior":"undercut","start_price":1.2,"price_floor_margin":0.1,"behavior_param":0.05,"quality":1,"quality_max":1.5,"prod_per_min":280,"stock_cap":220,"prod_per_level":0.15,"quality_per_level":0.12},
@@ -77,6 +116,7 @@
     {"market":"jam","id":"monkey","name":"Bocal Copieur","icon":"🐒","color":"#4aa3c7","desc":"Imite le leader, à ±5 %.","behavior":"follow","start_price":12,"price_floor_margin":0.1,"behavior_param":0.05,"quality":2.5,"quality_max":3.5,"prod_per_min":152,"stock_cap":95,"prod_per_level":0.15,"quality_per_level":0.12}
   ],
   "ai": {"price_interval_s":8,"level_tau_s":60},
+  "auction": {"unlock_level":3,"max_lots":3,"lot_every_s":40,"duration_s":120,"start_bid":0.3,"raise":0.1,"ai_bid_every_s":7,"ai_interest":0.6,"extend_s":10,"resale_chance":0.3,"offer_every_s":75,"offer_ttl_s":60,"offer_price":1.1,"reply_s":6,"accept_at":1,"rival_bonus_quality":0.25,"rival_bonus_prod":0.15},
   "levels": [
     {"level":1,"unlock":"harvest","reward":0},
     {"level":2,"unlock":"press","reward":60},

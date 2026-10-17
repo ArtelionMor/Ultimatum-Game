@@ -54,6 +54,15 @@
       <div id="cards" class="cards"></div>
       <div id="card-dots" class="dots hidden"></div>
     </section>
+
+    <section id="screen-auction" class="screen">
+      <div id="auc-tabs" class="subtabs">
+        <button data-sub="lots" class="active">🔨 Enchères</button>
+        <button data-sub="mine">📜 Recettes</button>
+        <button data-sub="offers">✉️ Offres<span class="dot hidden" id="auc-offers-dot"></span></button>
+      </div>
+      <div id="auc-body"></div>
+    </section>
   </main>
   <div id="edit-widget" class="hidden"></div>
   <div id="confirm" class="overlay hidden">
@@ -74,6 +83,7 @@
   <nav id="tabs">
     <button class="tab active" data-tab="factory">🏭 Usine</button>
     <button class="tab locked" data-tab="market"><span class="tab-label">🔒 Marché</span><span class="dot hidden"></span></button>
+    <button class="tab hidden" data-tab="auction"><span class="tab-label">🔨 Enchères</span><span class="dot hidden"></span></button>
   </nav>
 
   <div id="fx"></div>

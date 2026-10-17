@@ -51,8 +51,12 @@ export function rivalTarget(def, level) {
   };
 }
 
-export function approachRival(def, r, level, dt, tau) {
+// `bonus` = { quality, prod } added by the recipes this rival owns.
+export function approachRival(def, r, level, dt, tau, bonus = { quality: 0, prod: 0 }) {
   const t = rivalTarget(def, level), k = 1 - Math.exp(-dt / tau);
+  t.prodRate *= 1 + bonus.prod;
+  t.stockCap *= 1 + bonus.prod;
+  t.quality = Math.min(5, t.quality + bonus.quality);
   r.prodRate += (t.prodRate - r.prodRate) * k;
   r.stockCap += (t.stockCap - r.stockCap) * k;
   r.quality += (t.quality - r.quality) * k;

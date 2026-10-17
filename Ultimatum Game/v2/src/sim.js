@@ -11,6 +11,7 @@ import { createGrid, stepGrid, placeCost, machineDef, machineRate, upgradeCost, 
   placeMachine, placeBelt, removeMachine, removeBelt, beltAt, countOf } from './grid.js';
 import { createRival, repriceRival, approachRival } from './ai.js';
 import { initProgress, migrateProgress } from './progress.js';
+import { createAuction, stepAuction, rivalRecipeCount } from './auction.js';
 import { createBrand, stepBrand } from './monopoly.js';
 
 export const SAVE_VERSION = 3;
@@ -41,6 +42,7 @@ export function newGame(cfg, seed = 12345) {
     t: 0, money: cfg.player.start_money,
     grid: createGrid(cfg), stockLvl: 1,
     mk: {},
+    auc: createAuction(),
     stats: { sold: {}, earned: 0, upgrades: 0, priceChanges: 0, stockFullSeen: false, delivered: {}, built: {}, bestTier: {}, bestShare: {}, monopolies: {} },
     unlocked: {}, seen: {}, lastReveal: -999,
   };
@@ -99,9 +101,11 @@ export function migrate(cfg, st) {
   for (const m of st.grid.machines) {
     const d = machineDef(cfg, m.type);
     if (typeof m.buf === 'number') m.buf = Array.from({ length: m.buf }, () => item(d.input_stage ?? 0, 1));
-    m.out = up(m.out);
+    if (!Array.isArray(m.out)) m.out = m.out === null || m.out === undefined ? [] : [up(m.out)];
+    if (m.recipe === undefined) m.recipe = null;
   }
   for (const k in st.grid.belts) st.grid.belts[k].item = up(st.grid.belts[k].item);
+  st.auc ||= createAuction();
   st.stats.bestTier ||= {};
   st.stats.bestShare ||= {};
   st.stats.monopolies ||= {};
@@ -183,8 +187,13 @@ export function step(cfg, st, dt) {
         if (r.price !== old) ev.push({ type: 'rivalPrice', market: id, id: r.id, from: old, to: r.price });
       });
     }
-    defs.forEach((def, i) => approachRival(def, m.rivals[i], st.level, dt, cfg.ai.level_tau_s));
+    defs.forEach((def, i) => {
+      const n = rivalRecipeCount(st, `${id}:${def.id}`);
+      approachRival(def, m.rivals[i], st.level, dt, cfg.ai.level_tau_s,
+        { quality: n * cfg.auction.rival_bonus_quality, prod: n * cfg.auction.rival_bonus_prod });
+    });
   }
+  ev.push(...stepAuction(cfg, st, dt, rng(st)));
   return ev;
 }
 

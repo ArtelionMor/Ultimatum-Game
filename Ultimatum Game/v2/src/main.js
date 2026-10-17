@@ -10,6 +10,8 @@ import { initHud, renderHud } from './ui/hud.js';
 import { initMarket, renderMarket, openMarkets } from './ui/market-view.js';
 import { initFactory, renderFactory, currentTool, openToolMenu } from './ui/factory-view.js';
 import { initTasks } from './ui/tasks.js';
+import { initAuction, renderAuction } from './ui/auction-view.js';
+import { isOpen as auctionOpen, rivalByRef } from './auction.js';
 import { initDebug } from './ui/debug.js';
 import { toast, floatText } from './ui/fx.js';
 import { play } from './ui/sound.js';
@@ -53,6 +55,7 @@ async function boot() {
   initFactory(G);
   initDebug(G);
   initTasks(G);
+  initAuction(G);
   initTabs();
   render();
   startLoop();
@@ -111,6 +114,7 @@ function initTabs() {
 function showTab(tab) {
   G.tab = tab;
   if (tab === 'market') G.st.seen.market = true;
+  if (tab === 'auction') G.st.seen.auction = true;
   document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === 'screen-' + tab));
   $('app').querySelector('main').scrollTop = 0;
@@ -164,8 +168,18 @@ const holdingMarkets = () => G.cfg.markets.filter(r => { const b = G.st.mk[r.id]
 
 const nameOf = (market, id) => id === 'you' ? 'Tu' : G.cfg.rivals.find(r => r.market === market && r.id === id)?.name;
 
+const recipeName = id => G.cfg.recipes.find(x => x.id === id)?.name;
+const refName = ref => { const r = rivalByRef(G.cfg, ref); return r ? `${r.icon} ${r.name}` : ref; };
+
 function handle(e) {
   const r = e.market && G.cfg.markets.find(m => m.id === e.market);
+  // Auction / trades
+  if (e.type === 'outbid') return toast(`⚠️ ${refName(e.by)} te surenchérit sur « ${recipeName(e.recipe)} ». Ta mise t’est rendue.`);
+  if (e.type === 'lotWon') { bigFlash('📜 RECETTE GAGNÉE !'); return toast(`🎉 « ${recipeName(e.recipe)} » est à toi : choisis-la dans le widget d’une machine (⇄).`); }
+  if (e.type === 'lotLost') return toast(`💸 ${refName(e.by)} remporte « ${recipeName(e.recipe)} » pour ${money(e.price)} et se renforce.`);
+  if (e.type === 'offerIn') return toast(`✉️ ${refName(e.from)} veut racheter ta recette « ${recipeName(e.recipe)} » (onglet Enchères).`);
+  if (e.type === 'offerAccepted') return toast(`🤝 ${refName(e.from)} accepte : « ${recipeName(e.recipe)} » est à toi pour ${money(e.price)}.`);
+  if (e.type === 'offerRefused') return toast(`🙅 ${refName(e.from)} refuse ton offre pour « ${recipeName(e.recipe)} ».`);
   if (e.type === 'sale') saleAcc += e.gain;
   else if (e.type === 'rivalPrice') {
     const key = e.market + e.id;
@@ -250,7 +264,16 @@ function render() {
   mt.classList.toggle('locked', !st.unlocked.market);
   mt.querySelector('.tab-label').textContent = st.unlocked.market ? '📈 Marché' : '🔒 Marché';
   mt.querySelector('.dot').classList.toggle('hidden', !(st.unlocked.market && !st.seen.market) && !(st.unlocked.segments && !st.seen.segments && G.tab !== 'market'));
+  // Auction tab: opens with the player level.
+  const at = document.querySelector('.tab[data-tab="auction"]');
+  const open = auctionOpen(G.cfg, st);
+  at.classList.toggle('hidden', !open);
+  if (open && !st.unlocked.auctionTab) { st.unlocked.auctionTab = true; toast('🔨 L’hôtel des enchères est ouvert : achète des recettes plus avantageuses (onglet Enchères).'); }
+  at.querySelector('.dot').classList.toggle('hidden', !(open && (!st.seen.auction || st.auc.offersIn.length) && G.tab !== 'auction'));
+  // Factory overlays belong to the factory screen only.
+  if (G.tab !== 'factory') { $('edit-widget').classList.add('hidden'); $('tool-menu').classList.add('hidden'); }
   if (G.tab === 'market') renderMarket();
+  else if (G.tab === 'auction') renderAuction();
   else renderFactory();
 }
 

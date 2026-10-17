@@ -4,8 +4,10 @@
 // An item is a small int: stage × 8 + tier. Stages: 0 = fruit, 1 = juice,
 // 2 = bottle; tier = quality ★1..★5. A "make" machine takes items of its
 // `input_stage` on its input port and pushes `output_stage` items (same tier)
-// out of its output port. A "refine" machine merges `merge_n` items of one
-// tier into one item of the next tier. An Outcome (`sink: true`, 2×2, movable,
+// out of its output port. A "refine" machine merges items of one tier into
+// items of the next tier. How many go in / come out, the speed and a
+// harvester's output ★ come from the machine's recipe (cfg.recipes; m.recipe,
+// null = the base recipe). Finished items wait in the m.out queue. An Outcome (`sink: true`, 2×2, movable,
 // one placed at start) takes any item from any side and sends it to its market.
 //
 // Rotation r = flow direction: 0 → right, 1 → down, 2 → left, 3 → up.
@@ -21,10 +23,19 @@ const SIZE = 2;
 
 export function machineDef(cfg, type) { return cfg.machines.find(m => m.id === type); }
 
+const baseCache = new WeakMap();
+export function baseRecipe(cfg, type) {
+  let c = baseCache.get(cfg);
+  if (!c) { c = {}; baseCache.set(cfg, c); }
+  return c[type] || (c[type] = cfg.recipes.find(r => r.machine === type && r.base) || { inputs: 1, outputs: 1, rate_mult: 1, out_tier: 1 });
+}
+export const recipeOf = (cfg, m) => (m.recipe && cfg.recipes.find(r => r.id === m.recipe)) || baseRecipe(cfg, m.type);
+export const recipesFor = (cfg, type) => cfg.recipes.filter(r => r.machine === type);
+
 export function createGrid(cfg) {
   const g = cfg.grid;
   const grid = { cols: g.cols, rows: g.rows, machines: [], belts: {}, nextId: 1, v: 0 };
-  grid.machines.push({ id: 0, type: 'outcome', x: g.outcome_x, y: g.outcome_y, rot: 3, lvl: 1, buf: [], out: null, prog: 0, status: 'ok' });
+  grid.machines.push({ id: 0, type: 'outcome', x: g.outcome_x, y: g.outcome_y, rot: 3, lvl: 1, buf: [], out: [], prog: 0, status: 'ok' });
   return grid;
 }
 
@@ -111,7 +122,7 @@ export function moveMachine(grid, m, x, y) {
 export function placeMachine(grid, type, x, y, rot) {
   if (!canPlaceMachine(grid, x, y)) return null;
   const broken = clearBelts(grid, x, y);
-  const m = { id: grid.nextId++, type, x, y, rot, lvl: 1, buf: [], out: null, prog: 0, status: 'idle', broken };
+  const m = { id: grid.nextId++, type, x, y, rot, lvl: 1, recipe: null, buf: [], out: [], prog: 0, status: 'idle', broken };
   grid.machines.push(m);
   changed(grid);
   return m;
@@ -155,7 +166,6 @@ export function removeMachine(grid, m) {
 export function setMachineRot(grid, m, rot) {
   if (m.type === 'outcome' || m.rot === rot) return false;
   m.rot = rot;
-  m.out = null;
   changed(grid);
   return true;
 }
@@ -164,7 +174,6 @@ export function setMachineRot(grid, m, rot) {
 export function rotateMachine(grid, m) {
   if (m.type === 'outcome') return false;
   m.rot = (m.rot + 1) % 4;
-  m.out = null;
   changed(grid);
   return true;
 }
@@ -191,7 +200,7 @@ function accept(cfg, grid, sx, sy, tx, ty, it, ctx) {
     return true;
   }
   const p = ports(m);
-  const cap = d.kind === 'refine' ? d.merge_n * 2 : cfg.grid.machine_buffer;
+  const cap = Math.max(cfg.grid.machine_buffer, recipeOf(cfg, m).inputs * 2);
   if (p.in[0] !== sx || p.in[1] !== sy || d.input_stage !== stageOf(it) || m.buf.length >= cap) return false;
   m.buf.push(it);
   return true;
@@ -217,18 +226,25 @@ function beltOrder(grid) {
   return list;
 }
 
-// What a machine would do next: { use: [indices in buf], out: item } or null.
-function nextJob(d, m) {
-  if (d.input_stage === null) return { use: [], out: item(d.output_stage, 1) };
+// What a machine would do next: { use: [indices in buf], out: [items] } or null.
+const many = (n, it) => Array.from({ length: n }, () => it);
+function nextJob(d, m, r) {
+  if (d.input_stage === null) return { use: [], out: many(r.outputs, item(d.output_stage, r.out_tier)) };
+  if (d.kind !== 'refine') {
+    // Takes the first `inputs` items; the product keeps the lowest ★ used.
+    if (m.buf.length < r.inputs) return null;
+    const use = [...Array(r.inputs).keys()];
+    const tier = Math.min(...use.map(i => tierOf(m.buf[i])));
+    return { use, out: many(r.outputs, item(d.output_stage, tier)) };
+  }
   if (!m.buf.length) return null;
-  if (d.kind !== 'refine') return { use: [0], out: item(d.output_stage, tierOf(m.buf[0])) };
   // Refine: top-tier items pass straight through; else merge the lowest full tier.
   const top = m.buf.findIndex(it => tierOf(it) >= d.max_tier);
-  if (top >= 0) return { use: [top], out: m.buf[top], instant: true };
+  if (top >= 0) return { use: [top], out: [m.buf[top]], instant: true };
   const byTier = {};
   m.buf.forEach((it, i) => (byTier[tierOf(it)] ||= []).push(i));
-  for (let t = 1; t < d.max_tier; t++) if ((byTier[t]?.length || 0) >= d.merge_n)
-    return { use: byTier[t].slice(0, d.merge_n), out: item(d.output_stage, t + 1) };
+  for (let t = 1; t < d.max_tier; t++) if ((byTier[t]?.length || 0) >= r.inputs)
+    return { use: byTier[t].slice(0, r.inputs), out: many(r.outputs, item(d.output_stage, t + 1)) };
   return null;
 }
 
@@ -246,10 +262,11 @@ export function stepGrid(cfg, grid, dt, ctx) {
   for (const m of grid.machines) {
     const d = machineDef(cfg, m.type);
     if (d.sink) continue;
-    if (m.out === null) {
-      const job = nextJob(d, m);
+    if (!m.out.length) {
+      const r = recipeOf(cfg, m);
+      const job = nextJob(d, m, r);
       if (job) {
-        m.prog = job.instant ? 1 : m.prog + dt * machineRate(d, m.lvl) / 60;
+        m.prog = job.instant ? 1 : m.prog + dt * machineRate(d, m.lvl) * r.rate_mult / 60;
         if (m.prog >= 1) {
           m.prog = 0;
           m.buf = m.buf.filter((_, i) => !job.use.includes(i));
@@ -263,9 +280,9 @@ export function stepGrid(cfg, grid, dt, ctx) {
         m.status = m.wait > 3 ? 'starved' : 'ok';
       }
     }
-    if (m.out !== null) {
+    if (m.out.length) {
       const p = ports(m);
-      if (accept(cfg, grid, p.outCell[0], p.outCell[1], p.out[0], p.out[1], m.out, ctx)) { m.out = null; m.status = 'ok'; }
+      if (accept(cfg, grid, p.outCell[0], p.outCell[1], p.out[0], p.out[1], m.out[0], ctx)) { m.out.shift(); m.status = 'ok'; }
       else m.status = 'blocked';
     }
   }
@@ -276,7 +293,9 @@ export function stageCapacity(cfg, grid, stage) {
   let sum = 0;
   for (const m of grid.machines) {
     const d = machineDef(cfg, m.type);
-    if (!d.sink && d.kind !== 'refine' && d.output_stage === stage) sum += machineRate(d, m.lvl);
+    if (d.sink || d.kind === 'refine' || d.output_stage !== stage) continue;
+    const r = recipeOf(cfg, m);
+    sum += machineRate(d, m.lvl) * r.rate_mult * r.outputs;
   }
   return sum;
 }

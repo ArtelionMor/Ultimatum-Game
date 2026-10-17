@@ -18,6 +18,9 @@
 import { DIRS, ports, machineAt, beltAt, machineDef, placeCost, canPlaceMachine, canPlaceBelt,
   setBeltDir, setMachineRot, moveMachine, countOf, stageOf, tierOf, beltsUnder } from '../grid.js';
 import { buyMachine, buyBelt, sellMachine, sellValue, sellBelt, machineInfo, upgradeMachine, stockInfo, buyStock } from '../sim.js';
+import { usableRecipes } from '../auction.js';
+import { recipeOf } from '../grid.js';
+import { recipeText } from './auction-view.js';
 import { money, perMin, fmt, stars } from '../format.js';
 import { floatText, retrigger } from './fx.js';
 import { play } from './sound.js';
@@ -214,8 +217,10 @@ function renderWidget() {
       const meta = d.kind === 'refine'
         ? `Fusionne ${d.merge_n} ${r.icon} de même ★ en 1 ★ supérieur · ${perMin(info.rate)} · contient ${inside}`
         : `${perMin(info.rate)} · ${STATUS[m.status]}`;
+      const rec = recipeOf(cfg, m), usable = usableRecipes(cfg, st, m.type);
       html = `<div class="ew-title">${d.icon} ${d.name} <span class="muted">Niv. ${m.lvl}</span></div>
         <div class="ew-meta">${meta}</div>
+        <div class="ew-recipe">📜 ${rec.name} · ${recipeText(cfg, rec)}${usable.length > 1 ? ' <button class="btn small" data-act="recipe">⇄</button>' : ''}</div>
         <div class="ew-btns">
           <button class="btn small up-mini ${info.affordable ? '' : 'cant'}" data-act="up">⬆ ${perMin(info.nextRate)} · ${money(info.cost)}</button>
           <button class="btn small danger" data-act="sell">Vendre</button>
@@ -269,6 +274,15 @@ function onWidget(act, btn) {
       G.onAction('upgrade');
     } else floatText(btn, 'Pas assez d\'argent', 'bad');
   } else if (act === 'sell') confirmSell(m);
+  else if (act === 'recipe') {
+    // Next recipe this machine can run (base + the player's alternates).
+    const list = usableRecipes(cfg, st, m.type), cur = recipeOf(cfg, m);
+    const next = list[(list.findIndex(r => r.id === cur.id) + 1) % list.length];
+    m.recipe = next.base ? null : next.id;
+    m.buf = [];   // ingredients of the old recipe are lost
+    play('tick', 0.3);
+    floatText(btn, next.name, 'gold');
+  }
   renderFactory();
 }
 
@@ -672,7 +686,7 @@ function drawMachine(m, now) {
   const p = ports(m), [dx, dy] = DIRS[m.rot];
   if (d.input_stage !== null) arrow(p.inCell, dx, dy, '#ffa53a', -1);
   arrow(p.outCell, dx, dy, '#3ddc84', 1);
-  if (m.out !== null) drawItem(p.outCell[0] * c + c / 2 + dx * c * 0.2, p.outCell[1] * c + c / 2 + dy * c * 0.2, m.out);
+  if (m.out?.length) drawItem(p.outCell[0] * c + c / 2 + dx * c * 0.2, p.outCell[1] * c + c / 2 + dy * c * 0.2, m.out[0]);
 }
 
 // Triangle on the machine edge of cell `cl`, pointing along the flow.
