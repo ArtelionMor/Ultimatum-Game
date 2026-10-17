@@ -8,7 +8,7 @@
 import { marketCfg, stepMarket, createShareTracker, trackShares, marketShares, demandMultiplier } from './market.js';
 import { stockCap, stockCost, unitCost, produce } from './factory.js';
 import { createGrid, stepGrid, placeCost, machineDef, machineRate, upgradeCost, item, stageOf, tierOf,
-  placeMachine, placeBelt, placeSplitter, removeMachine, removeBelt, beltAt, countOf, expandGrid } from './grid.js';
+  placeMachine, placeBelt, placeSplitter, placeCrossing, placeTunnel, beltKind, removeMachine, removeBelt, beltAt, countOf, expandGrid } from './grid.js';
 import { createRival, repriceRival, approachRival } from './ai.js';
 import { initProgress, migrateProgress } from './progress.js';
 import { createAuction, stepAuction, rivalRecipeCount, migrateAuction, newMachineRecipe } from './auction.js';
@@ -273,12 +273,32 @@ export function buySplitter(cfg, st, x, y, dir) {
   return { ok: true, cost };
 }
 
+export function buyCrossing(cfg, st, x, y) {
+  const cost = placeCost(cfg, st.grid, 'crossing');
+  if (st.money < cost) return { ok: false, why: 'money' };
+  if (!placeCrossing(st.grid, x, y)) return { ok: false, why: 'place' };
+  st.money -= cost;
+  st.stats.built.crossing = (st.stats.built.crossing || 0) + 1;
+  return { ok: true, cost };
+}
+
+// Entrance at (x, y), exit `len` cells away in `dir`; one price for the pair.
+export function buyTunnel(cfg, st, x, y, dir, len) {
+  const cost = placeCost(cfg, st.grid, 'tunnel');
+  if (st.money < cost) return { ok: false, why: 'money' };
+  if (!placeTunnel(cfg, st.grid, x, y, dir, len)) return { ok: false, why: 'place' };
+  st.money -= cost;
+  st.stats.built.tunnel = (st.stats.built.tunnel || 0) + 1;
+  return { ok: true, cost };
+}
+
 export function sellBelt(cfg, st, x, y) {
   const b = beltAt(st.grid, x, y);
   if (!b) return 0;
   removeBelt(st.grid, x, y);
-  // A splitter gives back part of what the last one cost.
-  const paid = b.split ? placeCost(cfg, st.grid, 'splitter') : cfg.grid.belt_cost;
+  // Special cells give back part of what the last one cost (a tunnel pair once).
+  const kind = beltKind(b);
+  const paid = kind === 'belt' ? cfg.grid.belt_cost : placeCost(cfg, st.grid, kind);
   const back = Math.floor(paid * cfg.grid.sell_refund);
   st.money += back;
   return back;

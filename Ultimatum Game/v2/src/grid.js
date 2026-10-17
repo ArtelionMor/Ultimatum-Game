@@ -74,11 +74,17 @@ export const countOf = (grid, type) => grid.machines.filter(m => m.type === type
 export const isSink = (cfg, m) => !!machineDef(cfg, m.type)?.sink;
 
 // `first_free`: the first copy of that machine costs nothing (onboarding).
-export const splitterCount = grid => Object.values(grid.belts).filter(b => b.split).length;
+// Special belt cells: splitter, crossing, tunnel (counted by entrance: a pair is one).
+export const beltKind = b => (b.split ? 'splitter' : b.cross ? 'crossing' : b.tunnel ? 'tunnel' : 'belt');
+export const kindCount = (grid, kind) =>
+  Object.values(grid.belts).filter(b => beltKind(b) === kind && (kind !== 'tunnel' || b.tunnel.role === 'in')).length;
 
 export function placeCost(cfg, grid, type) {
   if (type === 'belt') return cfg.grid.belt_cost;
-  if (type === 'splitter') return Math.ceil(cfg.grid.splitter_cost * Math.pow(cfg.grid.splitter_cost_mult, splitterCount(grid)));
+  if (type === 'splitter' || type === 'crossing' || type === 'tunnel') {
+    const g = cfg.grid;
+    return Math.ceil(g[type + '_cost'] * Math.pow(g[type + '_cost_mult'], kindCount(grid, type)));
+  }
   const d = machineDef(cfg, type), n = countOf(grid, type);
   if (d.first_free && n === 0) return 0;
   return Math.ceil(d.cost * Math.pow(d.cost_mult, n));
@@ -155,7 +161,7 @@ export const SPLIT_MODES = ['50', '30', '70', 'prio'];
 // Make the belt at (x, y) a splitter, or place a new one. Returns the belt.
 export function placeSplitter(grid, x, y, dir) {
   let b = beltAt(grid, x, y);
-  if (b?.split) return null;
+  if (b && beltKind(b) !== 'belt') return null;
   if (!b) { if (!canPlaceBelt(grid, x, y)) return null; b = grid.belts[key(x, y)] = { dir, item: null, p: 0 }; }
   b.split = { shape: 'sl', mode: '50', n: [0, 0] };
   changed(grid);
@@ -168,6 +174,44 @@ export function setSplit(grid, x, y, patch) {
   Object.assign(b.split, patch, { n: [0, 0] });
   changed(grid);
   return true;
+}
+
+// --- Crossing -------------------------------------------------------------------
+// Items going left/right and up/down pass straight through without mixing:
+// cross.h / cross.v = { item, p, dir } or null. b.item stays null.
+export function placeCrossing(grid, x, y) {
+  let b = beltAt(grid, x, y);
+  if (b && (b.split || b.cross || b.tunnel)) return null;
+  if (!b) { if (!canPlaceBelt(grid, x, y)) return null; b = grid.belts[key(x, y)] = { dir: 0, item: null, p: 0 }; }
+  b.item = null; b.p = 0;
+  b.cross = { h: null, v: null };
+  changed(grid);
+  return b;
+}
+
+// --- Tunnel ---------------------------------------------------------------------
+// Entrance at (x, y), exit `len` cells further in `dir`; items jump from one to
+// the other, under whatever lies between. Ends store the offset to each other.
+export function canPlaceTunnel(cfg, grid, x, y, dir, len) {
+  if (len < 2 || len > cfg.grid.tunnel_max_gap + 1) return false;
+  const [dx, dy] = DIRS[dir], ex = x + dx * len, ey = y + dy * len;
+  const free = (cx, cy) => { const b = beltAt(grid, cx, cy); return inside(grid, cx, cy) && !machineAt(grid, cx, cy) && (!b || beltKind(b) === 'belt'); };
+  return free(x, y) && free(ex, ey);
+}
+
+export function placeTunnel(cfg, grid, x, y, dir, len) {
+  if (!canPlaceTunnel(cfg, grid, x, y, dir, len)) return null;
+  const [dx, dy] = DIRS[dir], ex = x + dx * len, ey = y + dy * len;
+  grid.belts[key(x, y)] = { dir, item: null, p: 0, tunnel: { role: 'in', dx: ex - x, dy: ey - y } };
+  grid.belts[key(ex, ey)] = { dir, item: null, p: 0, tunnel: { role: 'out', dx: x - ex, dy: y - ey } };
+  changed(grid);
+  return true;
+}
+
+// The other end, or null if the pair got broken (one end moved or built over).
+export function tunnelPartner(grid, x, y, b) {
+  const ox = x + b.tunnel.dx, oy = y + b.tunnel.dy, o = beltAt(grid, ox, oy);
+  return o?.tunnel && o.tunnel.role !== b.tunnel.role && ox + o.tunnel.dx === x && oy + o.tunnel.dy === y ? { x: ox, y: oy, b: o } : null;
 }
 
 // The two output directions [main, second] of a splitter.
@@ -195,8 +239,12 @@ export function setBeltDir(grid, x, y, dir) {
 }
 
 export function removeBelt(grid, x, y) {
-  if (!beltAt(grid, x, y)) return false;
+  const b = beltAt(grid, x, y);
+  if (!b) return false;
   delete grid.belts[key(x, y)];
+  // A tunnel goes as a pair.
+  const o = b.tunnel && tunnelPartner(grid, x, y, b);
+  if (o) delete grid.belts[key(o.x, o.y)];
   changed(grid);
   return true;
 }
@@ -282,6 +330,13 @@ function accept(cfg, grid, sx, sy, tx, ty, it, ctx) {
   if (!inside(grid, tx, ty)) return false;
   const b = beltAt(grid, tx, ty);
   if (b) {
+    if (b.cross) {
+      const d = DIRS.findIndex(([dx, dy]) => tx - sx === dx && ty - sy === dy), lane = d % 2 ? 'v' : 'h';
+      if (d < 0 || b.cross[lane]) return false;
+      b.cross[lane] = { item: it, p: 0, dir: d };
+      return true;
+    }
+    if (b.tunnel?.role === 'out') return false;   // fed by its entrance only
     if (b.item !== null) return false;
     const [dx, dy] = DIRS[b.dir];
     if (tx + dx === sx && ty + dy === sy) return false; // belt points back at the source
@@ -319,6 +374,8 @@ function beltOrder(grid) {
     const [x, y] = k.split(',').map(Number);
     const b = grid.belts[k];
     let best = 0;
+    if (b.cross) return (dist[k] = 0);
+    if (b.tunnel?.role === 'in') { const o = tunnelPartner(grid, x, y, b); return (dist[k] = o ? Math.min(1e9, depth(key(o.x, o.y)) + 1) : 0); }
     for (const d of b.split ? splitDirs(b) : [b.dir]) {
       const nk = key(x + DIRS[d][0], y + DIRS[d][1]);
       if (grid.belts[nk]) best = Math.max(best, Math.min(1e9, depth(nk) + 1));
@@ -358,9 +415,26 @@ export function stepGrid(cfg, grid, dt, ctx) {
   const speed = cfg.grid.belt_speed;
   for (const { x, y, k } of beltOrder(grid)) {
     const b = grid.belts[k];
+    if (b?.cross) {
+      for (const lane of ['h', 'v']) {
+        const c = b.cross[lane];
+        if (!c) continue;
+        c.p = Math.min(1, c.p + speed * dt);
+        if (c.p < 1) continue;
+        const [dx, dy] = DIRS[c.dir];
+        if (accept(cfg, grid, x, y, x + dx, y + dy, c.item, ctx)) b.cross[lane] = null;
+      }
+      continue;
+    }
     if (!b || b.item === null) continue;
     b.p = Math.min(1, b.p + speed * dt);
     if (b.p < 1) continue;
+    if (b.tunnel?.role === 'in') {
+      // Jump to the exit as soon as it is free.
+      const o = tunnelPartner(grid, x, y, b);
+      if (o && o.b.item === null) { o.b.item = b.item; o.b.p = 0; b.item = null; b.p = 0; }
+      continue;
+    }
     if (b.split) {
       const dirs = splitDirs(b);
       for (const i of splitOrder(b)) {

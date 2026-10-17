@@ -19,9 +19,9 @@
 
 import { DIRS, ports, machineAt, beltAt, machineDef, placeCost, canPlaceMachine, canPlaceBelt,
   setBeltDir, setMachineRot, moveMachine, countOf, stageOf, tierOf, beltsUnder,
-  selectRect, groupBox, groupMoveCheck, moveGroup, splitDirs, setSplit, SPLIT_SHAPES, SPLIT_MODES } from '../grid.js';
+  selectRect, groupBox, groupMoveCheck, moveGroup, splitDirs, setSplit, SPLIT_SHAPES, SPLIT_MODES, canPlaceTunnel, tunnelPartner } from '../grid.js';
 import { buyMachine, buyBelt, sellMachine, sellValue, sellBelt, machineInfo, upgradeMachine, stockInfo, buyStock,
-  expandInfo, buyExpand, sellGroup, buySplitter } from '../sim.js';
+  expandInfo, buyExpand, sellGroup, buySplitter, buyCrossing, buyTunnel } from '../sim.js';
 import { usableRecipes, applyRecipeAll, unseenRecipes, equipRecipe } from '../auction.js';
 import { recipeOf } from '../grid.js';
 import { recipeText } from './auction-view.js';
@@ -73,12 +73,12 @@ export function initFactory(game) {
 function buildToolbar() {
   const { cfg } = G;
   const groups = cfg.markets.map(r => `<button class="tool" data-group="${r.id}"><span class="ti">${r.icon}</span><small></small></button>`).join('');
-  const singles = ['outcome', 'belt', 'splitter', 'select'].map(id => {
-    const icon = id === 'belt' ? '⇉' : id === 'splitter' ? '🔀' : id === 'select' ? '⬚' : machineDef(cfg, id).icon;
+  const singles = ['outcome', 'select'].map(id => {
+    const icon = id === 'select' ? '⬚' : machineDef(cfg, id).icon;
     return `<button class="tool" data-tool="${id}"><span class="ti">${icon}</span><small></small></button>`;
   }).join('');
   const bar = $('toolbar');
-  bar.innerHTML = groups + singles;
+  bar.innerHTML = groups + '<button class="tool" data-group="belts"><span class="ti">⇉</span><small></small></button>' + singles;
   bar.querySelectorAll('[data-group]').forEach(b => b.addEventListener('click', () => {
     const g = b.dataset.group;
     if (groupOf(tool) === g) { tool = null; menuGroup = null; }      // put the tool down
@@ -98,7 +98,14 @@ function buildToolbar() {
 
 // Machines unlock with the player level (st.unlocked[machine id]); a product
 // shows up in the toolbar once one of its machines is unlocked.
-const groupOf = id => (id && id !== 'belt' ? machineDef(G.cfg, id)?.group : null) || null;
+// Conveyors (belt, splitter) form their own toolbar group.
+const BELT_TOOLS = [
+  { id: 'belt', icon: '⇉', name: 'Tapis', what: 'Glisse pour tracer' },
+  { id: 'splitter', icon: '🔀', name: 'Splitter', what: 'Partage un tapis en deux' },
+  { id: 'crossing', icon: '➕', name: 'Croisement', what: 'Deux tapis se croisent' },
+  { id: 'tunnel', icon: '🚇', name: 'Tunnel', what: 'Glisse : passe sous ce qui est entre' },
+];
+const groupOf = id => (BELT_TOOLS.some(t => t.id === id) ? 'belts' : id ? machineDef(G.cfg, id)?.group : null) || null;
 const machineUnlocked = d => !!G.st.unlocked[d.id];
 const groupUnlocked = g => G.cfg.machines.some(d => d.group === g && machineUnlocked(d));
 const toolUnlocked = id => id === 'belt' || id === 'splitter' || id === 'select' || machineUnlocked(machineDef(G.cfg, id));
@@ -111,6 +118,13 @@ export function renderFactory() {
   const { cfg, st } = G;
   document.querySelectorAll('#toolbar [data-group]').forEach(b => {
     const g = b.dataset.group, active = groupOf(tool) === g;
+    if (g === 'belts') {
+      const cur = BELT_TOOLS.find(t => t.id === tool);
+      b.classList.toggle('active', active || menuGroup === g);
+      b.querySelector('.ti').textContent = cur ? cur.icon : '⇉';
+      b.querySelector('small').textContent = cur ? cur.name : 'Tapis';
+      return;
+    }
     const make = cfg.machines.find(d => d.group === g && d.kind === 'make');
     b.classList.toggle('hidden', !groupUnlocked(g));
     b.classList.toggle('active', active || menuGroup === g);
@@ -138,7 +152,12 @@ function renderMenu() {
   const menu = $('tool-menu');
   if (!menuGroup || G.tab !== 'factory') { menu.classList.add('hidden'); return; }
   const { cfg, st } = G;
-  const html = cfg.machines.filter(d => d.group === menuGroup).map(d => {
+  const html = menuGroup === 'belts' ? BELT_TOOLS.map(t => {
+    const c = placeCost(cfg, st.grid, t.id);
+    return `<button class="tm-item ${st.money < c ? 'cant' : ''}" data-pick="${t.id}">
+      <span class="tm-icon">${t.icon}</span><span class="tm-text"><b>${t.name}</b><small>${t.what}</small></span>
+      <span class="tm-cost">${costLabel(c)}</span></button>`;
+  }).join('') : cfg.machines.filter(d => d.group === menuGroup).map(d => {
     const open = machineUnlocked(d), c = placeCost(cfg, st.grid, d.id);
     const what = d.kind === 'refine' ? `Amélioration · fusion ${d.merge_n} → ★+1` : 'Production';
     const lock = G.cfg.levels.find(l => (l.unlock || '').split(/\s+/).includes(d.id));
@@ -158,8 +177,10 @@ function renderMenu() {
     }));
   }
   const btn = document.querySelector(`#toolbar [data-group="${menuGroup}"]`);
-  menu.style.left = Math.max(0, btn.offsetLeft) + 'px';
   menu.classList.remove('hidden');
+  // Under its button, kept on screen even when the toolbar is scrolled.
+  const box = menu.offsetParent.getBoundingClientRect(), br = btn.getBoundingClientRect();
+  menu.style.left = Math.max(4, Math.min(box.width - menu.offsetWidth - 4, br.left - box.left)) + 'px';
 }
 
 // One line: each item's stock + the shared "grow storage" button.
@@ -243,6 +264,9 @@ function renderWidget() {
         <div class="sp-row">${SPLIT_SHAPES.map(s => chip('shape:' + s, SHAPE_LABEL[s], b.split.shape === s)).join('')}</div>
         <div class="sp-row">${SPLIT_MODES.map(m => chip('mode:' + m, MODE_LABEL[m], b.split.mode === m)).join('')}</div>
         <div class="ew-btns"><button class="btn small" data-act="rot">⟳</button><button class="btn small danger" data-act="sell">Vendre</button><button class="btn small" data-act="close">✕</button></div>`;
+    } else if (b.cross || b.tunnel) {
+      html = `<div class="ew-title">${b.cross ? '➕ Croisement' : '🚇 Tunnel'}</div>
+        <div class="ew-btns"><button class="btn small danger" data-act="sell">Vendre</button><button class="btn small" data-act="close">✕</button></div>`;
     } else html = `<div class="ew-title">⇉ Tapis</div>
       <div class="ew-btns"><button class="btn small" data-act="rot">⟳</button><button class="btn small danger" data-act="sell">Vendre</button><button class="btn small" data-act="close">✕</button></div>`;
   } else {
@@ -483,6 +507,8 @@ function onDown(e) {
     press = { mode: 'split', cell: p, dir: null, sx, sy };
     return;
   }
+  if (tool === 'crossing') { press = { mode: 'cross', cell: p, sx, sy }; return; }
+  if (tool === 'tunnel') { press = { mode: 'tun', cell: p, dir: 0, len: 0, sx, sy }; return; }
   if (tool === 'belt') {
     const existing = beltAt(grid, p.x, p.y);
     press = { mode: 'belt', last: [p.x, p.y], moved: false, startedOn: !!existing, sx, sy };
@@ -533,6 +559,14 @@ function onMove(e) {
     case 'belt':
       drawBelt(p, e);
       break;
+    case 'tun': {
+      // Drag from the entrance to the exit, in a straight line.
+      const dx = p.x - press.cell.x, dy = p.y - press.cell.y;
+      press.dir = Math.abs(dx) >= Math.abs(dy) ? (dx >= 0 ? 0 : 2) : (dy > 0 ? 1 : 3);
+      press.len = Math.max(Math.abs(dx), Math.abs(dy));
+      press.ok = canPlaceTunnel(G.cfg, G.st.grid, press.cell.x, press.cell.y, press.dir, press.len);
+      break;
+    }
     case 'split': {
       // Drag away from the cell to choose where items flow.
       const dx = p.fx - (press.cell.x + 0.5), dy = p.fy - (press.cell.y + 0.5);
@@ -625,6 +659,23 @@ function onUp(e) {
         if (broken) floatAt(e, `🔨 ${broken} tapis`, 'gold');
         G.onAction('move');
       } else floatAt(e, 'Place occupée', 'bad');
+      break;
+    }
+    case 'cross': {
+      const { x, y } = pr.cell, b = beltAt(grid, x, y);
+      if (b?.cross) { edit = { kind: 'belt', x, y }; break; }
+      const r = buyCrossing(G.cfg, G.st, x, y);
+      if (r.ok) { play('buy'); floatAt(e, `-${money(r.cost)}`, 'bad'); G.onAction('build', 'crossing'); }
+      else floatAt(e, r.why === 'money' ? 'Pas assez d\'argent' : 'Place occupée', 'bad');
+      break;
+    }
+    case 'tun': {
+      const { x, y } = pr.cell, b = beltAt(grid, x, y);
+      if (!pr.len) { if (b?.tunnel) edit = { kind: 'belt', x, y }; else floatAt(e, 'Glisse jusqu\'à la sortie', 'bad'); break; }
+      const r = buyTunnel(G.cfg, G.st, x, y, pr.dir, pr.len);
+      if (r.ok) { lastRot = pr.dir; play('buy'); floatAt(e, `-${money(r.cost)}`, 'bad'); G.onAction('build', 'tunnel'); }
+      else floatAt(e, r.why === 'money' ? 'Pas assez d\'argent'
+        : pr.len > G.cfg.grid.tunnel_max_gap + 1 ? `${G.cfg.grid.tunnel_max_gap} cases max entre les deux` : pr.len < 2 ? 'Trop court' : 'Place occupée', 'bad');
       break;
     }
     case 'split': {
@@ -720,10 +771,8 @@ function draw(now) {
     drawBelt2(x, y, grid.belts[k], t);
   }
   for (const k in grid.belts) {
-    const b = grid.belts[k];
-    if (b.item === null) continue;
     const [x, y] = k.split(',').map(Number);
-    drawBeltItem(x, y, b);
+    drawBeltItems(x, y, grid.belts[k]);
   }
 
   const moving = press && (press.mode === 'drag' || press.mode === 'move' || press.mode === 'turn') ? press.m : null;
@@ -737,6 +786,16 @@ function draw(now) {
     if (edit?.kind === 'belt') { const b = beltAt(grid, edit.x, edit.y); if (b) drawBelt2(edit.x, edit.y, b, t); outline(edit.x * c, edit.y * c, c, c, '#5aa9ff'); }
   }
   if (moving && !ghost) drawMachine(moving, now);
+
+  // Tunnel being drawn: entrance, exit and the hidden path.
+  if (press?.mode === 'tun' && press.len) {
+    const [dx, dy] = DIRS[press.dir], { x, y } = press.cell, col = press.ok ? '#3ddc84' : '#ff5d5d';
+    ctx.save(); ctx.setLineDash([4, 4]); ctx.strokeStyle = col; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo((x + 0.5) * c, (y + 0.5) * c); ctx.lineTo((x + dx * press.len + 0.5) * c, (y + dy * press.len + 0.5) * c); ctx.stroke();
+    ctx.restore();
+    outline(x * c, y * c, c, c, col);
+    outline((x + dx * press.len) * c, (y + dy * press.len) * c, c, c, col);
+  }
 
   // ⬚ rectangle being drawn
   if (press?.mode === 'rect') {
@@ -757,7 +816,7 @@ function draw(now) {
       const b = grid.belts[k]; if (!b) continue;
       const [x, y] = k.split(',').map(Number);
       drawBelt2(x, y, b, t);
-      if (b.item !== null) drawBeltItem(x, y, b);
+      drawBeltItems(x, y, b);
     }
     for (const m of group.machines) drawMachine(m, now);
     const bx = groupBox(group);
@@ -790,6 +849,17 @@ function draw(now) {
   placeWidget();
 }
 
+function drawBeltItems(x, y, b) {
+  const c = CELL;
+  if (b.cross) {
+    for (const lane of ['h', 'v']) {
+      const l = b.cross[lane]; if (!l) continue;
+      const [dx, dy] = DIRS[l.dir];
+      drawItem(x * c + c / 2 + dx * (l.p - 0.5) * c, y * c + c / 2 + dy * (l.p - 0.5) * c, l.item);
+    }
+  } else if (b.item !== null) drawBeltItem(x, y, b);
+}
+
 // Items run along the belt; on a splitter they stop at the centre, where the split happens.
 function drawBeltItem(x, y, b) {
   const c = CELL, [dx, dy] = DIRS[b.dir], f = b.split ? (b.p - 1) / 2 : b.p - 0.5;
@@ -817,8 +887,46 @@ function drawSplitter(x, y, b) {
   });
 }
 
+// Crossing: a plus of two belts with a hub in the middle.
+function drawCrossing(x, y) {
+  const c = CELL, cx = x * c + c / 2, cy = y * c + c / 2;
+  ctx.fillStyle = '#2f3542';
+  ctx.fillRect(x * c + 2, y * c + 2, c - 4, c - 4);
+  ctx.fillStyle = '#4f586d';
+  ctx.fillRect(x * c + 2, cy - 5, c - 4, 10);
+  ctx.fillRect(cx - 5, y * c + 2, 10, c - 4);
+  ctx.fillStyle = '#e6ecf5';
+  ctx.fillRect(cx - 3, cy - 3, 6, 6);
+}
+
+// Tunnel end: dark mouth; the entrance draws the dotted path to its exit.
+function drawTunnelEnd(x, y, b) {
+  const c = CELL, cx = x * c + c / 2, cy = y * c + c / 2;
+  const o = tunnelPartner(G.st.grid, x, y, b);
+  if (b.tunnel.role === 'in' && o) {
+    ctx.save(); ctx.setLineDash([3, 5]); ctx.strokeStyle = 'rgba(184,160,255,.45)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(o.x * c + c / 2, o.y * c + c / 2); ctx.stroke();
+    ctx.restore();
+  }
+  ctx.fillStyle = '#2a2438';
+  roundRect(x * c + 2, y * c + 2, c - 4, c - 4, 6); ctx.fill();
+  ctx.strokeStyle = o ? '#b8a0ff' : '#ff5d5d'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(b.dir * Math.PI / 2);
+  // Arch opening on the side items come from (entrance) or leave by (exit).
+  const side = b.tunnel.role === 'in' ? -1 : 1;
+  ctx.fillStyle = '#0d0b14';
+  ctx.beginPath(); ctx.arc(side * (c / 2 - 6), 0, 9, side > 0 ? Math.PI / 2 : -Math.PI / 2, side > 0 ? -Math.PI / 2 : Math.PI / 2, side > 0); ctx.fill();
+  ctx.fillStyle = '#b8a0ff';
+  ctx.beginPath(); ctx.moveTo(6, 0); ctx.lineTo(-3, -6); ctx.lineTo(-3, 6); ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+
 function drawBelt2(x, y, b, t) {
   if (b.split) return drawSplitter(x, y, b);
+  if (b.cross) return drawCrossing(x, y);
+  if (b.tunnel) return drawTunnelEnd(x, y, b);
   const c = CELL;
   ctx.fillStyle = '#2f3542';
   ctx.fillRect(x * c + 2, y * c + 2, c - 4, c - 4);

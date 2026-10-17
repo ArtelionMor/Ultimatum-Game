@@ -34,7 +34,7 @@
     {"market":"jam","id":"prem","name":"Premium","icon":"💎","demand_per_min":110,"a":0.6,"b":1.5,"c":0.8,"refuse_below":2.5}
   ],
   "monopoly": {"share":0.8,"hold_s":20,"grow_tau_s":30,"decay_tau_s":20,"decay_k":1.5},
-  "grid": {"cols":20,"rows":26,"expand_step":4,"expand_cost":400,"expand_cost_mult":2,"max_cols":64,"outcome_x":9,"outcome_y":12,"belt_cost":0,"splitter_cost":50,"splitter_cost_mult":1.01,"belt_speed":4,"machine_buffer":2,"sell_refund":0.5},
+  "grid": {"cols":20,"rows":26,"expand_step":4,"expand_cost":400,"expand_cost_mult":2,"max_cols":64,"outcome_x":9,"outcome_y":12,"belt_cost":0,"splitter_cost":50,"splitter_cost_mult":1.01,"crossing_cost":50,"crossing_cost_mult":1.01,"tunnel_cost":50,"tunnel_cost_mult":1.01,"tunnel_max_gap":4,"belt_speed":4,"machine_buffer":2,"sell_refund":0.5},
   "machines": [
     {"id":"harvest","group":"fruit","kind":"make","name":"Cueillette","icon":"🍋","color":"#7a8a2e","input_stage":null,"output_stage":0,"first_free":true,"cost":20,"cost_mult":1.45,"base_rate":24,"rate_mult":1.3,"up_cost":15,"up_cost_mult":1.35},
     {"id":"refine_fruit","group":"fruit","kind":"refine","name":"Tri des citrons","icon":"✨","color":"#5f6a24","input_stage":0,"output_stage":0,"merge_n":3,"max_tier":5,"cost":40,"cost_mult":1.6,"base_rate":20,"rate_mult":1.3,"up_cost":25,"up_cost_mult":1.4},
