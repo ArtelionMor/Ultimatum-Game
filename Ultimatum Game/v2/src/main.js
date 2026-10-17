@@ -172,7 +172,11 @@ const holdingMarkets = () => G.cfg.markets.filter(r => { const b = G.st.mk[r.id]
 
 const nameOf = (market, id) => id === 'you' ? 'Tu' : G.cfg.rivals.find(r => r.market === market && r.id === id)?.name;
 
-const recipeName = id => G.cfg.recipes.find(x => x.id === id)?.name;
+// Recipes in messages: rank + machine ("R 🍾 Embouteillage"), which is what the player compares.
+const recipeName = id => {
+  const r = G.cfg.recipes.find(x => x.id === id), d = r && machineDef(G.cfg, r.machine);
+  return r ? `${r.rarity} ${d.icon} ${d.name}` : id;
+};
 const refName = ref => { const r = rivalByRef(G.cfg, ref); return r ? `${r.icon} ${r.name}` : ref; };
 
 function handle(e) {
