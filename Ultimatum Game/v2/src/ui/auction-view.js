@@ -222,9 +222,10 @@ export function renderOfferNotif() {
   const { st } = G, o = st.auc.offersIn[0], box = $('offer-notif');
   $('app').classList.toggle('has-notif', !!o);
   if (!o) { box.classList.add('hidden'); box.dataset.html = ''; return; }
-  const r = rec(o.recipe), more = st.auc.offersIn.length - 1, d = machineDef(G.cfg, r.machine), u = recipeUse(st, r);
-  const tier = `<span class="rc-mini" style="--rar:${rarityOf(G.cfg, r).color}">${r.rarity}</span> ${d.icon} ${d.name} ${eqBadge(r)}`;
-  const html = `<div class="on-text">✉️ <b>${who(o.from)}</b> ${o.retry ? 'revient et ' : ''}veut racheter ta recette ${tier} pour <b>${money(o.price)}</b>${u.using ? ` <span class="muted">· équipée ${u.using}/${u.total}</span>` : ''}${more ? ` <span class="muted">(+${more} autre${more > 1 ? 's' : ''})</span>` : ''}</div>
+  const r = rec(o.recipe), more = st.auc.offersIn.length - 1, d = machineDef(G.cfg, r.machine);
+  const tier = `<span class="rc-mini" style="--rar:${rarityOf(G.cfg, r).color}">${r.rarity}</span> ${d.icon} ${eqBadge(r)}`;
+  // Short: who, which recipe (rank + machine + E), how much.
+  const html = `<div class="on-text">✉️ <b>${who(o.from)}</b> · ${tier} → <b>${money(o.price)}</b>${more ? ` <span class="muted">(+${more})</span>` : ''}</div>
     <div class="on-btns"><button class="btn small danger" data-refuse="${o.id}">Refuser</button><button class="btn small rc-btn" data-accept="${o.id}">Vendre</button></div>`;
   fill(box, html);
   box.classList.remove('hidden');
