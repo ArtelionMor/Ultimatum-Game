@@ -1,5 +1,6 @@
 // Plays a game with a simple greedy bot (no UI) to check pacing.
-// It builds up to 4 bottle lines from a fixed template wired to the starting
+// It first places the free Cueillette under the Outcome to sell lemons, then
+// builds up to 4 bottle lines from a fixed template wired to the starting
 // Outcome, upgrades the slowest machine, grows the stock when bottles pile up,
 // and every few seconds sets the bottle price that maximises expected
 // profit/min — or, once its output can cover a monopoly, the highest price
@@ -66,6 +67,9 @@ function bestPrice(st) {
 }
 
 const st = newGame(cfg);
+// Starter: free harvester just below the Outcome, facing up, one belt into it.
+buyMachine(cfg, st, 'harvest', OX, OY + 3, 3);
+buyBelt(cfg, st, OX, OY + 2, 3);
 let built = 0, nextLog = 0, priceT = 0, firstMono = null;
 for (let t = 0; t < MAX_MIN * 60; t += DT) {
   step(cfg, st, DT);

@@ -1,7 +1,7 @@
 // Boot, game loop, tabs, hints, reveal, monopoly effects, save. The simulation
 // lives in sim.js (pure); this file only wires it to the DOM.
 
-import { newGame, step, derive, SAVE_VERSION, sellersOf, stockInfo, mkOf, totalSold, monopolistOf } from './sim.js';
+import { newGame, step, derive, migrate, SAVE_VERSION, sellersOf, stockInfo, mkOf, totalSold, monopolistOf } from './sim.js';
 import { countOf, stageCapacity } from './grid.js';
 import { unitCost } from './factory.js';
 import { previewPreference } from './market.js';
@@ -61,7 +61,7 @@ function load() {
   if (NO_SAVE) return null;
   try {
     const st = JSON.parse(localStorage.getItem(SAVE_KEY));
-    if (st && st.v === SAVE_VERSION && st.cfgVersion === G.cfg.meta.version) return st;
+    if (st && st.v === SAVE_VERSION && st.cfgVersion === G.cfg.meta.version) return migrate(G.cfg, st);
   } catch { /* corrupted or unavailable */ }
   return null;
 }
@@ -185,7 +185,7 @@ function hint() {
   // Onboarding: one harvester wired to the Outcome sells lemons.
   if (!n('harvest')) return tool === 'harvest'
     ? '👉 Appuie sur la grille, glisse vers où doivent sortir les citrons, puis lâche.'
-    : '👉 Choisis 🍋 Cueillette (gratuite) dans la barre.';
+    : '👉 Touche 🍋 dans la barre, puis « Cueillette » (gratuite).';
   if (!totalSold(st) && !Object.values(st.stats.delivered).some(Boolean)) {
     if (tool !== 'belt') return '👉 Choisis ⇉ Tapis (gratuit) et glisse le doigt de la sortie verte jusqu’à l’📤 Outcome.';
     if (g.machines.find(m => m.status === 'blocked')) return '👉 Tire un tapis depuis la sortie verte de la Cueillette jusqu’à l’📤 Outcome.';
@@ -196,6 +196,8 @@ function hint() {
     const b = st.mk[r.id].brands.you;
     if (b.hold > 0 && !b.active) return `⏱ Garde ${pct(cfg.monopoly.share)} du marché ${r.icon} encore ${Math.ceil(cfg.monopoly.hold_s - b.hold)} s !`;
   }
+  if (st.unlocked.refine && !n('refine_fruit') && !n('refine_juice') && !n('refine_bottle'))
+    return '👉 Essaie l’Amélioration : touche 🍋 puis « Amélioration », et fais passer tes citrons dedans avant l’📤 Outcome.';
   if (st.unlocked.press && !n('press')) return '👉 Pose un ⚙️ Pressage : citrons → jus, qui se vend plus cher. Relie-le à l’📤 Outcome.';
   if (st.unlocked.bottle && !n('bottle')) return '👉 Pose un 🍾 Embouteillage : jus → bouteilles, le produit le plus cher.';
   const sk = stockInfo(cfg, st);

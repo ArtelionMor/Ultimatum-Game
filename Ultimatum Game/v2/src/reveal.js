@@ -19,6 +19,8 @@ export const REVEALS = [
     toast: '📦 Ton stock est petit : agrandis-le pour vendre aux heures de pointe.' },
   { id: 'segments', when: st => st.seen.market && st.stats.priceChanges >= 1,
     toast: '👥 Nouveau sur le Marché : fais glisser les cartes pour voir chaque type de client.' },
+  { id: 'refine',   when: (st, cfg) => sold(st) >= cfg.reveal.refine_after_sold,
+    toast: '✨ Nouveau : l’Amélioration. Touche 🍋 puis « Amélioration » : elle fusionne 3 citrons de même ★ en 1 citron ★ supérieur, qui plaît aux Premium.' },
   { id: 'outcome',  when: st => (st.stats.built.bottle || 0) >= 1,
     toast: '📤 Tu peux construire d’autres Outcomes pour raccourcir tes tapis.' },
 ];

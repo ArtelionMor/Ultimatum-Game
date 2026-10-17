@@ -20,11 +20,15 @@
   "monopoly": { "share": 0.8, "hold_s": 20, "grow_tau_s": 30, "decay_tau_s": 20, "decay_k": 1.5 },
   "grid": { "cols": 20, "rows": 26, "outcome_x": 9, "outcome_y": 12, "belt_cost": 0, "belt_speed": 4, "machine_buffer": 2, "sell_refund": 0.5 },
   "machines": [
-    { "id": "harvest", "name": "Cueillette",    "icon": "🍋", "color": "#7a8a2e", "input_stage": null, "output_stage": 0, "first_free": true, "cost": 20, "cost_mult": 1.45, "base_rate": 24, "rate_mult": 1.3, "up_cost": 15, "up_cost_mult": 1.35, "quality_per_level": 0.2 },
-    { "id": "press",   "name": "Pressage",      "icon": "⚙️", "color": "#8a5a2e", "input_stage": 0,    "output_stage": 1, "cost": 30, "cost_mult": 1.45, "base_rate": 30, "rate_mult": 1.3, "up_cost": 20, "up_cost_mult": 1.35, "quality_per_level": 0.3 },
-    { "id": "bottle",  "name": "Embouteillage", "icon": "🍾", "color": "#2e6a8a", "input_stage": 1,    "output_stage": 2, "cost": 40, "cost_mult": 1.45, "base_rate": 30, "rate_mult": 1.3, "up_cost": 25, "up_cost_mult": 1.35, "quality_per_level": 0.4 },
-    { "id": "outcome", "name": "Outcome",       "icon": "📤", "color": "#3a3f52", "sink": true, "input_stage": null, "output_stage": null, "cost": 60, "cost_mult": 2, "base_rate": 0, "rate_mult": 1, "up_cost": 0, "up_cost_mult": 1, "quality_per_level": 0 }
+    { "id": "harvest",       "group": "fruit",  "kind": "make",   "name": "Cueillette",       "icon": "🍋", "color": "#7a8a2e", "input_stage": null, "output_stage": 0, "first_free": true, "cost": 20, "cost_mult": 1.45, "base_rate": 24, "rate_mult": 1.3, "up_cost": 15, "up_cost_mult": 1.35 },
+    { "id": "refine_fruit",  "group": "fruit",  "kind": "refine", "name": "Tri des citrons",  "icon": "✨", "color": "#5f6a24", "input_stage": 0,    "output_stage": 0, "merge_n": 3, "max_tier": 5, "cost": 40, "cost_mult": 1.6, "base_rate": 20, "rate_mult": 1.3, "up_cost": 25, "up_cost_mult": 1.4 },
+    { "id": "press",         "group": "juice",  "kind": "make",   "name": "Pressage",         "icon": "⚙️", "color": "#8a5a2e", "input_stage": 0,    "output_stage": 1, "cost": 30, "cost_mult": 1.45, "base_rate": 30, "rate_mult": 1.3, "up_cost": 20, "up_cost_mult": 1.35 },
+    { "id": "refine_juice",  "group": "juice",  "kind": "refine", "name": "Affinage du jus",  "icon": "✨", "color": "#6a4422", "input_stage": 1,    "output_stage": 1, "merge_n": 3, "max_tier": 5, "cost": 60, "cost_mult": 1.6, "base_rate": 20, "rate_mult": 1.3, "up_cost": 35, "up_cost_mult": 1.4 },
+    { "id": "bottle",        "group": "bottle", "kind": "make",   "name": "Embouteillage",    "icon": "🍾", "color": "#2e6a8a", "input_stage": 1,    "output_stage": 2, "cost": 40, "cost_mult": 1.45, "base_rate": 30, "rate_mult": 1.3, "up_cost": 25, "up_cost_mult": 1.35 },
+    { "id": "refine_bottle", "group": "bottle", "kind": "refine", "name": "Cuvée spéciale",   "icon": "✨", "color": "#22506a", "input_stage": 2,    "output_stage": 2, "merge_n": 3, "max_tier": 5, "cost": 80, "cost_mult": 1.6, "base_rate": 20, "rate_mult": 1.3, "up_cost": 45, "up_cost_mult": 1.4 },
+    { "id": "outcome",       "group": null,     "kind": "sink",   "name": "Outcome",          "icon": "📤", "color": "#3a3f52", "sink": true, "input_stage": null, "output_stage": null, "cost": 60, "cost_mult": 2, "base_rate": 0, "rate_mult": 1, "up_cost": 0, "up_cost_mult": 1 }
   ],
+
   "player": { "start_money": 60, "start_quality": 1, "quality_max": 5, "stock_base": 30, "stock_mult": 1.5, "stock_base_cost": 40, "stock_cost_mult": 1.6 },
   "rivals": [
     { "market": "fruit",  "id": "orchard",  "name": "Le Verger Géant",    "icon": "🌳", "color": "#e8833a", "desc": "Des citrons à la tonne, moins chers que les tiens.", "behavior": "undercut", "start_price": 1.2, "price_floor_margin": 0.1, "behavior_param": 0.05, "quality": 1.0, "quality_step": 0.05, "quality_max": 1.5, "prod_per_min": 280, "prod_growth": 0.06, "stock_cap": 220 },
@@ -38,5 +42,5 @@
     { "market": "bottle", "id": "follower", "name": "Le Suiveur",         "icon": "🦎", "color": "#4aa3c7", "desc": "Copie le prix du leader, à ±5 %.",                   "behavior": "follow",   "start_price": 10,  "price_floor_margin": 0.1, "behavior_param": 0.05, "quality": 2.5, "quality_step": 0.05, "quality_max": 3.0, "prod_per_min": 200, "prod_growth": 0.06, "stock_cap": 150 }
   ],
   "ai": { "price_interval_s": 8, "upgrade_interval_s": 60 },
-  "reveal": { "min_gap_s": 5, "stock_hint_after_s": 90 }
+  "reveal": { "min_gap_s": 5, "stock_hint_after_s": 90, "refine_after_sold": 20 }
 }

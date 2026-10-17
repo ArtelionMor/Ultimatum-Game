@@ -1,16 +1,21 @@
 // Pure factory floor: a grid with 2×2 machines, 1×1 conveyor belts and the
 // items travelling on them. No DOM.
 //
-// Item stages: 0 = fruit, 1 = juice, 2 = bottle. A machine takes items of its
-// `input_stage` on its input port and pushes `output_stage` items out of its
-// output port. An Outcome (`sink: true`, 2×2, movable, one placed at start)
-// takes any item from any side and sends it to that item's market.
+// An item is a small int: stage × 8 + tier. Stages: 0 = fruit, 1 = juice,
+// 2 = bottle; tier = quality ★1..★5. A "make" machine takes items of its
+// `input_stage` on its input port and pushes `output_stage` items (same tier)
+// out of its output port. A "refine" machine merges `merge_n` items of one
+// tier into one item of the next tier. An Outcome (`sink: true`, 2×2, movable,
+// one placed at start) takes any item from any side and sends it to its market.
 //
 // Rotation r = flow direction: 0 → right, 1 → down, 2 → left, 3 → up.
 // A machine at (x, y) with r = 0 takes from (x-1, y) and outputs to (x+2, y);
 // the other rotations follow the same "lane on row/col 0" rule (see ports()).
 
 export const DIRS = [[1, 0], [0, 1], [-1, 0], [0, -1]];
+export const item = (stage, tier) => stage * 8 + tier;
+export const stageOf = it => it >> 3;
+export const tierOf = it => it & 7;
 const key = (x, y) => x + ',' + y;
 const SIZE = 2;
 
@@ -19,7 +24,7 @@ export function machineDef(cfg, type) { return cfg.machines.find(m => m.id === t
 export function createGrid(cfg) {
   const g = cfg.grid;
   const grid = { cols: g.cols, rows: g.rows, machines: [], belts: {}, nextId: 1, v: 0 };
-  grid.machines.push({ id: 0, type: 'outcome', x: g.outcome_x, y: g.outcome_y, rot: 3, lvl: 1, buf: 0, out: null, prog: 0, status: 'ok' });
+  grid.machines.push({ id: 0, type: 'outcome', x: g.outcome_x, y: g.outcome_y, rot: 3, lvl: 1, buf: [], out: null, prog: 0, status: 'ok' });
   return grid;
 }
 
@@ -70,27 +75,43 @@ export const upgradeCost = (d, lvl) => Math.ceil(d.up_cost * Math.pow(d.up_cost_
 
 // --- Edits (caller pays; these only check the layout) -------------------------
 
+// Belts don't block a machine: building on them breaks them.
 // `ignore`: a machine being moved doesn't block its own new spot.
 export function canPlaceMachine(grid, x, y, ignore = null) {
   for (let dx = 0; dx < SIZE; dx++) for (let dy = 0; dy < SIZE; dy++) {
     const cx = x + dx, cy = y + dy;
     const m = inside(grid, cx, cy) ? machineAt(grid, cx, cy) : null;
-    if (!inside(grid, cx, cy) || (m && m !== ignore) || beltAt(grid, cx, cy)) return false;
+    if (!inside(grid, cx, cy) || (m && m !== ignore)) return false;
   }
   return true;
 }
 
+// Belts under a 2×2 footprint (what building there would break).
+export function beltsUnder(grid, x, y) {
+  const out = [];
+  for (let dx = 0; dx < SIZE; dx++) for (let dy = 0; dy < SIZE; dy++) if (beltAt(grid, x + dx, y + dy)) out.push([x + dx, y + dy]);
+  return out;
+}
+function clearBelts(grid, x, y) {
+  const under = beltsUnder(grid, x, y);
+  for (const [bx, by] of under) delete grid.belts[key(bx, by)];
+  return under.length;
+}
+
 // Move a machine (Outcome included) for free; keeps its level and contents.
+// Returns the number of belts broken, or -1 if the spot is taken.
 export function moveMachine(grid, m, x, y) {
-  if (!canPlaceMachine(grid, x, y, m)) return false;
+  if (!canPlaceMachine(grid, x, y, m)) return -1;
+  const broken = clearBelts(grid, x, y);
   m.x = x; m.y = y;
   changed(grid);
-  return true;
+  return broken;
 }
 
 export function placeMachine(grid, type, x, y, rot) {
   if (!canPlaceMachine(grid, x, y)) return null;
-  const m = { id: grid.nextId++, type, x, y, rot, lvl: 1, buf: 0, out: null, prog: 0, status: 'idle' };
+  const broken = clearBelts(grid, x, y);
+  const m = { id: grid.nextId++, type, x, y, rot, lvl: 1, buf: [], out: null, prog: 0, status: 'idle', broken };
   grid.machines.push(m);
   changed(grid);
   return m;
@@ -150,28 +171,29 @@ export function rotateMachine(grid, m) {
 
 // --- Simulation --------------------------------------------------------------
 
-// Try to move an item of `stage` from cell (sx, sy) into cell (tx, ty).
-function accept(cfg, grid, sx, sy, tx, ty, stage, ctx) {
+// Try to move item `it` from cell (sx, sy) into cell (tx, ty).
+function accept(cfg, grid, sx, sy, tx, ty, it, ctx) {
   if (!inside(grid, tx, ty)) return false;
   const b = beltAt(grid, tx, ty);
   if (b) {
     if (b.item !== null) return false;
     const [dx, dy] = DIRS[b.dir];
     if (tx + dx === sx && ty + dy === sy) return false; // belt points back at the source
-    b.item = stage; b.p = 0;
+    b.item = it; b.p = 0;
     return true;
   }
   const m = machineAt(grid, tx, ty);
   if (!m) return false;
   const d = machineDef(cfg, m.type);
   if (d.sink) {
-    if (ctx.room(stage) <= 0) return false;
-    ctx.deliver(stage);
+    if (ctx.room(stageOf(it)) <= 0) return false;
+    ctx.deliver(it);
     return true;
   }
   const p = ports(m);
-  if (p.in[0] !== sx || p.in[1] !== sy || d.input_stage !== stage || m.buf >= cfg.grid.machine_buffer) return false;
-  m.buf++;
+  const cap = d.kind === 'refine' ? d.merge_n * 2 : cfg.grid.machine_buffer;
+  if (p.in[0] !== sx || p.in[1] !== sy || d.input_stage !== stageOf(it) || m.buf.length >= cap) return false;
+  m.buf.push(it);
   return true;
 }
 
@@ -195,7 +217,22 @@ function beltOrder(grid) {
   return list;
 }
 
-// ctx = { room: stage => free stock for that item, deliver: stage => void }
+// What a machine would do next: { use: [indices in buf], out: item } or null.
+function nextJob(d, m) {
+  if (d.input_stage === null) return { use: [], out: item(d.output_stage, 1) };
+  if (!m.buf.length) return null;
+  if (d.kind !== 'refine') return { use: [0], out: item(d.output_stage, tierOf(m.buf[0])) };
+  // Refine: top-tier items pass straight through; else merge the lowest full tier.
+  const top = m.buf.findIndex(it => tierOf(it) >= d.max_tier);
+  if (top >= 0) return { use: [top], out: m.buf[top], instant: true };
+  const byTier = {};
+  m.buf.forEach((it, i) => (byTier[tierOf(it)] ||= []).push(i));
+  for (let t = 1; t < d.max_tier; t++) if ((byTier[t]?.length || 0) >= d.merge_n)
+    return { use: byTier[t].slice(0, d.merge_n), out: item(d.output_stage, t + 1) };
+  return null;
+}
+
+// ctx = { room: stage => free stock for that item, deliver: item => void }
 export function stepGrid(cfg, grid, dt, ctx) {
   const speed = cfg.grid.belt_speed;
   for (const { x, y, k } of beltOrder(grid)) {
@@ -210,13 +247,13 @@ export function stepGrid(cfg, grid, dt, ctx) {
     const d = machineDef(cfg, m.type);
     if (d.sink) continue;
     if (m.out === null) {
-      const fed = d.input_stage === null || m.buf > 0;
-      if (fed) {
-        m.prog += dt * machineRate(d, m.lvl) / 60;
+      const job = nextJob(d, m);
+      if (job) {
+        m.prog = job.instant ? 1 : m.prog + dt * machineRate(d, m.lvl) / 60;
         if (m.prog >= 1) {
           m.prog = 0;
-          if (d.input_stage !== null) m.buf--;
-          m.out = d.output_stage;
+          m.buf = m.buf.filter((_, i) => !job.use.includes(i));
+          m.out = job.out;
         }
         m.wait = 0;
         m.status = 'ok';
@@ -239,18 +276,7 @@ export function stageCapacity(cfg, grid, stage) {
   let sum = 0;
   for (const m of grid.machines) {
     const d = machineDef(cfg, m.type);
-    if (!d.sink && d.output_stage === stage) sum += machineRate(d, m.lvl);
+    if (!d.sink && d.kind !== 'refine' && d.output_stage === stage) sum += machineRate(d, m.lvl);
   }
   return sum;
-}
-
-// Quality of an item: start quality + average level bonus of the machines making it.
-export function gridQuality(cfg, grid, stage) {
-  let n = 0, sum = 0;
-  for (const m of grid.machines) {
-    const d = machineDef(cfg, m.type);
-    if (d.sink || d.output_stage !== stage) continue;
-    n++; sum += d.quality_per_level * (m.lvl - 1);
-  }
-  return Math.min(cfg.player.quality_max, cfg.player.start_quality + (n ? sum / n : 0));
 }

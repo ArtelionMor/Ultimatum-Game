@@ -1,9 +1,12 @@
 // Factory screen: a top-down grid, larger than the screen, where the player
 // buys and places 2×2 machines and draws conveyor belts.
 //
+// Toolbar: one button per product (opens a menu: Production / Amélioration),
+// then Outcome and Belt.
+//
 // Gestures
 // - Machine tool: press where the machine goes, drag towards where its output
-//   should face, release to build.
+//   should face, release to build. Building on belts breaks them.
 // - Belt tool: drag to draw belts (each points to the next); tap a belt to turn it.
 // - Touch an existing machine: drag it to move it; or tap it to edit it — the
 //   rest of the floor greys out and a widget above it offers upgrade / sell.
@@ -13,7 +16,7 @@
 //   right/middle mouse or wheel.
 
 import { DIRS, ports, machineAt, beltAt, machineDef, placeCost, canPlaceMachine, canPlaceBelt,
-  setBeltDir, setMachineRot, moveMachine, countOf } from '../grid.js';
+  setBeltDir, setMachineRot, moveMachine, countOf, stageOf, tierOf, beltsUnder } from '../grid.js';
 import { buyMachine, buyBelt, sellMachine, sellValue, sellBelt, machineInfo, upgradeMachine, stockInfo, buyStock } from '../sim.js';
 import { money, perMin, fmt, stars } from '../format.js';
 import { floatText, retrigger } from './fx.js';
@@ -22,11 +25,13 @@ import { play } from './sound.js';
 const $ = id => document.getElementById(id);
 const ARROWS = ['→', '↓', '←', '↑'];
 const STAGE_COLORS = ['#ffe14a', '#ffa53a', '#3ddc84'];
+const TIER_COLORS = [null, null, '#e6ecf5', '#ffcf4a', '#c58cff', '#ff5d8f'];   // ring per ★ (★1 has none)
 const CELL = 34;
 const SLOP = 6;            // px a finger may move before a tap becomes a drag
 
 let G, canvas, ctx, bound = false;
 let tool = null;           // null | machine id | 'belt'
+let menuGroup = null;      // product whose Production / Amélioration menu is open
 let lastRot = 0;           // direction used for the previous build
 let cam = { x: 0, y: 0 }, viewW = 0, viewH = 0, camReady = false;
 let edit = null;           // { kind: 'machine', m } | { kind: 'belt', x, y }
@@ -54,37 +59,93 @@ export function initFactory(game) {
   requestAnimationFrame(draw);
 }
 
-// --- Toolbar (tap the active tool again to put it down) -------------------------
+// --- Toolbar ----------------------------------------------------------------
 
 function buildToolbar() {
-  const tools = [...G.cfg.machines.map(m => ({ id: m.id, icon: m.icon })), { id: 'belt', icon: '⇉' }];
+  const { cfg } = G;
+  const groups = cfg.markets.map(r => `<button class="tool" data-group="${r.id}"><span class="ti">${r.icon}</span><small></small></button>`).join('');
+  const singles = ['outcome', 'belt'].map(id => {
+    const icon = id === 'belt' ? '⇉' : machineDef(cfg, id).icon;
+    return `<button class="tool" data-tool="${id}"><span class="ti">${icon}</span><small></small></button>`;
+  }).join('');
   const bar = $('toolbar');
-  bar.innerHTML = tools.map(t => `<button class="tool" data-tool="${t.id}"><span class="ti">${t.icon}</span><small></small></button>`).join('');
+  bar.innerHTML = groups + singles;
+  bar.querySelectorAll('[data-group]').forEach(b => b.addEventListener('click', () => {
+    const g = b.dataset.group;
+    if (groupOf(tool) === g) { tool = null; menuGroup = null; }      // put the tool down
+    else menuGroup = menuGroup === g ? null : g;
+    edit = null;
+    play('tick', 0.2);
+    renderFactory();
+  }));
   bar.querySelectorAll('[data-tool]').forEach(b => b.addEventListener('click', () => {
     tool = tool === b.dataset.tool ? null : b.dataset.tool;
-    edit = null;
+    menuGroup = null; edit = null;
     play('tick', 0.2);
     G.onAction('tool', tool);
     renderFactory();
   }));
 }
 
-const toolUnlocked = id => id === 'belt' || id === 'harvest' || !!G.st.unlocked[id];
+const groupOf = id => (id && id !== 'belt' ? machineDef(G.cfg, id)?.group : null) || null;
+const groupUnlocked = g => g === 'fruit' || (g === 'juice' && !!G.st.unlocked.press) || (g === 'bottle' && !!G.st.unlocked.bottle);
+const machineUnlocked = d => groupUnlocked(d.group) && (d.kind !== 'refine' || !!G.st.unlocked.refine);
+const toolUnlocked = id => id === 'belt' || (id === 'outcome' ? !!G.st.unlocked.outcome : machineUnlocked(machineDef(G.cfg, id)));
 export const currentTool = () => tool;
+
+const costLabel = c => (c === 0 ? 'Gratuit' : money(c));
 
 export function renderFactory() {
   const { cfg, st } = G;
+  document.querySelectorAll('#toolbar [data-group]').forEach(b => {
+    const g = b.dataset.group, active = groupOf(tool) === g;
+    const make = cfg.machines.find(d => d.group === g && d.kind === 'make');
+    b.classList.toggle('hidden', !groupUnlocked(g));
+    b.classList.toggle('active', active || menuGroup === g);
+    b.classList.toggle('pulse', groupUnlocked(g) && !st.seen['tool_' + make.id]);
+    b.querySelector('small').textContent = active
+      ? (machineDef(cfg, tool).kind === 'refine' ? 'Amélioration' : 'Production')
+      : costLabel(placeCost(cfg, st.grid, make.id));
+  });
   document.querySelectorAll('#toolbar [data-tool]').forEach(b => {
     const id = b.dataset.tool;
     b.classList.toggle('hidden', !toolUnlocked(id));
     b.classList.toggle('active', id === tool);
-    b.classList.toggle('pulse', toolUnlocked(id) && id !== 'belt' && !st.seen['tool_' + id]);
     const c = placeCost(cfg, st.grid, id);
-    b.querySelector('small').textContent = c === 0 ? 'Gratuit' : money(c);
+    b.querySelector('small').textContent = costLabel(c);
     b.classList.toggle('cant', st.money < c);
   });
+  renderMenu();
   renderStock();
   renderWidget();
+}
+
+// Production / Amélioration choice under the product button.
+function renderMenu() {
+  const menu = $('tool-menu');
+  if (!menuGroup || G.tab !== 'factory') { menu.classList.add('hidden'); return; }
+  const { cfg, st } = G;
+  const html = cfg.machines.filter(d => d.group === menuGroup).map(d => {
+    const open = machineUnlocked(d), c = placeCost(cfg, st.grid, d.id);
+    const what = d.kind === 'refine' ? `Amélioration · fusion ${d.merge_n} → ★+1` : 'Production';
+    return `<button class="tm-item ${open ? '' : 'locked'} ${st.money < c ? 'cant' : ''}" data-pick="${open ? d.id : ''}">
+      <span class="tm-icon">${d.icon}</span><span class="tm-text"><b>${d.name}</b><small>${open ? what : '🔒 Bientôt'}</small></span>
+      <span class="tm-cost">${open ? costLabel(c) : ''}</span></button>`;
+  }).join('');
+  if (menu.dataset.html !== html) {
+    menu.innerHTML = html;
+    menu.dataset.html = html;
+    menu.querySelectorAll('[data-pick]').forEach(b => b.addEventListener('click', () => {
+      if (!b.dataset.pick) return;
+      tool = b.dataset.pick; menuGroup = null;
+      play('tick', 0.25);
+      G.onAction('tool', tool);
+      renderFactory();
+    }));
+  }
+  const btn = document.querySelector(`#toolbar [data-group="${menuGroup}"]`);
+  menu.style.left = Math.max(0, btn.offsetLeft) + 'px';
+  menu.classList.remove('hidden');
 }
 
 // One line: each item's stock + the shared "grow storage" button.
@@ -142,9 +203,15 @@ function renderWidget() {
         <div class="ew-btns">${countOf(st.grid, 'outcome') > 1 ? '<button class="btn small danger" data-act="sell">Vendre</button>' : ''}<button class="btn small" data-act="close">✕</button></div>`;
     } else {
       const info = machineInfo(cfg, st, m);
-      const q = cfg.markets.find(r => r.stage === d.output_stage);
+      const r = cfg.markets.find(x => x.stage === d.output_stage);
+      const counts = {};
+      for (const it of m.buf) counts[tierOf(it)] = (counts[tierOf(it)] || 0) + 1;
+      const inside = Object.keys(counts).map(t => `★${t}×${counts[t]}`).join(' ') || 'vide';
+      const meta = d.kind === 'refine'
+        ? `Fusionne ${d.merge_n} ${r.icon} de même ★ en 1 ★ supérieur · ${perMin(info.rate)} · contient ${inside}`
+        : `${perMin(info.rate)} · ${STATUS[m.status]}`;
       html = `<div class="ew-title">${d.icon} ${d.name} <span class="muted">Niv. ${m.lvl}</span></div>
-        <div class="ew-meta">${perMin(info.rate)} · ${q.icon} ${stars(st.mk[q.id].you.quality)} · ${STATUS[m.status]}</div>
+        <div class="ew-meta">${meta}</div>
         <div class="ew-btns">
           <button class="btn small up-mini ${info.affordable ? '' : 'cant'}" data-act="up">⬆ ${perMin(info.nextRate)} · ${money(info.cost)}</button>
           <button class="btn small danger" data-act="sell">Vendre</button>
@@ -274,6 +341,7 @@ function onDown(e) {
     pan = midpoint();
     return;
   }
+  if (menuGroup) { menuGroup = null; renderFactory(); }
   const p = toCell(e), grid = G.st.grid;
   const m = machineAt(grid, p.x, p.y);
   const sx = e.clientX, sy = e.clientY;
@@ -386,16 +454,18 @@ function onUp(e) {
     case 'beltTap': { const c = pr.cell; edit = { kind: 'belt', x: c.x, y: c.y }; break; }
     case 'tap': break;
     case 'grab': edit = { kind: 'machine', m: pr.m }; play('tick', 0.2); break;
-    case 'drag':
-      if (g && moveMachine(grid, pr.m, g.x, g.y)) { dropped(pr.m); }
+    case 'drag': {
+      const broken = g ? moveMachine(grid, pr.m, g.x, g.y) : -1;
+      if (broken >= 0) { dropped(pr.m); if (broken) floatAt(e, `🔨 ${broken} tapis`, 'gold'); }
       else floatAt(e, 'Place occupée', 'bad');
       break;
+    }
     case 'turn':
       if (pr.turned && g) { setMachineRot(grid, pr.m, g.rot); flashUntil.set(pr.m, performance.now() + 400); play('tick', 0.3); }
       else edit = null;   // tap on the edited machine closes the editor
       break;
     case 'move':
-      if (g && g.ok && moveMachine(grid, pr.m, g.x, g.y)) { setMachineRot(grid, pr.m, g.rot); dropped(pr.m); edit = null; }
+      if (g && g.ok && moveMachine(grid, pr.m, g.x, g.y) >= 0) { setMachineRot(grid, pr.m, g.rot); dropped(pr.m); edit = null; }
       else floatAt(e, 'Place occupée', 'bad');
       break;
     case 'place': {
@@ -404,7 +474,7 @@ function onUp(e) {
         lastRot = g.rot;
         play('buy');
         flashUntil.set(machineAt(grid, g.x, g.y), performance.now() + 600);
-        floatAt(e, r.cost ? `-${money(r.cost)}` : 'Gratuit !', r.cost ? 'bad' : 'gold');
+        floatAt(e, (r.cost ? `-${money(r.cost)}` : 'Gratuit !') + (r.broken ? ` · 🔨 ${r.broken} tapis` : ''), r.cost ? 'bad' : 'gold');
         G.st.seen['tool_' + tool] = true;
         G.onAction('build', tool);
       } else floatAt(e, r.why === 'money' ? 'Pas assez d\'argent' : 'Place occupée', 'bad');
@@ -511,6 +581,12 @@ function draw(now) {
     drawMachine({ type: ghost.type, x: ghost.x, y: ghost.y, rot: ghost.rot, lvl: ghost.lvl, prog: 0, status: 'ok', out: null }, now);
     ctx.globalAlpha = 1;
     outline(ghost.x * c, ghost.y * c, c * 2, c * 2, ghost.ok ? '#3ddc84' : '#ff5d5d');
+    // belts that building here will break
+    ctx.strokeStyle = '#ff9c5d'; ctx.lineWidth = 2;
+    for (const [bx, by] of beltsUnder(grid, ghost.x, ghost.y)) {
+      ctx.beginPath(); ctx.moveTo(bx * c + 8, by * c + 8); ctx.lineTo(bx * c + c - 8, by * c + c - 8);
+      ctx.moveTo(bx * c + c - 8, by * c + 8); ctx.lineTo(bx * c + 8, by * c + c - 8); ctx.stroke();
+    }
     // big arrow showing where the output will face
     if (!machineDef(cfg, ghost.type).sink) {
       const [dx, dy] = DIRS[ghost.rot];
@@ -572,12 +648,14 @@ function drawMachine(m, now) {
   }
   const bob = m.status === 'ok' ? Math.sin(now / 140 + m.x) * 1.2 : 0;
   ctx.fillText(d.icon, x + s / 2, y + s / 2 + bob - 3);
-  // level badge + progress bar
+  // level bubble + progress bar
+  const br = c * 0.27;
+  ctx.fillStyle = '#10131a';
+  ctx.beginPath(); ctx.arc(x + 4 + br, y + 4 + br, br, 0, Math.PI * 2); ctx.fill();
+  ctx.lineWidth = 1.5; ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.stroke();
   ctx.font = `bold ${Math.round(c * 0.3)}px system-ui, sans-serif`;
-  ctx.fillStyle = 'rgba(0,0,0,.45)';
-  roundRect(x + 6, y + 6, c * 0.6, c * 0.38, 4); ctx.fill();
   ctx.fillStyle = '#fff';
-  ctx.fillText(`${m.lvl}`, x + 6 + c * 0.3, y + 6 + c * 0.2);
+  ctx.fillText(`${m.lvl}`, x + 4 + br, y + 4 + br + 0.5);
   ctx.fillStyle = 'rgba(0,0,0,.35)';
   ctx.fillRect(x + 8, y + s - 11, s - 16, 4);
   ctx.fillStyle = '#ffe9a8';
@@ -604,10 +682,15 @@ function arrow(cl, dx, dy, color, side) {
   ctx.restore();
 }
 
-function drawItem(x, y, stage) {
+// Colour = item; ring colour = quality (★2 silver, ★3 gold, ★4 purple, ★5 pink).
+function drawItem(x, y, it) {
+  const stage = stageOf(it), ring = TIER_COLORS[tierOf(it)];
   ctx.fillStyle = STAGE_COLORS[stage];
-  if (stage === 2) { roundRect(x - 4, y - 7, 8, 14, 3); ctx.fill(); ctx.fillStyle = '#d9ffe8'; ctx.fillRect(x - 2, y - 10, 4, 4); }
-  else { ctx.beginPath(); ctx.arc(x, y, stage === 0 ? 6 : 5.5, 0, Math.PI * 2); ctx.fill(); }
+  if (stage === 2) roundRect(x - 4, y - 7, 8, 14, 3);
+  else { ctx.beginPath(); ctx.arc(x, y, stage === 0 ? 6 : 5.5, 0, Math.PI * 2); }
+  ctx.fill();
+  if (ring) { ctx.lineWidth = 2.5; ctx.strokeStyle = ring; ctx.stroke(); }
+  if (stage === 2) { ctx.fillStyle = '#d9ffe8'; ctx.fillRect(x - 2, y - 10, 4, 4); }
 }
 
 function outline(x, y, w, h, color) {

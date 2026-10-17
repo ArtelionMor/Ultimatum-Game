@@ -14,9 +14,12 @@ Puis ouvrir http://localhost:8795.
 1. **Usine** : une grille vue de dessus, plus grande que l'écran.
    - Tu achètes et poses des machines 2×2 : 🍋 Cueillette (crée des citrons), ⚙️ Pressage (citron → jus), 🍾 Embouteillage (jus → bouteille). Chaque machine a une entrée (flèche orange) et une sortie (flèche verte).
    - Tu les relies avec des tapis jusqu'à un **📤 Outcome**, qui envoie à la vente tout ce qui y entre, par tous les côtés.
-   - Chaque machine s'améliore (+30 % de vitesse), se tourne, se déplace gratuitement ou se revend (avec confirmation).
+   - Chaque machine s'améliore (+30 % de vitesse, niveau affiché dans une bulle), se tourne, se déplace gratuitement ou se revend (avec confirmation).
    - La 1re Cueillette et les tapis sont gratuits.
-   - La qualité d'une ressource = le niveau moyen des machines qui la produisent.
+   - **Qualité ★1–★5 par fusion** : chaque produit a une machine d'**Amélioration** (Tri des citrons, Affinage du jus, Cuvée spéciale). Elle fusionne 3 objets de même ★ en 1 objet ★ supérieur ; un ★5 la traverse tel quel.
+     - Chaîner deux Améliorations donne du ★3, etc. ; on sacrifie de la quantité pour de la qualité.
+     - Les objets portent leur ★ (anneau : ★2 argent, ★3 or, ★4 violet, ★5 rose) et la gardent dans la chaîne (citron ★3 → jus ★3).
+     - La qualité vendue = la moyenne des ★ du stock ; les ventes prennent chaque ★ au prorata.
 2. **Marché** : un onglet par ressource livrée (🍋 Citron, 🧃 Jus, 🍾 Bouteille), chacun avec ses 3 rivaux. Tu règles ton prix ; des cartes camembert montrent les parts (tout le marché, puis chaque type de client).
 3. Les ventes rapportent `prix − coût unitaire`. Pas de revenu passif ; comme la 1re Cueillette et les tapis sont gratuits, on peut toujours relancer une ligne.
 4. **Monopole** (pas d'écran de victoire) : tenir 80 % d'un marché pendant 20 s donne le monopole. Il apporte un effet visuel et un **bonus d'attrait** qui fidélise les clients. Les rivaux peuvent aussi prendre un monopole.
@@ -24,8 +27,8 @@ Puis ouvrir http://localhost:8795.
 ## Écrans
 - **Haut** : l'objectif « Prends un monopole », la barre de ton meilleur marché (repère à 80 %) avec le chrono, l'argent et le revenu/min, et une ligne « 👉 » qui dit quoi faire maintenant.
 - **Usine** :
-  - Barre d'outils : 🍋 · ⚙️ · 🍾 · 📤 · ⇉ Tapis. Toucher l'outil actif le repose. Dessous : les stocks par ressource et le bouton Agrandir.
-  - **Poser** : avec un outil machine, appuie là où tu la veux, glisse vers où doit sortir la production (grosse flèche verte), lâche.
+  - Barre d'outils : un bouton par produit (🍋 · 🧃 · 🍾), qui ouvre un menu **Production / Amélioration** ; puis 📤 Outcome et ⇉ Tapis. Toucher le produit de l'outil actif le repose. Dessous : les stocks par ressource et le bouton Agrandir.
+  - **Poser** : avec un outil machine, appuie là où tu la veux, glisse vers où doit sortir la production (grosse flèche verte), lâche. Poser (ou déplacer) une machine sur des tapis les casse (croix orange en aperçu).
   - **Tapis** : glisse le doigt pour tracer ; toucher un tapis existant le tourne.
   - **Déplacer** : appuie sur une machine et fais-la glisser (elle garde son sens).
   - **Éditer** : touche une machine. Le reste de l'usine se grise et un widget au-dessus propose ⬆ Améliorer et Vendre (avec « Êtes-vous sûr ? »). En mode édition :
@@ -68,7 +71,7 @@ Plancher : `coût unitaire × (1 + price_floor_margin)`, arrondi au pas de prix 
 ## Outils
 - `node tools/check-market.js [--market bottle] [--minutes 5]` : pour chaque marché, 10 min simulées à prix fixes (0,6 / 1 / 1,6 × réf) × 3 qualités, avec les parts par segment.
   - Résultat actuel : sur les 3 marchés, le prix le plus rentable dépend du segment (pas de stratégie dominante), et chaque segment a un rival favori différent.
-- `node tools/bot-run.js` : un bot construit jusqu'à 4 lignes de bouteilles et vise le monopole Bouteille. Il l'obtient à ≈ 16 min. **Premier calage, à affiner.**
+- `node tools/bot-run.js` : un bot pose la Cueillette gratuite, puis construit jusqu'à 4 lignes de bouteilles et vise le monopole Bouteille. Il n'utilise pas encore l'Amélioration, donc il reste à ★1 et n'obtient plus de monopole : **équilibrage à refaire avec le niveau joueur (étape 2)**.
 
 ## Paramètres de `config.json` à toucher pour le fun
 | Clé | Effet |
@@ -84,6 +87,8 @@ Plancher : `coût unitaire × (1 + price_floor_margin)`, arrondi au pas de prix 
 | `grid.belt_cost` / `belt_speed` | prix d'un tapis (0 = gratuit), cases/s (débit max ≈ 60 × vitesse /min) |
 | `player.start_money` / `stock_*` | démarrage, stock |
 | `machines[].first_free` | le 1er exemplaire est gratuit (Cueillette) |
+| `machines[].kind` / `group` / `merge_n` / `max_tier` | `make` = production, `refine` = Amélioration (fusion `merge_n` → ★+1, jusqu'à `max_tier`) ; `group` = produit du menu |
+| `reveal.refine_after_sold` | ventes avant de débloquer l'Amélioration |
 | `rivals[]` (`market`, `behavior`, prix, qualité, production, croissance) | rivaux de chaque marché |
 | `ai.price_interval_s` / `upgrade_interval_s` | nervosité et progression des rivaux |
 | `reveal.*` | rythme de la révélation progressive |
@@ -115,7 +120,9 @@ assets/kenney/         sous-ensemble des packs Kenney (CC0, voir License.txt)
 - Reprendre un monopole pendant que l'ancien bonus décroît repart du bonus restant (courbe continue).
 - **Mêmes 3 types de clients** sur chaque marché (volumes différents) ; rivaux différents par marché.
 - **Un seul niveau de stock** pour toutes les ressources (chaque ressource a son propre stock, de même capacité).
-- **Qualité = niveau moyen des machines** qui produisent la ressource.
+- **Qualité = moyenne des ★ du stock** ; le niveau d'une machine ne donne que de la vitesse.
+- **Coût unitaire d'un ★n** = formule `unit_cost_base + unit_cost_per_quality × (n − 1)`, pas ×3 : sinon la fusion n'est jamais rentable. Le vrai prix de la qualité, c'est la quantité sacrifiée.
+- **Ventes au prorata des ★** (pas de choix « vendre seulement les ★4 » pour l'instant).
 - Machines 2×2, entrée et sortie sur la même file ; une machine peut livrer directement dans la suivante si elles sont collées et alignées.
 - 1 objet par case de tapis ; les tapis peuvent fusionner ; l'Outcome accepte par tous les côtés.
 - Le dernier Outcome ne peut pas être vendu ; déplacer est gratuit ; revente = 50 % (machine + améliorations).

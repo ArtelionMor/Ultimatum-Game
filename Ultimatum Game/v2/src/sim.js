@@ -7,7 +7,7 @@
 
 import { marketCfg, stepMarket, createShareTracker, trackShares, marketShares, demandMultiplier } from './market.js';
 import { stockCap, stockCost, unitCost, produce } from './factory.js';
-import { createGrid, stepGrid, gridQuality, placeCost, machineDef, machineRate, upgradeCost,
+import { createGrid, stepGrid, placeCost, machineDef, machineRate, upgradeCost, item, stageOf, tierOf,
   placeMachine, placeBelt, removeMachine, removeBelt, beltAt, countOf } from './grid.js';
 import { createRival, repriceRival, upgradeRival } from './ai.js';
 import { createBrand, stepBrand } from './monopoly.js';
@@ -45,7 +45,8 @@ export function newGame(cfg, seed = 12345) {
   };
   for (const row of cfg.markets) {
     const mk = mkOf(cfg, row.id);
-    const you = { id: 'you', price: row.start_price, quality: 1, stock: 0, stockCap: 0, prodRate: 0, brand: 0 };
+    // tiers[t] = units of quality ★t in stock (fractional once sales start).
+    const you = { id: 'you', price: row.start_price, quality: 1, stock: 0, tiers: [0, 0, 0, 0, 0, 0], stockCap: 0, prodRate: 0, brand: 0 };
     const rivals = rivalDefs(cfg, row.id).map(createRival);
     const ids = ['you', ...rivals.map(r => r.id)];
     st.mk[row.id] = {
@@ -65,11 +66,34 @@ export function newGame(cfg, seed = 12345) {
 export function derive(cfg, st) {
   for (const row of cfg.markets) {
     const m = st.mk[row.id];
-    m.you.quality = gridQuality(cfg, st.grid, row.stage);
+    m.you.quality = stockQuality(m.you);
     m.you.stockCap = stockCap(cfg, st.stockLvl);
     const b = priceBounds(cfg, st, row.id);
     if (m.you.price < b.min) m.you.price = b.min;
   }
+}
+
+// The quality customers see: average ★ of what is in stock (kept when empty).
+export function stockQuality(you) {
+  let n = 0, sum = 0;
+  you.tiers.forEach((c, t) => { n += c; sum += c * t; });
+  return n > 1e-6 ? sum / n : you.quality;
+}
+
+// Bring a save from before quality tiers up to date (items were bare stages).
+export function migrate(cfg, st) {
+  for (const row of cfg.markets) {
+    const y = st.mk[row.id].you;
+    if (!y.tiers) y.tiers = [0, y.stock, 0, 0, 0, 0];
+  }
+  const up = it => (it === null || it >= 8 ? it : item(it, 1));
+  for (const m of st.grid.machines) {
+    const d = machineDef(cfg, m.type);
+    if (typeof m.buf === 'number') m.buf = Array.from({ length: m.buf }, () => item(d.input_stage ?? 0, 1));
+    m.out = up(m.out);
+  }
+  for (const k in st.grid.belts) st.grid.belts[k].item = up(st.grid.belts[k].item);
+  return st;
 }
 
 export const sellersOf = (st, id) => [st.mk[id].you, ...st.mk[id].rivals];
@@ -86,9 +110,10 @@ export function step(cfg, st, dt) {
   const delivered = {};
   stepGrid(cfg, st.grid, dt, {
     room: stage => { const m = st.mk[marketOfStage(cfg, stage).id]; return m.you.stockCap - m.you.stock; },
-    deliver: stage => {
-      const id = marketOfStage(cfg, stage).id;
-      st.mk[id].you.stock++;
+    deliver: it => {
+      const id = marketOfStage(cfg, stageOf(it)).id, you = st.mk[id].you;
+      you.stock++;
+      you.tiers[tierOf(it)]++;
       delivered[id] = (delivered[id] || 0) + 1;
     },
   });
@@ -105,9 +130,13 @@ export function step(cfg, st, dt) {
 
     for (const r of m.rivals) produce(r, dt);
     const sellers = sellersOf(st, id);
+    you.quality = stockQuality(you);
+    const before = you.stock;
     const res = stepMarket(mk, sellers, dt, mult);
     trackShares(m.shares, res, dt, cfg.market.share_smoothing_s);
     const sold = res.sold.you;
+    // Sales take every tier in proportion, so the average quality stays put.
+    if (sold > 0 && before > 0) { const k = you.stock / before; you.tiers = you.tiers.map(c => c * k); }
     if (sold > 0) {
       const gain = sold * (you.price - unitCost(row, you.quality));
       const before = Math.floor(st.stats.sold[id]);
@@ -155,11 +184,13 @@ export function step(cfg, st, dt) {
 export function buyMachine(cfg, st, type, x, y, rot) {
   const cost = placeCost(cfg, st.grid, type);
   if (st.money < cost) return { ok: false, why: 'money' };
-  if (!placeMachine(st.grid, type, x, y, rot)) return { ok: false, why: 'place' };
+  const m = placeMachine(st.grid, type, x, y, rot);
+  if (!m) return { ok: false, why: 'place' };
+  const broken = m.broken; delete m.broken;
   st.money -= cost;
   st.stats.built[type] = (st.stats.built[type] || 0) + 1;
   derive(cfg, st);
-  return { ok: true, cost };
+  return { ok: true, cost, broken };
 }
 
 export function buyBelt(cfg, st, x, y, dir) {
