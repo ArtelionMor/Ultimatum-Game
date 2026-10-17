@@ -14,20 +14,25 @@ Puis ouvrir http://localhost:8795.
 1. **Usine** : une grille vue de dessus, plus grande que l'écran.
    - Tu achètes et poses des machines 2×2 : 🍋 Cueillette (crée des citrons), ⚙️ Pressage (citron → jus), 🍾 Embouteillage (jus → bouteille). Chaque machine a une entrée (flèche orange) et une sortie (flèche verte).
    - Tu les relies avec des tapis jusqu'à un **📤 Outcome**, qui envoie à la vente tout ce qui y entre, par tous les côtés.
-   - Chaque machine s'améliore (+30 % de vitesse), se tourne, se déplace gratuitement ou se revend.
+   - Chaque machine s'améliore (+30 % de vitesse), se tourne, se déplace gratuitement ou se revend (avec confirmation).
+   - La 1re Cueillette et les tapis sont gratuits.
    - La qualité d'une ressource = le niveau moyen des machines qui la produisent.
 2. **Marché** : un onglet par ressource livrée (🍋 Citron, 🧃 Jus, 🍾 Bouteille), chacun avec ses 3 rivaux. Tu règles ton prix ; des cartes camembert montrent les parts (tout le marché, puis chaque type de client).
-3. Les ventes rapportent `prix − coût unitaire`, plus un **revenu de base** de 1 $/s : on n'est jamais bloqué.
+3. Les ventes rapportent `prix − coût unitaire`. Pas de revenu passif ; comme la 1re Cueillette et les tapis sont gratuits, on peut toujours relancer une ligne.
 4. **Monopole** (pas d'écran de victoire) : tenir 80 % d'un marché pendant 20 s donne le monopole. Il apporte un effet visuel et un **bonus d'attrait** qui fidélise les clients. Les rivaux peuvent aussi prendre un monopole.
 
 ## Écrans
 - **Haut** : l'objectif « Prends un monopole », la barre de ton meilleur marché (repère à 80 %) avec le chrono, l'argent et le revenu/min, et une ligne « 👉 » qui dit quoi faire maintenant.
 - **Usine** :
-  - Barre d'outils : ✋ Gérer · 🍋 · ⚙️ · 🍾 · 📤 · ⇉ Tapis · ⟳ sens. Dessous, les stocks par ressource et le bouton Agrandir.
-  - Machine : touche la grille ; on peut glisser pour ajuster avant de lâcher.
-  - Tapis : glisse le doigt pour tracer ; toucher un tapis existant le tourne.
-  - ✋ + toucher une machine ouvre son panneau : Améliorer, Déplacer, Tourner, Vendre.
-  - **Pan** : glisser avec ✋, deux doigts avec n'importe quel outil, clic droit/molette sur PC.
+  - Barre d'outils : 🍋 · ⚙️ · 🍾 · 📤 · ⇉ Tapis. Toucher l'outil actif le repose. Dessous : les stocks par ressource et le bouton Agrandir.
+  - **Poser** : avec un outil machine, appuie là où tu la veux, glisse vers où doit sortir la production (grosse flèche verte), lâche.
+  - **Tapis** : glisse le doigt pour tracer ; toucher un tapis existant le tourne.
+  - **Déplacer** : appuie sur une machine et fais-la glisser (elle garde son sens).
+  - **Éditer** : touche une machine. Le reste de l'usine se grise et un widget au-dessus propose ⬆ Améliorer et Vendre (avec « Êtes-vous sûr ? »). En mode édition :
+    - appuyer ailleurs (+ glisser) la déplace à cet endroit avec un nouveau sens ;
+    - appuyer sur elle et glisser la tourne ;
+    - la toucher à nouveau ou ✕ ferme.
+  - **Pan** : glisser sur le sol vide sans outil, deux doigts avec n'importe quel outil, clic droit/molette sur PC.
   - Icônes : 💤 = attend sa matière, ⛔ = sortie bloquée (pas de tapis, ou stock plein).
 - **Marché** (débloqué à la 1re vente) : onglets de ressources (👑 = ton monopole, ⚠️ = celui d'un rival), bandeau monopole, prix (± / curseur), marge, qualité, cartes camembert.
 - Les nouveautés arrivent une par une, avec une pastille et un toast : Marché → Pressage → Embouteillage → améliorations → stock → cartes segments → Outcomes supplémentaires.
@@ -76,8 +81,9 @@ Plancher : `coût unitaire × (1 + price_floor_margin)`, arrondi au pas de prix 
 | `market.demand_wave_amp` / `_period_s` | heures de pointe (utilité du stock) |
 | `machines[]` | prix (et hausse par exemplaire), vitesse, améliorations, qualité par niveau ; `outcome` = point de vente |
 | `grid.cols` / `rows` / `outcome_x` / `_y` | taille de l'usine et position du 1er Outcome |
-| `grid.belt_cost` / `belt_speed` | prix d'un tapis, cases/s (débit max ≈ 60 × vitesse /min) |
-| `player.start_money` / `base_income_per_s` / `stock_*` | démarrage, revenu de base, stock |
+| `grid.belt_cost` / `belt_speed` | prix d'un tapis (0 = gratuit), cases/s (débit max ≈ 60 × vitesse /min) |
+| `player.start_money` / `stock_*` | démarrage, stock |
+| `machines[].first_free` | le 1er exemplaire est gratuit (Cueillette) |
 | `rivals[]` (`market`, `behavior`, prix, qualité, production, croissance) | rivaux de chaque marché |
 | `ai.price_interval_s` / `upgrade_interval_s` | nervosité et progression des rivaux |
 | `reveal.*` | rythme de la révélation progressive |

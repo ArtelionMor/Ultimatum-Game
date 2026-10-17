@@ -22,9 +22,9 @@ const NO_SAVE = new URLSearchParams(location.search).has('nosave'); // test sess
 const G = {
   cfg: null, st: null, speed: 1, tab: 'factory', market: 'fruit',
   onAction,
-  // Sales margin of every market + base income.
+  // Sales margin of every market.
   incomePerMin: () => {
-    let inc = (G.cfg.player.base_income_per_s || 0) * 60;
+    let inc = 0;
     for (const r of G.cfg.markets) {
       const m = G.st.mk[r.id];
       inc += m.shares.flow.you * 60 * (m.you.price - unitCost(r, m.you.quality));
@@ -184,12 +184,12 @@ function hint() {
   const tool = currentTool();
   // Onboarding: one harvester wired to the Outcome sells lemons.
   if (!n('harvest')) return tool === 'harvest'
-    ? '👉 Touche la grille pour poser la Cueillette. ⟳ change son sens (flèche verte = sortie).'
-    : '👉 Choisis 🍋 Cueillette dans la barre, puis touche la grille.';
+    ? '👉 Appuie sur la grille, glisse vers où doivent sortir les citrons, puis lâche.'
+    : '👉 Choisis 🍋 Cueillette (gratuite) dans la barre.';
   if (!totalSold(st) && !Object.values(st.stats.delivered).some(Boolean)) {
-    if (tool !== 'belt') return '👉 Choisis ⇉ Tapis et glisse le doigt de la sortie verte jusqu’à l’📤 Outcome.';
+    if (tool !== 'belt') return '👉 Choisis ⇉ Tapis (gratuit) et glisse le doigt de la sortie verte jusqu’à l’📤 Outcome.';
     if (g.machines.find(m => m.status === 'blocked')) return '👉 Tire un tapis depuis la sortie verte de la Cueillette jusqu’à l’📤 Outcome.';
-    return '👉 Termine le tapis jusqu’à l’📤 Outcome (glisse ✋ pour déplacer la vue).';
+    return '👉 Termine le tapis jusqu’à l’📤 Outcome (deux doigts pour déplacer la vue).';
   }
   if (st.unlocked.market && !st.seen.market) return '👉 Ouvre l’onglet Marché, en bas.';
   for (const r of openMarkets(cfg, st)) {

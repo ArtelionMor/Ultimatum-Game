@@ -57,10 +57,12 @@ const changed = grid => { grid.v++; };
 export const countOf = (grid, type) => grid.machines.filter(m => m.type === type).length;
 export const isSink = (cfg, m) => !!machineDef(cfg, m.type)?.sink;
 
+// `first_free`: the first copy of that machine costs nothing (onboarding).
 export function placeCost(cfg, grid, type) {
   if (type === 'belt') return cfg.grid.belt_cost;
-  const d = machineDef(cfg, type);
-  return Math.ceil(d.cost * Math.pow(d.cost_mult, countOf(grid, type)));
+  const d = machineDef(cfg, type), n = countOf(grid, type);
+  if (d.first_free && n === 0) return 0;
+  return Math.ceil(d.cost * Math.pow(d.cost_mult, n));
 }
 
 export const machineRate = (d, lvl) => d.base_rate * Math.pow(d.rate_mult, lvl - 1);
@@ -125,6 +127,14 @@ export function removeBelt(grid, x, y) {
 export function removeMachine(grid, m) {
   if (m.type === 'outcome' && countOf(grid, 'outcome') <= 1) return false;
   grid.machines = grid.machines.filter(o => o !== m);
+  changed(grid);
+  return true;
+}
+
+export function setMachineRot(grid, m, rot) {
+  if (m.type === 'outcome' || m.rot === rot) return false;
+  m.rot = rot;
+  m.out = null;
   changed(grid);
   return true;
 }

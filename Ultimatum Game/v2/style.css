@@ -42,7 +42,7 @@ button { font: inherit; color: inherit; }
 #money.neg { color: var(--bad); }
 #income { color: var(--you); font-weight: 600; font-size: 14px; }
 #income.neg { color: var(--bad); }
-#hint { margin-top: 6px; padding: 7px 10px; border-radius: 10px; background: rgba(90,169,255,.12); color: #cfe4ff; font-size: 13px; min-height: 32px; }
+#hint { margin-top: 6px; padding: 7px 10px; border-radius: 10px; background: rgba(90,169,255,.12); color: #cfe4ff; font-size: 13px; line-height: 17px; height: 50px; overflow: hidden; display: flex; align-items: center; }
 #hint.flash { animation: hintpop .6s ease; }
 
 /* --- Screens -------------------------------------------------------------- */
@@ -219,3 +219,15 @@ main { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 12px 14px 16px; }
   font: 900 28px "KFuture", system-ui, sans-serif; color: var(--gold); text-shadow: 0 4px 16px #000, 0 0 30px rgba(255,207,74,.6);
   animation: monoflash 2.6s ease forwards; }
 @keyframes monoflash { 0% { opacity: 0; transform: scale(.6); } 15% { opacity: 1; transform: scale(1.1); } 25% { transform: scale(1); } 80% { opacity: 1; } 100% { opacity: 0; transform: translateY(-30px); } }
+
+/* --- Edit widget / confirm ---------------------------------------------------- */
+#edit-widget { position: absolute; z-index: 30; max-width: 300px; background: #232837; border: 1px solid var(--accent); border-radius: 12px;
+  padding: 8px 10px; box-shadow: 0 8px 22px rgba(0,0,0,.55); display: flex; flex-direction: column; gap: 5px; }
+.ew-title { font-weight: 800; font-size: 14px; }
+.ew-meta { font-size: 12px; color: var(--muted); }
+.ew-btns { display: flex; gap: 6px; justify-content: flex-end; }
+.btn.up-mini { background: #2b5a3c; color: #d9ffe8; }
+.btn.up-mini.cant { background: var(--panel2); color: var(--muted); }
+.confirm-box { background: #232837; border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin: 0 24px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,.6); }
+.confirm-box p { margin: 0 0 14px; font-size: 15px; }
+.confirm-btns { display: flex; gap: 10px; justify-content: center; }

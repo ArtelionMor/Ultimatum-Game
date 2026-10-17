@@ -18,14 +18,14 @@
     { "market": "bottle", "id": "prem", "name": "Premium",   "icon": "💎", "demand_per_min": 130, "a": 0.6, "b": 1.5, "c": 0.8, "refuse_below": 2.5 }
   ],
   "monopoly": { "share": 0.8, "hold_s": 20, "grow_tau_s": 30, "decay_tau_s": 20, "decay_k": 1.5 },
-  "grid": { "cols": 20, "rows": 26, "outcome_x": 9, "outcome_y": 12, "belt_cost": 2, "belt_speed": 4, "machine_buffer": 2, "sell_refund": 0.5 },
+  "grid": { "cols": 20, "rows": 26, "outcome_x": 9, "outcome_y": 12, "belt_cost": 0, "belt_speed": 4, "machine_buffer": 2, "sell_refund": 0.5 },
   "machines": [
-    { "id": "harvest", "name": "Cueillette",    "icon": "🍋", "color": "#7a8a2e", "input_stage": null, "output_stage": 0, "cost": 20, "cost_mult": 1.45, "base_rate": 24, "rate_mult": 1.3, "up_cost": 15, "up_cost_mult": 1.35, "quality_per_level": 0.2 },
+    { "id": "harvest", "name": "Cueillette",    "icon": "🍋", "color": "#7a8a2e", "input_stage": null, "output_stage": 0, "first_free": true, "cost": 20, "cost_mult": 1.45, "base_rate": 24, "rate_mult": 1.3, "up_cost": 15, "up_cost_mult": 1.35, "quality_per_level": 0.2 },
     { "id": "press",   "name": "Pressage",      "icon": "⚙️", "color": "#8a5a2e", "input_stage": 0,    "output_stage": 1, "cost": 30, "cost_mult": 1.45, "base_rate": 30, "rate_mult": 1.3, "up_cost": 20, "up_cost_mult": 1.35, "quality_per_level": 0.3 },
     { "id": "bottle",  "name": "Embouteillage", "icon": "🍾", "color": "#2e6a8a", "input_stage": 1,    "output_stage": 2, "cost": 40, "cost_mult": 1.45, "base_rate": 30, "rate_mult": 1.3, "up_cost": 25, "up_cost_mult": 1.35, "quality_per_level": 0.4 },
     { "id": "outcome", "name": "Outcome",       "icon": "📤", "color": "#3a3f52", "sink": true, "input_stage": null, "output_stage": null, "cost": 60, "cost_mult": 2, "base_rate": 0, "rate_mult": 1, "up_cost": 0, "up_cost_mult": 1, "quality_per_level": 0 }
   ],
-  "player": { "start_money": 60, "base_income_per_s": 1, "start_quality": 1, "quality_max": 5, "stock_base": 30, "stock_mult": 1.5, "stock_base_cost": 40, "stock_cost_mult": 1.6 },
+  "player": { "start_money": 60, "start_quality": 1, "quality_max": 5, "stock_base": 30, "stock_mult": 1.5, "stock_base_cost": 40, "stock_cost_mult": 1.6 },
   "rivals": [
     { "market": "fruit",  "id": "orchard",  "name": "Le Verger Géant",    "icon": "🌳", "color": "#e8833a", "desc": "Des citrons à la tonne, moins chers que les tiens.", "behavior": "undercut", "start_price": 1.2, "price_floor_margin": 0.1, "behavior_param": 0.05, "quality": 1.0, "quality_step": 0.05, "quality_max": 1.5, "prod_per_min": 280, "prod_growth": 0.06, "stock_cap": 220 },
     { "market": "fruit",  "id": "organic",  "name": "Bio & Co",           "icon": "🌿", "color": "#9b6bdf", "desc": "Citrons bio, chers et superbes.",                     "behavior": "premium",  "start_price": 3.6, "price_floor_margin": 0.3, "behavior_param": 0.03, "quality": 4.0, "quality_step": 0.05, "quality_max": 4.5, "prod_per_min": 70,  "prod_growth": 0.06, "stock_cap": 50 },

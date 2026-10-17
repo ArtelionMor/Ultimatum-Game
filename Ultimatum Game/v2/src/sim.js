@@ -8,7 +8,7 @@
 import { marketCfg, stepMarket, createShareTracker, trackShares, marketShares, demandMultiplier } from './market.js';
 import { stockCap, stockCost, unitCost, produce } from './factory.js';
 import { createGrid, stepGrid, gridQuality, placeCost, machineDef, machineRate, upgradeCost,
-  placeMachine, placeBelt, removeMachine, removeBelt, beltAt } from './grid.js';
+  placeMachine, placeBelt, removeMachine, removeBelt, beltAt, countOf } from './grid.js';
 import { createRival, repriceRival, upgradeRival } from './ai.js';
 import { createBrand, stepBrand } from './monopoly.js';
 
@@ -80,7 +80,6 @@ export const totalSold = st => Object.values(st.stats.sold).reduce((a, b) => a +
 export function step(cfg, st, dt) {
   const ev = [];
   st.t += dt;
-  st.money += (cfg.player.base_income_per_s || 0) * dt;   // never stuck broke
   const mult = demandMultiplier(cfg, st.t);
 
   // Factory floor → one stock per item.
@@ -172,13 +171,20 @@ export function buyBelt(cfg, st, x, y, dir) {
   return { ok: true, cost };
 }
 
-// Selling refunds part of the build price (and of the upgrades). Returns the refund, or -1.
-export function sellMachine(cfg, st, m) {
+// What selling `m` gives back: part of what rebuilding it would cost (the
+// price of the last copy of its type) plus its upgrades.
+export function sellValue(cfg, st, m) {
   const d = machineDef(cfg, m.type);
-  if (!d || !removeMachine(st.grid, m)) return -1;
-  let spent = Math.ceil(d.cost * Math.pow(d.cost_mult, st.grid.machines.filter(o => o.type === m.type).length));
+  const n = countOf(st.grid, m.type) - 1;
+  let spent = d.first_free && n === 0 ? 0 : Math.ceil(d.cost * Math.pow(d.cost_mult, n));
   for (let l = 1; l < m.lvl; l++) spent += upgradeCost(d, l);
-  const back = Math.floor(spent * cfg.grid.sell_refund);
+  return Math.floor(spent * cfg.grid.sell_refund);
+}
+
+// Returns the refund, or -1 if it can't be sold (the last Outcome).
+export function sellMachine(cfg, st, m) {
+  const back = sellValue(cfg, st, m);
+  if (!removeMachine(st.grid, m)) return -1;
   st.money += back;
   derive(cfg, st);
   return back;

@@ -1,11 +1,20 @@
 // Factory screen: a top-down grid, larger than the screen, where the player
 // buys and places 2×2 machines and draws conveyor belts.
-// Tools: ✋ manage (drag = pan, tap = select), one per machine, belt, ⟳.
-// Pan: one finger with ✋, two fingers with any tool, right/middle mouse or wheel.
+//
+// Gestures
+// - Machine tool: press where the machine goes, drag towards where its output
+//   should face, release to build.
+// - Belt tool: drag to draw belts (each points to the next); tap a belt to turn it.
+// - Touch an existing machine: drag it to move it; or tap it to edit it — the
+//   rest of the floor greys out and a widget above it offers upgrade / sell.
+//   While editing: press elsewhere (+ drag for the direction) to move it there,
+//   press on it and drag to turn it, tap it again (or ✕) to close.
+// - Pan: one finger on empty floor with no tool, two fingers anytime,
+//   right/middle mouse or wheel.
 
 import { DIRS, ports, machineAt, beltAt, machineDef, placeCost, canPlaceMachine, canPlaceBelt,
-  setBeltDir, rotateMachine, moveMachine, countOf } from '../grid.js';
-import { buyMachine, buyBelt, sellMachine, sellBelt, machineInfo, upgradeMachine, stockInfo, buyStock } from '../sim.js';
+  setBeltDir, setMachineRot, moveMachine, countOf } from '../grid.js';
+import { buyMachine, buyBelt, sellMachine, sellValue, sellBelt, machineInfo, upgradeMachine, stockInfo, buyStock } from '../sim.js';
 import { money, perMin, fmt, stars } from '../format.js';
 import { floatText, retrigger } from './fx.js';
 import { play } from './sound.js';
@@ -14,23 +23,22 @@ const $ = id => document.getElementById(id);
 const ARROWS = ['→', '↓', '←', '↑'];
 const STAGE_COLORS = ['#ffe14a', '#ffa53a', '#3ddc84'];
 const CELL = 34;
-const PAN_SLOP = 6;        // px a finger may move before a tap becomes a pan
+const SLOP = 6;            // px a finger may move before a tap becomes a drag
 
 let G, canvas, ctx, bound = false;
-let tool = 'hand', rot = 0;
+let tool = null;           // null | machine id | 'belt'
+let lastRot = 0;           // direction used for the previous build
 let cam = { x: 0, y: 0 }, viewW = 0, viewH = 0, camReady = false;
-let ghost = null;          // { x, y, ok } machine preview while the finger is down
-let drag = null;           // belt drawing: { last: [x, y], moved, startedOn }
-let sel = null;            // { kind: 'machine', m } | { kind: 'belt', x, y }
-let moving = null;         // machine being moved: the next tap on the grid drops it
-let tap = null;            // ✋ pending tap { x, y, cell }
-let pan = null;            // { x, y } last pan anchor (screen px)
+let edit = null;           // { kind: 'machine', m } | { kind: 'belt', x, y }
+let press = null;          // gesture in progress (see onDown)
+let ghost = null;          // { x, y, rot, ok, type, lvl } preview footprint
+let pan = null;            // last pan anchor (screen px)
 const pointers = new Map();
 const flashUntil = new Map();
 
 export function initFactory(game) {
   G = game;
-  sel = null; moving = null; tool = 'hand'; camReady = false;
+  edit = null; press = null; ghost = null; tool = null; camReady = false;
   buildToolbar();
   if (bound) return;
   bound = true;
@@ -39,32 +47,29 @@ export function initFactory(game) {
   canvas.addEventListener('pointerdown', onDown);
   canvas.addEventListener('pointermove', onMove);
   canvas.addEventListener('pointerup', onUp);
-  canvas.addEventListener('pointercancel', e => { pointers.delete(e.pointerId); ghost = null; drag = null; tap = null; pan = null; });
+  canvas.addEventListener('pointercancel', e => { pointers.delete(e.pointerId); press = null; ghost = null; pan = null; });
   canvas.addEventListener('contextmenu', e => e.preventDefault());
   canvas.addEventListener('wheel', e => { e.preventDefault(); panBy(e.deltaX, e.deltaY); }, { passive: false });
+  $('confirm-no').addEventListener('click', () => { $('confirm').classList.add('hidden'); renderFactory(); });
   requestAnimationFrame(draw);
 }
 
-// --- Toolbar ------------------------------------------------------------------
+// --- Toolbar (tap the active tool again to put it down) -------------------------
 
 function buildToolbar() {
+  const tools = [...G.cfg.machines.map(m => ({ id: m.id, icon: m.icon })), { id: 'belt', icon: '⇉' }];
   const bar = $('toolbar');
-  const tools = [{ id: 'hand', icon: '✋', label: 'Gérer' },
-    ...G.cfg.machines.map(m => ({ id: m.id, icon: m.icon })), { id: 'belt', icon: '⇉' }];
-  bar.innerHTML = tools.map(t => `<button class="tool" data-tool="${t.id}"><span class="ti">${t.icon}</span><small>${t.label || ''}</small></button>`).join('')
-    + `<button class="tool" id="rotate-btn" title="Tourner"><span class="ti">⟳</span><small>${ARROWS[rot]}</small></button>`;
+  bar.innerHTML = tools.map(t => `<button class="tool" data-tool="${t.id}"><span class="ti">${t.icon}</span><small></small></button>`).join('');
   bar.querySelectorAll('[data-tool]').forEach(b => b.addEventListener('click', () => {
-    tool = b.dataset.tool; sel = null; moving = null; play('tick', 0.2);
+    tool = tool === b.dataset.tool ? null : b.dataset.tool;
+    edit = null;
+    play('tick', 0.2);
     G.onAction('tool', tool);
     renderFactory();
   }));
-  $('rotate-btn').addEventListener('click', () => {
-    rot = (rot + 1) % 4; play('tick', 0.2);
-    $('rotate-btn').querySelector('small').textContent = ARROWS[rot];
-  });
 }
 
-const toolUnlocked = id => id === 'hand' || id === 'belt' || id === 'harvest' || !!G.st.unlocked[id];
+const toolUnlocked = id => id === 'belt' || id === 'harvest' || !!G.st.unlocked[id];
 export const currentTool = () => tool;
 
 export function renderFactory() {
@@ -73,16 +78,13 @@ export function renderFactory() {
     const id = b.dataset.tool;
     b.classList.toggle('hidden', !toolUnlocked(id));
     b.classList.toggle('active', id === tool);
-    b.classList.toggle('pulse', toolUnlocked(id) && id !== 'hand' && id !== 'belt' && !st.seen['tool_' + id]);
-    if (id !== 'hand') {
-      const c = placeCost(cfg, st.grid, id);
-      b.querySelector('small').textContent = money(c);
-      b.classList.toggle('cant', st.money < c);
-    }
+    b.classList.toggle('pulse', toolUnlocked(id) && id !== 'belt' && !st.seen['tool_' + id]);
+    const c = placeCost(cfg, st.grid, id);
+    b.querySelector('small').textContent = c === 0 ? 'Gratuit' : money(c);
+    b.classList.toggle('cant', st.money < c);
   });
-  $('rotate-btn').classList.toggle('hidden', tool === 'hand' || tool === 'outcome');
   renderStock();
-  renderSelection();
+  renderWidget();
 }
 
 // One line: each item's stock + the shared "grow storage" button.
@@ -114,95 +116,105 @@ function renderStock() {
   }
 }
 
-// --- Selection sheet ------------------------------------------------------------
+// --- Edit widget (floats above the edited machine / belt) ------------------------
 
 const STATUS = {
   ok: '✅ Tourne',
-  starved: '💤 Attend sa matière : amène un tapis sur son entrée (flèche orange).',
-  blocked: '⛔ Sortie bloquée : pose un tapis sur sa sortie (flèche verte), ou ton stock est plein.',
+  starved: '💤 Attend sa matière (flèche orange)',
+  blocked: '⛔ Sortie bloquée (flèche verte) ou stock plein',
   idle: '…',
 };
 
-function sheet(html, handlers) {
-  const panel = $('sel-panel');
-  if (panel.dataset.html !== html) {
-    panel.innerHTML = html;
-    panel.dataset.html = html;
-    panel.querySelectorAll('[data-act]').forEach(b => b.addEventListener('click', () => handlers(b.dataset.act, b)));
+function renderWidget() {
+  const w = $('edit-widget');
+  // Hidden while the sell confirmation is open, so the dialog is the only thing to answer.
+  if (!edit || G.tab !== 'factory' || !$('confirm').classList.contains('hidden')) { w.classList.add('hidden'); return; }
+  const { cfg, st } = G;
+  let html;
+  if (edit.kind === 'belt') {
+    if (!beltAt(st.grid, edit.x, edit.y)) { edit = null; w.classList.add('hidden'); return; }
+    html = `<div class="ew-title">⇉ Tapis</div>
+      <div class="ew-btns"><button class="btn small" data-act="rot">⟳</button><button class="btn small danger" data-act="sell">Vendre</button><button class="btn small" data-act="close">✕</button></div>`;
+  } else {
+    const m = edit.m, d = machineDef(cfg, m.type);
+    if (d.sink) {
+      html = `<div class="ew-title">📤 Outcome</div><div class="ew-meta">Glisse-le ailleurs pour le déplacer</div>
+        <div class="ew-btns">${countOf(st.grid, 'outcome') > 1 ? '<button class="btn small danger" data-act="sell">Vendre</button>' : ''}<button class="btn small" data-act="close">✕</button></div>`;
+    } else {
+      const info = machineInfo(cfg, st, m);
+      const q = cfg.markets.find(r => r.stage === d.output_stage);
+      html = `<div class="ew-title">${d.icon} ${d.name} <span class="muted">Niv. ${m.lvl}</span></div>
+        <div class="ew-meta">${perMin(info.rate)} · ${q.icon} ${stars(st.mk[q.id].you.quality)} · ${STATUS[m.status]}</div>
+        <div class="ew-btns">
+          <button class="btn small up-mini ${info.affordable ? '' : 'cant'}" data-act="up">⬆ ${perMin(info.nextRate)} · ${money(info.cost)}</button>
+          <button class="btn small danger" data-act="sell">Vendre</button>
+          <button class="btn small" data-act="close">✕</button>
+        </div>`;
+    }
   }
-  panel.classList.remove('hidden');
+  if (w.dataset.html !== html) {
+    w.innerHTML = html;
+    w.dataset.html = html;
+    w.querySelectorAll('[data-act]').forEach(b => b.addEventListener('click', () => onWidget(b.dataset.act, b)));
+  }
+  w.classList.remove('hidden');
+  placeWidget();
 }
 
-function renderSelection() {
-  const panel = $('sel-panel');
+// Keep the widget above its target (below it near the top edge).
+function placeWidget() {
+  const w = $('edit-widget');
+  if (!edit || w.classList.contains('hidden')) return;
+  const a = $('app').getBoundingClientRect(), r = canvas.getBoundingClientRect();
+  const cx = edit.kind === 'belt' ? (edit.x + 0.5) * CELL : (edit.m.x + 1) * CELL;
+  const top = edit.kind === 'belt' ? edit.y * CELL : edit.m.y * CELL;
+  const bottom = top + (edit.kind === 'belt' ? 1 : 2) * CELL;
+  const sx = r.left - a.left + cx - cam.x;
+  let sy = r.top - a.top + top - cam.y - w.offsetHeight - 8;
+  if (sy < r.top - a.top) sy = r.top - a.top + bottom - cam.y + 8;
+  const half = w.offsetWidth / 2;
+  w.style.left = Math.max(8, Math.min(a.width - w.offsetWidth - 8, sx - half)) + 'px';
+  w.style.top = sy + 'px';
+}
+
+function onWidget(act, btn) {
   const { cfg, st } = G;
-  if (G.tab !== 'factory') { panel.classList.add('hidden'); return; }
-  if (moving) {
-    sheet(`<div class="sel-title">✥ Déplacement</div><div class="sel-meta">Touche la grille où poser la machine (glisse pour ajuster).</div>
-      <div class="sel-btns"><button class="btn small" data-act="cancel">Annuler</button></div>`, () => { moving = null; renderFactory(); });
+  if (act === 'close') { edit = null; renderFactory(); return; }
+  if (edit.kind === 'belt') {
+    if (act === 'rot') {
+      const b = beltAt(st.grid, edit.x, edit.y);
+      if (b) setBeltDir(st.grid, edit.x, edit.y, (b.dir + 1) % 4);
+      play('tick', 0.3);
+    } else if (act === 'sell') { sellBelt(cfg, st, edit.x, edit.y); edit = null; G.onAction('sell'); }
+    renderFactory();
     return;
   }
-  if (!sel) { panel.classList.add('hidden'); return; }
-  const close = '<button class="btn small" data-act="close">✕</button>';
-  if (sel.kind === 'machine' && machineDef(cfg, sel.m.type).sink) {
-    const lines = cfg.markets.map(r => `${r.icon} ${fmt(Math.floor(st.mk[r.id].you.stock))}/${fmt(st.mk[r.id].you.stockCap)}`).join(' · ');
-    sheet(`<div class="sel-title">📤 Outcome</div>
-      <div class="sel-meta">Envoie à la vente tout ce qui y entre, par tous les côtés. Stock : ${lines}</div>
-      <div class="sel-btns">
-        <button class="btn small" data-act="move">✥ Déplacer</button>
-        ${countOf(st.grid, 'outcome') > 1 ? '<button class="btn small danger" data-act="sell">Vendre</button>' : ''}
-        ${close}
-      </div>`, onSelAction);
-  } else if (sel.kind === 'machine') {
-    const m = sel.m, info = machineInfo(cfg, st, m);
-    const q = cfg.markets.find(r => r.stage === info.def.output_stage);
-    sheet(`<div class="sel-title">${info.def.icon} ${info.def.name} <span class="muted">Niv. ${m.lvl}</span></div>
-      <div class="sel-meta">${perMin(info.rate)} · qualité ${q.icon} ${stars(st.mk[q.id].you.quality)} · ${STATUS[m.status]}</div>
-      ${st.unlocked.upgrades ? `<button class="btn up ${info.affordable ? '' : 'cant'}" data-act="up"><span>Améliorer → ${perMin(info.nextRate)}</span><span>${money(info.cost)}</span></button>` : ''}
-      <div class="sel-btns">
-        <button class="btn small" data-act="move">✥ Déplacer</button>
-        <button class="btn small" data-act="rot">⟳ Tourner</button>
-        <button class="btn small danger" data-act="sell">Vendre</button>
-        ${close}
-      </div>`, onSelAction);
-  } else {
-    const b = beltAt(st.grid, sel.x, sel.y);
-    if (!b) { sel = null; panel.classList.add('hidden'); return; }
-    sheet(`<div class="sel-title">⇉ Tapis <span class="muted">${ARROWS[b.dir]}</span></div>
-      <div class="sel-btns">
-        <button class="btn small" data-act="rot">⟳ Tourner</button>
-        <button class="btn small danger" data-act="sell">Vendre</button>
-        ${close}
-      </div>`, onSelAction);
-  }
+  const m = edit.m;
+  if (act === 'up') {
+    if (upgradeMachine(cfg, st, m)) {
+      play('buy');
+      flashUntil.set(m, performance.now() + 600);
+      floatText(btn, perMin(machineInfo(cfg, st, m).rate), 'gold');
+      G.onAction('upgrade');
+    } else floatText(btn, 'Pas assez d\'argent', 'bad');
+  } else if (act === 'sell') confirmSell(m);
+  renderFactory();
 }
 
-function onSelAction(act, btn) {
-  const { cfg, st } = G;
-  if (act === 'close') sel = null;
-  else if (sel?.kind === 'machine') {
-    const m = sel.m;
-    if (act === 'up') {
-      if (upgradeMachine(cfg, st, m)) {
-        play('buy');
-        flashUntil.set(m, performance.now() + 600);
-        floatText(btn, perMin(machineInfo(cfg, st, m).rate), 'gold');
-        G.onAction('upgrade');
-      } else floatText(btn, 'Pas assez d\'argent', 'bad');
-    } else if (act === 'move') { moving = m; sel = null; play('tick', 0.3); }
-    else if (act === 'rot') { rotateMachine(st.grid, m); play('tick', 0.3); }
-    else if (act === 'sell') {
-      const back = sellMachine(cfg, st, m);
-      if (back >= 0) { floatText(btn, `+${money(back)}`, 'gold'); sel = null; G.onAction('sell'); }
-    }
-  } else if (sel?.kind === 'belt') {
-    if (act === 'rot') {
-      const b = beltAt(st.grid, sel.x, sel.y);
-      if (b) setBeltDir(st.grid, sel.x, sel.y, (b.dir + 1) % 4);
-      play('tick', 0.3);
-    } else if (act === 'sell') { sellBelt(cfg, st, sel.x, sel.y); sel = null; G.onAction('sell'); }
-  }
-  renderFactory();
+function confirmSell(m) {
+  const { cfg, st } = G, d = machineDef(cfg, m.type);
+  const back = sellValue(cfg, st, m);
+  $('confirm-text').textContent = `Vendre ${d.icon} ${d.name}${d.sink ? '' : ` (niv. ${m.lvl})`} ? Tu récupères ${money(back)}.`;
+  $('confirm').classList.remove('hidden');
+  renderWidget();
+  $('confirm-yes').onclick = () => {
+    $('confirm').classList.add('hidden');
+    const got = sellMachine(cfg, st, m);
+    if (got >= 0) { floatText($('money'), `+${money(got)}`, 'gold'); play('tick', 0.4); }
+    edit = null;
+    G.onAction('sell');
+    renderFactory();
+  };
 }
 
 // --- Camera -------------------------------------------------------------------
@@ -212,7 +224,7 @@ function clampCam() {
   cam.x = Math.max(0, Math.min(Math.max(0, g.cols * CELL - viewW), cam.x));
   cam.y = Math.max(0, Math.min(Math.max(0, g.rows * CELL - viewH), cam.y));
 }
-function panBy(dx, dy) { cam.x += dx; cam.y += dy; clampCam(); }
+function panBy(dx, dy) { cam.x += dx; cam.y += dy; clampCam(); placeWidget(); }
 function centerOn(m) {
   cam.x = (m.x + 1) * CELL - viewW / 2;
   cam.y = (m.y + 1) * CELL - viewH / 2;
@@ -227,12 +239,25 @@ function toCell(e) {
   return { fx, fy, x: Math.floor(fx), y: Math.floor(fy) };
 }
 
-// The 2×2 footprint is centred on the finger.
-function machineGhost(p) {
+// 2×2 footprint centred on the finger.
+function footprintAt(p) {
   const { cols, rows } = G.st.grid;
-  const x = Math.max(0, Math.min(cols - 2, Math.round(p.fx - 1)));
-  const y = Math.max(0, Math.min(rows - 2, Math.round(p.fy - 1)));
-  return { x, y, ok: canPlaceMachine(G.st.grid, x, y, moving) };
+  return {
+    x: Math.max(0, Math.min(cols - 2, Math.round(p.fx - 1))),
+    y: Math.max(0, Math.min(rows - 2, Math.round(p.fy - 1))),
+  };
+}
+
+// Direction from the footprint centre to the finger; `fallback` while the
+// finger is still on the machine.
+function dirTowards(g, p, fallback) {
+  const dx = p.fx - (g.x + 1), dy = p.fy - (g.y + 1);
+  if (Math.hypot(dx, dy) < 1.1) return fallback;
+  return Math.abs(dx) >= Math.abs(dy) ? (dx > 0 ? 0 : 2) : (dy > 0 ? 1 : 3);
+}
+
+function makeGhost(x, y, rot, type, lvl, ignore) {
+  return { x, y, rot, type, lvl, ok: canPlaceMachine(G.st.grid, x, y, ignore) };
 }
 
 const midpoint = () => {
@@ -244,35 +269,93 @@ function onDown(e) {
   pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
   canvas.setPointerCapture(e.pointerId);
   if (e.button === 1 || e.button === 2 || pointers.size >= 2) {
-    // Second finger or right/middle mouse: pan, and drop whatever was being placed.
-    ghost = null; drag = null; tap = null;
+    // Second finger or right/middle mouse: pan, and drop the gesture in progress.
+    press = null; ghost = null;
     pan = midpoint();
     return;
   }
-  const p = toCell(e);
-  if (moving) { ghost = machineGhost(p); return; }
-  if (tool === 'hand') { tap = { x: e.clientX, y: e.clientY, cell: p }; return; }
+  const p = toCell(e), grid = G.st.grid;
+  const m = machineAt(grid, p.x, p.y);
+  const sx = e.clientX, sy = e.clientY;
+
+  if (edit?.kind === 'machine') {
+    const em = edit.m;
+    if (m === em) {
+      // On the edited machine: drag to turn it, tap to close.
+      press = { mode: 'turn', m: em, sx, sy };
+      ghost = makeGhost(em.x, em.y, em.rot, em.type, em.lvl, em);
+    } else if (m) {
+      edit = { kind: 'machine', m };
+      press = { mode: 'tap', sx, sy };
+    } else {
+      // Elsewhere: that's where it goes; drag for the direction.
+      const f = footprintAt(p);
+      press = { mode: 'move', m: em, sx, sy };
+      ghost = makeGhost(f.x, f.y, em.rot, em.type, em.lvl, em);
+    }
+    renderFactory();
+    return;
+  }
+  if (m) {
+    // Touch a machine: drag it to move it, or tap to edit it.
+    press = { mode: 'grab', m, sx, sy };
+    return;
+  }
   if (tool === 'belt') {
-    const existing = beltAt(G.st.grid, p.x, p.y);
-    drag = { last: [p.x, p.y], moved: false, startedOn: !!existing };
-    if (!existing) tryBelt(p.x, p.y, rot, e);
-  } else ghost = machineGhost(p);
+    const existing = beltAt(grid, p.x, p.y);
+    press = { mode: 'belt', last: [p.x, p.y], moved: false, startedOn: !!existing, sx, sy };
+    if (!existing) tryBelt(p.x, p.y, lastRot, e);
+  } else if (tool) {
+    const f = footprintAt(p);
+    press = { mode: 'place', sx, sy };
+    ghost = makeGhost(f.x, f.y, lastRot, tool, 1, null);
+  } else {
+    press = { mode: beltAt(grid, p.x, p.y) ? 'beltTap' : 'empty', cell: p, sx, sy };
+  }
 }
 
 function onMove(e) {
   if (!pointers.has(e.pointerId)) return;
   pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
-  if (tap && Math.hypot(e.clientX - tap.x, e.clientY - tap.y) > PAN_SLOP) { pan = { x: tap.x, y: tap.y }; tap = null; }
   if (pan) {
-    const m = midpoint();
-    panBy(pan.x - m.x, pan.y - m.y);
-    pan = m;
+    const mp = midpoint();
+    panBy(pan.x - mp.x, pan.y - mp.y);
+    pan = mp;
     return;
   }
-  if (!ghost && !drag) return;
+  if (!press) return;
+  const far = Math.hypot(e.clientX - press.sx, e.clientY - press.sy) > SLOP;
   const p = toCell(e);
-  if (ghost) { ghost = machineGhost(p); return; }
-  const [lx, ly] = drag.last;
+  switch (press.mode) {
+    case 'empty':
+    case 'beltTap':
+      if (far) { pan = { x: press.sx, y: press.sy }; press = null; onMove(e); }
+      break;
+    case 'grab': {
+      const m = press.m;
+      const inside = p.x >= m.x && p.x < m.x + 2 && p.y >= m.y && p.y < m.y + 2;
+      if (far && !inside) { press = { mode: 'drag', m, sx: press.sx, sy: press.sy }; edit = null; renderFactory(); }
+      break;
+    }
+    case 'drag': {
+      const f = footprintAt(p);
+      ghost = makeGhost(f.x, f.y, press.m.rot, press.m.type, press.m.lvl, press.m);
+      break;
+    }
+    case 'place':
+    case 'move':
+    case 'turn':
+      ghost = { ...ghost, rot: dirTowards(ghost, p, press.mode === 'place' ? lastRot : press.m.rot) };
+      if (press.mode === 'turn' && far) press.turned = true;
+      break;
+    case 'belt':
+      drawBelt(p, e);
+      break;
+  }
+}
+
+function drawBelt(p, e) {
+  const [lx, ly] = press.last;
   if (p.x === lx && p.y === ly) return;
   // Walk one cell at a time towards the finger so fast swipes leave no holes;
   // each belt points to the next one.
@@ -285,51 +368,64 @@ function onMove(e) {
     if (!beltAt(G.st.grid, nx, ny) && !tryBelt(nx, ny, dir, e)) break;
     setBeltDir(G.st.grid, nx, ny, dir);
     cx = nx; cy = ny;
-    rot = dir;
+    lastRot = dir;
   }
-  $('rotate-btn').querySelector('small').textContent = ARROWS[rot];
-  drag.last = [cx, cy];
-  drag.moved = true;
+  press.last = [cx, cy];
+  press.moved = true;
 }
 
 function onUp(e) {
   pointers.delete(e.pointerId);
-  if (pan) { if (!pointers.size) pan = null; else pan = midpoint(); return; }
-  if (tap) {
-    const p = tap.cell; tap = null;
-    const m = machineAt(G.st.grid, p.x, p.y);
-    if (m) sel = { kind: 'machine', m };
-    else if (beltAt(G.st.grid, p.x, p.y)) sel = { kind: 'belt', x: p.x, y: p.y };
-    else sel = null;
-  } else if (ghost && moving) {
-    const g = ghost, m = moving; ghost = null;
-    if (moveMachine(G.st.grid, m, g.x, g.y)) {
-      moving = null;
-      play('buy');
-      flashUntil.set(m, performance.now() + 600);
-      sel = { kind: 'machine', m };
-      G.onAction('move');
-    } else floatAt(e, 'Place occupée', 'bad');
-  } else if (ghost) {
-    const g = ghost; ghost = null;
-    const r = buyMachine(G.cfg, G.st, tool, g.x, g.y, rot);
-    if (r.ok) {
-      play('buy');
-      flashUntil.set(machineAt(G.st.grid, g.x, g.y), performance.now() + 600);
-      floatAt(e, `-${money(r.cost)}`, 'bad');
-      G.st.seen['tool_' + tool] = true;
-      G.onAction('build', tool);
-    } else floatAt(e, r.why === 'money' ? 'Pas assez d\'argent' : 'Place occupée', 'bad');
-  } else if (drag) {
-    // A tap on an existing belt turns it.
-    if (!drag.moved && drag.startedOn) {
-      const p = toCell(e), b = beltAt(G.st.grid, p.x, p.y);
-      if (b) { setBeltDir(G.st.grid, p.x, p.y, (b.dir + 1) % 4); play('tick', 0.3); }
+  if (pan) { pan = pointers.size ? midpoint() : null; return; }
+  const pr = press, g = ghost;
+  press = null; ghost = null;
+  if (!pr) return;
+  const grid = G.st.grid;
+  switch (pr.mode) {
+    case 'empty': edit = null; break;
+    case 'beltTap': { const c = pr.cell; edit = { kind: 'belt', x: c.x, y: c.y }; break; }
+    case 'tap': break;
+    case 'grab': edit = { kind: 'machine', m: pr.m }; play('tick', 0.2); break;
+    case 'drag':
+      if (g && moveMachine(grid, pr.m, g.x, g.y)) { dropped(pr.m); }
+      else floatAt(e, 'Place occupée', 'bad');
+      break;
+    case 'turn':
+      if (pr.turned && g) { setMachineRot(grid, pr.m, g.rot); flashUntil.set(pr.m, performance.now() + 400); play('tick', 0.3); }
+      else edit = null;   // tap on the edited machine closes the editor
+      break;
+    case 'move':
+      if (g && g.ok && moveMachine(grid, pr.m, g.x, g.y)) { setMachineRot(grid, pr.m, g.rot); dropped(pr.m); edit = null; }
+      else floatAt(e, 'Place occupée', 'bad');
+      break;
+    case 'place': {
+      const r = g ? buyMachine(G.cfg, G.st, tool, g.x, g.y, g.rot) : { ok: false, why: 'place' };
+      if (r.ok) {
+        lastRot = g.rot;
+        play('buy');
+        flashUntil.set(machineAt(grid, g.x, g.y), performance.now() + 600);
+        floatAt(e, r.cost ? `-${money(r.cost)}` : 'Gratuit !', r.cost ? 'bad' : 'gold');
+        G.st.seen['tool_' + tool] = true;
+        G.onAction('build', tool);
+      } else floatAt(e, r.why === 'money' ? 'Pas assez d\'argent' : 'Place occupée', 'bad');
+      break;
     }
-    drag = null;
-    G.onAction('build', 'belt');
+    case 'belt':
+      // A tap on an existing belt turns it.
+      if (!pr.moved && pr.startedOn) {
+        const p = toCell(e), b = beltAt(grid, p.x, p.y);
+        if (b) { setBeltDir(grid, p.x, p.y, (b.dir + 1) % 4); play('tick', 0.3); }
+      }
+      G.onAction('build', 'belt');
+      break;
   }
   renderFactory();
+}
+
+function dropped(m) {
+  play('buy', 0.3);
+  flashUntil.set(m, performance.now() + 500);
+  G.onAction('move');
 }
 
 function tryBelt(x, y, dir, e) {
@@ -372,7 +468,6 @@ function draw(now) {
   ctx.fillStyle = '#12151c';
   ctx.fillRect(0, 0, viewW, viewH);
   ctx.translate(-Math.round(cam.x), -Math.round(cam.y));
-  canvas.style.touchAction = 'none';
   const c = CELL;
 
   // floor (only visible cells)
@@ -385,26 +480,12 @@ function draw(now) {
   ctx.strokeStyle = '#3a4152'; ctx.lineWidth = 2;
   ctx.strokeRect(1, 1, grid.cols * c - 2, grid.rows * c - 2);
 
-  // belts
+  // belts + items
   const t = now / 1000;
   for (const k in grid.belts) {
-    const [x, y] = k.split(',').map(Number), b = grid.belts[k];
+    const [x, y] = k.split(',').map(Number);
     if (x < x0 - 1 || x > x1 || y < y0 - 1 || y > y1) continue;
-    ctx.fillStyle = '#2f3542';
-    ctx.fillRect(x * c + 2, y * c + 2, c - 4, c - 4);
-    ctx.save();
-    ctx.translate(x * c + c / 2, y * c + c / 2);
-    ctx.rotate(b.dir * Math.PI / 2);
-    ctx.strokeStyle = '#4f586d';
-    ctx.lineWidth = 2;
-    const off = (t * cfg.grid.belt_speed * c * 0.5) % (c / 2);
-    for (let i = -1; i < 2; i++) {
-      const sx = -c / 4 + off + i * c / 2;
-      if (sx < -c / 2 + 3 || sx > c / 2 - 8) continue;
-      ctx.beginPath(); ctx.moveTo(sx, -c / 4); ctx.lineTo(sx + 5, 0); ctx.lineTo(sx, c / 4); ctx.stroke();
-    }
-    ctx.restore();
-    if (sel && sel.kind === 'belt' && sel.x === x && sel.y === y) outline(x * c, y * c, c, c, '#5aa9ff');
+    drawBelt2(x, y, grid.belts[k], t);
   }
   for (const k in grid.belts) {
     const b = grid.belts[k];
@@ -413,15 +494,53 @@ function draw(now) {
     drawItem(x * c + c / 2 + dx * (b.p - 0.5) * c, y * c + c / 2 + dy * (b.p - 0.5) * c, b.item);
   }
 
-  for (const m of grid.machines) drawMachine(m, now);
+  const moving = press && (press.mode === 'drag' || press.mode === 'move' || press.mode === 'turn') ? press.m : null;
+  for (const m of grid.machines) if (m !== moving) drawMachine(m, now);
+
+  // Edit mode: grey everything but the edited thing.
+  if (edit || moving) {
+    ctx.fillStyle = 'rgba(8,10,14,.62)';
+    ctx.fillRect(0, 0, grid.cols * c, grid.rows * c);
+    if (edit?.kind === 'machine' && edit.m !== moving) { drawMachine(edit.m, now); outline(edit.m.x * c, edit.m.y * c, 2 * c, 2 * c, '#5aa9ff'); }
+    if (edit?.kind === 'belt') { const b = beltAt(grid, edit.x, edit.y); if (b) drawBelt2(edit.x, edit.y, b, t); outline(edit.x * c, edit.y * c, c, c, '#5aa9ff'); }
+  }
+  if (moving && !ghost) drawMachine(moving, now);
 
   if (ghost) {
-    ctx.globalAlpha = 0.6;
-    const src = moving || { type: tool, rot, lvl: 1 };
-    drawMachine({ type: src.type, x: ghost.x, y: ghost.y, rot: src.rot, lvl: src.lvl, prog: 0, status: 'ok', out: null }, now);
+    ctx.globalAlpha = 0.75;
+    drawMachine({ type: ghost.type, x: ghost.x, y: ghost.y, rot: ghost.rot, lvl: ghost.lvl, prog: 0, status: 'ok', out: null }, now);
     ctx.globalAlpha = 1;
     outline(ghost.x * c, ghost.y * c, c * 2, c * 2, ghost.ok ? '#3ddc84' : '#ff5d5d');
+    // big arrow showing where the output will face
+    if (!machineDef(cfg, ghost.type).sink) {
+      const [dx, dy] = DIRS[ghost.rot];
+      ctx.save();
+      ctx.translate((ghost.x + 1) * c + dx * c * 1.45, (ghost.y + 1) * c + dy * c * 1.45);
+      ctx.rotate(Math.atan2(dy, dx));
+      ctx.fillStyle = '#3ddc84';
+      ctx.beginPath(); ctx.moveTo(12, 0); ctx.lineTo(-6, -10); ctx.lineTo(-6, 10); ctx.closePath(); ctx.fill();
+      ctx.restore();
+    }
   }
+  placeWidget();
+}
+
+function drawBelt2(x, y, b, t) {
+  const c = CELL;
+  ctx.fillStyle = '#2f3542';
+  ctx.fillRect(x * c + 2, y * c + 2, c - 4, c - 4);
+  ctx.save();
+  ctx.translate(x * c + c / 2, y * c + c / 2);
+  ctx.rotate(b.dir * Math.PI / 2);
+  ctx.strokeStyle = '#4f586d';
+  ctx.lineWidth = 2;
+  const off = (t * G.cfg.grid.belt_speed * c * 0.5) % (c / 2);
+  for (let i = -1; i < 2; i++) {
+    const sx = -c / 4 + off + i * c / 2;
+    if (sx < -c / 2 + 3 || sx > c / 2 - 8) continue;
+    ctx.beginPath(); ctx.moveTo(sx, -c / 4); ctx.lineTo(sx + 5, 0); ctx.lineTo(sx, c / 4); ctx.stroke();
+  }
+  ctx.restore();
 }
 
 function drawMachine(m, now) {
@@ -432,7 +551,7 @@ function drawMachine(m, now) {
   ctx.fillStyle = flashing ? '#3d6b4d' : d.color;
   roundRect(x + 3, y + 3, s - 6, s - 6, 9); ctx.fill();
   ctx.lineWidth = 2;
-  ctx.strokeStyle = (sel && sel.m === m) || moving === m ? '#5aa9ff' : 'rgba(255,255,255,.18)';
+  ctx.strokeStyle = 'rgba(255,255,255,.18)';
   roundRect(x + 3, y + 3, s - 6, s - 6, 9); ctx.stroke();
 
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';

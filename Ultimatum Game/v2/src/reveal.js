@@ -12,7 +12,7 @@ export const REVEALS = [
   { id: 'bottle',   when: st => (st.stats.built.press || 0) >= 1,
     toast: '🍾 Nouveau : l’Embouteillage met le jus en bouteille, le produit le plus cher.' },
   { id: 'upgrades', when: st => st.seen.market && sold(st) >= 10,
-    toast: '🔧 Touche une machine (outil ✋) pour l’améliorer ou la déplacer.' },
+    toast: '🔧 Touche une machine pour l’améliorer ou la vendre ; fais-la glisser pour la déplacer.' },
   { id: 'stock',    when: (st, cfg) => st.stats.stockFullSeen || st.t >= cfg.reveal.stock_hint_after_s,
     toast: '📦 Ton stock est petit : agrandis-le pour vendre aux heures de pointe.' },
   { id: 'segments', when: st => st.seen.market && st.stats.priceChanges >= 1,
