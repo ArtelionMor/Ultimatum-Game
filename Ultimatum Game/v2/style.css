@@ -1,3 +1,4 @@
+@font-face { font-family: "KFuture"; src: url("assets/kenney/font/kenney-future.ttf") format("truetype"); font-display: swap; }
 :root {
   --bg: #14161c;
   --panel: #1f232d;
@@ -16,6 +17,9 @@ html, body { margin: 0; height: 100%; background: #0d0f13; color: var(--text);
   font: 15px/1.35 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
 button { font: inherit; color: inherit; }
 .hidden { display: none !important; }
+.kf, .big, #money, .tab, .win-box h1, .btn.up span:last-child, .label { font-family: "KFuture", system-ui, sans-serif; letter-spacing: .2px; }
+.ico-mask { display: inline-block; width: 1em; height: 1em; background: currentColor; vertical-align: -0.12em;
+  -webkit-mask: var(--icon) center / contain no-repeat; mask: var(--icon) center / contain no-repeat; }
 
 #app { position: relative; max-width: 480px; height: 100dvh; margin: 0 auto; background: var(--bg);
   display: flex; flex-direction: column; overflow: hidden; }
@@ -33,18 +37,18 @@ button { font: inherit; color: inherit; }
 #goal-hold.on { color: var(--gold); font-weight: 700; }
 .hud-row { display: flex; justify-content: space-between; align-items: baseline; margin-top: 6px; }
 #money-box { font-size: 24px; font-weight: 800; letter-spacing: .3px; }
-#money-box .coin { margin-right: 6px; }
+#money-box .coin { margin-right: 6px; color: var(--gold); }
 .bump { animation: bump .35s ease; display: inline-block; }
 #money.neg { color: var(--bad); }
 #income { color: var(--you); font-weight: 600; font-size: 14px; }
 #income.neg { color: var(--bad); }
 #hint { margin-top: 6px; padding: 7px 10px; border-radius: 10px; background: rgba(90,169,255,.12); color: #cfe4ff; font-size: 13px; min-height: 32px; }
-#hint.flash { animation: hintflash .6s ease; }
+#hint.flash { animation: hintpop .6s ease; }
 
 /* --- Screens -------------------------------------------------------------- */
 main { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 12px 14px 16px; }
 .screen { display: none; }
-.screen.active { display: block; animation: fadein .2s ease; }
+.screen.active { display: block; }
 .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; margin-bottom: 12px; }
 .row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .label { font-weight: 700; color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: .4px; }
@@ -55,12 +59,18 @@ main { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 12px 14px 16px; }
 
 .btn { border: 0; border-radius: 12px; padding: 10px 14px; background: var(--panel2); cursor: pointer; font-weight: 700; touch-action: manipulation; user-select: none; }
 .btn:active { transform: scale(.97); }
-.btn.up { width: 100%; display: flex; justify-content: space-between; align-items: center; background: #2b3a2f; color: #d9ffe8; }
-.btn.up.cant { background: var(--panel2); color: var(--muted); }
-.btn.up.reco { box-shadow: 0 0 0 2px var(--you) inset; }
-.btn.round { width: 44px; height: 44px; padding: 0; border-radius: 50%; font-size: 22px; flex: none; }
+/* Kenney UI buttons (9-slice) */
+.btn.up { width: 100%; display: flex; justify-content: space-between; align-items: center; background: none; border-radius: 0;
+  border-style: solid; border-width: 6px 10px 10px; border-image: url("assets/kenney/ui/btn_green.png") 12 20 20 20 fill / 6px 10px 10px;
+  padding: 4px 4px; color: #06351c; }
+.btn.up.cant { border-image-source: url("assets/kenney/ui/btn_grey.png"); color: #5d6370; }
+.btn.up.reco { border-image-source: url("assets/kenney/ui/btn_yellow.png"); color: #4a3300; }
+.btn.up:active { transform: translateY(2px); }
+.btn.round { width: 46px; height: 46px; padding: 0 0 5px; border-radius: 50%; font-size: 24px; flex: none; color: #fff;
+  background: url("assets/kenney/ui/round_blue.png") center / 100% 100% no-repeat; }
 .btn.small { padding: 6px 10px; font-size: 13px; border-radius: 8px; }
-.btn.primary { background: var(--you); color: #06210f; padding: 14px 28px; font-size: 17px; }
+.btn.primary { background: none; border-radius: 0; border-style: solid; border-width: 6px 10px 10px; color: #06351c; padding: 8px 26px; font-size: 18px;
+  border-image: url("assets/kenney/ui/btn_green.png") 12 20 20 20 fill / 6px 10px 10px; font-family: "KFuture", system-ui, sans-serif; }
 .btn.danger { background: #5a2626; }
 .btn.active { background: var(--accent); color: #061a33; }
 
@@ -129,13 +139,14 @@ main { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 12px 14px 16px; }
   font-size: 14px; box-shadow: 0 6px 18px rgba(0,0,0,.4); animation: toastin .25s ease, toastout .4s ease 3.6s forwards; }
 
 /* --- Debug / overlay ------------------------------------------------------ */
-#debug { position: absolute; top: 60px; right: 8px; width: 250px; background: #10131a; border: 1px solid var(--accent); border-radius: 12px; padding: 10px;
+#debug { position: absolute; top: 60px; right: 8px; width: 290px; background: #10131a; border: 1px solid var(--accent); border-radius: 12px; padding: 10px;
   z-index: 40; font-size: 13px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.6); }
-#debug input { width: 64px; background: var(--panel2); border: 1px solid var(--line); color: var(--text); border-radius: 6px; padding: 3px 5px; }
+#debug input { width: 52px; background: var(--panel2); border: 1px solid var(--line); color: var(--text); border-radius: 6px; padding: 3px 5px; }
 #debug .seg-btns { display: flex; gap: 4px; }
 .overlay { position: absolute; inset: 0; background: rgba(5,7,10,.82); display: grid; place-items: center; z-index: 50; animation: fadein .3s ease; }
 .win-box { text-align: center; padding: 24px; }
-.win-crown { font-size: 72px; animation: bump 1s ease infinite alternate; }
+.win-crown { font-size: 84px; color: var(--gold); animation: bump 1s ease infinite alternate; }
+.win-crown .ico-mask { filter: drop-shadow(0 4px 10px rgba(255,207,74,.5)); }
 .win-box h1 { margin: 6px 0 8px; color: var(--gold); }
 .win-box p { color: var(--muted); margin: 0 0 20px; }
 
@@ -145,5 +156,6 @@ main { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 12px 14px 16px; }
 @keyframes toastin { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @keyframes toastout { to { opacity: 0; transform: translateY(6px); } }
 @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+@keyframes hintpop { 0% { transform: scale(1.03); background-color: rgba(255,207,74,.35); } 100% { transform: none; background-color: rgba(90,169,255,.12); } }
 @keyframes hintflash { 0% { background-color: rgba(255,207,74,.35); } 100% { background-color: transparent; } }
 @keyframes cardflash { 0% { box-shadow: 0 0 0 3px var(--you); } 100% { box-shadow: 0 0 0 0 transparent; } }

@@ -5,7 +5,7 @@
   ],
   "market": { "temperature": 0.5, "share_smoothing_s": 8, "demand_wave_amp": 0.5, "demand_wave_period_s": 40 },
   "segments": [
-    { "id": "eco",  "name": "Économes", "icon": "🪙", "demand_per_min": 250, "a": 4.0, "b": 0.5, "refuse_below": -3.2 },
+    { "id": "eco",  "name": "Économes", "icon": "🛒", "demand_per_min": 250, "a": 4.0, "b": 0.5, "refuse_below": -3.2 },
     { "id": "std",  "name": "Standards", "icon": "🙂", "demand_per_min": 220, "a": 2.5, "b": 1.0, "refuse_below": -1.5 },
     { "id": "prem", "name": "Premium",  "icon": "💎", "demand_per_min": 130, "a": 0.6, "b": 1.5, "refuse_below": 2.5 }
   ],

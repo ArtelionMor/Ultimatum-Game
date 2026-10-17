@@ -20,7 +20,7 @@ export function initDebug(G) {
   temp.value = G.cfg.market.temperature;
   temp.addEventListener('change', () => { const v = Number(temp.value); if (v > 0) G.cfg.market.temperature = v; });
 
-  $('dbg-segments').innerHTML = G.cfg.segments.map(sg => `<div class="row">${sg.icon} ${sg.name}
+  $('dbg-segments').innerHTML = G.cfg.segments.map(sg => `<div class="row"><span style="white-space:nowrap">${sg.icon} ${sg.name}</span>
     <span>a <input type="number" step="0.1" data-seg="${sg.id}" data-k="a" value="${sg.a}">
     b <input type="number" step="0.1" data-seg="${sg.id}" data-k="b" value="${sg.b}"></span></div>`).join('');
   $('dbg-segments').querySelectorAll('input').forEach(inp => inp.addEventListener('change', () => {

@@ -1,10 +1,11 @@
 // Market screen: the one gesture here is setting the price.
 
-import { previewPreference, segmentShare } from '../market.js';
+import { previewPreference, segmentShare, score } from '../market.js';
 import { unitCost } from '../factory.js';
 import { productOf, sellersOf, shareOf, priceBounds, setPrice } from '../sim.js';
 import { price as fPrice, pct, perMin, stars, fmt } from '../format.js';
 import { floatText, retrigger } from './fx.js';
+import { play } from './sound.js';
 
 const $ = id => document.getElementById(id);
 const YOU_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--you').trim() || '#3ddc84';
@@ -12,17 +13,26 @@ const YOU_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 let G; // { cfg, st, onAction }
 const rivalEls = {};
 
+let bound = false;
 export function initMarket(game) {
   G = game;
+  if (!bound) bindControls();
+  bound = true;
+  buildRivals();
+}
+
+function bindControls() {
   const slider = $('price-slider');
   const apply = (p, src) => {
-    if (setPrice(G.cfg, G.st, p)) { G.onAction('price'); renderPrice(); if (src) retrigger($('price-value'), 'bump'); }
+    if (setPrice(G.cfg, G.st, p)) { G.onAction('price'); renderPrice(); if (src) { retrigger($('price-value'), 'bump'); play('tick', 0.25); } }
   };
   slider.addEventListener('input', () => apply(Number(slider.value)));
   const b = () => priceBounds(G.cfg, G.st).step;
   holdRepeat($('price-minus'), () => apply(G.st.you.price - b(), 'btn'));
   holdRepeat($('price-plus'), () => apply(G.st.you.price + b(), 'btn'));
+}
 
+function buildRivals() {
   const box = $('rivals');
   box.innerHTML = '';
   for (const def of G.cfg.competitors) {
@@ -37,12 +47,17 @@ export function initMarket(game) {
   }
 }
 
-// Press-and-hold repeats, so ± stays usable on mobile.
+// Tap = one step; press-and-hold repeats, so ± stays usable on mobile.
 function holdRepeat(btn, fn) {
-  let t1, t2;
+  let t1, t2, repeated = false;
   const stop = () => { clearTimeout(t1); clearInterval(t2); };
-  btn.addEventListener('pointerdown', e => { e.preventDefault(); fn(); t1 = setTimeout(() => { t2 = setInterval(fn, 90); }, 350); });
+  btn.addEventListener('pointerdown', () => {
+    stop();
+    repeated = false;
+    t1 = setTimeout(() => { repeated = true; fn(); t2 = setInterval(fn, 90); }, 400);
+  });
   ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => btn.addEventListener(ev, stop));
+  btn.addEventListener('click', () => { if (!repeated) fn(); repeated = false; });
 }
 
 export function flashRival(id) { const el = rivalEls[id]; if (el) retrigger(el, 'changed'); }
@@ -125,10 +140,11 @@ export function renderMarket() {
   });
 }
 
+// Too expensive if the lowest allowed price would be accepted, else quality.
 function refusalReason(sg) {
   const { cfg, st } = G;
-  const avgRival = st.rivals.reduce((a, r) => a + r.price, 0) / st.rivals.length;
-  return st.you.price > avgRival
+  const atMin = score(sg, { quality: st.you.quality, price: priceBounds(cfg, st).min }, productOf(cfg).ref_price);
+  return atMin >= sg.refuse_below
     ? `Les ${sg.name} te trouvent trop cher`
     : `Les ${sg.name} trouvent ta qualité trop faible`;
 }

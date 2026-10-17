@@ -10,6 +10,7 @@ import { initMarket, renderMarket, flashRival } from './ui/market-view.js';
 import { initFactory, renderFactory, saleCoin } from './ui/factory-view.js';
 import { initDebug } from './ui/debug.js';
 import { toast, floatText, retrigger } from './ui/fx.js';
+import { play } from './ui/sound.js';
 import { money, perMin, pct } from './format.js';
 
 const $ = id => document.getElementById(id);
@@ -73,6 +74,7 @@ function initTabs() {
       toast('🔒 Vends ton premier jus pour ouvrir le Marché.');
       return;
     }
+    if (btn.dataset.tab !== G.tab) play('tab', 0.3);
     showTab(btn.dataset.tab);
   }));
 }

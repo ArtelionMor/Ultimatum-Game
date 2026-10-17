@@ -5,9 +5,10 @@ import { stationsOf } from '../factory.js';
 import { productOf, upgradeInfo, buyStation, stockInfo, buyStock, currentBottleneck } from '../sim.js';
 import { money, perMin, fmt, stars } from '../format.js';
 import { floatText, retrigger } from './fx.js';
+import { play } from './sound.js';
 
 const $ = id => document.getElementById(id);
-let G, cards = {}, canvas, ctx, items = [], coins = [], spawnAcc = 0, beltOff = 0, lastT = 0;
+let G, bound = false, cards = {}, canvas, ctx, items = [], coins = [], spawnAcc = 0, beltOff = 0, lastT = 0;
 const flashUntil = {};
 const BELT_SPEED = 55; // px/s
 
@@ -24,6 +25,7 @@ export function initFactory(game) {
       <button class="btn up"></button>`;
     d.querySelector('.btn').addEventListener('click', () => {
       if (buyStation(G.cfg, G.st, st.id)) {
+        play('buy');
         flashUntil[st.id] = performance.now() + 600;
         retrigger(d, 'flash');
         const info = upgradeInfo(G.cfg, G.st, st.id);
@@ -36,8 +38,11 @@ export function initFactory(game) {
     box.appendChild(d);
     cards[st.id] = d;
   }
+  if (bound) return;
+  bound = true;
   $('stock-btn').addEventListener('click', () => {
     if (buyStock(G.cfg, G.st)) {
+      play('buy');
       retrigger($('stock-card'), 'flash');
       floatText($('stock-btn'), `Entrepôt ${fmt(G.st.you.stockCap)}`, 'gold');
       G.onAction('stock');
@@ -62,6 +67,7 @@ export function renderFactory() {
     btn.classList.toggle('hidden', !allOpen && !isBn);
     btn.classList.toggle('cant', !info.affordable);
     btn.classList.toggle('reco', isBn && info.affordable);
+    btn.classList.toggle('pulse', allOpen ? !isBn && !st.seen.upgrades : isBn);
     btn.innerHTML = `<span>Améliorer → ${perMin(info.nextRate)}${s.quality_per_level ? ' ★+' + s.quality_per_level : ''}</span><span>${money(info.cost)}</span>`;
   }
   const sk = stockInfo(cfg, st);
@@ -73,6 +79,7 @@ export function renderFactory() {
   sb.classList.toggle('hidden', !st.unlocked.stock);
   sb.classList.toggle('cant', !sk.affordable);
   sb.classList.toggle('reco', fill >= 0.999 && sk.affordable);
+  sb.classList.toggle('pulse', !!st.unlocked.stock && !st.seen.stock);
   sb.innerHTML = `<span>Agrandir → ${fmt(sk.nextCap)}</span><span>${money(sk.cost)}</span>`;
 }
 
