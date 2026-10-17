@@ -11,16 +11,23 @@ import { Meta } from "./meta.js";
 
 export function freeWorkers(player) { return player.workers.filter((w) => !w.machineId); }
 
-// Total speed bonus of a machine's crew: base per-worker bonus from the machine
-// level L + each character's affinity/gear speed on this machine.
-export function crewSpeedBonus(L, m) {
-  return m.crew.reduce((s, w) => s + L.workerSpeedBonus + (w.charId ? Meta.speedBonus(w.charId, m.id) : 0), 0);
+// Rework rabatteur : chaque ouvrier a son PROPRE interrupteur (w.role = "prod" |
+// "sell") — moitié/moitié, 3/1, 0/4… Les producteurs EFFECTIFS d'une machine sont
+// les rôles "prod" physiquement à la base (un rabatteur qui rentre — w._hawk
+// encore posé — ne compte pas avant d'être arrivé).
+export function prodCrew(m) { return m.crew.filter((w) => w.role !== "sell" && !w._hawk); }
+
+// Total speed bonus of the workers actually producing: base per-worker bonus from
+// the machine level L + each character's affinity/gear speed on this machine.
+export function crewSpeedBonus(L, m, crew) {
+  return (crew || prodCrew(m)).reduce((s, w) => s + L.workerSpeedBonus + (w.charId ? Meta.speedBonus(w.charId, m.id) : 0), 0);
 }
 
 // Chance the whole spawn doubles: characters roll together (1 - prod of misses).
+// Seuls ceux qui PRODUISENT participent — un rabatteur dehors ne double rien.
 export function crewProba2x(m) {
   let miss = 1;
-  m.crew.forEach((w) => { if (w.charId) miss *= 1 - Math.min(1, Meta.proba2x(w.charId)); });
+  prodCrew(m).forEach((w) => { if (w.charId) miss *= 1 - Math.min(1, Meta.proba2x(w.charId)); });
   return 1 - miss;
 }
 
@@ -65,7 +72,9 @@ export function unassignWorker(game, w, opts) {
   w.machineId = null;
   if (m) {
     m.crew = m.crew.filter((x) => x !== w);
-    if (m.crew.length < game.lvl(m).workersRequired) { m.producing = false; m.elapsed = 0; game.setProgress(m, 0); }
+    // Just stop it: `elapsed` is kept so the cycle resumes on the next worker, and
+    // tickProduction repaints the frozen bar on the very next frame.
+    if (m.crew.length < game.lvl(m).workersRequired) m.producing = false;
     if (!opts || !opts.silent) { game.renderWorkers(); game.refreshMachineCard(m); }
   }
 }

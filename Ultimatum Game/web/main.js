@@ -3,20 +3,21 @@
  */
 "use strict";
 
-import { BASE_MARKETING, SPAWN_INTERVAL, FALL_TIME, S } from "./constants.js";
+import { BASE_MARKETING, SPAWN_INTERVAL, SPAWN_BATCH_MAX, SPAWN_BATCH_GAP, FALL_TIME, S } from "./constants.js";
 import { sprite, $, el, randInt } from "./helpers.js";
 import { normalize, resolveLevel } from "./config.js";
 import { Meta } from "./meta.js";
 import { initMenu, showMenu, hideMenu, renderMenu, openCharacterPanel, gearBadges, renderDropList } from "./menu.js";
 import { openBuildingPanel } from "./building.js";
 import { openResource } from "./resource.js";
-import { freeWorkers, crewSpeedBonus, crewProba2x, addWorker, selectWorker, assignWorker, removeWorker, unassignWorker } from "./game-workers.js";
-import { nextWorker, buyWorker, nextMkt, buyMkt, nextStorage, buyStorage, nextMachineLevel, upgradeMachine } from "./game-shop.js";
+import { freeWorkers, addWorker } from "./game-workers.js";
+import { nextMkt, buyMkt, nextStorage, buyStorage, nextMachineLevel, upgradeMachine } from "./game-shop.js";
 import { botPlanRound, staffBot } from "./game-bots.js";
-import { spawnCustomer, restackCustomers } from "./game-customers.js";
-import { tickProduction } from "./game-production.js";
+import { spawnCustomer, restackCustomers, retryWaiting } from "./game-customers.js";
+import { tickProduction, fullCrewTime } from "./game-production.js";
 import { renderMethods } from "./game-render.js";
 import { cheatMethods } from "./game-cheats.js";
+import { Tutorial } from "./tutorial.js";
 
 // Player-facing names of feature_unlock ids (victory screen announcement).
 const FEATURE_LABEL = {
@@ -77,9 +78,10 @@ const Game = {
     }
     Meta.init(this.cfg);
     initMenu(this);
+    Tutorial.init(this);
     this.applyCheatMode();
     this.transitionTo(S.Menu);
-    this.setupInventoryObserver();
+    this._invVisible = false; this._invDirty = false;   // la sheet Stock démarre fermée
     requestAnimationFrame((t) => this.loop(t));
   },
 
@@ -88,13 +90,18 @@ const Game = {
   enterMenu() { $("#app").classList.add("hidden"); showMenu(); },
   launchLevel(levelId) {
     this.levelCfg = this.resolveLevel(levelId);
+    // enter_level_[number]: same progression point as reach_level_(N-1), but
+    // observed here, with the in-game UI on screen — that is where the tutorials
+    // pointing at in-game buttons need to fire.
+    Meta.noteEnterLevel(this.cfg.worldLevels.findIndex((l) => l.id === levelId) + 1);
     hideMenu();
     $("#app").classList.remove("hidden");
     this.transitionTo(S.Setup);
   },
   // Abandon or finish -> back to the menu (game loop idles in S.Menu).
   toMenu() {
-    ["#results-overlay", "#gameover-overlay", "#quit-overlay", "#rankinfo-overlay"].forEach((id) => $(id)?.classList.add("hidden"));
+    ["#results-overlay", "#gameover-overlay", "#quit-overlay", "#rankinfo-overlay", "#boutique-overlay", "#stock-overlay", "#merge-overlay"].forEach((id) => { const o = $(id); if (o) { o.classList.add("hidden"); o.classList.remove("open"); } });
+    this._invVisible = false;   // sheet Stock refermée avec le reste
     this.waveActive = false; this.market = null;
     const lane = $("#customer-lane"); if (lane) lane.innerHTML = "";
     this.transitionTo(S.Menu);
@@ -104,19 +111,9 @@ const Game = {
   onMetaChanged() { if (this.state === S.Play) { this.renderWorkers(); } },
 
   // The inventory DOM is deliberately kept stale: stock mutations only flip
-  // _invDirty. We flush to the DOM (chiffres + collapse des lignes vides) solely
-  // when the section is on screen, so off-screen production never touches the DOM
-  // and the reflow lands while the player is actually looking at the inventory.
-  setupInventoryObserver() {
-    this._invVisible = true; this._invDirty = false;
-    const bar = $("#inventory-bar");
-    if (!bar || !("IntersectionObserver" in window)) return; // no support → always flush
-    this._invVisible = false;
-    new IntersectionObserver((entries) => {
-      this._invVisible = entries[0].isIntersecting;
-      if (this._invVisible) this.maybeRefreshInventory();
-    }, { root: $("#content"), threshold: 0 }).observe(bar);
-  },
+  // _invDirty, and the flush only happens while the Stock sheet is open
+  // (_invVisible, posé par openStock/closeStock). L'IntersectionObserver de
+  // l'ancien layout scrollable n'a plus d'objet : la sheet EST la visibilité.
   maybeRefreshInventory() { if (this._invDirty && this._invVisible) this.refreshInventory(); },
 
   loop(t) {
@@ -124,7 +121,9 @@ const Game = {
     let dt = (t - this.lastTime) / 1000; this.lastTime = t;
     if (dt > 0.2) dt = 0.2;
     dt *= (this.timeScale || 1); // time acceleration (HUD speed button / cheat console)
-    if (this.state === S.Play) this.updatePlay(dt);
+    // A black_mask freezes the run: the prep countdown must not drain behind a
+    // modal the player can only dismiss by performing the action.
+    if (this.state === S.Play && !Tutorial.isBlocking()) this.updatePlay(dt);
     requestAnimationFrame((t2) => this.loop(t2));
   },
 
@@ -208,11 +207,15 @@ const Game = {
     return img;
   },
 
-  // Fly a freshly produced unit from its machine card into the inventory tiles.
+  // Fly a freshly produced unit from its machine card into the inventory — les
+  // tuiles de la bande INVENTAIRE (toujours à l'écran ; l'exact inverse de
+  // reserveRect côté vente).
   flyToInventory(m, resId, tier) {
-    const node = m._node, box = this._invTiles;
-    if (!node || !box || !box.isConnected || !this._invVisible) return;
+    const node = m._node; if (!node) return;
+    const box = (this._invTiles && this._invTiles.isConnected) ? this._invTiles : $("#inventory-bar");
+    if (!box || !box.isConnected) return;
     const from = node.getBoundingClientRect(), to = box.getBoundingClientRect();
+    if (!to.width) return;
     const fly = this.tierImg(resId, tier); fly.className = "fly-res";
     document.body.appendChild(fly);
     const x0 = from.left + from.width / 2 - 14, y0 = from.top + 18;
@@ -223,12 +226,15 @@ const Game = {
   },
 
   // Floating "luck" popup over a machine, styled per its output slot group (A..F).
-  showSpawnPopup(m, resId, qty, tier, group) {
+  // `bonusTiers` = the ingredient tiers that won their +1 quality roll this cycle
+  // (game-production.rollIngredientBonus); each gets its own credit line under the drop.
+  showSpawnPopup(m, resId, qty, tier, group, bonusTiers) {
     const node = m._node; if (!node) return;
     const slot = (this.cfg.slots && this.cfg.slots[group]) || {};
     const r = node.getBoundingClientRect();
     const desc = slot.description ? slot.description + " " : "";
-    const pop = el("div", "spawn-pop", `${desc}+${qty} Tier ${tier} ${this.res(resId).displayName}`);
+    const bonus = (bonusTiers || []).map((t) => `<br><span class="spawn-bonus">bonus for good ingredient: Tier ${t}</span>`).join("");
+    const pop = el("div", "spawn-pop", `${desc}+${qty} Tier ${tier} ${this.res(resId).displayName}${bonus}`);
     if (slot.color) pop.style.color = slot.color;
     pop.style.fontSize = (slot.font || 12) + "px";
     pop.style.left = (r.left + r.width / 2) + "px";
@@ -240,6 +246,10 @@ const Game = {
   // ---------- Setup ----------
   enterSetup() {
     const g = this.cfg.g;
+    // The run starts with an empty inventory, so the stock/wave trigger records
+    // start over too: a condition like "hold 3 tennis balls" has to be met in
+    // THIS run, not inherited from the last one.
+    Meta.startRun();
     this.round = 0;
     this.selectedWorker = null;
     this.timeScale = 1;           // each run starts at normal speed
@@ -252,21 +262,23 @@ const Game = {
       machines: [], buys: { increaseWorker: 0, increaseMarketting: 0, increaseStorage: 0 },
       salesThisRound: 0, revenue: 0,
     };
-    for (let i = 0; i < g.startingWorkers; i++) addWorker(this, this.player);
+    // Plus d'ouvriers de départ à poser : chaque machine arrive équipée (fillCrew).
     this.cfg.machines.forEach((m) => { const r = this.machineUnlockRound(m.id); if (r != null && r <= 1) this.giveMachine(this.player, m.id); });
 
     // The level defines the exact bot lineup.
     const bots = this.levelCfg.bots.map((b) => ({
       id: b.id, name: b.displayName, spriteId: b.spriteId, spriteFolder: "Characters", isPlayer: false,
-      money: b.startingMoney, stock: this.emptyStock(), storageCap: g.startingStorage,
+      // Même argent de départ que le joueur (les bots jouent TON économie). Sans repli,
+      // une colonne startingMoney absente laissait money=undefined → NaN, et NaN déjoue
+      // TOUTES les vérifs d'achat (NaN < reserve = false) : le bot achetait à l'infini.
+      money: Number.isFinite(b.startingMoney) ? b.startingMoney : g.startingMoney, stock: this.emptyStock(), storageCap: g.startingStorage,
       marketing: BASE_MARKETING + (b.buffs.marketing || 0), def: b, behaviorByRound: b.behaviorByRound, buffs: b.buffs, upgradesBought: 0,
       workers: [], machines: [],
       buys: { increaseWorker: 0, increaseMarketting: 0, increaseStorage: 0 }, salesThisRound: 0, revenue: 0,
     }));
-    // Les bots jouent TON économie : mêmes ouvriers de départ, mêmes machines
-    // débloquées, même horloge de production (game-production.js tickProduction).
+    // Les bots jouent TON économie : mêmes machines débloquées (équipées d'office),
+    // même horloge de production (game-production.js tickProduction).
     bots.forEach((b) => {
-      for (let i = 0; i < g.startingWorkers; i++) addWorker(this, b);
       this.cfg.machines.forEach((m) => { const r = this.machineUnlockRound(m.id); if (r != null && r <= 1) this.giveMachine(b, m.id); });
     });
     this.competitors = [this.player, ...bots];
@@ -274,7 +286,28 @@ const Game = {
     this.transitionTo(S.Play);
   },
 
-  giveMachine(p, id) { if (!p.machines.some((m) => m.id === id)) p.machines.push({ id, level: 1, crew: [], elapsed: 0, producing: false }); },
+  // Rework « rabatteur » : plus de gestion d'ouvriers. Une machine ARRIVE avec son
+  // équipe au complet (maxWorkers de son niveau) et ne la partage plus. Le verbe du
+  // joueur n'est plus « déplacer des bonshommes » mais « choisir la posture de
+  // chaque machine » : mode "prod" (fabrique) ou "sell" (rabatteur — l'équipe crie
+  // sur le pas de la porte : attractivité boostée sur SA ressource, zéro production).
+  giveMachine(p, id) {
+    if (p.machines.some((m) => m.id === id)) return;
+    const m = { id, level: 1, crew: [], elapsed: 0, producing: false };
+    p.machines.push(m);
+    this.fillCrew(p, m);
+  },
+  // Complète l'équipe d'une machine à maxWorkers (appelé à la création ET après
+  // chaque upgrade, joueur comme bot). Passe par addWorker : les PERSONNAGES du
+  // joueur embarquent toujours en premier (bonus de vitesse/proba conservés).
+  fillCrew(p, m) {
+    const L = this.lvl(m);
+    while (m.crew.length < L.maxWorkers) {
+      addWorker(this, p);
+      const w = p.workers[p.workers.length - 1];
+      w.machineId = m.id; w.role = "prod"; m.crew.push(w);
+    }
+  },
 
   // ---------- Play (single screen: continuous production + customer waves) ----------
   enterPlay() {
@@ -282,23 +315,33 @@ const Game = {
     this.startPrep();
   },
 
-  // One-time screen setup: both zones visible, worker bar shown.
+  // One-time screen setup. L'écran une-page n'a plus de scroll vertical : la
+  // mécanique de condensation du marché (hystérésis, padding compensé) est morte
+  // avec lui — le marché est toujours en pleine taille.
   setupScreen() {
     this._screenReady = true;
     $("#factory-zone").classList.remove("hidden");
     $("#market-zone").classList.remove("hidden");
-    $("#worker-bar").style.display = "flex";
     $("#customer-lane").innerHTML = "";
   },
 
   // Prep window before a wave: production runs, player prepares, top menu shows demand.
   startPrep() {
     this.round++;
+    Meta.noteWave(this.round);   // reach_wave_[number]
     const g = this.cfg.g;
     this.waveActive = false;
-    this.prepTimer = g.tycoonPhaseDuration;
+    // Prep window is per-level (world_level.preparationTime); the global
+    // tycoonPhaseDuration is only the fallback for levels that leave it blank.
+    this.prepTimer = this.levelCfg.preparationTime != null ? this.levelCfg.preparationTime : g.tycoonPhaseDuration;
     this.market = null;
     this.selectedWorker = null;
+
+    // Pendant la prépa, PERSONNE ne produit (joueur comme bots) : la production
+    // ne tourne que pendant la vague (voir updatePlay). On gèle donc chaque machine
+    // à l'arrêt ; son cycle en cours reprend là où il s'était figé au lancement.
+    this.competitors.forEach((c) => c.machines.forEach((m) => { m.producing = false; }));
+    this.setAssignWarning(false); // repart d'un banc « propre » (safeAssign)
 
     // round income (scheduled) to every competitor — counts as earned revenue
     const inc = this.cfg.roundIncome[this.round];
@@ -309,25 +352,67 @@ const Game = {
     this.competitors.forEach((c) => {
       this.cfg.machines.forEach((m) => { if (this.machineUnlockRound(m.id) === this.round) this.giveMachine(c, m.id); });
     });
-    this.player.machines.forEach((m) => { m.elapsed = 0; });
 
     // Les bots décident leur round ici : acheter, puis staffer. Ils ne fabriquent
     // rien eux-mêmes — leurs machines tournent dans tickProduction comme les tiennes.
     this.competitors.forEach((c) => { if (!c.isPlayer) botPlanRound(this, c); });
 
+    this.clearCounters();   // vague finie : plus une seule commande en attente sur les comptoirs
+    this._invVisible = true; // la bande inventaire est toujours à l'écran : refresh live
     this.renderInventory(); this.renderShop(); this.renderMachines(); this.renderWorkers();
     this.renderSuppliers(); this.renderWavePreview(); this.refreshHud();
+    // Freshly rebuilt machine cards start empty : on ré-affiche la barre figée du
+    // cycle en pause (0 si aucun cycle n'a encore tourné), sans compte à rebours.
+    this.player.machines.forEach((m) => this.setProgress(m, m._cycle ? Math.min(1, m.elapsed / m._cycle) : 0));
+    // La demande de la vague apparaît en gros au centre puis glisse vers le bandeau.
+    this.announceDemand();
+  },
+
+  // Prep opener: the incoming wave's demand pops in the middle of the screen as
+  // floating text, then slides up to its slot in the top banner (#wave-preview).
+  // Purely cosmetic (pointer-events:none) — the real banner is already rendered
+  // underneath, so the float just merges into it and self-removes.
+  announceDemand() {
+    const pr = this.previewWave();
+    if (pr == null) return;                    // last wave: nothing incoming to announce
+    const banner = $("#wave-preview");
+    const chips = banner && banner.querySelector(".wp-chips");
+    if (!chips) return;
+    document.querySelectorAll(".demand-float").forEach((n) => n.remove()); // drop any leftover
+    const float = el("div", "demand-float");
+    float.innerHTML = `<div class="df-title">Vague ${pr}</div><div class="wp-chips">${chips.innerHTML}</div>`;
+    document.body.appendChild(float);
+    // getBoundingClientRect force un reflow : l'état initial (opacity:0) est « commité »,
+    // donc passer à 1 juste après déclenche bien la transition — sans dépendre du rAF.
+    const target = banner.getBoundingClientRect(), fr = float.getBoundingClientRect();
+    const dx = (target.left + target.width / 2) - (fr.left + fr.width / 2);
+    const dy = (target.top + target.height / 2) - (fr.top + fr.height / 2);
+    const HOLD = 3000, FLY = 0.75;                               // reste ≥ 3 s à l'écran avant de filer
+    float.style.opacity = "1";                                   // fade in, centered (CSS)
+    setTimeout(() => {                                            // hold, then fly to the banner
+      float.style.transition = `transform ${FLY}s cubic-bezier(.4,0,.2,1), opacity ${FLY}s ease`;
+      float.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(.62)`;
+      float.style.opacity = "0";
+    }, HOLD);
+    const done = () => float.remove();
+    float.addEventListener("transitionend", (e) => { if (e.propertyName === "transform") done(); }, { once: true });
+    setTimeout(done, HOLD + FLY * 1000 + 400); // safety net if transitionend never fires
   },
 
   updatePlay(dt) {
-    tickProduction(this, dt);
+    // Production ne tourne QUE pendant la vague : la phase de prépa est un temps
+    // mort où l'on s'organise (achats, ouvriers, fusions) sans rien fabriquer.
+    if (this.waveActive) tickProduction(this, dt);
     // The inventory DOM is only written when the section is on screen (see the
     // IntersectionObserver in setupInventoryObserver). Off-screen production just
     // accumulates in the model + flips _invDirty, so it never shifts the layout
     // while the player watches the machines.
     this.maybeRefreshInventory();
+    // Les rabatteurs se déplacent à CHAQUE frame (ce sont des agents physiques,
+    // leur trajet gate la reprise de production — voir game-render.tickHawkers).
+    this.tickHawkers(dt);
     this._supTimer = (this._supTimer || 0) - dt;
-    if (this._supTimer <= 0) { this.refreshSuppliers(); this.refreshAffordability(); this._supTimer = 0.2; }
+    if (this._supTimer <= 0) { this.refreshSuppliers(); this.refreshAffordability(); this.refreshWaveCoverage(); this.refreshMachineDots(); this.refreshCustomerDim(); this.refreshStockBtn(); this._supTimer = 0.2; }
     // Les bots redéploient leurs ouvriers en cours de round, comme tu le fais à la main :
     // une chaîne de conversion ne coule que si on passe l'ouvrier au convertisseur dès que
     // son stock d'intrants est prêt, puis qu'on le rend au fournisseur quand il est à sec.
@@ -344,27 +429,102 @@ const Game = {
     if (this.waveActive) {
       const m = this.market;
       m.spawnTimer -= dt;
-      if (m.remaining > 0 && m.spawnTimer <= 0) { m.spawnTimer = SPAWN_INTERVAL / (this.cfg.g.customerRate || 1); m.remaining--; spawnCustomer(this); }
+      // Les clients arrivent par PAQUETS (1..N d'un coup), plus un par un. Le tout
+      // premier paquet n'apparaît qu'après le délai posé dans startWave (= temps de
+      // prépa de la ressource la plus demandée), le temps de produire un peu.
+      if (m.remaining > 0 && m.pending <= 0 && m.spawnTimer <= 0) {
+        const batchMax = (m.def && m.def.customerBatch) || this.cfg.g.customerBatch || SPAWN_BATCH_MAX; // par niveau (level designer), défaut 2
+        const batch = Math.min(m.remaining, randInt(1, batchMax));
+        m.remaining -= batch; m.pending = batch; m.batchTimer = 0;
+        m.spawnTimer = SPAWN_INTERVAL / (this.cfg.g.customerRate || 1);
+      }
+      // Le paquet s'ÉGRÈNE (SPAWN_BATCH_GAP entre deux clients) au lieu de tomber
+      // d'un bloc : deux clients nés à la même frame partaient de la même hauteur et,
+      // s'ils visaient le même comptoir, descendaient superposés. Le décalage passe
+      // par le timer du jeu (donc suit x1/x2/x4), pas par un setTimeout.
+      if (m.pending > 0) {
+        m.batchTimer -= dt;
+        if (m.batchTimer <= 0) { spawnCustomer(this); m.pending--; m.batchTimer = SPAWN_BATCH_GAP; }
+      }
       this._stackTimer = (this._stackTimer || 0) - dt;
-      if (this._stackTimer <= 0) { restackCustomers(); this._stackTimer = 0.1; }
+      // Même tick que le tri en profondeur : on retente de servir les clients partis
+      // à vide (leur commande a pu sortir d'une machine entre-temps).
+      if (this._stackTimer <= 0) { restackCustomers(); retryWaiting(this); this._stackTimer = 0.1; }
       if (m.remaining <= 0 && m.served >= m.total) this.endWave();
     } else {
       this.prepTimer -= dt;
+      // safeAssign : quand le chrono tombe à 0, la vague ne part QUE si le banc est
+      // vide. Sinon on gèle le chrono à 0, on fait clignoter le banc en rouge et on
+      // attend que le joueur assigne ses ouvriers (re-testé à chaque frame).
+      if (this.prepTimer <= 0) {
+        this.prepTimer = 0;
+        if (this.assignGateBlocking()) this.setAssignWarning(true);
+        else { this.setAssignWarning(false); this.startWave(); }
+      } else if (this._assignWarn && !this.assignGateBlocking()) {
+        // Alerte levée par un « ⏭ Lancer » refusé, chrono encore en cours : elle
+        // s'éteint dès que le banc est vidé. Sans ça, rien ne la re-testait avant 0 et
+        // le banc restait rouge alors que le joueur avait déjà corrigé. On ne lance
+        // PAS la vague pour autant : c'est au joueur de re-cliquer.
+        this.setAssignWarning(false);
+      }
       this.updateWavePreviewTimer();
-      if (this.prepTimer <= 0) this.startWave();
     }
     this.refreshHud();
+  },
+
+  // safeAssign gate: block the wave while an idle worker sits on the bench — but
+  // only while there is actually an open machine slot to move it to, so a level
+  // with more workers than seats can never soft-lock the player in prep.
+  assignGateBlocking() {
+    if (!this.levelCfg || !this.levelCfg.safeAssign) return false;
+    if (freeWorkers(this.player).length === 0) return false;
+    const openSlots = this.player.machines.reduce((s, m) => s + Math.max(0, this.lvl(m).maxWorkers - m.crew.length), 0);
+    return openSlots > 0;
+  },
+  setAssignWarning(on) {
+    if (this._assignWarn === on) return;
+    this._assignWarn = on;
+    const bar = $("#worker-bar"); if (bar) bar.classList.toggle("assign-warn", on);
   },
 
   // A wave arrives: bots stock up, customers start falling. Production keeps running.
   startWave() {
     this.waveActive = true;
+    this.setAssignWarning(false); // le banc a été vidé : on éteint l'alerte rouge
     this.competitors.forEach((c) => { c.salesThisRound = 0; c.unitsThisRound = 0; });
     const m = this.marketFor(this.round);
-    this.market = { def: m, remaining: m.customers, total: m.customers, served: 0, spawnTimer: 0, active: 0, lostUnits: 0, lostValue: 0 };
+    // Le premier client attend le temps de PRODUIRE la ressource la plus demandée :
+    // spawnTimer démarre à ce délai (au lieu de 0), le reste des paquets suit à l'interval.
+    // stolenUnits / ruptureUnits : les pertes du JOUEUR ventilées par cause (volé au
+    // tirage vs rupture de stock) — comptées dans game-customers, lues par le bilan.
+    this.market = { def: m, remaining: m.customers, total: m.customers, served: 0, spawnTimer: this.firstDemandDelay(m), pending: 0, batchTimer: 0, waiting: [], active: 0, lostUnits: 0, lostValue: 0, stolenUnits: 0, ruptureUnits: 0 };
     $("#customer-lane").innerHTML = "";
     this.renderSuppliers(); this.renderWavePreview(); this.refreshHud();
-    const content = $("#content"); if (content) content.scrollTo({ top: 0, behavior: "smooth" });
+  },
+
+  // Délai avant le tout premier client de la vague. On prend le temps de complétion
+  // du PIRE bot pour la ressource la plus demandée : pour chaque bot qui possède la
+  // machine qui la produit, son temps effectif (niveau + équipe + buffs), et on garde
+  // le plus lent. Ainsi même le concurrent le plus lent a le temps d'en sortir une
+  // avant que la file ne démarre. Repli sur le temps de base si aucun bot ne la produit.
+  firstDemandDelay(mk) {
+    const w = mk.weights || {};
+    const resId = this.cfg.resourceOrder
+      .filter((r) => (w[r] || 0) > 0)
+      .sort((a, b) => (w[b] || 0) - (w[a] || 0))[0];
+    if (!resId) return 0;
+    let worst = 0;
+    this.competitors.forEach((c) => {
+      if (c.isPlayer) return; // le PIRE bot, pas le joueur
+      const machine = c.machines.find((m) => { const d = this.machineDef(m.id); return d && d.outputs === resId; });
+      if (machine) worst = Math.max(worst, fullCrewTime(this, c, machine)); // équipe au complet : les rôles du moment n'entrent pas dans le rythme des vagues
+    });
+    if (worst === 0) { // aucun bot ne produit cette ressource : temps de base de la machine
+      const producer = this.cfg.machines.find((mm) => mm.outputs === resId);
+      const lvl0 = producer && producer.levels && producer.levels[0];
+      worst = (lvl0 && lvl0.productionTime) || 0;
+    }
+    return worst;
   },
 
   // Wave fully served -> standings, then back to prep for the next one.
@@ -394,19 +554,64 @@ const Game = {
     const totalW = order.reduce((s, r) => s + (mk.weights[r] || 0), 0) || 1;
     const chips = order.filter((r) => (mk.weights[r] || 0) > 0)
       .sort((a, b) => (mk.weights[b] || 0) - (mk.weights[a] || 0))
-      .map((r) => `<div class="wp-chip" data-res="${r}"><img src="${this.tierSrc(r, 1)}" title="${this.res(r).displayName}"><span>${Math.round((mk.weights[r] || 0) / totalW * 100)}%</span></div>`)
+      .map((r) => `<div class="wp-chip" data-res="${r}"><img src="${this.tierSrc(r, 1)}" title="${this.res(r).displayName}"><span>${Math.round((mk.weights[r] || 0) / totalW * 100)}%</span><span class="wp-cov" data-covres="${r}"></span></div>`)
       .join("");
     wrap.innerHTML =
       `<div class="wp-head"><span class="wp-title">Vague ${pr}</span>` +
       `<span class="wp-state">${this.waveActive ? "en cours" : "à venir"}</span>` +
-      `<span id="wp-countdown" class="wp-countdown"></span></div>` +
-      `<div class="wp-chips">${chips}</div>`;
+      `<span id="wp-countdown" class="wp-countdown"></span>` +
+      // Le bouton n'existe QUE pendant la prépa : pas de « lancer » à cliquer sur une
+      // vague déjà partie. Le bandeau est reconstruit à chaque bascule de phase.
+      (this.waveActive ? "" : `<button id="wp-skip" class="wp-skip" title="Lancer la vague sans attendre la fin de la préparation">⏭ Lancer</button>`) +
+      `</div><div class="wp-chips">${chips}</div>`;
+    this.refreshWaveCoverage();
     this.updateWavePreviewTimer();
+  },
+
+  // ✓ / ⚠ / — sur chaque ressource demandée : « est-ce que MA production est prête ? »
+  // Le calcul mental que la prépa exigeait (demande → machine → ouvriers), fait par
+  // le jeu : ✓ machine staffée (ça produira), ⚠ machine présente mais à l'arrêt,
+  // — pas positionné dessus (pas ton marché, pas une erreur). Rafraîchi sur le tick
+  // 0.2 s : réagit à chaque (dé)staff pendant la prépa. Le sélecteur couvre aussi la
+  // copie des chips dans l'annonce centrale (.demand-float).
+  refreshWaveCoverage() {
+    if (!this.player) return;
+    document.querySelectorAll("#wave-preview .wp-cov, .demand-float .wp-cov").forEach((n) => {
+      const rid = n.dataset.covres;
+      const producers = this.player.machines.filter((x) => { const d = this.machineDef(x.id); return d && d.outputs === rid; });
+      // Rework rabatteur (interrupteur par ouvrier) : une machine ne produit que
+      // si assez de rôles "prod" restent à la base. ⚠ = trop d'ouvriers partis
+      // rabattre, rien ne sortira de cette ressource.
+      const producing = producers.some((x) => x.crew.filter((w) => w.role !== "sell").length >= this.lvl(x).workersRequired);
+      const hasStock = this.stockOf(this.player, rid) > 0;
+      let cls, txt, tip;
+      if (producing) { cls = "ok"; txt = "✓"; tip = "Ta machine produit cette ressource"; }
+      else if (producers.length) { cls = "warn"; txt = "⚠"; tip = "Trop d'ouvriers en Rabatteur : plus assez de producteurs sur cette machine"; }
+      else if (hasStock) { cls = "ok"; txt = "✓"; tip = "Tu as du stock (mais aucune machine pour en refaire)"; }
+      else { cls = "off"; txt = "–"; tip = "Tu n'es pas positionné sur cette ressource"; }
+      n.className = "wp-cov " + cls; n.textContent = txt; n.title = tip;
+    });
   },
   updateWavePreviewTimer() {
     const c = $("#wp-countdown"); if (!c) return;
+    // Le bouton se grise quand safeAssign bloque : il reste cliquable (le clic rappelle
+    // pourquoi ça ne part pas), mais il annonce d'avance qu'il ne partira pas.
+    const skip = $("#wp-skip"); if (skip) skip.classList.toggle("blocked", !!this._assignWarn || this.assignGateBlocking());
+    // safeAssign bloque le départ : on remplace le décompte par une consigne rouge.
+    if (this._assignWarn) { c.textContent = "⚠ Assigne tes ouvriers"; c.classList.add("imminent"); return; }
     c.textContent = this.waveActive ? "" : "↓ " + Math.max(0, Math.ceil(this.prepTimer)) + "s"; // l'état est dans .wp-state
     c.classList.toggle("imminent", !this.waveActive && this.prepTimer <= 5);
+  },
+
+  // « Skip preparation time » : le joueur déclare qu'il a fini de se préparer. Passe
+  // par EXACTEMENT le même chemin que le chrono qui tombe à 0 (verrou safeAssign
+  // compris) — un raccourci de confort, pas une porte dérobée pour partir le banc plein.
+  skipPrep() {
+    if (this.state !== S.Play || this.waveActive || this.previewWave() == null) return;
+    if (this.assignGateBlocking()) { this.setAssignWarning(true); this.updateWavePreviewTimer(); return; }
+    this.prepTimer = 0;
+    this.setAssignWarning(false);
+    this.startWave();
   },
 
   // ---------- Results (standings) ----------
@@ -475,6 +680,10 @@ $("#hud-home")?.addEventListener("click", () => {
 $("#quit-confirm")?.addEventListener("click", () => Game.toMenu());
 $("#quit-cancel")?.addEventListener("click", () => $("#quit-overlay").classList.add("hidden"));
 $("#merge-overlay")?.addEventListener("click", (e) => { if (e.target.id === "merge-overlay") Game.closeMerge(); });
+// Sheet Boutique : ouverte par la barre du bas, fermée au tap sur le fond.
+// (L'inventaire n'a plus de sheet : c'est une bande permanente de la barre du bas.)
+$("#boutique-btn")?.addEventListener("click", () => Game.openBoutique());
+$("#boutique-overlay")?.addEventListener("click", (e) => { if (e.target.id === "boutique-overlay") Game.closeBoutique(); });
 // L'auto-merge est un RÉGLAGE, pas un état de partie : il survit à la fermeture
 // de l'app (même modèle que la meta, clé localStorage à part).
 try { Game.autoMerge = localStorage.getItem("mu_automerge") === "1"; } catch (e) { /* storage bloqué → off */ }
@@ -485,7 +694,12 @@ $("#automerge-box")?.addEventListener("change", (e) => {
 });
 $("#competitor-close").addEventListener("click", () => Game.closeCompetitor());
 $("#competitor-overlay").addEventListener("click", (e) => { if (e.target.id === "competitor-overlay") Game.closeCompetitor(); });
-$("#wave-preview")?.addEventListener("click", (e) => { const chip = e.target.closest(".wp-chip[data-res]"); if (chip) openResource(chip.dataset.res); });
+// Délégation : le bandeau est reconstruit à chaque phase, un listener posé sur le
+// bouton lui-même mourrait avec lui.
+$("#wave-preview")?.addEventListener("click", (e) => {
+  if (e.target.closest("#wp-skip")) { Game.skipPrep(); return; }
+  const chip = e.target.closest(".wp-chip[data-res]"); if (chip) openResource(chip.dataset.res);
+});
 // Guarded with ?.: if a stale/cached index.html lacks these nodes, the bootstrap must
 // not throw here — otherwise Game.start() below never runs and the game hangs.
 $("#hud-rank")?.addEventListener("click", () => Game.openRankInfo());
@@ -519,4 +733,5 @@ $("#cheat-reset")?.addEventListener("click", () => { if (confirm("Effacer toute 
 
 window.Game = Game; // expose for console debugging
 window.Meta = Meta; // idem: Meta.state, Meta.openChest("common_chest"), Meta.reset()…
+window.Tutorial = Tutorial; // idem: Tutorial.pending(), Tutorial.evaluate()
 Game.start();

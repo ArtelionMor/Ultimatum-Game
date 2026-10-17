@@ -195,14 +195,23 @@ const slotResIcon = (slot) =>
 function renderCharacters(body) {
   // Fill the empty slots with the best available characters (recruit order:
   // rarest -> best equipped -> highest level), same rules as in-game hiring.
-  const autoBtn = el("button", "slot-autofill", "Auto-équiper ⚡");
-  autoBtn.onclick = () => { Meta.autoFillSlots(); renderMenu(); if (Game.onMetaChanged) Game.onMetaChanged(); };
-  body.appendChild(autoBtn);
+  // A locked slot is hidden outright, not greyed: the grid only shows what the
+  // player can actually use (same rule as the locked shop entries in game-render).
+  // Nothing unlocked yet = no grid and no auto-fill button at all.
+  const openSlots = Game.cfg.characterSlots.filter((slot) => Meta.slotUnlocked(slot.id));
+  if (openSlots.length) {
+    const autoBtn = el("button", "slot-autofill", "Auto-équiper ⚡");
+    autoBtn.onclick = () => { Meta.autoFillSlots(); renderMenu(); if (Game.onMetaChanged) Game.onMetaChanged(); };
+    body.appendChild(autoBtn);
+  }
   const grid = el("div", "slot-grid");
-  Game.cfg.characterSlots.forEach((slot) => {
+  openSlots.forEach((slot) => {
     const charId = Meta.slotChar(slot.id);
     const ch = charId && Game.cfg.characters[charId];
     const card = el("div", "slot-card" + (ch ? " filled " + charRarity(ch) : " empty"));
+    // tutorial targets: the slot itself (unlock_slot_X) and, once filled, the
+    // character sitting in it (the "dog" step of the characters chain).
+    card.dataset.tut = ch ? "char_" + charId : slot.id;
     if (ch) {
       card.innerHTML = slotResIcon(slot) + charAvatar(ch) +
         `<div class="char-name">${ch.displayName}</div>` +
@@ -233,6 +242,7 @@ function renderCharacters(body) {
     ownedIds.forEach((id) => {
       const ch = Game.cfg.characters[id];
       const c = el("div", "sp-card " + charRarity(ch));
+      c.dataset.tut = "char_" + id;
       c.innerHTML = charAvatar(ch) +
         `<div class="char-name">${ch.displayName}</div>` +
         `<div class="char-lvl">Nv. ${Meta.charLevel(id)}</div>` +
@@ -309,7 +319,9 @@ function renderSlotPicker() {
     const used = Meta.assignedRaces(slot.id);
     slot.containments.forEach((race) => {
       const chars = byRace(race);
-      if (!chars.length) return;
+      // Only races the player has actually unlocked: a race they own no character
+      // of isn't a choice yet, just a card nothing can be done with.
+      if (!chars.some((c) => Meta.isOwned(c.id))) return;
       const rep = chars.reduce((a, b) => (rarityIdx(b) < rarityIdx(a) ? b : a));
       const taken = used.includes(race);
       const card = el("div", "sp-card" + (taken ? " off" : ""));

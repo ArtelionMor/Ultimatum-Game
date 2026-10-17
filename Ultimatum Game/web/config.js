@@ -17,11 +17,15 @@ export function normalize(raw) {
   const maxTier = Math.max(...raw.resources.map((r) => r.tier));
 
   // per-tier background colors (sheet tab `ressources_tier`: {id:"Tier2", color:"ACFF47"});
-  // tolerant of older exports without the tab (tierColor() falls back to neutral grey)
-  const tierColors = {};
+  // tolerant of older exports without the tab (tierColor() falls back to neutral grey).
+  // `increase` on the same row = the chance that ONE consumed ingredient of that tier
+  // pushes the converter's output up a tier (see rollIngredientBonus in game-production).
+  const tierColors = {}, tierBonusChance = {};
   (raw.ressources_tier || []).forEach((t) => {
     const m = /^tier\s*(\d+)$/i.exec(t.id || "");
-    if (m && t.color) tierColors[+m[1]] = "#" + String(t.color).replace(/^#/, "");
+    if (!m) return;
+    if (t.color) tierColors[+m[1]] = "#" + String(t.color).replace(/^#/, "");
+    tierBonusChance[+m[1]] = +t.increase || 0;
   });
 
   // `inputs` is a RECIPE table keyed by recipe name (which reads like the produced
@@ -59,6 +63,9 @@ export function normalize(raw) {
       // qty_spread (tool checkbox, 1/0): opt back IN to the ±1 random quantity.
       // Absent or 0, every customer asks EXACTLY `avg` — "average 1" means 1.
       spread: !!m.qty_spread,
+      // customerBatch (level designer, défaut 2) : nombre max de clients par paquet.
+      // Absent = repli sur la constante moteur (SPAWN_BATCH_MAX).
+      customerBatch: m.customerBatch != null && m.customerBatch !== "" ? +m.customerBatch : null,
       // data-driven: one weight per known resource id (column named like the resource)
       weights: Object.fromEntries(resourceOrder.map((rid) => [rid, m[rid] || 0])),
     };
@@ -66,8 +73,11 @@ export function normalize(raw) {
 
   // tax profiles: one row per profile, "round N" columns hold the cost (0 = no tax)
   // unlock profiles: which machines exist in a level and the round they unlock
+  // `|| []`: unlock_config now lives in config_levels.json (tool-owned), so the
+  // sheet may drop it entirely — an absent section must default to empty, not
+  // crash, exactly like market_config / competitors_behavior above.
   const unlockProfiles = {};
-  raw.unlock_config.forEach((u) => { (unlockProfiles[u.id] = unlockProfiles[u.id] || {})[u.machine] = u.unlock; });
+  (raw.unlock_config || []).forEach((u) => { (unlockProfiles[u.id] = unlockProfiles[u.id] || {})[u.machine] = u.unlock; });
 
   // world configs: one row per (level config, competitor)
   const worldConfigs = {};
@@ -80,8 +90,13 @@ export function normalize(raw) {
   });
 
   // ordered level list (menu order = sheet order); topX = rank the player must
-  // reach (1 = finish first, 2 = top 2…) to win the level on cumulative revenue
-  const worldLevels = raw.world_level.map((l) => ({ id: l.id, config: l.config, reward: l.reward, topX: l.topX || 1 }));
+  // reach (1 = finish first, 2 = top 2…) to win the level on cumulative revenue.
+  // preparationTime (seconds) is the per-level prep window; blank falls back to
+  // the global general.tycoonPhaseDuration at resolve time (see startPrep).
+  // safeAssign (TRUE) = the wave refuses to start while the player still has an
+  // idle worker on the bench (see the assign-gate in updatePlay). The exporter
+  // may hand us a real boolean (checkbox column) or the string "TRUE".
+  const worldLevels = raw.world_level.map((l) => ({ id: l.id, config: l.config, reward: l.reward, topX: l.topX || 1, preparationTime: l.preparationTime != null && l.preparationTime !== "" ? +l.preparationTime : null, safeAssign: l.safeAssign === true || String(l.safeAssign).toUpperCase() === "TRUE" }));
 
   // rewards: rolls grouped by reward id then group letter; a row without content = "nothing"
   const rewards = {};
@@ -144,11 +159,38 @@ export function normalize(raw) {
   });
   characterSlots.sort((a, b) => a.order - b.order);
 
-  // feature unlocks: {id, level} — the feature turns on once the level with
-  // that 1-based number on the trophy road is COMPLETED (announced as a reward
-  // on that level's victory screen).
+  // feature unlocks: {id, tutorial, target, trigger, value}. The feature turns on
+  // when its `trigger` is satisfied — either an atomic trigger from the `triggers`
+  // tab (reach_level_[number], enter_level_[number], reach_[number]_in_stock,
+  // reach_[number]_of_[ressource], optain_[character_typeSlot]) or the id of an
+  // AND/OR group in `triggers_group`. `tutorial` (black_mask | red_dot) and the
+  // `target` chain drive the onboarding overlay (tutorial.js); a row with no
+  // tutorial just gates the feature silently.
   const featureUnlocks = {};
-  (raw.feature_unlock || []).forEach((f) => { if (f.id) featureUnlocks[f.id] = f.level || 0; });
+  (raw.feature_unlock || []).forEach((f) => {
+    if (!f.id) return;
+    featureUnlocks[f.id] = {
+      id: f.id,
+      // "back_mask" is a recurring typo in the sheet — same thing as black_mask,
+      // and silently ignoring the row would just make the tutorial not show up.
+      tutorial: f.tutorial === "back_mask" ? "black_mask" : (f.tutorial || null),
+      // "character_tab, dog, equip_hat" -> a chain the player walks one click at a time
+      targets: String(f.target == null ? "" : f.target).split(",").map((s) => s.trim()).filter(Boolean),
+      trigger: f.trigger || null,
+      value: f.value,
+    };
+  });
+
+  // trigger groups: several rows share one id, each adding a term. `logic` is
+  // carried by every row of the group (AND / OR) and a term may itself be another
+  // group id — that is how unlock_merge nests reach_3_common_ressources.
+  const triggerGroups = {};
+  (raw.triggers_group || []).forEach((g) => {
+    if (!g.id) return;
+    const grp = (triggerGroups[g.id] = triggerGroups[g.id] || { id: g.id, logic: "AND", terms: [] });
+    if (g.logic) grp.logic = String(g.logic).toUpperCase();
+    if (g.trigger) grp.terms.push({ trigger: g.trigger, value: g.value });
+  });
 
   // upgrade profiles: shard cost to reach each level (level 1 = unlock cost)
   const upgradeProfiles = {};
@@ -227,9 +269,9 @@ export function normalize(raw) {
   const competitors = raw.competitors.map((c) => ({ ...c }));
 
   return {
-    g, resources, resourceOrder, maxTier, tierColors, machines, purchases, roundIncome, competitors, convert, slots, customerSprites, customerDefs, customerOrder,
+    g, resources, resourceOrder, maxTier, tierColors, tierBonusChance, machines, purchases, roundIncome, competitors, convert, slots, customerSprites, customerDefs, customerOrder,
     marketProfiles, unlockProfiles, worldConfigs, worldLevels, rewards, gears, characters, characterOrder, upgradeProfiles,
-    behaviorProfiles, buffProfiles, progressProfiles, characterSlots, featureUnlocks,
+    behaviorProfiles, buffProfiles, progressProfiles, characterSlots, featureUnlocks, triggerGroups,
   };
 }
 
@@ -245,7 +287,10 @@ export function resolveLevel(cfg, levelId) {
   if (!wc) throw new Error("Unknown world config: " + level.config);
   // same id chain as the bots below: marketConfig column, else the ids themselves
   const market = cfg.marketProfiles[wc.marketConfig] || cfg.marketProfiles[level.id] || cfg.marketProfiles[wc.id] || {};
-  const unlocks = cfg.unlockProfiles[wc.unlockConfig] || {};
+  // same id chain as market/behavior: the designer scopes unlock_config by the
+  // world_level id, so fall back to it (then wc.id) when the world_config column
+  // doesn't name a profile of its own.
+  const unlocks = cfg.unlockProfiles[wc.unlockConfig] || cfg.unlockProfiles[level.id] || cfg.unlockProfiles[wc.id] || {};
   // behavior/buffs are scoped by world_level id: the same bot can play
   // differently in every level (competitors_behavior v2). Fallbacks on the
   // marketConfig id then the world_config id, so any of those columns can
@@ -262,5 +307,5 @@ export function resolveLevel(cfg, levelId) {
   // the market profile defines the level's length; sheet nbOfRounds is only a fallback
   const rounds = Object.keys(market).map(Number);
   const totalRounds = rounds.length ? Math.max(...rounds) : (wc.nbOfRounds || 0);
-  return { id: level.id, reward: level.reward, totalRounds, market, unlocks, bots, topX: level.topX || 1 };
+  return { id: level.id, reward: level.reward, totalRounds, market, unlocks, bots, topX: level.topX || 1, preparationTime: level.preparationTime, safeAssign: level.safeAssign };
 }

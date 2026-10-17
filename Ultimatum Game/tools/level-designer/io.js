@@ -59,6 +59,7 @@ export function migrate(doc) {
   const known = new Set(d.biomes.map((b) => b.id));
   d.levels.forEach((l) => {
     if (!l.biomeId || !known.has(l.biomeId)) l.biomeId = d.biomes[0].id;
+    if (l.customerBatch == null) l.customerBatch = 2; // paquet de clients : défaut 2 (docs pré-batch)
     // A level's market used to carry its own id, free to drift from the level's on
     // rename — which silently shipped the market under a dead name and loaded the
     // level with 0 rounds. One id now; drop the old field so it can't come back.
@@ -79,6 +80,10 @@ export const canUseFS = () => typeof window.showSaveFilePicker === "function";
 
 let handle = null;
 export const hasHandle = () => !!handle;
+export const getHandle = () => handle;
+// Handles are structured-cloneable, so a tab that already picked the file can
+// hand it to the others over BroadcastChannel instead of each one re-prompting.
+export const adoptHandle = (h) => { if (h && !handle) handle = h; };
 
 export async function pickDocFile(mode) {
   const opts = { types: [{ description: "Level design JSON", accept: { "application/json": [".json"] } }], suggestedName: "leveldesign.json" };
@@ -88,6 +93,9 @@ export async function pickDocFile(mode) {
 
 export async function readHandle() {
   if (!handle) return null;
+  if (handle.queryPermission && (await handle.queryPermission({ mode: "read" })) !== "granted") {
+    if ((await handle.requestPermission({ mode: "read" })) !== "granted") return null;
+  }
   const f = await handle.getFile();
   const t = await f.text();
   return t.trim() ? migrate(JSON.parse(t)) : emptyDoc();
@@ -95,6 +103,13 @@ export async function readHandle() {
 
 export async function writeHandle(doc) {
   if (!handle) throw new Error("Aucun fichier ouvert");
+  // An adopted handle carries no write permission for this tab: ask once (we're
+  // inside the Sauvegarder click, so the gesture requirement is satisfied).
+  if (handle.queryPermission && (await handle.queryPermission({ mode: "readwrite" })) !== "granted") {
+    if ((await handle.requestPermission({ mode: "readwrite" })) !== "granted") {
+      throw new Error("Accès en écriture refusé sur leveldesign.json");
+    }
+  }
   const w = await handle.createWritable();
   await w.write(JSON.stringify(doc, null, 2));
   await w.close();

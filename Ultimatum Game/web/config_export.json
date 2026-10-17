@@ -184,27 +184,213 @@
   "competitors": [
     {
       "id": "bot_cat",
-      "displayName": "Mew Corp",
-      "spriteId": "Cat",
-      "startingMoney": 50,
-      "increaseByRound": 50,
-      "upgradeEffect": 50
+      "displayName": "MeowCo",
+      "spriteId": "Cat"
     },
     {
       "id": "bot_octopus",
-      "displayName": "8 Helps",
-      "spriteId": "Octopus",
-      "startingMoney": 50,
-      "increaseByRound": 50,
-      "upgradeEffect": 50
+      "displayName": "Tentacorp",
+      "spriteId": "Octopus"
     },
     {
       "id": "bot_sloth",
-      "displayName": "Sleepy Inc",
-      "spriteId": "Sloth",
-      "startingMoney": 50,
-      "increaseByRound": 50,
-      "upgradeEffect": 50
+      "displayName": "Sloth LLC",
+      "spriteId": "Sloth"
+    },
+    {
+      "id": "bot_dog",
+      "displayName": "Woof Inc",
+      "spriteId": "Dog"
+    },
+    {
+      "id": "bot_robin",
+      "displayName": "TweetCo",
+      "spriteId": "Robin"
+    },
+    {
+      "id": "bot_BigBadWolfMythic",
+      "displayName": "Wolf Mega",
+      "spriteId": "Big Bad Wolf Mythic"
+    },
+    {
+      "id": "bot_BigBadWolf",
+      "displayName": "HuffPuff",
+      "spriteId": "Big Bad Wolf"
+    },
+    {
+      "id": "bot_catGinger",
+      "displayName": "Ginger Cat",
+      "spriteId": "Cat Ginger"
+    },
+    {
+      "id": "bot_catMenkoun",
+      "displayName": "MaineCoon",
+      "spriteId": "Cat Menkoun"
+    },
+    {
+      "id": "bot_catSiamee",
+      "displayName": "Siam Meow",
+      "spriteId": "Cat Siamese"
+    },
+    {
+      "id": "bot_catSphinx",
+      "displayName": "Bald Meow",
+      "spriteId": "Cat Sphinx"
+    },
+    {
+      "id": "bot_catWitch",
+      "displayName": "Hex Meow",
+      "spriteId": "Cat Witch"
+    },
+    {
+      "id": "bot_crowSkeleton",
+      "displayName": "Bone Crow",
+      "spriteId": "Crow Skeleton"
+    },
+    {
+      "id": "bot_crowThreeEyes",
+      "displayName": "3rd Eye",
+      "spriteId": "Crow Three Eyes"
+    },
+    {
+      "id": "bot_crowVolcanic",
+      "displayName": "Lava Crow",
+      "spriteId": "Crow Volcanic"
+    },
+    {
+      "id": "bot_crowWhite",
+      "displayName": "Pale Crow",
+      "spriteId": "Crow White"
+    },
+    {
+      "id": "bot_crow",
+      "displayName": "Caw Corp",
+      "spriteId": "Crow"
+    },
+    {
+      "id": "bot_Cocker",
+      "displayName": "Flop Ear",
+      "spriteId": "Dog Cocker"
+    },
+    {
+      "id": "bot_dogGermanShepherd",
+      "displayName": "K9 Guard",
+      "spriteId": "Dog German Shepherd"
+    },
+    {
+      "id": "bot_dogGniocci",
+      "displayName": "Gnocchi",
+      "spriteId": "Dog Gniocci"
+    },
+    {
+      "id": "bot_falcon",
+      "displayName": "Swoop Co",
+      "spriteId": "Falcon"
+    },
+    {
+      "id": "bot_foxRobinHood",
+      "displayName": "Rob Fox",
+      "spriteId": "Fox Robin Hood"
+    },
+    {
+      "id": "bot_foxSnow",
+      "displayName": "Ice Fox",
+      "spriteId": "Fox Snow"
+    },
+    {
+      "id": "bot_foxWild",
+      "displayName": "Wild Fox",
+      "spriteId": "Fox Wild"
+    },
+    {
+      "id": "bot_frogCaptain",
+      "displayName": "Capt Croak",
+      "spriteId": "Frog Captain"
+    },
+    {
+      "id": "bot_frogToad",
+      "displayName": "Toad Co",
+      "spriteId": "Frog Toad"
+    },
+    {
+      "id": "bot_frogVenomous",
+      "displayName": "Toxic Toad",
+      "spriteId": "Frog Venomous"
+    },
+    {
+      "id": "bot_frog",
+      "displayName": "Croak Inc",
+      "spriteId": "Frog"
+    },
+    {
+      "id": "bot_owlAcademic",
+      "displayName": "Smart Owl",
+      "spriteId": "Owl Academic"
+    },
+    {
+      "id": "bot_owlCosmonaute",
+      "displayName": "Astro Owl",
+      "spriteId": "Owl Cosmonaute"
+    },
+    {
+      "id": "bot_owlGreatHorned",
+      "displayName": "Horn Owl",
+      "spriteId": "Owl Great Horned"
+    },
+    {
+      "id": "bot_owlSnow",
+      "displayName": "Snow Owl",
+      "spriteId": "Owl Snow"
+    },
+    {
+      "id": "bot_owl",
+      "displayName": "Hoot Inc",
+      "spriteId": "Owl"
+    },
+    {
+      "id": "bot_rabbitEnglishLop",
+      "displayName": "Lop Ear",
+      "spriteId": "Rabbit English Lop"
+    },
+    {
+      "id": "bot_rabbitMyxomatose",
+      "displayName": "Sick Bunny",
+      "spriteId": "Rabbit Myxomatose"
+    },
+    {
+      "id": "bot_rabbitRobot",
+      "displayName": "Robo-Bun",
+      "spriteId": "Rabbit Robot"
+    },
+    {
+      "id": "bot_rabbit",
+      "displayName": "Hop Co",
+      "spriteId": "Rabbit"
+    },
+    {
+      "id": "bot_redPandaKitsune",
+      "displayName": "Magic Red",
+      "spriteId": "Red Panda Kitsune"
+    },
+    {
+      "id": "bot_redPanda",
+      "displayName": "Panda Co",
+      "spriteId": "Red Panda"
+    },
+    {
+      "id": "bot_SlothCosmoSloth",
+      "displayName": "Space Zzz",
+      "spriteId": "Sloth CosmoSloth"
+    },
+    {
+      "id": "bot_VolcanoSloth",
+      "displayName": "Hot Sloth",
+      "spriteId": "Sloth Volcano"
+    },
+    {
+      "id": "bot_goat",
+      "displayName": "G.O.A.T Corp",
+      "spriteId": "Goat"
     }
   ],
   "characters": [
@@ -559,11 +745,11 @@
       "machine_2": "bottleMaker"
     },
     {
-      "id": "owlGreatHornedOwl",
+      "id": "owlGreatHorned",
       "name": "Great Horned Owl",
       "upgrade_profile": "epic_character",
       "typeSlot": "Owl",
-      "spriteIngame": "Owl Great Horned Owl",
+      "spriteIngame": "Owl Great Horned",
       "progress_profile": "level_profile_3",
       "multiplier": 1.3,
       "machine_1": "nestFactory",
@@ -733,27 +919,33 @@
   "ressources_tier": [
     {
       "id": "Tier1",
-      "color": "EFEFEF"
+      "color": "EFEFEF",
+      "increase": 0
     },
     {
       "id": "Tier2",
-      "color": "ACFF47"
+      "color": "ACFF47",
+      "increase": 0.1
     },
     {
       "id": "Tier3",
-      "color": "00C8FF"
+      "color": "00C8FF",
+      "increase": 0.2
     },
     {
       "id": "Tier4",
-      "color": "D400FF"
+      "color": "D400FF",
+      "increase": 0.4
     },
     {
       "id": "Tier5",
-      "color": "EEFF00"
+      "color": "EEFF00",
+      "increase": 0.5
     },
     {
       "id": "Tier6",
-      "color": "FF0000"
+      "color": "FF0000",
+      "increase": 1
     }
   ],
   "character_slot": [
@@ -2265,64 +2457,259 @@
   ],
   "feature_unlock": [
     {
-      "id": "tier2",
-      "level": 1
+      "id": "attributing_a_worker",
+      "tutorial": "black_mask",
+      "target": "buy_a_worker, assign_a_worker",
+      "trigger": "reach_level_[number]",
+      "value": 0
+    },
+    {
+      "id": "switch_a_worker",
+      "tutorial": "black_mask",
+      "target": "drag_n_drop_a_worker",
+      "trigger": "reach_wave_[number]",
+      "value": 2
     },
     {
       "id": "storage",
-      "level": 1
+      "tutorial": "black_mask",
+      "target": "storage",
+      "trigger": "unlock_storage",
+      "value": 1
     },
     {
       "id": "merge",
-      "level": 2
+      "tutorial": "black_mask",
+      "target": "merge_button",
+      "trigger": "unlock_merge"
+    },
+    {
+      "id": "tier2",
+      "tutorial": "red_dot",
+      "target": "[ressource_tier2]",
+      "trigger": "reach_level_[number]",
+      "value": 2
     },
     {
       "id": "upgrade_machine",
-      "level": 3
+      "tutorial": "red_dot",
+      "target": "upgrade_button",
+      "trigger": "enter_level_[number]",
+      "value": 4
     },
     {
       "id": "tier3",
-      "level": 3
+      "tutorial": "red_dot",
+      "target": "[ressource_tier3]",
+      "trigger": "reach_level_[number]",
+      "value": 3
     },
     {
       "id": "x2_button",
-      "level": 4
+      "tutorial": "red_dot",
+      "target": "x2_button",
+      "trigger": "reach_level_[number]",
+      "value": 4
     },
     {
       "id": "chest",
-      "level": 5
+      "tutorial": "red_dot",
+      "target": "chest_tab",
+      "trigger": "reach_level_[number]",
+      "value": 5
     },
     {
       "id": "character",
-      "level": 5
+      "tutorial": "red_dot",
+      "target": "character_tab, dog",
+      "trigger": "reach_level_[number]",
+      "value": 5
     },
     {
       "id": "end_of_round_summary",
-      "level": 6
+      "tutorial": "red_dot",
+      "target": "hud-money",
+      "trigger": "reach_level_[number]",
+      "value": 6
     },
     {
       "id": "tier4",
-      "level": 7
+      "tutorial": "red_dot",
+      "target": "[ressource_tier4]",
+      "trigger": "reach_level_[number]",
+      "value": 7
     },
     {
       "id": "gears",
-      "level": 7
+      "tutorial": "red_dot",
+      "target": "character_tab, dog, equip_hat",
+      "trigger": "reach_level_[number]",
+      "value": 7
     },
     {
       "id": "tier5",
-      "level": 8
+      "tutorial": "red_dot",
+      "target": "[ressource_tier5]",
+      "trigger": "reach_level_[number]",
+      "value": 8
     },
     {
       "id": "marketting",
-      "level": 9
+      "tutorial": "black_mask",
+      "target": "marketting",
+      "trigger": "enter_level_[number]",
+      "value": 10
     },
     {
       "id": "x4_button",
-      "level": 10
+      "tutorial": "red_dot",
+      "target": "x4_button",
+      "trigger": "reach_level_[number]",
+      "value": 10
     },
     {
       "id": "tier6",
-      "level": 11
+      "tutorial": "red_dot",
+      "target": "[ressource_tier6]",
+      "trigger": "reach_level_[number]",
+      "value": 11
+    },
+    {
+      "id": "unlock_slot_tennisBall",
+      "tutorial": "red_dot",
+      "target": "slot_tennisBall",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Dog"
+    },
+    {
+      "id": "unlock_slot_coffee",
+      "tutorial": "red_dot",
+      "target": "slot_coffee",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Cat"
+    },
+    {
+      "id": "unlock_slot_carrot",
+      "tutorial": "red_dot",
+      "target": "slot_carrot",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Rabbit"
+    },
+    {
+      "id": "unlock_slot_nenuphar",
+      "tutorial": "red_dot",
+      "target": "slot_nenuphar",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Frog"
+    },
+    {
+      "id": "unlock_slot_pillow",
+      "tutorial": "red_dot",
+      "target": "slot_pillow",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Sloth"
+    },
+    {
+      "id": "unlock_slot_bottle",
+      "tutorial": "red_dot",
+      "target": "slot_bottle",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Octopus"
+    },
+    {
+      "id": "unlock_slot_sandwitch",
+      "tutorial": "red_dot",
+      "target": "slot_sandwitch",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Fox"
+    },
+    {
+      "id": "unlock_slot_nest",
+      "tutorial": "red_dot",
+      "target": "slot_nest",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Owl"
+    },
+    {
+      "id": "unlock_slot_croissant",
+      "tutorial": "red_dot",
+      "target": "slot_croissant",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Robin"
+    },
+    {
+      "id": "unlock_slot_candle",
+      "tutorial": "red_dot",
+      "target": "slot_candle",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Goat"
+    },
+    {
+      "id": "unlock_slot_blackLotus",
+      "tutorial": "red_dot",
+      "target": "slot_blackLotus",
+      "trigger": "optain_[character_typeSlot]",
+      "value": "Crow"
+    }
+  ],
+  "triggers_group": [
+    {
+      "id": "unlock_merge",
+      "logic": "AND",
+      "trigger": "reach_level_[number]",
+      "value": 2
+    },
+    {
+      "id": "unlock_merge",
+      "logic": "AND",
+      "trigger": "reach_3_common_ressources"
+    },
+    {
+      "id": "reach_3_common_ressources",
+      "logic": "OR",
+      "trigger": "reach_[number]_of_[ressource]",
+      "value": "3, tennisBall"
+    },
+    {
+      "id": "reach_3_common_ressources",
+      "logic": "OR",
+      "trigger": "reach_[number]_of_[ressource]",
+      "value": "3, carrot"
+    },
+    {
+      "id": "unlock_storage",
+      "logic": "AND",
+      "trigger": "reach_[number]_in_stock",
+      "value": 5
+    },
+    {
+      "id": "unlock_storage",
+      "logic": "AND",
+      "trigger": "reach_level_[number]",
+      "value": 1
+    }
+  ],
+  "triggers": [
+    {
+      "id": "reach_[number]_in_stock"
+    },
+    {
+      "id": "reach_[number]_of_[ressource]"
+    },
+    {
+      "id": "reach_level_[number]"
+    },
+    {
+      "id": "optain_[character_typeSlot]"
+    },
+    {
+      "id": "optain_[ressource]_of_Tier[number]"
+    },
+    {
+      "id": "enter_level_[number]"
+    },
+    {
+      "id": "reach_wave_[number]"
     }
   ],
   "gears": [
@@ -2546,7 +2933,7 @@
   "general": [
     {
       "id": "startingMoney",
-      "value": 120
+      "value": 50
     },
     {
       "id": "tycoonPhaseDuration",
@@ -2554,7 +2941,7 @@
     },
     {
       "id": "startingWorkers",
-      "value": 1
+      "value": 0
     },
     {
       "id": "maxWorkersTotal",
@@ -2570,11 +2957,15 @@
     },
     {
       "id": "customerSpeed",
-      "value": 0.65
+      "value": 0.4
+    },
+    {
+      "id": "hawkerSpeed",
+      "value": 1.5
     },
     {
       "id": "customerRate",
-      "value": 0.2
+      "value": 0.05
     },
     {
       "id": "earlyTaxDiscount",
@@ -2583,6 +2974,20 @@
     {
       "id": "enableCheats",
       "value": true
+    }
+  ],
+  "Sheet44": [
+    {
+      "": 5000
+    },
+    {
+      "": 1750
+    },
+    {
+      "": 21000
+    },
+    {
+      "": 525000
     }
   ],
   "inputs": [
@@ -2719,568 +3124,574 @@
   ],
   "purshases": [
     {
+      "id": "more_worker_0",
+      "type": "increaseWorker",
+      "effect": 1,
+      "price": 0
+    },
+    {
       "id": "more_worker_1",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 75
+      "price": 50
     },
     {
       "id": "more_worker_2",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 150
+      "price": 55
     },
     {
       "id": "more_worker_3",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 300
+      "price": 61
     },
     {
       "id": "more_worker_4",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 600
+      "price": 68
     },
     {
       "id": "more_worker_5",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 1200
+      "price": 75
     },
     {
       "id": "more_worker_6",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 1800
+      "price": 83
     },
     {
       "id": "more_worker_7",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 2200
+      "price": 92
     },
     {
       "id": "more_worker_8",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 2600
+      "price": 102
     },
     {
       "id": "more_worker_9",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 3200
+      "price": 113
     },
     {
       "id": "more_worker_10",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 4000
+      "price": 125
     },
     {
       "id": "more_worker_11",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 5000
+      "price": 138
     },
     {
       "id": "more_worker_12",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 6000
+      "price": 152
     },
     {
       "id": "more_worker_13",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 7000
+      "price": 168
     },
     {
       "id": "more_worker_14",
       "type": "increaseWorker",
       "effect": 1,
-      "price": 8000
+      "price": 185
     },
     {
       "id": "better_marketing_1",
       "type": "increaseMarketting",
       "effect": 1.1,
-      "price": 75
+      "price": 10
     },
     {
       "id": "better_marketing_2",
       "type": "increaseMarketting",
       "effect": 1.2,
-      "price": 150
+      "price": 12
     },
     {
       "id": "better_marketing_3",
       "type": "increaseMarketting",
       "effect": 1.3,
-      "price": 300
+      "price": 15
     },
     {
       "id": "better_marketing_4",
       "type": "increaseMarketting",
       "effect": 1.4,
-      "price": 450
+      "price": 18
     },
     {
       "id": "better_marketing_5",
       "type": "increaseMarketting",
       "effect": 1.5,
-      "price": 600
+      "price": 22
     },
     {
       "id": "better_marketing_6",
       "type": "increaseMarketting",
       "effect": 1.6,
-      "price": 800
+      "price": 27
     },
     {
       "id": "better_marketing_7",
       "type": "increaseMarketting",
       "effect": 1.7,
-      "price": 1000
+      "price": 33
     },
     {
       "id": "better_marketing_8",
       "type": "increaseMarketting",
       "effect": 1.8,
-      "price": 1200
+      "price": 40
     },
     {
       "id": "better_marketing_9",
       "type": "increaseMarketting",
       "effect": 1.9,
-      "price": 1400
+      "price": 48
     },
     {
       "id": "better_marketing_10",
       "type": "increaseMarketting",
       "effect": 2,
-      "price": 1600
+      "price": 58
     },
     {
       "id": "better_marketing_11",
       "type": "increaseMarketting",
       "effect": 2.1,
-      "price": 1800
+      "price": 70
     },
     {
       "id": "better_marketing_12",
       "type": "increaseMarketting",
       "effect": 2.2,
-      "price": 2000
+      "price": 84
     },
     {
       "id": "better_marketing_13",
       "type": "increaseMarketting",
       "effect": 2.3,
-      "price": 2200
+      "price": 101
     },
     {
       "id": "better_marketing_14",
       "type": "increaseMarketting",
       "effect": 2.4,
-      "price": 2400
+      "price": 122
     },
     {
       "id": "better_marketing_15",
       "type": "increaseMarketting",
       "effect": 2.5,
-      "price": 2600
+      "price": 147
     },
     {
       "id": "better_marketing_16",
       "type": "increaseMarketting",
       "effect": 2.6,
-      "price": 2800
+      "price": 177
     },
     {
       "id": "better_marketing_17",
       "type": "increaseMarketting",
       "effect": 2.7,
-      "price": 3000
+      "price": 213
     },
     {
       "id": "better_marketing_18",
       "type": "increaseMarketting",
       "effect": 2.8,
-      "price": 3200
+      "price": 256
     },
     {
       "id": "better_marketing_19",
       "type": "increaseMarketting",
       "effect": 2.9,
-      "price": 3400
+      "price": 308
     },
     {
       "id": "better_marketing_20",
       "type": "increaseMarketting",
       "effect": 3,
-      "price": 3600
+      "price": 370
     },
     {
       "id": "better_marketing_21",
       "type": "increaseMarketting",
       "effect": 3.1,
-      "price": 3800
+      "price": 444
     },
     {
       "id": "better_marketing_22",
       "type": "increaseMarketting",
       "effect": 3.2,
-      "price": 4000
+      "price": 533
     },
     {
       "id": "better_marketing_23",
       "type": "increaseMarketting",
       "effect": 3.3,
-      "price": 4200
+      "price": 640
     },
     {
       "id": "better_marketing_24",
       "type": "increaseMarketting",
       "effect": 3.4,
-      "price": 4400
+      "price": 768
     },
     {
       "id": "better_marketing_25",
       "type": "increaseMarketting",
       "effect": 3.5,
-      "price": 4600
+      "price": 922
     },
     {
       "id": "better_marketing_26",
       "type": "increaseMarketting",
       "effect": 3.6,
-      "price": 4800
+      "price": 1107
     },
     {
       "id": "better_marketing_27",
       "type": "increaseMarketting",
       "effect": 3.7,
-      "price": 5000
+      "price": 1329
     },
     {
       "id": "better_marketing_28",
       "type": "increaseMarketting",
       "effect": 3.8,
-      "price": 5200
+      "price": 1595
     },
     {
       "id": "better_marketing_29",
       "type": "increaseMarketting",
       "effect": 3.9,
-      "price": 5400
+      "price": 1914
     },
     {
       "id": "better_marketing_30",
       "type": "increaseMarketting",
       "effect": 4,
-      "price": 5600
+      "price": 2297
     },
     {
       "id": "better_marketing_31",
       "type": "increaseMarketting",
       "effect": 4.1,
-      "price": 5800
+      "price": 2757
     },
     {
       "id": "better_marketing_32",
       "type": "increaseMarketting",
       "effect": 4.2,
-      "price": 6000
+      "price": 3309
     },
     {
       "id": "better_marketing_33",
       "type": "increaseMarketting",
       "effect": 4.3,
-      "price": 6200
+      "price": 3971
     },
     {
       "id": "better_marketing_34",
       "type": "increaseMarketting",
       "effect": 4.4,
-      "price": 6400
+      "price": 4766
     },
     {
       "id": "better_marketing_35",
       "type": "increaseMarketting",
       "effect": 4.5,
-      "price": 6600
+      "price": 5720
     },
     {
       "id": "better_marketing_36",
       "type": "increaseMarketting",
       "effect": 4.6,
-      "price": 6800
+      "price": 6864
     },
     {
       "id": "better_marketing_37",
       "type": "increaseMarketting",
       "effect": 4.7,
-      "price": 7000
+      "price": 8237
     },
     {
       "id": "better_marketing_38",
       "type": "increaseMarketting",
       "effect": 4.8,
-      "price": 7200
+      "price": 9885
     },
     {
       "id": "better_marketing_39",
       "type": "increaseMarketting",
       "effect": 4.9,
-      "price": 7400
+      "price": 11862
     },
     {
       "id": "better_marketing_40",
       "type": "increaseMarketting",
       "effect": 5,
-      "price": 7600
+      "price": 14235
     },
     {
       "id": "better_storage_1",
       "type": "increaseStorage",
-      "effect": 5,
-      "price": 38
+      "effect": 1,
+      "price": 5
     },
     {
       "id": "better_storage_2",
       "type": "increaseStorage",
-      "effect": 5,
-      "price": 75
+      "effect": 1,
+      "price": 6
     },
     {
       "id": "better_storage_3",
       "type": "increaseStorage",
-      "effect": 5,
-      "price": 150
+      "effect": 1,
+      "price": 7
     },
     {
       "id": "better_storage_4",
       "type": "increaseStorage",
-      "effect": 5,
-      "price": 225
+      "effect": 1,
+      "price": 8
     },
     {
       "id": "better_storage_5",
       "type": "increaseStorage",
-      "effect": 5,
-      "price": 300
+      "effect": 1,
+      "price": 9
     },
     {
       "id": "better_storage_6",
       "type": "increaseStorage",
-      "effect": 5,
-      "price": 400
+      "effect": 1,
+      "price": 10
     },
     {
       "id": "better_storage_7",
       "type": "increaseStorage",
-      "effect": 5,
-      "price": 500
+      "effect": 1,
+      "price": 11
     },
     {
       "id": "better_storage_8",
       "type": "increaseStorage",
-      "effect": 5,
-      "price": 600
+      "effect": 1,
+      "price": 12
     },
     {
       "id": "better_storage_9",
       "type": "increaseStorage",
-      "effect": 5,
-      "price": 700
+      "effect": 1,
+      "price": 13
     },
     {
       "id": "better_storage_10",
       "type": "increaseStorage",
-      "effect": 20,
-      "price": 800
+      "effect": 1,
+      "price": 14
     },
     {
       "id": "better_storage_11",
       "type": "increaseStorage",
-      "effect": 20,
-      "price": 900
+      "effect": 1,
+      "price": 15
     },
     {
       "id": "better_storage_12",
       "type": "increaseStorage",
-      "effect": 20,
-      "price": 1000
+      "effect": 1,
+      "price": 17
     },
     {
       "id": "better_storage_13",
       "type": "increaseStorage",
-      "effect": 20,
-      "price": 1100
+      "effect": 1,
+      "price": 19
     },
     {
       "id": "better_storage_14",
       "type": "increaseStorage",
-      "effect": 20,
-      "price": 1200
+      "effect": 1,
+      "price": 21
     },
     {
       "id": "better_storage_15",
       "type": "increaseStorage",
-      "effect": 20,
-      "price": 1300
+      "effect": 1,
+      "price": 23
     },
     {
       "id": "better_storage_16",
       "type": "increaseStorage",
-      "effect": 20,
-      "price": 1400
+      "effect": 1,
+      "price": 25
     },
     {
       "id": "better_storage_17",
       "type": "increaseStorage",
-      "effect": 20,
-      "price": 1500
+      "effect": 1,
+      "price": 28
     },
     {
       "id": "better_storage_18",
       "type": "increaseStorage",
-      "effect": 20,
-      "price": 1600
+      "effect": 1,
+      "price": 31
     },
     {
       "id": "better_storage_19",
       "type": "increaseStorage",
-      "effect": 20,
-      "price": 1700
+      "effect": 1,
+      "price": 34
     },
     {
       "id": "better_storage_20",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 1800
+      "effect": 1,
+      "price": 37
     },
     {
       "id": "better_storage_21",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 1900
+      "effect": 1,
+      "price": 41
     },
     {
       "id": "better_storage_22",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 2000
+      "effect": 1,
+      "price": 45
     },
     {
       "id": "better_storage_23",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 2100
+      "effect": 1,
+      "price": 50
     },
     {
       "id": "better_storage_24",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 2200
+      "effect": 1,
+      "price": 55
     },
     {
       "id": "better_storage_25",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 2300
+      "effect": 1,
+      "price": 61
     },
     {
       "id": "better_storage_26",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 2400
+      "effect": 1,
+      "price": 67
     },
     {
       "id": "better_storage_27",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 2500
+      "effect": 1,
+      "price": 74
     },
     {
       "id": "better_storage_28",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 2600
+      "effect": 1,
+      "price": 81
     },
     {
       "id": "better_storage_29",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 2700
+      "effect": 1,
+      "price": 89
     },
     {
       "id": "better_storage_30",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 2800
+      "effect": 1,
+      "price": 98
     },
     {
       "id": "better_storage_31",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 2900
+      "effect": 1,
+      "price": 108
     },
     {
       "id": "better_storage_32",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 3000
+      "effect": 1,
+      "price": 119
     },
     {
       "id": "better_storage_33",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 3100
+      "effect": 1,
+      "price": 131
     },
     {
       "id": "better_storage_34",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 3200
+      "effect": 1,
+      "price": 144
     },
     {
       "id": "better_storage_35",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 3300
+      "effect": 1,
+      "price": 158
     },
     {
       "id": "better_storage_36",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 3400
+      "effect": 1,
+      "price": 174
     },
     {
       "id": "better_storage_37",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 3500
+      "effect": 1,
+      "price": 191
     },
     {
       "id": "better_storage_38",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 3600
+      "effect": 1,
+      "price": 210
     },
     {
       "id": "better_storage_39",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 3700
+      "effect": 1,
+      "price": 231
     },
     {
       "id": "better_storage_40",
       "type": "increaseStorage",
-      "effect": 50,
-      "price": 3800
+      "effect": 1,
+      "price": 254
     }
   ],
   "outputs": [
@@ -3347,8 +3758,8 @@
       "quantity": 1,
       "weight": 8500,
       "group": "A",
-      "tier1": 70,
-      "tier2": 30,
+      "tier1": 2,
+      "tier2": 0,
       "tier3": 0,
       "tier4": 0,
       "tier5": 0,
@@ -3360,8 +3771,8 @@
       "quantity": 2,
       "weight": 1000,
       "group": "B",
-      "tier1": 65,
-      "tier2": 35,
+      "tier1": 3,
+      "tier2": 2,
       "tier3": 0,
       "tier4": 0,
       "tier5": 0,
@@ -3373,284 +3784,285 @@
       "quantity": 3,
       "weight": 350,
       "group": "C",
-      "tier1": 60,
-      "tier2": 35,
+      "tier1": 4,
+      "tier2": 2,
+      "tier3": 0,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 1,
+      "quantity": 1,
+      "weight": 120,
+      "group": "D",
+      "tier1": 4,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 1,
+      "quantity": 2,
+      "weight": 25,
+      "group": "E",
+      "tier1": 4,
+      "tier2": 5,
+      "tier3": 2,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0,
+      "": 0.6
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 1,
+      "quantity": 3,
+      "weight": 5,
+      "group": "F",
+      "tier1": 3,
+      "tier2": 4,
+      "tier3": 2,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 2,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 3,
+      "tier2": 2,
+      "tier3": 0,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 2,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 5,
+      "tier2": 2,
+      "tier3": 0,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 2,
+      "quantity": 3,
+      "weight": 350,
+      "group": "C",
+      "tier1": 4,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 2,
+      "quantity": 1,
+      "weight": 120,
+      "group": "D",
+      "tier1": 4,
+      "tier2": 4,
+      "tier3": 2,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 2,
+      "quantity": 2,
+      "weight": 25,
+      "group": "E",
+      "tier1": 3,
+      "tier2": 7,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 2,
+      "quantity": 3,
+      "weight": 5,
+      "group": "F",
+      "tier1": 2,
+      "tier2": 4,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 3,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 4,
+      "tier2": 2,
+      "tier3": 0,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 3,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 6,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 3,
+      "quantity": 3,
+      "weight": 350,
+      "group": "C",
+      "tier1": 4,
+      "tier2": 4,
+      "tier3": 2,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 3,
+      "quantity": 1,
+      "weight": 120,
+      "group": "D",
+      "tier1": 3,
+      "tier2": 5,
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 3,
+      "quantity": 2,
+      "weight": 25,
+      "group": "E",
+      "tier1": 2,
+      "tier2": 7,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 3,
+      "quantity": 3,
+      "weight": 5,
+      "group": "F",
+      "tier1": 2,
+      "tier2": 4,
+      "tier3": 4,
+      "tier4": 2,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 4,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 5,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 4,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 5,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 0,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 4,
+      "quantity": 3,
+      "weight": 350,
+      "group": "C",
+      "tier1": 3,
+      "tier2": 4,
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 4,
+      "quantity": 1,
+      "weight": 120,
+      "group": "D",
+      "tier1": 2,
+      "tier2": 5,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 4,
+      "quantity": 2,
+      "weight": 25,
+      "group": "E",
+      "tier1": 2,
+      "tier2": 5,
+      "tier3": 4,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 4,
+      "quantity": 3,
+      "weight": 5,
+      "group": "F",
+      "tier1": 0,
+      "tier2": 3,
       "tier3": 5,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 1,
-      "quantity": 1,
-      "weight": 120,
-      "group": "D",
-      "tier1": 55,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 1,
-      "quantity": 2,
-      "weight": 25,
-      "group": "E",
-      "tier1": 45,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 1,
-      "quantity": 3,
-      "weight": 5,
-      "group": "F",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 2,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 60,
-      "tier2": 35,
-      "tier3": 5,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 2,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 60,
-      "tier2": 35,
-      "tier3": 5,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 2,
-      "quantity": 3,
-      "weight": 350,
-      "group": "C",
-      "tier1": 55,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 2,
-      "quantity": 1,
-      "weight": 120,
-      "group": "D",
-      "tier1": 45,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 2,
-      "quantity": 2,
-      "weight": 25,
-      "group": "E",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 2,
-      "quantity": 3,
-      "weight": 5,
-      "group": "F",
-      "tier1": 40,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 3,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 55,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 3,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 50,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 3,
-      "quantity": 3,
-      "weight": 350,
-      "group": "C",
-      "tier1": 45,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 3,
-      "quantity": 1,
-      "weight": 120,
-      "group": "D",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 3,
-      "quantity": 2,
-      "weight": 25,
-      "group": "E",
-      "tier1": 35,
-      "tier2": 40,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 3,
-      "quantity": 3,
-      "weight": 5,
-      "group": "F",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 4,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 50,
-      "tier2": 35,
-      "tier3": 10,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 4,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 45,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 4,
-      "quantity": 3,
-      "weight": 350,
-      "group": "C",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 4,
-      "quantity": 1,
-      "weight": 120,
-      "group": "D",
-      "tier1": 40,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 5,
-      "tier5": 0,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 4,
-      "quantity": 2,
-      "weight": 25,
-      "group": "E",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 4,
-      "quantity": 3,
-      "weight": 5,
-      "group": "F",
-      "tier1": 25,
-      "tier2": 40,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
+      "tier4": 3,
+      "tier5": 2,
       "tier6": 0
     },
     {
@@ -3659,10 +4071,10 @@
       "quantity": 1,
       "weight": 8500,
       "group": "A",
-      "tier1": 40,
-      "tier2": 40,
-      "tier3": 15,
-      "tier4": 5,
+      "tier1": 4,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 0,
       "tier5": 0,
       "tier6": 0
     },
@@ -3672,10 +4084,10 @@
       "quantity": 2,
       "weight": 1000,
       "group": "B",
-      "tier1": 35,
-      "tier2": 45,
-      "tier3": 15,
-      "tier4": 5,
+      "tier1": 3,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 2,
       "tier5": 0,
       "tier6": 0
     },
@@ -3685,10 +4097,10 @@
       "quantity": 3,
       "weight": 350,
       "group": "C",
-      "tier1": 35,
-      "tier2": 40,
-      "tier3": 20,
-      "tier4": 5,
+      "tier1": 2,
+      "tier2": 4,
+      "tier3": 3,
+      "tier4": 2,
       "tier5": 0,
       "tier6": 0
     },
@@ -3698,11 +4110,11 @@
       "quantity": 1,
       "weight": 120,
       "group": "D",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
+      "tier1": 2,
+      "tier2": 4,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 0,
       "tier6": 0
     },
     {
@@ -3711,11 +4123,11 @@
       "quantity": 2,
       "weight": 25,
       "group": "E",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
+      "tier1": 0,
+      "tier2": 2,
+      "tier3": 4,
+      "tier4": 2,
+      "tier5": 2,
       "tier6": 0
     },
     {
@@ -3724,11 +4136,11 @@
       "quantity": 3,
       "weight": 5,
       "group": "F",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
+      "tier1": 0,
+      "tier2": 2,
+      "tier3": 4,
+      "tier4": 3,
+      "tier5": 2,
       "tier6": 0
     },
     {
@@ -3737,10 +4149,10 @@
       "quantity": 1,
       "weight": 8500,
       "group": "A",
-      "tier1": 40,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 5,
+      "tier1": 3,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 2,
       "tier5": 0,
       "tier6": 0
     },
@@ -3750,10 +4162,10 @@
       "quantity": 2,
       "weight": 1000,
       "group": "B",
-      "tier1": 40,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 5,
+      "tier1": 2,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 2,
       "tier5": 0,
       "tier6": 0
     },
@@ -3763,11 +4175,11 @@
       "quantity": 3,
       "weight": 350,
       "group": "C",
-      "tier1": 30,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
+      "tier1": 2,
+      "tier2": 4,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 0,
       "tier6": 0
     },
     {
@@ -3776,11 +4188,11 @@
       "quantity": 1,
       "weight": 120,
       "group": "D",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
+      "tier1": 0,
+      "tier2": 3,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 2,
       "tier6": 0
     },
     {
@@ -3789,11 +4201,11 @@
       "quantity": 2,
       "weight": 25,
       "group": "E",
-      "tier1": 25,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 4,
+      "tier4": 3,
+      "tier5": 2,
       "tier6": 0
     },
     {
@@ -3802,12 +4214,12 @@
       "quantity": 3,
       "weight": 5,
       "group": "F",
-      "tier1": 20,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 3,
+      "tier4": 3,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -3815,10 +4227,10 @@
       "quantity": 1,
       "weight": 8500,
       "group": "A",
-      "tier1": 0,
-      "tier2": 40,
-      "tier3": 20,
-      "tier4": 10,
+      "tier1": 2,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 2,
       "tier5": 0,
       "tier6": 0
     },
@@ -3829,232 +4241,232 @@
       "weight": 1000,
       "group": "B",
       "tier1": 0,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 7,
-      "quantity": 3,
-      "weight": 350,
-      "group": "C",
-      "tier1": 0,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 7,
-      "quantity": 1,
-      "weight": 120,
-      "group": "D",
-      "tier1": 0,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 7,
-      "quantity": 2,
-      "weight": 25,
-      "group": "E",
-      "tier1": 0,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 7,
-      "quantity": 3,
-      "weight": 5,
-      "group": "F",
-      "tier1": 0,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 8,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 0,
-      "tier2": 35,
-      "tier3": 20,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 8,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 0,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 8,
-      "quantity": 3,
-      "weight": 350,
-      "group": "C",
-      "tier1": 0,
-      "tier2": 35,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 5
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 8,
-      "quantity": 1,
-      "weight": 120,
-      "group": "D",
-      "tier1": 0,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 8,
-      "quantity": 2,
-      "weight": 25,
-      "group": "E",
-      "tier1": 0,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 8,
-      "quantity": 3,
-      "weight": 5,
-      "group": "F",
-      "tier1": 0,
-      "tier2": 30,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 9,
-      "quantity": 1,
-      "weight": 8500,
-      "group": "A",
-      "tier1": 0,
-      "tier2": 0,
-      "tier3": 25,
-      "tier4": 10,
-      "tier5": 5,
-      "tier6": 0
-    },
-    {
-      "id": "profil_complexity 0",
-      "level": 9,
-      "quantity": 2,
-      "weight": 1000,
-      "group": "B",
-      "tier1": 0,
-      "tier2": 0,
-      "tier3": 25,
-      "tier4": 15,
+      "tier2": 3,
+      "tier3": 3,
+      "tier4": 2,
       "tier5": 0,
-      "tier6": 5
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
-      "level": 9,
+      "level": 7,
       "quantity": 3,
       "weight": 350,
       "group": "C",
       "tier1": 0,
-      "tier2": 0,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
+      "tier2": 3,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
-      "level": 9,
+      "level": 7,
       "quantity": 1,
       "weight": 120,
       "group": "D",
       "tier1": 0,
-      "tier2": 0,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
+      "tier2": 2,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
-      "level": 9,
+      "level": 7,
       "quantity": 2,
       "weight": 25,
       "group": "E",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 3,
+      "tier4": 3,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
-      "level": 9,
+      "level": 7,
       "quantity": 3,
       "weight": 5,
       "group": "F",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 3,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
-      "level": 10,
+      "level": 8,
       "quantity": 1,
       "weight": 8500,
       "group": "A",
-      "tier1": 0,
-      "tier2": 0,
-      "tier3": 25,
-      "tier4": 15,
+      "tier1": 2,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 2,
       "tier5": 0,
-      "tier6": 5
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 8,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 0,
+      "tier2": 3,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 8,
+      "quantity": 3,
+      "weight": 350,
+      "group": "C",
+      "tier1": 0,
+      "tier2": 2,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 8,
+      "quantity": 1,
+      "weight": 120,
+      "group": "D",
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 8,
+      "quantity": 2,
+      "weight": 25,
+      "group": "E",
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 3,
+      "tier4": 3,
+      "tier5": 2,
+      "tier6": 2
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 8,
+      "quantity": 3,
+      "weight": 5,
+      "group": "F",
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 2,
+      "tier4": 3,
+      "tier5": 2,
+      "tier6": 2
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 9,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 0,
+      "tier2": 3,
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 0,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 9,
+      "quantity": 2,
+      "weight": 1000,
+      "group": "B",
+      "tier1": 0,
+      "tier2": 2,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 9,
+      "quantity": 3,
+      "weight": 350,
+      "group": "C",
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 3,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 9,
+      "quantity": 1,
+      "weight": 120,
+      "group": "D",
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 9,
+      "quantity": 2,
+      "weight": 25,
+      "group": "E",
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 2,
+      "tier4": 3,
+      "tier5": 2,
+      "tier6": 2
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 9,
+      "quantity": 3,
+      "weight": 5,
+      "group": "F",
+      "tier1": 0,
+      "tier2": 0,
+      "tier3": 0,
+      "tier4": 3,
+      "tier5": 2,
+      "tier6": 2
+    },
+    {
+      "id": "profil_complexity 0",
+      "level": 10,
+      "quantity": 1,
+      "weight": 8500,
+      "group": "A",
+      "tier1": 0,
+      "tier2": 2,
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
@@ -4063,11 +4475,11 @@
       "weight": 1000,
       "group": "B",
       "tier1": 0,
-      "tier2": 0,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
+      "tier2": 2,
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
@@ -4077,10 +4489,10 @@
       "group": "C",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4090,10 +4502,10 @@
       "group": "D",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 25,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4103,10 +4515,10 @@
       "group": "E",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 0,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4116,10 +4528,10 @@
       "group": "F",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 25,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10
+      "tier3": 0,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4128,11 +4540,11 @@
       "weight": 8500,
       "group": "A",
       "tier1": 0,
-      "tier2": 0,
-      "tier3": 0,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
+      "tier2": 2,
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
@@ -4142,10 +4554,10 @@
       "group": "B",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 0,
-      "tier4": 15,
-      "tier5": 5,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
@@ -4155,10 +4567,10 @@
       "group": "C",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 0,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4168,10 +4580,10 @@
       "group": "D",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 0,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4182,9 +4594,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4195,9 +4607,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4207,10 +4619,10 @@
       "group": "A",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 0,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
@@ -4220,10 +4632,10 @@
       "group": "B",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 0,
-      "tier4": 15,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
@@ -4233,10 +4645,10 @@
       "group": "C",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 0,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4247,9 +4659,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 5
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4260,9 +4672,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4273,9 +4685,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 20,
-      "tier5": 10,
-      "tier6": 10
+      "tier4": 0,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4285,10 +4697,10 @@
       "group": "A",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 0,
-      "tier4": 0,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
@@ -4298,10 +4710,10 @@
       "group": "B",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 0,
-      "tier4": 0,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4312,9 +4724,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 0,
-      "tier5": 10,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4325,9 +4737,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 0,
-      "tier5": 10,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4338,9 +4750,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 0,
-      "tier5": 15,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4352,8 +4764,8 @@
       "tier2": 0,
       "tier3": 0,
       "tier4": 0,
-      "tier5": 15,
-      "tier6": 15
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4363,10 +4775,10 @@
       "group": "A",
       "tier1": 0,
       "tier2": 0,
-      "tier3": 0,
-      "tier4": 0,
-      "tier5": 10,
-      "tier6": 5
+      "tier3": 2,
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
@@ -4377,9 +4789,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 0,
-      "tier5": 10,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4390,9 +4802,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 0,
-      "tier5": 10,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4403,9 +4815,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 0,
-      "tier5": 15,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4417,8 +4829,8 @@
       "tier2": 0,
       "tier3": 0,
       "tier4": 0,
-      "tier5": 15,
-      "tier6": 15
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4430,8 +4842,8 @@
       "tier2": 0,
       "tier3": 0,
       "tier4": 0,
-      "tier5": 15,
-      "tier6": 15
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4442,9 +4854,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 0
     },
     {
       "id": "profil_complexity 0",
@@ -4455,9 +4867,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4468,9 +4880,9 @@
       "tier1": 0,
       "tier2": 0,
       "tier3": 0,
-      "tier4": 0,
-      "tier5": 0,
-      "tier6": 10
+      "tier4": 2,
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4482,8 +4894,8 @@
       "tier2": 0,
       "tier3": 0,
       "tier4": 0,
-      "tier5": 0,
-      "tier6": 15
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4495,8 +4907,8 @@
       "tier2": 0,
       "tier3": 0,
       "tier4": 0,
-      "tier5": 0,
-      "tier6": 15
+      "tier5": 2,
+      "tier6": 2
     },
     {
       "id": "profil_complexity 0",
@@ -4509,7 +4921,7 @@
       "tier3": 0,
       "tier4": 0,
       "tier5": 0,
-      "tier6": 20
+      "tier6": 2
     }
   ],
   "resources": [
@@ -4529,7 +4941,7 @@
       "description": "Tennis Ball Tier 2 description",
       "spriteId": "Tennis Ball Tier 2",
       "baseSellPrice": 14,
-      "influence": 1.1
+      "influence": 1.5
     },
     {
       "id": "tennisBall",
@@ -4538,7 +4950,7 @@
       "description": "Tennis Ball Tier 3 description",
       "spriteId": "Tennis Ball Tier 3",
       "baseSellPrice": 32,
-      "influence": 1.2
+      "influence": 2
     },
     {
       "id": "tennisBall",
@@ -4547,7 +4959,7 @@
       "description": "Tennis Ball Tier 4 description",
       "spriteId": "Tennis Ball Tier 4",
       "baseSellPrice": 48,
-      "influence": 1.3
+      "influence": 2.5
     },
     {
       "id": "tennisBall",
@@ -4556,7 +4968,7 @@
       "description": "Tennis Ball Tier 5 description",
       "spriteId": "Tennis Ball Tier 5",
       "baseSellPrice": 81,
-      "influence": 1.4
+      "influence": 3
     },
     {
       "id": "tennisBall",
@@ -4565,7 +4977,7 @@
       "description": "Tennis Ball Tier 6 description",
       "spriteId": "Tennis Ball Tier 6",
       "baseSellPrice": 155,
-      "influence": 1.5
+      "influence": 3.5
     },
     {
       "id": "carrot",
@@ -4583,7 +4995,7 @@
       "description": "Carrot Tier 2 description",
       "spriteId": "Carrot Tier 2",
       "baseSellPrice": 22,
-      "influence": 1.1
+      "influence": 1.5
     },
     {
       "id": "carrot",
@@ -4592,7 +5004,7 @@
       "description": "Carrot Tier 3 description",
       "spriteId": "Carrot Tier 3",
       "baseSellPrice": 59,
-      "influence": 1.2
+      "influence": 2
     },
     {
       "id": "carrot",
@@ -4601,7 +5013,7 @@
       "description": "Carrot Tier 4 description",
       "spriteId": "Carrot Tier 4",
       "baseSellPrice": 104,
-      "influence": 1.3
+      "influence": 2.5
     },
     {
       "id": "carrot",
@@ -4610,7 +5022,7 @@
       "description": "Carrot Tier 5 description",
       "spriteId": "Carrot Tier 5",
       "baseSellPrice": 210,
-      "influence": 1.4
+      "influence": 3
     },
     {
       "id": "carrot",
@@ -4619,7 +5031,7 @@
       "description": "Carrot Tier 6 description",
       "spriteId": "Carrot Tier 6",
       "baseSellPrice": 488,
-      "influence": 1.5
+      "influence": 3.5
     },
     {
       "id": "nenuphar",
@@ -4627,7 +5039,7 @@
       "displayName": "Nenuphar Tier 1",
       "description": "Nenuphar Tier 1 description",
       "spriteId": "Nenuphar Tier 1",
-      "baseSellPrice": 9,
+      "baseSellPrice": 6,
       "influence": 1
     },
     {
@@ -4636,8 +5048,8 @@
       "displayName": "Nenuphar Tier 2",
       "description": "Nenuphar Tier 2 description",
       "spriteId": "Nenuphar Tier 2",
-      "baseSellPrice": 26,
-      "influence": 1.1
+      "baseSellPrice": 14,
+      "influence": 1.5
     },
     {
       "id": "nenuphar",
@@ -4645,8 +5057,8 @@
       "displayName": "Nenuphar Tier 3",
       "description": "Nenuphar Tier 3 description",
       "spriteId": "Nenuphar Tier 3",
-      "baseSellPrice": 74,
-      "influence": 1.2
+      "baseSellPrice": 32,
+      "influence": 2
     },
     {
       "id": "nenuphar",
@@ -4654,8 +5066,8 @@
       "displayName": "Nenuphar Tier 4",
       "description": "Nenuphar Tier 4 description",
       "spriteId": "Nenuphar Tier 4",
-      "baseSellPrice": 138,
-      "influence": 1.3
+      "baseSellPrice": 48,
+      "influence": 2.5
     },
     {
       "id": "nenuphar",
@@ -4663,8 +5075,8 @@
       "displayName": "Nenuphar Tier 5",
       "description": "Nenuphar Tier 5 description",
       "spriteId": "Nenuphar Tier 5",
-      "baseSellPrice": 295,
-      "influence": 1.4
+      "baseSellPrice": 81,
+      "influence": 3
     },
     {
       "id": "nenuphar",
@@ -4672,8 +5084,8 @@
       "displayName": "Nenuphar Tier 6",
       "description": "Nenuphar Tier 6 description",
       "spriteId": "Nenuphar Tier 6",
-      "baseSellPrice": 729,
-      "influence": 1.5
+      "baseSellPrice": 155,
+      "influence": 3.5
     },
     {
       "id": "nest",
@@ -4681,7 +5093,7 @@
       "displayName": "Nest Tier 1",
       "description": "Nest Tier 1 description",
       "spriteId": "Nest Tier 1",
-      "baseSellPrice": 18,
+      "baseSellPrice": 200,
       "influence": 1
     },
     {
@@ -4690,8 +5102,8 @@
       "displayName": "Nest Tier 2",
       "description": "Nest Tier 2 description",
       "spriteId": "Nest Tier 2",
-      "baseSellPrice": 68,
-      "influence": 1.1
+      "baseSellPrice": 1381,
+      "influence": 1.5
     },
     {
       "id": "nest",
@@ -4699,8 +5111,8 @@
       "displayName": "Nest Tier 3",
       "description": "Nest Tier 3 description",
       "spriteId": "Nest Tier 3",
-      "baseSellPrice": 249,
-      "influence": 1.2
+      "baseSellPrice": 8673,
+      "influence": 2
     },
     {
       "id": "nest",
@@ -4708,8 +5120,8 @@
       "displayName": "Nest Tier 4",
       "description": "Nest Tier 4 description",
       "spriteId": "Nest Tier 4",
-      "baseSellPrice": 597,
-      "influence": 1.3
+      "baseSellPrice": 34156,
+      "influence": 2.5
     },
     {
       "id": "nest",
@@ -4717,8 +5129,8 @@
       "displayName": "Nest Tier 5",
       "description": "Nest Tier 5 description",
       "spriteId": "Nest Tier 5",
-      "baseSellPrice": 1657,
-      "influence": 1.4
+      "baseSellPrice": 154845,
+      "influence": 3
     },
     {
       "id": "nest",
@@ -4726,8 +5138,8 @@
       "displayName": "Nest Tier 6",
       "description": "Nest Tier 6 description",
       "spriteId": "Nest Tier 6",
-      "baseSellPrice": 5334,
-      "influence": 1.5
+      "baseSellPrice": 803630,
+      "influence": 3.5
     },
     {
       "id": "candle",
@@ -4735,7 +5147,7 @@
       "displayName": "Candle Tier 1",
       "description": "Candle Tier 1 description",
       "spriteId": "Candle Tier 1",
-      "baseSellPrice": 7,
+      "baseSellPrice": 80,
       "influence": 1
     },
     {
@@ -4744,8 +5156,8 @@
       "displayName": "Candle Tier 2",
       "description": "Candle Tier 2 description",
       "spriteId": "Candle Tier 2",
-      "baseSellPrice": 18,
-      "influence": 1.1
+      "baseSellPrice": 457,
+      "influence": 1.5
     },
     {
       "id": "candle",
@@ -4753,8 +5165,8 @@
       "displayName": "Candle Tier 3",
       "description": "Candle Tier 3 description",
       "spriteId": "Candle Tier 3",
-      "baseSellPrice": 45,
-      "influence": 1.2
+      "baseSellPrice": 2431,
+      "influence": 2
     },
     {
       "id": "candle",
@@ -4762,8 +5174,8 @@
       "displayName": "Candle Tier 4",
       "description": "Candle Tier 4 description",
       "spriteId": "Candle Tier 4",
-      "baseSellPrice": 74,
-      "influence": 1.3
+      "baseSellPrice": 8231,
+      "influence": 2.5
     },
     {
       "id": "candle",
@@ -4771,8 +5183,8 @@
       "displayName": "Candle Tier 5",
       "description": "Candle Tier 5 description",
       "spriteId": "Candle Tier 5",
-      "baseSellPrice": 138,
-      "influence": 1.4
+      "baseSellPrice": 32228,
+      "influence": 3
     },
     {
       "id": "candle",
@@ -4780,8 +5192,8 @@
       "displayName": "Candle Tier 6",
       "description": "Candle Tier 6 description",
       "spriteId": "Candle Tier 6",
-      "baseSellPrice": 295,
-      "influence": 1.5
+      "baseSellPrice": 145291,
+      "influence": 3.5
     },
     {
       "id": "pillow",
@@ -4789,7 +5201,7 @@
       "displayName": "Pillow Tier 1",
       "description": "Pillow Tier 1 description",
       "spriteId": "Pillow Tier 1",
-      "baseSellPrice": 0,
+      "baseSellPrice": 8,
       "influence": 1
     },
     {
@@ -4798,8 +5210,8 @@
       "displayName": "Pillow Tier 2",
       "description": "Pillow Tier 2 description",
       "spriteId": "Pillow Tier 2",
-      "baseSellPrice": 0,
-      "influence": 1.1
+      "baseSellPrice": 22,
+      "influence": 1.5
     },
     {
       "id": "pillow",
@@ -4807,8 +5219,8 @@
       "displayName": "Pillow Tier 3",
       "description": "Pillow Tier 3 description",
       "spriteId": "Pillow Tier 3",
-      "baseSellPrice": 0,
-      "influence": 1.2
+      "baseSellPrice": 59,
+      "influence": 2
     },
     {
       "id": "pillow",
@@ -4816,8 +5228,8 @@
       "displayName": "Pillow Tier 4",
       "description": "Pillow Tier 4 description",
       "spriteId": "Pillow Tier 4",
-      "baseSellPrice": 0,
-      "influence": 1.3
+      "baseSellPrice": 104,
+      "influence": 2.5
     },
     {
       "id": "pillow",
@@ -4825,8 +5237,8 @@
       "displayName": "Pillow Tier 5",
       "description": "Pillow Tier 5 description",
       "spriteId": "Pillow Tier 5",
-      "baseSellPrice": 0,
-      "influence": 1.4
+      "baseSellPrice": 210,
+      "influence": 3
     },
     {
       "id": "pillow",
@@ -4834,8 +5246,8 @@
       "displayName": "Pillow Tier 6",
       "description": "Pillow Tier 6 description",
       "spriteId": "Pillow Tier 6",
-      "baseSellPrice": 0,
-      "influence": 1.5
+      "baseSellPrice": 488,
+      "influence": 3.5
     },
     {
       "id": "blackLotus",
@@ -4843,7 +5255,7 @@
       "displayName": "Black Lotus Tier 1",
       "description": "Black Lotus Tier 1 description",
       "spriteId": "Black Lotus Tier 1",
-      "baseSellPrice": 90,
+      "baseSellPrice": 400,
       "influence": 1
     },
     {
@@ -4852,8 +5264,8 @@
       "displayName": "Black Lotus Tier 2",
       "description": "Black Lotus Tier 2 description",
       "spriteId": "Black Lotus Tier 2",
-      "baseSellPrice": 528,
-      "influence": 1.1
+      "baseSellPrice": 3122,
+      "influence": 1.5
     },
     {
       "id": "blackLotus",
@@ -4861,8 +5273,8 @@
       "displayName": "Black Lotus Tier 3",
       "description": "Black Lotus Tier 3 description",
       "spriteId": "Black Lotus Tier 3",
-      "baseSellPrice": 2875,
-      "influence": 1.2
+      "baseSellPrice": 21819,
+      "influence": 2
     },
     {
       "id": "blackLotus",
@@ -4870,8 +5282,8 @@
       "displayName": "Black Lotus Tier 4",
       "description": "Black Lotus Tier 4 description",
       "spriteId": "Black Lotus Tier 4",
-      "baseSellPrice": 9944,
-      "influence": 1.3
+      "baseSellPrice": 94669,
+      "influence": 2.5
     },
     {
       "id": "blackLotus",
@@ -4879,8 +5291,8 @@
       "displayName": "Black Lotus Tier 5",
       "description": "Black Lotus Tier 5 description",
       "spriteId": "Black Lotus Tier 5",
-      "baseSellPrice": 39752,
-      "influence": 1.4
+      "baseSellPrice": 471093,
+      "influence": 3
     },
     {
       "id": "blackLotus",
@@ -4888,8 +5300,8 @@
       "displayName": "Black Lotus Tier 6",
       "description": "Black Lotus Tier 6 description",
       "spriteId": "Black Lotus Tier 6",
-      "baseSellPrice": 182834,
-      "influence": 1.5
+      "baseSellPrice": 2672561,
+      "influence": 3.5
     },
     {
       "id": "bottle",
@@ -4897,7 +5309,7 @@
       "displayName": "Bottle Tier 1",
       "description": "Bottle Tier 1 description",
       "spriteId": "Bottle Tier 1",
-      "baseSellPrice": 10,
+      "baseSellPrice": 40,
       "influence": 1
     },
     {
@@ -4906,8 +5318,8 @@
       "displayName": "Bottle Tier 2",
       "description": "Bottle Tier 2 description",
       "spriteId": "Bottle Tier 2",
-      "baseSellPrice": 30,
-      "influence": 1.1
+      "baseSellPrice": 192,
+      "influence": 1.5
     },
     {
       "id": "bottle",
@@ -4915,8 +5327,8 @@
       "displayName": "Bottle Tier 3",
       "description": "Bottle Tier 3 description",
       "spriteId": "Bottle Tier 3",
-      "baseSellPrice": 89,
-      "influence": 1.2
+      "baseSellPrice": 877,
+      "influence": 2
     },
     {
       "id": "bottle",
@@ -4924,8 +5336,8 @@
       "displayName": "Bottle Tier 4",
       "description": "Bottle Tier 4 description",
       "spriteId": "Bottle Tier 4",
-      "baseSellPrice": 173,
-      "influence": 1.3
+      "baseSellPrice": 2581,
+      "influence": 2.5
     },
     {
       "id": "bottle",
@@ -4933,8 +5345,8 @@
       "displayName": "Bottle Tier 5",
       "description": "Bottle Tier 5 description",
       "spriteId": "Bottle Tier 5",
-      "baseSellPrice": 387,
-      "influence": 1.4
+      "baseSellPrice": 8806,
+      "influence": 3
     },
     {
       "id": "bottle",
@@ -4942,8 +5354,8 @@
       "displayName": "Bottle Tier 6",
       "description": "Bottle Tier 6 description",
       "spriteId": "Bottle Tier 6",
-      "baseSellPrice": 1001,
-      "influence": 1.5
+      "baseSellPrice": 34738,
+      "influence": 3.5
     },
     {
       "id": "coffee",
@@ -4951,7 +5363,7 @@
       "displayName": "Coffee Tier 1",
       "description": "Coffee Tier 1 description",
       "spriteId": "Coffee Tier 1",
-      "baseSellPrice": 5,
+      "baseSellPrice": 9,
       "influence": 1
     },
     {
@@ -4960,8 +5372,8 @@
       "displayName": "Coffee Tier 2",
       "description": "Coffee Tier 2 description",
       "spriteId": "Coffee Tier 2",
-      "baseSellPrice": 10,
-      "influence": 1.1
+      "baseSellPrice": 26,
+      "influence": 1.5
     },
     {
       "id": "coffee",
@@ -4969,8 +5381,8 @@
       "displayName": "Coffee Tier 3",
       "description": "Coffee Tier 3 description",
       "spriteId": "Coffee Tier 3",
-      "baseSellPrice": 20,
-      "influence": 1.2
+      "baseSellPrice": 74,
+      "influence": 2
     },
     {
       "id": "coffee",
@@ -4978,8 +5390,8 @@
       "displayName": "Coffee Tier 4",
       "description": "Coffee Tier 4 description",
       "spriteId": "Coffee Tier 4",
-      "baseSellPrice": 26,
-      "influence": 1.3
+      "baseSellPrice": 138,
+      "influence": 2.5
     },
     {
       "id": "coffee",
@@ -4987,8 +5399,8 @@
       "displayName": "Coffee Tier 5",
       "description": "Coffee Tier 5 description",
       "spriteId": "Coffee Tier 5",
-      "baseSellPrice": 37,
-      "influence": 1.4
+      "baseSellPrice": 295,
+      "influence": 3
     },
     {
       "id": "coffee",
@@ -4996,8 +5408,8 @@
       "displayName": "Coffee Tier 6",
       "description": "Coffee Tier 6 description",
       "spriteId": "Coffee Tier 6",
-      "baseSellPrice": 58,
-      "influence": 1.5
+      "baseSellPrice": 729,
+      "influence": 3.5
     },
     {
       "id": "sandwitch",
@@ -5005,7 +5417,7 @@
       "displayName": "Sandwitch Tier 1",
       "description": "Sandwitch Tier 1 description",
       "spriteId": "Sandwitch Tier 1",
-      "baseSellPrice": 14,
+      "baseSellPrice": 45,
       "influence": 1
     },
     {
@@ -5014,8 +5426,8 @@
       "displayName": "Sandwitch Tier 2",
       "description": "Sandwitch Tier 2 description",
       "spriteId": "Sandwitch Tier 2",
-      "baseSellPrice": 48,
-      "influence": 1.1
+      "baseSellPrice": 223,
+      "influence": 1.5
     },
     {
       "id": "sandwitch",
@@ -5023,8 +5435,8 @@
       "displayName": "Sandwitch Tier 3",
       "description": "Sandwitch Tier 3 description",
       "spriteId": "Sandwitch Tier 3",
-      "baseSellPrice": 161,
-      "influence": 1.2
+      "baseSellPrice": 1047,
+      "influence": 2
     },
     {
       "id": "sandwitch",
@@ -5032,8 +5444,8 @@
       "displayName": "Sandwitch Tier 4",
       "description": "Sandwitch Tier 4 description",
       "spriteId": "Sandwitch Tier 4",
-      "baseSellPrice": 355,
-      "influence": 1.3
+      "baseSellPrice": 3162,
+      "influence": 2.5
     },
     {
       "id": "sandwitch",
@@ -5041,8 +5453,8 @@
       "displayName": "Sandwitch Tier 5",
       "description": "Sandwitch Tier 5 description",
       "spriteId": "Sandwitch Tier 5",
-      "baseSellPrice": 905,
-      "influence": 1.4
+      "baseSellPrice": 11067,
+      "influence": 3
     },
     {
       "id": "sandwitch",
@@ -5050,8 +5462,8 @@
       "displayName": "Sandwitch Tier 6",
       "description": "Sandwitch Tier 6 description",
       "spriteId": "Sandwitch Tier 6",
-      "baseSellPrice": 2676,
-      "influence": 1.5
+      "baseSellPrice": 44755,
+      "influence": 3.5
     },
     {
       "id": "croissant",
@@ -5059,7 +5471,7 @@
       "displayName": "Croissant Tier 1",
       "description": "Croissant Tier 1 description",
       "spriteId": "Croissant Tier 1",
-      "baseSellPrice": 22,
+      "baseSellPrice": 90,
       "influence": 1
     },
     {
@@ -5068,8 +5480,8 @@
       "displayName": "Croissant Tier 2",
       "description": "Croissant Tier 2 description",
       "spriteId": "Croissant Tier 2",
-      "baseSellPrice": 89,
-      "influence": 1.1
+      "baseSellPrice": 528,
+      "influence": 1.5
     },
     {
       "id": "croissant",
@@ -5077,8 +5489,8 @@
       "displayName": "Croissant Tier 3",
       "description": "Croissant Tier 3 description",
       "spriteId": "Croissant Tier 3",
-      "baseSellPrice": 347,
-      "influence": 1.2
+      "baseSellPrice": 2875,
+      "influence": 2
     },
     {
       "id": "croissant",
@@ -5086,8 +5498,8 @@
       "displayName": "Croissant Tier 4",
       "description": "Croissant Tier 4 description",
       "spriteId": "Croissant Tier 4",
-      "baseSellPrice": 881,
-      "influence": 1.3
+      "baseSellPrice": 9944,
+      "influence": 2.5
     },
     {
       "id": "croissant",
@@ -5095,8 +5507,8 @@
       "displayName": "Croissant Tier 5",
       "description": "Croissant Tier 5 description",
       "spriteId": "Croissant Tier 5",
-      "baseSellPrice": 2595,
-      "influence": 1.4
+      "baseSellPrice": 39752,
+      "influence": 3
     },
     {
       "id": "croissant",
@@ -5104,8 +5516,8 @@
       "displayName": "Croissant Tier 6",
       "description": "Croissant Tier 6 description",
       "spriteId": "Croissant Tier 6",
-      "baseSellPrice": 8860,
-      "influence": 1.5
+      "baseSellPrice": 182834,
+      "influence": 3.5
     }
   ],
   "rewards": [
@@ -6487,7 +6899,7 @@
     {
       "id": "upgrade_profile_complexity_0",
       "level": 1,
-      "cost": 75,
+      "cost": 25,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.2,
@@ -6496,7 +6908,7 @@
     {
       "id": "upgrade_profile_complexity_0",
       "level": 2,
-      "cost": 83,
+      "cost": 28,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.21000000000000002,
@@ -6505,124 +6917,124 @@
     {
       "id": "upgrade_profile_complexity_0",
       "level": 3,
-      "cost": 91,
+      "cost": 31,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.22050000000000003,
       "productionTime": 11
     },
     {
       "id": "upgrade_profile_complexity_0",
       "level": 4,
-      "cost": 100,
+      "cost": 34,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.23152500000000004,
       "productionTime": 10
     },
     {
       "id": "upgrade_profile_complexity_0",
       "level": 5,
-      "cost": 110,
+      "cost": 37,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.24310125000000005,
       "productionTime": 9
     },
     {
       "id": "upgrade_profile_complexity_0",
       "level": 6,
-      "cost": 121,
+      "cost": 41,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2552563125000001,
       "productionTime": 8
     },
     {
       "id": "upgrade_profile_complexity_0",
       "level": 7,
-      "cost": 133,
+      "cost": 45,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2680191281250001,
       "productionTime": 7
     },
     {
       "id": "upgrade_profile_complexity_0",
       "level": 8,
-      "cost": 146,
+      "cost": 50,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2814200845312501,
       "productionTime": 6
     },
     {
       "id": "upgrade_profile_complexity_0",
       "level": 9,
-      "cost": 161,
+      "cost": 55,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.29549108875781266,
       "productionTime": 5
     },
     {
       "id": "upgrade_profile_complexity_0",
       "level": 10,
-      "cost": 177,
+      "cost": 61,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3102656431957033,
       "productionTime": 5
     },
     {
       "id": "upgrade_profile_complexity_0",
       "level": 11,
-      "cost": 195,
+      "cost": 67,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3257789253554885,
       "productionTime": 5
     },
     {
       "id": "upgrade_profile_complexity_0",
       "level": 12,
-      "cost": 215,
+      "cost": 74,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.34206787162326296,
       "productionTime": 5
     },
     {
       "id": "upgrade_profile_complexity_0",
       "level": 13,
-      "cost": 237,
+      "cost": 81,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3591712652044261,
       "productionTime": 5
     },
     {
       "id": "upgrade_profile_complexity_0",
       "level": 14,
-      "cost": 261,
+      "cost": 89,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.37712982846464743,
       "productionTime": 5
     },
     {
       "id": "upgrade_profile_complexity_0",
       "level": 15,
-      "cost": 287,
+      "cost": 98,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3959863198878798,
       "productionTime": 5
     },
     {
       "id": "upgrade_profile_complexity_1",
       "level": 1,
-      "cost": 300,
+      "cost": 50,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.2,
@@ -6631,7 +7043,7 @@
     {
       "id": "upgrade_profile_complexity_1",
       "level": 2,
-      "cost": 360,
+      "cost": 60,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.21000000000000002,
@@ -6640,124 +7052,124 @@
     {
       "id": "upgrade_profile_complexity_1",
       "level": 3,
-      "cost": 432,
+      "cost": 72,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.22050000000000003,
       "productionTime": 18
     },
     {
       "id": "upgrade_profile_complexity_1",
       "level": 4,
-      "cost": 518,
+      "cost": 86,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.23152500000000004,
       "productionTime": 17
     },
     {
       "id": "upgrade_profile_complexity_1",
       "level": 5,
-      "cost": 622,
+      "cost": 103,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.24310125000000005,
       "productionTime": 16
     },
     {
       "id": "upgrade_profile_complexity_1",
       "level": 6,
-      "cost": 746,
+      "cost": 124,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2552563125000001,
       "productionTime": 15
     },
     {
       "id": "upgrade_profile_complexity_1",
       "level": 7,
-      "cost": 895,
+      "cost": 149,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2680191281250001,
       "productionTime": 14
     },
     {
       "id": "upgrade_profile_complexity_1",
       "level": 8,
-      "cost": 1074,
+      "cost": 179,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2814200845312501,
       "productionTime": 13
     },
     {
       "id": "upgrade_profile_complexity_1",
       "level": 9,
-      "cost": 1289,
+      "cost": 215,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.29549108875781266,
       "productionTime": 12
     },
     {
       "id": "upgrade_profile_complexity_1",
       "level": 10,
-      "cost": 1547,
+      "cost": 258,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3102656431957033,
       "productionTime": 11
     },
     {
       "id": "upgrade_profile_complexity_1",
       "level": 11,
-      "cost": 1856,
+      "cost": 310,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3257789253554885,
       "productionTime": 10
     },
     {
       "id": "upgrade_profile_complexity_1",
       "level": 12,
-      "cost": 2227,
+      "cost": 372,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.34206787162326296,
       "productionTime": 9
     },
     {
       "id": "upgrade_profile_complexity_1",
       "level": 13,
-      "cost": 2672,
+      "cost": 446,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3591712652044261,
       "productionTime": 8
     },
     {
       "id": "upgrade_profile_complexity_1",
       "level": 14,
-      "cost": 3206,
+      "cost": 535,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.37712982846464743,
       "productionTime": 7
     },
     {
       "id": "upgrade_profile_complexity_1",
       "level": 15,
-      "cost": 3847,
+      "cost": 642,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3959863198878798,
       "productionTime": 6
     },
     {
       "id": "upgrade_profile_complexity_2",
       "level": 1,
-      "cost": 500,
+      "cost": 75,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.2,
@@ -6766,7 +7178,7 @@
     {
       "id": "upgrade_profile_complexity_2",
       "level": 2,
-      "cost": 650,
+      "cost": 98,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.21000000000000002,
@@ -6775,124 +7187,124 @@
     {
       "id": "upgrade_profile_complexity_2",
       "level": 3,
-      "cost": 845,
+      "cost": 127,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.22050000000000003,
       "productionTime": 48
     },
     {
       "id": "upgrade_profile_complexity_2",
       "level": 4,
-      "cost": 1099,
+      "cost": 165,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.23152500000000004,
       "productionTime": 47
     },
     {
       "id": "upgrade_profile_complexity_2",
       "level": 5,
-      "cost": 1429,
+      "cost": 215,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.24310125000000005,
       "productionTime": 46
     },
     {
       "id": "upgrade_profile_complexity_2",
       "level": 6,
-      "cost": 1858,
+      "cost": 280,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2552563125000001,
       "productionTime": 45
     },
     {
       "id": "upgrade_profile_complexity_2",
       "level": 7,
-      "cost": 2415,
+      "cost": 364,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2680191281250001,
       "productionTime": 44
     },
     {
       "id": "upgrade_profile_complexity_2",
       "level": 8,
-      "cost": 3140,
+      "cost": 473,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2814200845312501,
       "productionTime": 43
     },
     {
       "id": "upgrade_profile_complexity_2",
       "level": 9,
-      "cost": 4082,
+      "cost": 615,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.29549108875781266,
       "productionTime": 42
     },
     {
       "id": "upgrade_profile_complexity_2",
       "level": 10,
-      "cost": 5307,
+      "cost": 800,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3102656431957033,
       "productionTime": 41
     },
     {
       "id": "upgrade_profile_complexity_2",
       "level": 11,
-      "cost": 6899,
+      "cost": 1040,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3257789253554885,
       "productionTime": 40
     },
     {
       "id": "upgrade_profile_complexity_2",
       "level": 12,
-      "cost": 8969,
+      "cost": 1352,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.34206787162326296,
       "productionTime": 39
     },
     {
       "id": "upgrade_profile_complexity_2",
       "level": 13,
-      "cost": 11660,
+      "cost": 1758,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3591712652044261,
       "productionTime": 38
     },
     {
       "id": "upgrade_profile_complexity_2",
       "level": 14,
-      "cost": 15158,
+      "cost": 2285,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.37712982846464743,
       "productionTime": 37
     },
     {
       "id": "upgrade_profile_complexity_2",
       "level": 15,
-      "cost": 19705,
+      "cost": 2971,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3959863198878798,
       "productionTime": 36
     },
     {
       "id": "upgrade_profile_complexity_3",
       "level": 1,
-      "cost": 1000,
+      "cost": 85,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.2,
@@ -6901,7 +7313,7 @@
     {
       "id": "upgrade_profile_complexity_3",
       "level": 2,
-      "cost": 1400,
+      "cost": 119,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.21000000000000002,
@@ -6910,124 +7322,124 @@
     {
       "id": "upgrade_profile_complexity_3",
       "level": 3,
-      "cost": 1960,
+      "cost": 167,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.22050000000000003,
       "productionTime": 192
     },
     {
       "id": "upgrade_profile_complexity_3",
       "level": 4,
-      "cost": 2744,
+      "cost": 234,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.23152500000000004,
       "productionTime": 188
     },
     {
       "id": "upgrade_profile_complexity_3",
       "level": 5,
-      "cost": 3842,
+      "cost": 328,
       "workersRequired": 1,
-      "maxWorkers": 2,
+      "maxWorkers": 3,
       "workerSpeedBonus": 0.24310125000000005,
       "productionTime": 184
     },
     {
       "id": "upgrade_profile_complexity_3",
       "level": 6,
-      "cost": 5379,
+      "cost": 459,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2552563125000001,
       "productionTime": 180
     },
     {
       "id": "upgrade_profile_complexity_3",
       "level": 7,
-      "cost": 7531,
+      "cost": 643,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2680191281250001,
       "productionTime": 176
     },
     {
       "id": "upgrade_profile_complexity_3",
       "level": 8,
-      "cost": 10543,
+      "cost": 900,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.2814200845312501,
       "productionTime": 172
     },
     {
       "id": "upgrade_profile_complexity_3",
       "level": 9,
-      "cost": 14760,
+      "cost": 1260,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.29549108875781266,
       "productionTime": 169
     },
     {
       "id": "upgrade_profile_complexity_3",
       "level": 10,
-      "cost": 20664,
+      "cost": 1764,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3102656431957033,
       "productionTime": 166
     },
     {
       "id": "upgrade_profile_complexity_3",
       "level": 11,
-      "cost": 28930,
+      "cost": 2470,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3257789253554885,
       "productionTime": 163
     },
     {
       "id": "upgrade_profile_complexity_3",
       "level": 12,
-      "cost": 40502,
+      "cost": 3458,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.34206787162326296,
       "productionTime": 160
     },
     {
       "id": "upgrade_profile_complexity_3",
       "level": 13,
-      "cost": 56703,
+      "cost": 4841,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3591712652044261,
       "productionTime": 157
     },
     {
       "id": "upgrade_profile_complexity_3",
       "level": 14,
-      "cost": 79384,
+      "cost": 6777,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.37712982846464743,
       "productionTime": 154
     },
     {
       "id": "upgrade_profile_complexity_3",
       "level": 15,
-      "cost": 111138,
+      "cost": 9488,
       "workersRequired": 1,
-      "maxWorkers": 3,
+      "maxWorkers": 4,
       "workerSpeedBonus": 0.3959863198878798,
       "productionTime": 151
     },
     {
       "id": "upgrade_profile_complexity_4",
       "level": 1,
-      "cost": 75,
+      "cost": 100,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.2,
@@ -7036,7 +7448,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 2,
-      "cost": 113,
+      "cost": 150,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.21000000000000002,
@@ -7045,7 +7457,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 3,
-      "cost": 170,
+      "cost": 225,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.22050000000000003,
@@ -7054,7 +7466,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 4,
-      "cost": 255,
+      "cost": 338,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.23152500000000004,
@@ -7063,7 +7475,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 5,
-      "cost": 383,
+      "cost": 507,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.24310125000000005,
@@ -7072,7 +7484,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 6,
-      "cost": 575,
+      "cost": 761,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2552563125000001,
@@ -7081,7 +7493,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 7,
-      "cost": 863,
+      "cost": 1142,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2680191281250001,
@@ -7090,7 +7502,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 8,
-      "cost": 1295,
+      "cost": 1713,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2814200845312501,
@@ -7099,7 +7511,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 9,
-      "cost": 1943,
+      "cost": 2570,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.29549108875781266,
@@ -7108,7 +7520,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 10,
-      "cost": 2915,
+      "cost": 3855,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.3102656431957033,
@@ -7117,7 +7529,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 11,
-      "cost": 4373,
+      "cost": 5783,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.3257789253554885,
@@ -7126,7 +7538,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 12,
-      "cost": 6560,
+      "cost": 8675,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.34206787162326296,
@@ -7135,7 +7547,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 13,
-      "cost": 9840,
+      "cost": 13013,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.3591712652044261,
@@ -7144,7 +7556,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 14,
-      "cost": 14760,
+      "cost": 19520,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.37712982846464743,
@@ -7153,7 +7565,7 @@
     {
       "id": "upgrade_profile_complexity_4",
       "level": 15,
-      "cost": 22140,
+      "cost": 29280,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.3959863198878798,
@@ -7162,7 +7574,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 1,
-      "cost": 75,
+      "cost": 115,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.15,
@@ -7171,7 +7583,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 2,
-      "cost": 120,
+      "cost": 184,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.1575,
@@ -7180,7 +7592,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 3,
-      "cost": 192,
+      "cost": 294,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.16537500000000002,
@@ -7189,7 +7601,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 4,
-      "cost": 307,
+      "cost": 470,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.17364375000000004,
@@ -7198,7 +7610,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 5,
-      "cost": 491,
+      "cost": 752,
       "workersRequired": 1,
       "maxWorkers": 2,
       "workerSpeedBonus": 0.18232593750000006,
@@ -7207,7 +7619,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 6,
-      "cost": 786,
+      "cost": 1203,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.19144223437500008,
@@ -7216,7 +7628,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 7,
-      "cost": 1258,
+      "cost": 1925,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2010143460937501,
@@ -7225,7 +7637,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 8,
-      "cost": 2013,
+      "cost": 3080,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2110650633984376,
@@ -7234,7 +7646,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 9,
-      "cost": 3221,
+      "cost": 4928,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2216183165683595,
@@ -7243,7 +7655,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 10,
-      "cost": 5154,
+      "cost": 7885,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2326992323967775,
@@ -7252,7 +7664,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 11,
-      "cost": 8246,
+      "cost": 12616,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.24433419401661638,
@@ -7261,7 +7673,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 12,
-      "cost": 13194,
+      "cost": 20186,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2565509037174472,
@@ -7270,7 +7682,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 13,
-      "cost": 21110,
+      "cost": 32298,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2693784489033196,
@@ -7279,7 +7691,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 14,
-      "cost": 33776,
+      "cost": 51677,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2828473713484856,
@@ -7288,7 +7700,7 @@
     {
       "id": "upgrade_profile_complexity_5",
       "level": 15,
-      "cost": 54042,
+      "cost": 82683,
       "workersRequired": 1,
       "maxWorkers": 3,
       "workerSpeedBonus": 0.2969897399159099,
@@ -7777,328 +8189,212 @@
       "content": "legendary_shard"
     }
   ],
-  "unlock_config": [
-    {
-      "id": "Tutorial_1-3",
-      "machine": "tennisBallFactory",
-      "unlock": 1
-    },
-    {
-      "id": "Tutorial_1-3",
-      "machine": "carrotFarm",
-      "unlock": 2
-    },
-    {
-      "id": "Bottle_Intro",
-      "machine": "tennisBallFactory",
-      "unlock": 1
-    },
-    {
-      "id": "Bottle_Intro",
-      "machine": "carrotFarm",
-      "unlock": 2
-    },
-    {
-      "id": "Bottle_Intro",
-      "machine": "bottleMaker",
-      "unlock": 4
-    },
-    {
-      "id": "Bottle_2",
-      "machine": "tennisBallFactory",
-      "unlock": 1
-    },
-    {
-      "id": "Bottle_2",
-      "machine": "carrotFarm",
-      "unlock": 2
-    },
-    {
-      "id": "Bottle_2",
-      "machine": "bottleMaker",
-      "unlock": 3
-    },
-    {
-      "id": "Bottle_3",
-      "machine": "tennisBallFactory",
-      "unlock": 1
-    },
-    {
-      "id": "Bottle_3",
-      "machine": "carrotFarm",
-      "unlock": 1
-    },
-    {
-      "id": "Bottle_3",
-      "machine": "bottleMaker",
-      "unlock": 2
-    },
-    {
-      "id": "Bottle_4",
-      "machine": "tennisBallFactory",
-      "unlock": 1
-    },
-    {
-      "id": "Bottle_4",
-      "machine": "carrotFarm",
-      "unlock": 1
-    },
-    {
-      "id": "Bottle_4",
-      "machine": "bottleMaker",
-      "unlock": 2
-    },
-    {
-      "id": "Nenuphar_Intro",
-      "machine": "tennisBallFactory",
-      "unlock": 2
-    },
-    {
-      "id": "Nenuphar_Intro",
-      "machine": "carrotFarm",
-      "unlock": 2
-    },
-    {
-      "id": "Nenuphar_Intro",
-      "machine": "bottleMaker",
-      "unlock": 5
-    },
-    {
-      "id": "Nenuphar_Intro",
-      "machine": "nenupharFarm",
-      "unlock": 1
-    },
-    {
-      "id": "Nest_Intro",
-      "machine": "tennisBallFactory",
-      "unlock": 1
-    },
-    {
-      "id": "Nest_Intro",
-      "machine": "carrotFarm",
-      "unlock": 2
-    },
-    {
-      "id": "Nest_Intro",
-      "machine": "bottleMaker",
-      "unlock": 3
-    },
-    {
-      "id": "Nest_Intro",
-      "machine": "nenupharFarm",
-      "unlock": 1
-    },
-    {
-      "id": "Nest_Intro",
-      "machine": "nestFactory",
-      "unlock": 5
-    },
-    {
-      "id": "Nest_1_Normal",
-      "machine": "tennisBallFactory",
-      "unlock": 1
-    },
-    {
-      "id": "Nest_1_Normal",
-      "machine": "carrotFarm",
-      "unlock": 1
-    },
-    {
-      "id": "Nest_1_Normal",
-      "machine": "bottleMaker",
-      "unlock": 2
-    },
-    {
-      "id": "Nest_1_Normal",
-      "machine": "nenupharFarm",
-      "unlock": 2
-    },
-    {
-      "id": "Nest_1_Normal",
-      "machine": "nestFactory",
-      "unlock": 5
-    },
-    {
-      "id": "base",
-      "machine": "tennisBallFactory",
-      "unlock": 1
-    },
-    {
-      "id": "base",
-      "machine": "carrotFarm",
-      "unlock": 2
-    },
-    {
-      "id": "base",
-      "machine": "nestFactory",
-      "unlock": 3
-    },
-    {
-      "id": "base",
-      "machine": "nenupharFarm",
-      "unlock": 4
-    },
-    {
-      "id": "base",
-      "machine": "candleBabaYagaHut",
-      "unlock": 4
-    },
-    {
-      "id": "base",
-      "machine": "coffeeShop"
-    },
-    {
-      "id": "base",
-      "machine": "bottleMaker"
-    },
-    {
-      "id": "base",
-      "machine": "sandwichStore"
-    },
-    {
-      "id": "base",
-      "machine": "croissantMaker"
-    },
-    {
-      "id": "base",
-      "machine": "gameStore",
-      "unlock": 15
-    }
-  ],
   "world_config": [
     {
-      "id": "Tutorial_1",
-      "taxConfig": "tax_config_0",
-      "unlockConfig": "Tutorial_1-3"
+      "id": "Tutorial_1"
     },
     {
-      "id": "Tutorial_1_2",
-      "taxConfig": "tax_config_0",
-      "unlockConfig": "Tutorial_1-3"
+      "id": "Tutorial_1_2"
     },
     {
-      "id": "Tutorial_1_3",
-      "taxConfig": "tax_config_1",
-      "unlockConfig": "Tutorial_1-3"
+      "id": "Tutorial_1_3"
     },
     {
-      "id": "Tutorial_2",
-      "taxConfig": "tax_config_2",
-      "unlockConfig": "Tutorial_1-3"
+      "id": "Tutorial_2"
     },
     {
-      "id": "Tutorial_3",
-      "taxConfig": "tax_config_2",
-      "unlockConfig": "Tutorial_1-3"
+      "id": "Tutorial_3"
     },
     {
-      "id": "Bottle_Intro",
-      "taxConfig": "tax_config_2",
-      "unlockConfig": "Bottle_Intro"
+      "id": "Bottle_Intro"
     },
     {
-      "id": "Bottle_2_Intense",
-      "taxConfig": "tax_config_2",
-      "unlockConfig": "Bottle_2"
+      "id": "Bottle_2_Intense"
     },
     {
-      "id": "Bottle_3_Slow",
-      "taxConfig": "tax_config_2",
-      "unlockConfig": "Bottle_3"
+      "id": "Bottle_3_Slow"
     },
     {
-      "id": "Bottle_4_Intense",
-      "taxConfig": "tax_config_2",
-      "unlockConfig": "Bottle_4"
+      "id": "Bottle_4_Intense"
     },
     {
-      "id": "Nenuphar_Intro",
-      "taxConfig": "tax_config_2",
-      "unlockConfig": "Nenuphar_Intro"
+      "id": "Nenuphar_Intro"
     },
     {
-      "id": "Nest_Intro",
-      "taxConfig": "tax_config_2",
-      "unlockConfig": "Nest_Intro"
+      "id": "Nest_Intro"
     },
     {
-      "id": "Nest_1_Normal",
-      "taxConfig": "tax_config_2",
-      "unlockConfig": "Nest_1_Normal"
+      "id": "Nest_1_Normal"
+    },
+    {
+      "id": "Intro_Sandwitch"
+    },
+    {
+      "id": "Intro_Croissant"
+    },
+    {
+      "id": "Intro_Coffee & Pillow"
+    },
+    {
+      "id": "Breakfast"
+    },
+    {
+      "id": "Bottles & Candles"
+    },
+    {
+      "id": "Intro_Black Lotus"
+    },
+    {
+      "id": "Lotus & Croissant"
     }
   ],
   "world_level": [
     {
       "id": "level1",
       "config": "Tutorial_1",
-      "reward": "1_common_chest",
-      "topX": 2
+      "topX": 2,
+      "preparationTime": 30,
+      "safeAssign": true
     },
     {
       "id": "level2",
       "config": "Tutorial_1_2",
-      "reward": "1_common_chest",
-      "topX": 2
+      "topX": 2,
+      "preparationTime": 30,
+      "safeAssign": true
     },
     {
       "id": "level3",
       "config": "Tutorial_1_3",
-      "reward": "1_common_chest",
-      "topX": 2
+      "topX": 2,
+      "preparationTime": 30,
+      "safeAssign": true
     },
     {
       "id": "level4",
       "config": "Tutorial_2",
-      "reward": "2_common_chest",
-      "topX": 2
+      "topX": 3,
+      "preparationTime": 25,
+      "safeAssign": true
     },
     {
       "id": "level5",
       "config": "Tutorial_3",
-      "reward": "3_rare_chest",
-      "topX": 2
+      "topX": 3,
+      "preparationTime": 25,
+      "safeAssign": true
     },
     {
       "id": "level6",
       "config": "Bottle_Intro",
-      "reward": "4_epic_chest",
-      "topX": 2
+      "reward": "1_common_chest",
+      "topX": 2,
+      "preparationTime": 20,
+      "safeAssign": true
     },
     {
       "id": "level7",
       "config": "Bottle_2_Intense",
-      "reward": "1_legendary_chest",
-      "topX": 2
+      "reward": "2_common_chest",
+      "topX": 2,
+      "preparationTime": 20,
+      "safeAssign": true
     },
     {
       "id": "level8",
       "config": "Bottle_3_Slow",
-      "reward": "1_legendary_chest",
-      "topX": 1
+      "reward": "2_common_chest",
+      "topX": 2,
+      "preparationTime": 20,
+      "safeAssign": true
     },
     {
       "id": "level9",
       "config": "Bottle_4_Intense",
-      "reward": "1_legendary_chest",
-      "topX": 1
+      "reward": "1_rare_chest",
+      "topX": 2,
+      "preparationTime": 15,
+      "safeAssign": true
     },
     {
       "id": "level10",
       "config": "Nenuphar_Intro",
-      "reward": "1_legendary_chest",
-      "topX": 1
+      "reward": "1_rare_chest",
+      "topX": 2,
+      "preparationTime": 15,
+      "safeAssign": true
     },
     {
-      "id": "level9",
+      "id": "level11",
       "config": "Nest_Intro",
-      "reward": "1_legendary_chest",
-      "topX": 1
+      "reward": "1_epic_chest",
+      "topX": 2,
+      "preparationTime": 15,
+      "safeAssign": true
     },
     {
-      "id": "level10",
+      "id": "level12",
       "config": "Nest_1_Normal",
+      "reward": "1_epic_chest",
+      "topX": 2,
+      "preparationTime": 15,
+      "safeAssign": true
+    },
+    {
+      "id": "level13",
+      "config": "Intro_Sandwitch",
+      "reward": "2_epic_chest",
+      "topX": 2,
+      "preparationTime": 15,
+      "safeAssign": true
+    },
+    {
+      "id": "level14",
+      "config": "Intro_Croissant",
+      "reward": "2_epic_chest",
+      "topX": 2,
+      "preparationTime": 15,
+      "safeAssign": true
+    },
+    {
+      "id": "level15",
+      "config": "Intro_Coffee & Pillow",
+      "reward": "2_epic_chest",
+      "topX": 2,
+      "preparationTime": 15,
+      "safeAssign": true
+    },
+    {
+      "id": "level16",
+      "config": "Breakfast",
       "reward": "1_legendary_chest",
-      "topX": 1
+      "topX": 2,
+      "preparationTime": 15,
+      "safeAssign": false
+    },
+    {
+      "id": "level17",
+      "config": "Bottles & Candles",
+      "reward": "1_legendary_chest",
+      "topX": 2,
+      "preparationTime": 15,
+      "safeAssign": false
+    },
+    {
+      "id": "level18",
+      "config": "Intro_Black Lotus",
+      "reward": "1_legendary_chest",
+      "topX": 2,
+      "preparationTime": 15,
+      "safeAssign": false
+    },
+    {
+      "id": "level19",
+      "config": "Lotus & Croissant",
+      "reward": "1_legendary_chest",
+      "topX": 1,
+      "preparationTime": 15,
+      "safeAssign": false
     }
   ]
 }
