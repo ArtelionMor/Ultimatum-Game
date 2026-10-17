@@ -39,4 +39,13 @@ export function initDebug(G) {
 
   $('dbg-money').addEventListener('click', () => { G.st.money += 1000; });
   $('dbg-reset').addEventListener('click', () => { if (confirm('Effacer la partie et recommencer ?')) G.reset(); });
+
+  // Keep a game for later / move it to another browser.
+  $('dbg-export').addEventListener('click', () => G.exportSave());
+  $('dbg-import').addEventListener('click', () => $('dbg-import-file').click());
+  $('dbg-import-file').addEventListener('change', async e => {
+    const f = e.target.files[0];
+    e.target.value = '';
+    if (f && confirm('Remplacer la partie en cours par ce fichier ? (elle est gardée de côté)')) G.importSave(await f.text());
+  });
 }

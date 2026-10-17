@@ -36,6 +36,8 @@ const G = {
     return inc;
   },
   reset,
+  exportSave,
+  importSave,
   // Jump to where a task gets done.
   goto(t) {
     const d = machineDef(G.cfg, t.param);
@@ -95,11 +97,44 @@ function load() {
 
 function reset() {
   try { localStorage.removeItem(SAVE_KEY); } catch { /* ignore */ }
-  G.st = newGame(G.cfg, (Math.random() * 2 ** 31) | 0);
+  adopt(newGame(G.cfg, (Math.random() * 2 ** 31) | 0));
+}
+
+// Switch the running game to another state (new game, imported save).
+function adopt(st) {
+  G.st = st;
   derive(G.cfg, G.st);
   initMarket(G);
   initFactory(G);
   showTab('factory');
+}
+
+// Download the current game as a .json file the player can keep anywhere.
+function exportSave() {
+  const name = `market-ultimatum-niv${G.st.level}-${new Date().toISOString().slice(0, 10)}.json`;
+  const url = URL.createObjectURL(new Blob([JSON.stringify(G.st)], { type: 'application/json' }));
+  const a = Object.assign(document.createElement('a'), { href: url, download: name });
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  toast(`💾 Partie exportée : ${name}`);
+}
+
+// Load a game exported earlier. The current one is kept aside first.
+function importSave(text) {
+  let st;
+  try {
+    st = JSON.parse(text);
+    if (!st || st.v !== SAVE_VERSION || st.cfgVersion !== G.cfg.meta.version) throw new Error('version');
+    st = migrate(G.cfg, st);
+  } catch {
+    toast('⚠️ Ce fichier n’est pas une partie compatible.');
+    return false;
+  }
+  if (!NO_SAVE) try { localStorage.setItem(SAVE_KEY + '_before_import', JSON.stringify(G.st)); } catch { /* ignore */ }
+  adopt(st);
+  save();
+  toast(`📂 Partie importée (niveau ${st.level}).`);
+  return true;
 }
 
 // --- Tabs -------------------------------------------------------------------
