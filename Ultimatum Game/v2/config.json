@@ -1,7 +1,7 @@
 {
   "meta": { "version": 3 },
   "markets": [
-    { "id": "fruit",  "stage": 0, "name": "Citron",    "icon": "🍋", "ref_price": 2,  "start_price": 2,  "price_min": 0.1, "price_max": 10, "price_step": 0.1, "unit_cost_base": 0.5, "unit_cost_per_quality": 0.1 },
+    { "id": "fruit",  "stage": 0, "name": "Citron",    "icon": "🍋", "ref_price": 2,  "start_price": 1.2,  "price_min": 0.1, "price_max": 10, "price_step": 0.1, "unit_cost_base": 0.5, "unit_cost_per_quality": 0.1 },
     { "id": "juice",  "stage": 1, "name": "Jus",       "icon": "🧃", "ref_price": 5,  "start_price": 5,  "price_min": 0.5, "price_max": 20, "price_step": 0.25, "unit_cost_base": 1.5, "unit_cost_per_quality": 0.25 },
     { "id": "bottle", "stage": 2, "name": "Bouteille", "icon": "🍾", "ref_price": 10, "start_price": 10, "price_min": 1,   "price_max": 40, "price_step": 0.5, "unit_cost_base": 3,   "unit_cost_per_quality": 0.5 }
   ],

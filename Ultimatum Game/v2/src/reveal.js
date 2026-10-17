@@ -3,10 +3,12 @@
 // Pure: reads/writes st.unlocked and st.lastReveal only.
 
 const sold = st => Object.values(st.stats.sold).reduce((x, y) => x + y, 0);
+const delivered = st => Object.values(st.stats.delivered).reduce((x, y) => x + y, 0);
 
 export const REVEALS = [
-  { id: 'market',   when: st => sold(st) >= 1,
-    toast: '📈 Premier client ! L’onglet Marché est ouvert.' },
+  // On delivery, not on sale: a price nobody accepts must still be fixable.
+  { id: 'market',   when: st => delivered(st) >= 1,
+    toast: '📈 Ta 1re production est arrivée : l’onglet Marché est ouvert, fixe ton prix.' },
   { id: 'press',    when: st => st.stats.sold.fruit >= 5,
     toast: '⚙️ Nouveau : le Pressage fait du jus, qui se vend plus cher que le citron.' },
   { id: 'bottle',   when: st => (st.stats.built.press || 0) >= 1,
