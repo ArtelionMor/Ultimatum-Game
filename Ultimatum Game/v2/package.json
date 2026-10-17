@@ -1,0 +1,8 @@
+{
+  "name": "market-ultimatum-v2",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node tools/check-market.js"
+  }
+}
