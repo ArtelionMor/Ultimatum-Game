@@ -71,11 +71,21 @@ function card(r, body) {
   const { cfg } = G, rar = rarityOf(cfg, r), d = machineDef(cfg, r.machine);
   const eq = equippedOn(r.machine), isEq = eq && eq.r.id === r.id;
   const ref = !eq || isEq ? baseRecipe(cfg, r.machine) : eq.r;
-  const chip = isEq ? `<span class="rc-eq on">✓ Équipée (${eq.n}/${eq.total})</span>`
-    : eq ? `<span class="rc-eq">🔧 Équipé : ${eq.r.name} (${eq.n}/${eq.total})</span>` : '';
+  // Rarity rank: C < PC < R < SR < UR < L; a base recipe has no rank (-1).
+  const rank = x => (x.base ? -1 : cfg.rarities.findIndex(k => k.id === x.rarity));
+  const tag = x => (x.base ? '<span class="rc-mini base">Base</span>'
+    : `<span class="rc-mini" style="--rar:${rarityOf(cfg, x).color}">${x.rarity}</span>`);
+  let chip = '';
+  if (isEq) chip = `<span class="rc-eq on">✓ Équipée (${eq.n}/${eq.total})</span>`;
+  else if (eq) {
+    const diff = rank(r) - rank(eq.r);
+    const verdict = diff > 0 ? '<span class="rc-vs up">⬆ Meilleur rang</span>'
+      : diff < 0 ? '<span class="rc-vs down">⬇ Rang inférieur</span>' : '<span class="rc-vs same">= Même rang</span>';
+    chip = `<span class="rc-eq">🔧 Équipé : ${tag(eq.r)} ${eq.r.base ? '' : eq.r.name + ' '}(${eq.n}/${eq.total})</span>${verdict}`;
+  }
   return `<div class="rcard" style="--rar:${rar.color}">
     <div class="rc-top"><span class="rc-rar">${rar.id}</span><span class="rc-machine">${d.icon} ${d.name}</span></div>
-    <div class="rc-namerow"><div class="rc-name">${r.name}</div>${chip}</div>
+    <div class="rc-namerow"><div class="rc-name">${r.name}</div>${chip ? `<div class="rc-eqrow">${chip}</div>` : ''}</div>
     <div class="rc-formula"><s>${recipeText(cfg, ref)}</s><b>${recipeText(cfg, r)}</b></div>
     ${body}</div>`;
 }
@@ -167,7 +177,7 @@ export function renderRecipes() {
     + (theirs.length ? theirs.map(({ r, ref }) => {
       const pending = a.offersOut.find(o => o.recipe === r.id);
       const asks = [1, 1.3, 1.7].map(k => Math.ceil(r.value * k));
-      return card(r, `<div class="rc-bid"><span>Chez ${who(ref)}</span></div>
+      return card(r, `<div class="rc-bid"><span>${who(ref)}</span></div>
         ${pending ? `<div class="rc-lead">⏳ Offre de ${money(pending.amount)} envoyée…</div>`
           : `<div class="rc-offers">${asks.map(p => `<button class="btn small ${st.money < p ? 'cant' : ''}" data-offer="${r.id}" data-amount="${p}">Offrir ${money(p)}</button>`).join('')}</div>`}`);
     }).join('') : '<div class="rc-empty">Aucun rival n’a de recette pour l’instant.</div>');

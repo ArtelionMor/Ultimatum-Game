@@ -392,3 +392,12 @@ main { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 12px 14px 16px; }
 
 #expand-btn { white-space: nowrap; }
 #expand-btn.cant { opacity: .55; }
+
+/* Equipped vs this card: rarity rank comparison */
+.rc-eqrow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.rc-mini { display: inline-block; font-size: 10px; font-weight: 900; color: #10131a; background: var(--rar); border-radius: 5px; padding: 0 5px; margin-right: 2px; }
+.rc-mini.base { background: #8fa0b5; }
+.rc-vs { font-size: 11px; font-weight: 900; border-radius: 8px; padding: 3px 8px; }
+.rc-vs.up { background: var(--you); color: #06210f; }
+.rc-vs.down { background: #5a2626; color: #ffb3b3; }
+.rc-vs.same { background: var(--panel2); color: var(--muted); }
