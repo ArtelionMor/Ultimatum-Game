@@ -6,6 +6,8 @@
 import { tasksOf, taskState, claimTask, levelProgress, canLevelUp, levelUp, levelRow, unlockNames } from '../progress.js';
 import { machineDef } from '../grid.js';
 import { money, pct } from '../format.js';
+import { shareOf } from '../sim.js';
+import { openMarkets } from './market-view.js';
 import { floatText, toast } from './fx.js';
 import { play } from './sound.js';
 
@@ -41,8 +43,20 @@ export function taskLabel(t) {
   }
 }
 
+// Monopoly task not done yet: the open market where the player's share is highest
+// (or the task's own market). Progress = share / monopoly threshold.
+function monoBest(t) {
+  const { cfg, st } = G;
+  const list = t.param === 'any' ? openMarkets(cfg, st) : cfg.markets.filter(m => m.id === t.param);
+  let best = null;
+  for (const m of list) { const sh = shareOf(st, m.id).you || 0; if (!best || sh > best.share) best = { m, share: sh }; }
+  return best;
+}
+const monoPending = (t, s) => t.type === 'monopoly' && !s.ready && monoBest(t);
+
 // Progress 0..1. Levels (machine, stock) start at 1, so count from there.
 export function taskFrac(t, s) {
+  if (monoPending(t, s)) return Math.min(1, monoBest(t).share / G.cfg.monopoly.share);
   const base = t.type === 'upgrade' || t.type === 'stock' ? 1 : 0;
   return Math.max(0, Math.min(1, (s.value - base) / Math.max(1e-9, t.target - base)));
 }
@@ -74,7 +88,7 @@ export function renderQuest(tip) {
   } else if (f) {
     title = taskLabel(f.t); frac = taskFrac(f.t, f.s);
     act = f.s.ready ? 'claim' : 'go';
-    sub = tip || `${fmtValue(f.t, f.s.value)} / ${fmtTarget(f.t)} · 🎁 ${money(f.t.reward)}`;
+    sub = tip || `${progressText(f.t, f.s)} · 🎁 ${money(f.t.reward)}`;
   } else {
     title = tip || '👉 Vise un monopole : le marché où ta part est la plus haute.'; sub = ''; frac = 0;
   }
@@ -94,13 +108,19 @@ export function renderQuest(tip) {
   if (b) b.addEventListener('click', () => {
     if (b.dataset.q === 'claim') {
       if (claimTask(cfg, st, f.t)) { play('buy'); floatText(b, `+${money(f.t.reward)}`, 'gold'); G.onAction('task'); }
-    } else if (b.dataset.q === 'go') G.goto(f.t);
+    } else if (b.dataset.q === 'go') gotoTask(f.t);
     else openTasks();
   });
 }
 
 const fmtValue = (t, v) => (t.type === 'share' ? pct(v) : t.type === 'earn' ? money(v) : `${Math.min(v, t.target)}`);
 const fmtTarget = t => (t.type === 'share' ? pct(t.target) : t.type === 'earn' ? money(t.target) : `${t.target}`);
+const progressText = (t, s) => {
+  const b = monoPending(t, s);
+  return b ? `Meilleur : ${b.m.icon} ${b.m.name} ${pct(b.share)} / ${pct(G.cfg.monopoly.share)}` : `${fmtValue(t, s.value)} / ${fmtTarget(t)}`;
+};
+// "Aller" for the monopoly task opens the best market.
+const gotoTask = t => (t.type === 'monopoly' && t.param === 'any' && monoBest(t) ? G.goto({ ...t, param: monoBest(t).m.id }) : G.goto(t));
 
 // HUD: level badge + "Tâches 2/4" bar, pulsing when something can be claimed.
 export function renderTasksHud() {
@@ -127,7 +147,7 @@ function renderPanel() {
     return `<div class="tk ${s.claimed ? 'claimed' : ''}">
       <div class="tk-main"><div class="tk-label">${taskLabel(t)}</div>
         <div class="tk-bar"><span style="width:${(frac * 100).toFixed(0)}%"></span></div>
-        <div class="tk-meta"><span>${fmtValue(t, s.value)} / ${fmtTarget(t)}</span><span>🎁 ${money(t.reward)}</span></div></div>
+        <div class="tk-meta"><span>${progressText(t, s)}</span><span>🎁 ${money(t.reward)}</span></div></div>
       ${btn}</div>`;
   }).join('');
   const next = levelRow(cfg, st.level + 1);
@@ -148,7 +168,7 @@ function renderPanel() {
   }));
   $('tasks-list').querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => {
     closeTasks();
-    G.goto(cfg.tasks.find(x => x.id === b.dataset.go));
+    gotoTask(cfg.tasks.find(x => x.id === b.dataset.go));
   }));
   const up = $('tk-levelup');
   if (up) up.addEventListener('click', () => {

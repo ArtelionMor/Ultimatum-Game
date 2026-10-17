@@ -37,8 +37,12 @@ export function taskValue(cfg, st, t) {
   }
 }
 
+// Once reached, a task stays reached (selling the machine doesn't undo it).
 export function taskState(cfg, st, t) {
-  const value = taskValue(cfg, st, t);
+  st.reached ||= {};
+  let value = taskValue(cfg, st, t);
+  if (value >= t.target) st.reached[t.id] = true;
+  if (st.reached[t.id] || st.claimed[t.id]) value = Math.max(value, t.target);
   return { value, target: t.target, ready: value >= t.target, claimed: !!st.claimed[t.id] };
 }
 
