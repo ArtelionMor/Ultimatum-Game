@@ -29,7 +29,7 @@ Puis ouvrir http://localhost:8795.
 5. **Recettes et enchères** (niveau 3+) :
    - chaque machine suit une recette : par ex. Pressage de base 2 🍋 → 1 🧃, Confiturerie 3 🍓 → 1 🍯, fusion 3 → 1 ★+1 ;
    - les **ventes aux enchères sont un événement** : environ toutes les 9 min (`event_every_s` + durée), quelques recettes alternatives (moins d'ingrédients, plus de sorties, plus rapide, Cueillette ★2) sont mises en vente pendant 2 min. Entre deux, l'onglet affiche un compte à rebours ;
-   - tu enchéris (ta mise est bloquée, et rendue si tu es dépassé) ; les rivaux enchérissent jusqu'à un maximum secret. Un rival qui gagne **se renforce** ;
+   - tu enchéris (ta mise est bloquée, et rendue si tu es dépassé) ; les rivaux enchérissent jusqu'à un maximum secret (ceux du marché de la recette presque toujours, ceux des autres marchés parfois). Un rival dépassé par un autre rival s'obstine : il répond vite et monte un peu son maximum. Un rival qui gagne **se renforce** ;
    - **📜 Recettes** (bouton en haut, tiroir latéral) : tes recettes (appliquer à toutes tes machines, remettre la base, **mettre aux enchères**) et celles des rivaux (leur faire une offre) ;
    - **offres de rachat** : une notification reste en bas de l'écran jusqu'à ta réponse (Vendre / Refuser). Un rival refusé revient plus tard, plus offrant. Les rivaux se rachètent aussi des recettes entre eux ;
    - un **point rouge** signale une recette inutilisée, une seule fois (il s'éteint dès que tu as ouvert le tiroir) ;
@@ -51,7 +51,10 @@ Puis ouvrir http://localhost:8795.
   - **🧱 Agrandir** (à côté des stocks) : +4 colonnes et +4 lignes (à droite et en bas), prix qui double à chaque fois (`grid.expand_*`, max `grid.max_cols`).
   - **Pan** : glisser sur le sol vide sans outil, deux doigts avec n'importe quel outil, clic droit/molette sur PC.
   - Icônes : 💤 = attend sa matière, ⛔ = sortie bloquée (pas de tapis, ou stock plein).
-- **Marché** (débloqué à la 1re vente) : onglets de ressources (👑 = ton monopole, ⚠️ = celui d'un rival), bandeau monopole, prix (± / curseur), marge, qualité, cartes camembert.
+- **Marché** (débloqué à la 1re vente) : onglets de ressources (👑 = ton monopole, ⚠️ = celui d'un rival), bandeau monopole, prix (± / curseur), marge, qualité, cartes camembert (prix et ★ qualité de chaque vendeur).
+  - Prix de 0,1 $ à 999 $ sur tous les marchés. Curseur logarithmique : 0,1 → 100 $ sur les 90 premiers %, 100 → 999 $ sur les 10 derniers (`price_slider`). Pas des ± : 0,1 sous 10 $, 0,5 jusqu'à 100 $, puis 1 $.
+- **E encadré** à côté de tes recettes : plein = équipée sur au moins une machine, pointillé = pas équipée.
+- **Recette équipée = choix durable** : la dernière recette choisie pour un type de machine (⇄, « Appliquer à mes… » ou « Remettre la base ») est aussi celle des machines construites ensuite (`auc.equip`). Si la recette est vendue, ce type repasse en recette de base.
 - **Enchères** (niveau 3) : sous-onglets 🔨 Enchères (vente en cours, ou compte à rebours) et ✉️ Offres (reçues et envoyées).
 - **En haut** : 📜 Recettes (tiroir) et 📊 Statistiques : courbes de tes ventes ($/min) par produit sur les dernières minutes, et part de chaque produit dans tes revenus.
 - Les nouveautés arrivent une par une, avec une pastille et un toast : Marché → Pressage → Embouteillage → améliorations → stock → cartes segments → Outcomes supplémentaires.
@@ -117,7 +120,8 @@ Plancher : `coût unitaire × (1 + price_floor_margin)`, arrondi au pas de prix 
 | `ai.price_interval_s` / `level_tau_s` | nervosité des rivaux, vitesse à laquelle ils rejoignent leur cible |
 | `recipes[]` (`machine`, `base`, `rarity`, `inputs`, `outputs`, `rate_mult`, `out_tier`, `value`) | recettes de base et alternatives ; `value` sert de prix de référence aux enchères et aux offres |
 | `rarities[]` (`color`, `ai_max`) | couleur des cartes et jusqu'où les rivaux peuvent monter (× valeur) |
-| `auction.*` | ouverture (niveau), événements (`event_every_s`, `event_lots`, `first_event_s`, `duration_s`), mise de départ, surenchère, intérêt des rivaux, revente, offres reçues (`offer_every_s`, `retry_s`, `retry_raise`), échanges entre rivaux (`rival_trade_every_s`, `rival_trade_chance`), bonus d'un rival par recette possédée |
+| `price_slider` (`knee_price`, `knee_pos`, `steps[]`) | curseur de prix logarithmique et pas des ± selon la tranche de prix |
+| `auction.*` | ouverture (niveau), événements (`event_every_s`, `event_lots`, `first_event_s`, `duration_s`), mise de départ, surenchère, intérêt des rivaux (`ai_interest`, `ai_interest_other`, `ai_max_mult`, `ai_other_max`), obstination (`ai_pride`, `ai_pride_cap`, `ai_counter_s`), revente, offres reçues (`offer_every_s`, `retry_s`, `retry_raise`), échanges entre rivaux (`rival_trade_every_s`, `rival_trade_chance`), bonus d'un rival par recette possédée |
 | `levels[]` (`level`, `unlock`, `reward`) | ce que chaque niveau débloque (ids de machines séparés par des espaces) et rapporte |
 | `tasks[]` (`level`, `type`, `param`, `target`, `reward`) | tâches de chaque niveau ; types : `build`, `sell`, `tier`, `upgrade`, `share`, `earn`, `stock`, `monopoly`, `own_recipe`, `use_recipe` |
 | `reveal.*` | rythme de la révélation progressive |
@@ -145,7 +149,7 @@ assets/kenney/         sous-ensemble des packs Kenney (CC0, voir License.txt)
 ## Décisions à valider
 - **Flux continu** plutôt que tirage client par client : la part = l'espérance du tirage softmax, lisse et reproductible.
 - **Refus par vendeur** : un segment refuse chaque vendeur sous son seuil.
-- **Prix plancher = coût unitaire** (pas de revente à perte).
+- **Prix de 0,1 à 999 $ partout, vente à perte permise** (la marge passe en rouge). L'ancien plancher au coût unitaire a été retiré.
 - **Pas de victoire** : le monopole est un état (effet visuel + bonus), qu'on peut perdre ; le jeu continue.
 - Le monopole exige d'abord **80 % pendant 20 s** ; la croissance de son bonus démarre à ce moment-là.
 - Reprendre un monopole pendant que l'ancien bonus décroît repart du bonus restant (courbe continue).

@@ -1,13 +1,13 @@
 {
   "meta": {"version":3},
   "markets": [
-    {"id":"fruit","stage":0,"name":"Citron","icon":"🍋","ref_price":2,"start_price":1.2,"price_min":0.1,"price_max":10,"price_step":0.1,"unit_cost_base":0.5,"unit_cost_per_quality":0.1},
-    {"id":"juice","stage":1,"name":"Jus","icon":"🧃","ref_price":5,"start_price":5,"price_min":0.5,"price_max":20,"price_step":0.25,"unit_cost_base":1.5,"unit_cost_per_quality":0.25},
-    {"id":"bottle","stage":2,"name":"Bouteille","icon":"🍾","ref_price":10,"start_price":10,"price_min":1,"price_max":40,"price_step":0.5,"unit_cost_base":3,"unit_cost_per_quality":0.5},
-    {"id":"orange","stage":3,"name":"Orange","icon":"🍊","ref_price":3,"start_price":2,"price_min":0.1,"price_max":15,"price_step":0.1,"unit_cost_base":0.8,"unit_cost_per_quality":0.15},
-    {"id":"ojuice","stage":4,"name":"Jus d'orange","icon":"🥤","ref_price":7,"start_price":6,"price_min":0.5,"price_max":30,"price_step":0.25,"unit_cost_base":2,"unit_cost_per_quality":0.35},
-    {"id":"berry","stage":5,"name":"Fraise","icon":"🍓","ref_price":4,"start_price":3,"price_min":0.1,"price_max":20,"price_step":0.1,"unit_cost_base":1,"unit_cost_per_quality":0.2},
-    {"id":"jam","stage":6,"name":"Confiture","icon":"🍯","ref_price":12,"start_price":10,"price_min":1,"price_max":50,"price_step":0.5,"unit_cost_base":3.5,"unit_cost_per_quality":0.6}
+    {"id":"fruit","stage":0,"name":"Citron","icon":"🍋","ref_price":2,"start_price":1.2,"price_min":0.1,"price_max":999,"price_step":0.1,"unit_cost_base":0.5,"unit_cost_per_quality":0.1},
+    {"id":"juice","stage":1,"name":"Jus","icon":"🧃","ref_price":5,"start_price":5,"price_min":0.1,"price_max":999,"price_step":0.25,"unit_cost_base":1.5,"unit_cost_per_quality":0.25},
+    {"id":"bottle","stage":2,"name":"Bouteille","icon":"🍾","ref_price":10,"start_price":10,"price_min":0.1,"price_max":999,"price_step":0.5,"unit_cost_base":3,"unit_cost_per_quality":0.5},
+    {"id":"orange","stage":3,"name":"Orange","icon":"🍊","ref_price":3,"start_price":2,"price_min":0.1,"price_max":999,"price_step":0.1,"unit_cost_base":0.8,"unit_cost_per_quality":0.15},
+    {"id":"ojuice","stage":4,"name":"Jus d'orange","icon":"🥤","ref_price":7,"start_price":6,"price_min":0.1,"price_max":999,"price_step":0.25,"unit_cost_base":2,"unit_cost_per_quality":0.35},
+    {"id":"berry","stage":5,"name":"Fraise","icon":"🍓","ref_price":4,"start_price":3,"price_min":0.1,"price_max":999,"price_step":0.1,"unit_cost_base":1,"unit_cost_per_quality":0.2},
+    {"id":"jam","stage":6,"name":"Confiture","icon":"🍯","ref_price":12,"start_price":10,"price_min":0.1,"price_max":999,"price_step":0.5,"unit_cost_base":3.5,"unit_cost_per_quality":0.6}
   ],
   "market": {"temperature":0.4,"share_smoothing_s":8,"demand_wave_amp":0.5,"demand_wave_period_s":40},
   "segments": [
@@ -116,7 +116,8 @@
     {"market":"jam","id":"monkey","name":"Bocal Copieur","icon":"🐒","color":"#4aa3c7","desc":"Imite le leader, à ±5 %.","behavior":"follow","start_price":12,"price_floor_margin":0.1,"behavior_param":0.05,"quality":2.5,"quality_max":3.5,"prod_per_min":152,"stock_cap":95,"prod_per_level":0.05,"quality_per_level":0.12}
   ],
   "ai": {"price_interval_s":8,"level_tau_s":60},
-  "auction": {"unlock_level":3,"duration_s":120,"start_bid":0.3,"raise":0.1,"ai_bid_every_s":7,"ai_interest":0.6,"extend_s":10,"resale_chance":0.3,"offer_every_s":150,"offer_price":1.1,"reply_s":6,"accept_at":1,"rival_bonus_quality":0.25,"rival_bonus_prod":0.15,"event_every_s":420,"event_lots":3,"first_event_s":45,"retry_s":120,"retry_raise":0.15,"rival_trade_every_s":200,"rival_trade_chance":0.5},
+  "price_slider": {"knee_price":100,"knee_pos":0.9,"steps":[{"below":10,"step":0.1},{"below":100,"step":0.5},{"below":1e9,"step":1}]},
+  "auction": {"unlock_level":3,"duration_s":120,"start_bid":0.3,"raise":0.1,"ai_bid_every_s":4,"ai_interest":0.9,"ai_interest_other":0.3,"ai_other_max":0.8,"ai_max_mult":1.25,"ai_counter_s":2,"ai_pride":0.06,"ai_pride_cap":1.25,"extend_s":10,"resale_chance":0.3,"offer_every_s":150,"offer_price":1.1,"reply_s":6,"accept_at":1,"rival_bonus_quality":0.25,"rival_bonus_prod":0.15,"event_every_s":420,"event_lots":3,"first_event_s":45,"retry_s":120,"retry_raise":0.15,"rival_trade_every_s":200,"rival_trade_chance":0.5},
   "levels": [
     {"level":1,"unlock":"harvest","reward":0},
     {"level":2,"unlock":"press","reward":60},

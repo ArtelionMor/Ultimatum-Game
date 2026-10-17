@@ -401,3 +401,9 @@ main { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 12px 14px 16px; }
 .rc-vs.up { background: var(--you); color: #06210f; }
 .rc-vs.down { background: #5a2626; color: #ffb3b3; }
 .rc-vs.same { background: var(--panel2); color: var(--muted); }
+
+/* Boxed E: the player's recipe is equipped (filled) or not (dashed) */
+.eq-badge { display: inline-block; font-size: 10px; font-weight: 900; line-height: 13px; width: 15px; text-align: center; border: 1.5px dashed var(--muted); color: var(--muted); border-radius: 4px; vertical-align: middle; }
+.eq-badge.on { border-style: solid; border-color: var(--you); background: var(--you); color: #06210f; }
+/* Seller quality next to its price */
+.q { color: #ffcf4a; }

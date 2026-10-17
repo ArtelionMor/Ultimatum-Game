@@ -4,7 +4,7 @@
 
 import { previewPreference, segmentShare, score } from '../market.js';
 import { unitCost } from '../factory.js';
-import { mkOf, sellersOf, shareOf, priceBounds, setPrice, monopolistOf } from '../sim.js';
+import { mkOf, sellersOf, shareOf, priceBounds, setPrice, monopolistOf, nudgePrice, priceToPos, posToPrice } from '../sim.js';
 import { price as fPrice, pct, stars, money } from '../format.js';
 import { retrigger } from './fx.js';
 import { play } from './sound.js';
@@ -29,10 +29,10 @@ export function initMarket(game) {
       if (src) { retrigger($('price-value'), 'bump'); play('tick', 0.25); }
     }
   };
-  slider.addEventListener('input', () => apply(Number(slider.value)));
-  const step = () => priceBounds(G.cfg, G.st, G.market).step;
-  holdRepeat($('price-minus'), () => apply(G.st.mk[G.market].you.price - step(), 'btn'));
-  holdRepeat($('price-plus'), () => apply(G.st.mk[G.market].you.price + step(), 'btn'));
+  // The slider runs 0..1000 on a log scale (see priceToPos).
+  slider.addEventListener('input', () => apply(posToPrice(G.cfg, priceBounds(G.cfg, G.st, G.market), Number(slider.value) / 1000)));
+  holdRepeat($('price-minus'), () => apply(nudgePrice(G.cfg, G.st.mk[G.market].you.price, -1), 'btn'));
+  holdRepeat($('price-plus'), () => apply(nudgePrice(G.cfg, G.st.mk[G.market].you.price, 1), 'btn'));
   $('cards').addEventListener('scroll', paintDots, { passive: true });
   // Cards are refreshed in place, so "?" clicks are caught on the container.
   $('cards').addEventListener('click', e => { const b = e.target.closest('[data-help]'); if (b) openHelp(b.dataset.help); });
@@ -77,8 +77,7 @@ function renderPrice() {
   const row = cfg.markets.find(r => r.id === G.market), you = st.mk[G.market].you;
   const b = priceBounds(cfg, st, G.market);
   const slider = $('price-slider');
-  slider.min = b.min; slider.max = b.max; slider.step = b.step;
-  if (document.activeElement !== slider) slider.value = you.price;
+  if (document.activeElement !== slider) slider.value = Math.round(priceToPos(cfg, b, you.price) * 1000);
   const m = you.price - unitCost(row, you.quality);
   $('price-value').textContent = fPrice(you.price);
   $('margin').textContent = (m >= 0 ? '+' : '') + fPrice(m);
@@ -143,10 +142,10 @@ export function renderMarket() {
   const m = st.mk[G.market], mk = mkOf(cfg, G.market);
   const sh = shareOf(st, G.market);
   const holder = monopolistOf(st, G.market);
-  const priceOf = id => id === 'you' ? m.you.price : m.rivals.find(r => r.id === id).price;
+  const seller = id => (id === 'you' ? m.you : m.rivals.find(r => r.id === id));
   const cards = [card('📊 Tout le marché', `Ta part : <b>${pct(sh.you)}</b>`,
     meta.map(s => ({ value: sh[s.id], color: s.color })),
-    meta.map(s => row(s, sh[s.id], `<span>${s.id === holder ? '👑 ' : ''}${fPrice(priceOf(s.id))}</span>`)).join(''),
+    meta.map(s => row(s, sh[s.id], `<span>${s.id === holder ? '👑 ' : ''}${fPrice(seller(s.id).price)} · <span class="q">${stars(seller(s.id).quality)}</span></span>`)).join(''),
     holder ? '👑' : '', 'all')];
 
   if (st.unlocked.segments) {

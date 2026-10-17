@@ -67,6 +67,14 @@ function equippedOn(type) {
 
 // Card: the struck line is what the player runs today (or the base recipe),
 // the green line is this card; a chip says what is equipped.
+// Boxed "E" next to a recipe the player owns: equipped somewhere or not.
+function eqBadge(r) {
+  if (!G.st.auc.owned[r.id]) return '';
+  const u = recipeUse(G.st, r);
+  return u.using ? `<span class="eq-badge on" title="Équipée ${u.using}/${u.total}">E</span>`
+    : '<span class="eq-badge" title="Pas équipée">E</span>';
+}
+
 function card(r, body) {
   const { cfg } = G, rar = rarityOf(cfg, r), d = machineDef(cfg, r.machine);
   const eq = equippedOn(r.machine), isEq = eq && eq.r.id === r.id;
@@ -85,7 +93,7 @@ function card(r, body) {
   }
   return `<div class="rcard" style="--rar:${rar.color}">
     <div class="rc-top"><span class="rc-rar">${rar.id}</span><span class="rc-machine">${d.icon} ${d.name}</span></div>
-    <div class="rc-namerow"><div class="rc-name">${r.name}</div>${chip ? `<div class="rc-eqrow">${chip}</div>` : ''}</div>
+    <div class="rc-namerow"><div class="rc-name">${r.name} ${eqBadge(r)}</div>${chip ? `<div class="rc-eqrow">${chip}</div>` : ''}</div>
     <div class="rc-formula"><s>${recipeText(cfg, ref)}</s><b>${recipeText(cfg, r)}</b></div>
     ${body}</div>`;
 }
@@ -215,7 +223,7 @@ export function renderOfferNotif() {
   $('app').classList.toggle('has-notif', !!o);
   if (!o) { box.classList.add('hidden'); box.dataset.html = ''; return; }
   const r = rec(o.recipe), more = st.auc.offersIn.length - 1, d = machineDef(G.cfg, r.machine), u = recipeUse(st, r);
-  const tier = `<span class="rc-mini" style="--rar:${rarityOf(G.cfg, r).color}">${r.rarity}</span> ${d.icon} ${d.name}`;
+  const tier = `<span class="rc-mini" style="--rar:${rarityOf(G.cfg, r).color}">${r.rarity}</span> ${d.icon} ${d.name} ${eqBadge(r)}`;
   const html = `<div class="on-text">✉️ <b>${who(o.from)}</b> ${o.retry ? 'revient et ' : ''}veut racheter ta recette ${tier} pour <b>${money(o.price)}</b>${u.using ? ` <span class="muted">· équipée ${u.using}/${u.total}</span>` : ''}${more ? ` <span class="muted">(+${more} autre${more > 1 ? 's' : ''})</span>` : ''}</div>
     <div class="on-btns"><button class="btn small danger" data-refuse="${o.id}">Refuser</button><button class="btn small rc-btn" data-accept="${o.id}">Vendre</button></div>`;
   fill(box, html);

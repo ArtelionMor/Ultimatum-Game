@@ -11,7 +11,7 @@ import { createGrid, stepGrid, placeCost, machineDef, machineRate, upgradeCost, 
   placeMachine, placeBelt, removeMachine, removeBelt, beltAt, countOf, expandGrid } from './grid.js';
 import { createRival, repriceRival, approachRival } from './ai.js';
 import { initProgress, migrateProgress } from './progress.js';
-import { createAuction, stepAuction, rivalRecipeCount, migrateAuction } from './auction.js';
+import { createAuction, stepAuction, rivalRecipeCount, migrateAuction, newMachineRecipe } from './auction.js';
 import { createBrand, stepBrand } from './monopoly.js';
 
 export const SAVE_VERSION = 3;
@@ -229,6 +229,7 @@ export function buyMachine(cfg, st, type, x, y, rot) {
   const m = placeMachine(st.grid, type, x, y, rot);
   if (!m) return { ok: false, why: 'place' };
   const broken = m.broken; delete m.broken;
+  m.recipe = newMachineRecipe(st, type);
   st.money -= cost;
   st.stats.built[type] = (st.stats.built[type] || 0) + 1;
   derive(cfg, st);
@@ -328,16 +329,38 @@ export function buyStock(cfg, st) {
 }
 
 // Price can't go under the unit cost (resale at a loss is not allowed).
+// Player price range. Selling under the unit cost is allowed (the margin turns red).
+// `step` is the price step at the current price (finer for cheap prices).
 export function priceBounds(cfg, st, id) {
   const row = cfg.markets.find(m => m.id === id);
-  const step = row.price_step;
-  const min = Math.max(row.price_min, Math.ceil(unitCost(row, st.mk[id].you.quality) / step - 1e-9) * step);
-  return { min: Math.round(min * 100) / 100, max: row.price_max, step };
+  return { min: row.price_min, max: row.price_max, step: priceStep(cfg, st.mk[id].you.price) };
+}
+
+export function priceStep(cfg, p) {
+  return cfg.price_slider.steps.find(s => p < s.below - 1e-9).step;
+}
+
+// One click of +/- from price p (dir = +-1): the step of the band we move into.
+export function nudgePrice(cfg, p, dir) {
+  return dir > 0 ? p + priceStep(cfg, p) : p - priceStep(cfg, p - 1e-6);
+}
+
+// Slider position (0..1) <-> price: log scale, prices above the knee in the last part.
+export function priceToPos(cfg, b, p) {
+  const { knee_price: k, knee_pos: kp } = cfg.price_slider;
+  p = Math.max(b.min, Math.min(b.max, p));
+  return p <= k ? kp * Math.log(p / b.min) / Math.log(k / b.min)
+    : kp + (1 - kp) * Math.log(p / k) / Math.log(b.max / k);
+}
+export function posToPrice(cfg, b, x) {
+  const { knee_price: k, knee_pos: kp } = cfg.price_slider;
+  return x <= kp ? b.min * Math.pow(k / b.min, x / kp) : k * Math.pow(b.max / k, (x - kp) / (1 - kp));
 }
 
 export function setPrice(cfg, st, id, price) {
   const b = priceBounds(cfg, st, id);
-  const p = Math.round(Math.round(Math.max(b.min, Math.min(b.max, price)) / b.step) * b.step * 100) / 100;
+  const c = Math.max(b.min, Math.min(b.max, price)), step = priceStep(cfg, c);
+  const p = Math.round(Math.max(b.min, Math.min(b.max, Math.round(c / step) * step)) * 100) / 100;
   const you = st.mk[id].you;
   if (p === you.price) return false;
   you.price = p;

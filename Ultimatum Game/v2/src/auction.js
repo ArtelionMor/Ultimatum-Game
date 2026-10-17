@@ -24,13 +24,14 @@ const pickOne = (list, rand) => list[Math.floor(rand() * list.length)];
 const recipeById = (cfg, id) => cfg.recipes.find(r => r.id === id);
 
 export function createAuction() {
-  return { lots: [], offersIn: [], offersOut: [], retries: [], listed: [], owned: {}, rivalOwned: {}, eventAt: 0, nextOfferT: 0, nextTradeT: 0, opened: false, seq: 1 };
+  return { lots: [], offersIn: [], offersOut: [], retries: [], listed: [], owned: {}, rivalOwned: {}, equip: {}, eventAt: 0, nextOfferT: 0, nextTradeT: 0, opened: false, seq: 1 };
 }
 
 // Older saves: fields added since.
 export function migrateAuction(a) {
   a.retries ||= [];
   a.listed ||= [];
+  a.equip ||= {};
   a.eventAt ??= 0;
   a.nextTradeT ??= 0;
   if (a.opened === undefined) a.opened = false;
@@ -54,12 +55,18 @@ const nextBid = l => (l.bidder ? round(l.bid * (1 + l.raise)) : l.bid);
 
 function openLot(cfg, st, r, rand) {
   const a = st.auc, A = cfg.auction, rar = rarityOf(cfg, r), aiMax = {};
-  for (const ref of rivalRefs(cfg, marketOfRecipe(cfg, r)))
-    if (rand() < A.ai_interest) aiMax[ref] = round(r.value * (0.5 + rand() * (rar.ai_max - 0.5)));
+  // Rivals of the recipe's market are keen; others sometimes join, with a lower ceiling.
+  const home = marketOfRecipe(cfg, r), cap = {};
+  for (const x of cfg.rivals) {
+    const ref = `${x.market}:${x.id}`, own = x.market === home;
+    if (rand() >= (own ? A.ai_interest : A.ai_interest_other)) continue;
+    aiMax[ref] = round(r.value * A.ai_max_mult * (own ? 1 : A.ai_other_max) * (0.6 + rand() * (rar.ai_max - 0.6)));
+    cap[ref] = round(aiMax[ref] * A.ai_pride_cap);
+  }
   const seller = a.owned[r.id] ? 'you' : a.rivalOwned[r.id] || null;
   if (seller) delete aiMax[seller];
   a.lots.push({ id: a.seq++, recipe: r.id, seller, bid: round(r.value * A.start_bid), bidder: null, raise: A.raise,
-    ends: st.t + A.duration_s, aiMax, aiNext: st.t + A.ai_bid_every_s * (0.5 + rand()) });
+    ends: st.t + A.duration_s, aiMax, cap, aiNext: st.t + A.ai_bid_every_s * (0.5 + rand()) });
 }
 
 // Advance timers; returns events { type, ... } for the UI.
@@ -98,6 +105,11 @@ export function stepAuction(cfg, st, dt, rand) {
       if (keen.length) {
         const ref = pickOne(keen, rand);
         if (l.bidder === 'you') { st.money += l.bid; ev.push({ type: 'outbid', recipe: l.recipe, by: ref }); }
+        // An outbid rival gets stubborn: its ceiling rises a bit, and it answers fast.
+        else if (l.bidder && l.cap && l.aiMax[l.bidder]) {
+          l.aiMax[l.bidder] = Math.min(l.cap[l.bidder], round(l.aiMax[l.bidder] * (1 + A.ai_pride)));
+          l.aiNext = st.t + A.ai_counter_s * (0.5 + rand());
+        }
         l.bid = price; l.bidder = ref;
         if (l.ends - st.t < A.extend_s) l.ends = st.t + A.extend_s;
       }
@@ -193,6 +205,7 @@ function sellToRival(st, recipeId, ref, price) {
   a.listed = a.listed.filter(id => id !== recipeId);
   st.money += price;
   for (const m of st.grid.machines) if (m.recipe === recipeId) m.recipe = null;
+  for (const t in a.equip) if (a.equip[t] === recipeId) a.equip[t] = null;
 }
 
 // Sell one of the player's recipes to the rival who asked.
@@ -245,9 +258,24 @@ export const usableRecipes = (cfg, st, type) =>
 // Run `recipeId` (or the base recipe if null) on every machine of `type`.
 // Ingredients waiting for the old recipe are lost. Returns how many changed.
 export function applyRecipeAll(cfg, st, type, recipeId) {
+  equipRecipe(st, type, recipeId);
   let n = 0;
   for (const m of st.grid.machines) if (m.type === type && m.recipe !== recipeId) { m.recipe = recipeId; m.buf = []; n++; }
   return n;
+}
+
+// Remember the recipe the player last chose for a machine type (null = base):
+// machines built later start with it.
+export function equipRecipe(st, type, recipeId) {
+  st.auc.equip[type] = recipeId || null;
+}
+
+// Recipe a newly built machine of this type starts with. Older saves have no
+// choice stored: copy an owned recipe the other machines of that type run.
+export function newMachineRecipe(st, type) {
+  const a = st.auc, owned = id => id && a.owned[id];
+  if (type in a.equip) return owned(a.equip[type]) ? a.equip[type] : null;
+  return st.grid.machines.find(m => m.type === type && owned(m.recipe))?.recipe || null;
 }
 
 export const recipeUse = (st, r) => ({

@@ -22,7 +22,7 @@ import { DIRS, ports, machineAt, beltAt, machineDef, placeCost, canPlaceMachine,
   selectRect, groupBox, groupMoveCheck, moveGroup } from '../grid.js';
 import { buyMachine, buyBelt, sellMachine, sellValue, sellBelt, machineInfo, upgradeMachine, stockInfo, buyStock,
   expandInfo, buyExpand, sellGroup } from '../sim.js';
-import { usableRecipes, applyRecipeAll, unseenRecipes } from '../auction.js';
+import { usableRecipes, applyRecipeAll, unseenRecipes, equipRecipe } from '../auction.js';
 import { recipeOf } from '../grid.js';
 import { recipeText } from './auction-view.js';
 import { money, perMin, fmt, stars } from '../format.js';
@@ -328,6 +328,7 @@ function onWidget(act, btn) {
     const list = usableRecipes(cfg, st, m.type), cur = recipeOf(cfg, m);
     const next = list[(list.findIndex(r => r.id === cur.id) + 1) % list.length];
     m.recipe = next.base ? null : next.id;
+    equipRecipe(st, m.type, m.recipe);   // next machines of this type start with it
     m.buf = [];   // ingredients of the old recipe are lost
     play('tick', 0.3);
     floatText(btn, next.name, 'gold');
