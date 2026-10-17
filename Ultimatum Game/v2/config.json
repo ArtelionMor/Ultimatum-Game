@@ -1,24 +1,24 @@
 {
   "meta": { "version": 1 },
   "product": [
-    { "id": "juice", "name": "Jus", "icon": "🧃", "ref_price": 10, "start_price": 8, "price_min": 1, "price_max": 40, "price_step": 0.5, "unit_cost_base": 3, "unit_cost_per_quality": 1 }
+    { "id": "juice", "name": "Jus", "icon": "🧃", "ref_price": 10, "start_price": 8, "price_min": 1, "price_max": 40, "price_step": 0.5, "unit_cost_base": 3, "unit_cost_per_quality": 0.5 }
   ],
-  "market": { "temperature": 0.6, "share_smoothing_s": 8 },
+  "market": { "temperature": 0.5, "share_smoothing_s": 8, "demand_wave_amp": 0.5, "demand_wave_period_s": 40 },
   "segments": [
     { "id": "eco",  "name": "Économes", "icon": "🪙", "demand_per_min": 250, "a": 4.0, "b": 0.5, "refuse_below": -3.2 },
     { "id": "std",  "name": "Standards", "icon": "🙂", "demand_per_min": 220, "a": 2.5, "b": 1.0, "refuse_below": -1.5 },
     { "id": "prem", "name": "Premium",  "icon": "💎", "demand_per_min": 130, "a": 0.6, "b": 1.5, "refuse_below": 2.5 }
   ],
   "stations": [
-    { "id": "harvest", "product": "juice", "order": 1, "name": "Cueillette",    "icon": "🍋", "base_rate": 40, "rate_mult": 1.3, "base_cost": 25, "cost_mult": 1.32, "quality_per_level": 0 },
-    { "id": "press",   "product": "juice", "order": 2, "name": "Pressage",      "icon": "🫗", "base_rate": 32, "rate_mult": 1.3, "base_cost": 30, "cost_mult": 1.32, "quality_per_level": 0 },
-    { "id": "bottle",  "product": "juice", "order": 3, "name": "Embouteillage", "icon": "🍾", "base_rate": 24, "rate_mult": 1.3, "base_cost": 20, "cost_mult": 1.32, "quality_per_level": 0.25 }
+    { "id": "harvest", "product": "juice", "order": 1, "name": "Cueillette",    "icon": "🍋", "base_rate": 40, "rate_mult": 1.3, "base_cost": 25, "cost_mult": 1.38, "quality_per_level": 0 },
+    { "id": "press",   "product": "juice", "order": 2, "name": "Pressage",      "icon": "🫗", "base_rate": 32, "rate_mult": 1.3, "base_cost": 30, "cost_mult": 1.38, "quality_per_level": 0 },
+    { "id": "bottle",  "product": "juice", "order": 3, "name": "Embouteillage", "icon": "🍾", "base_rate": 24, "rate_mult": 1.3, "base_cost": 20, "cost_mult": 1.38, "quality_per_level": 0.25 }
   ],
   "player": { "start_money": 10, "start_quality": 1, "quality_max": 5, "stock_base": 30, "stock_mult": 1.5, "stock_base_cost": 40, "stock_cost_mult": 1.6 },
   "competitors": [
-    { "id": "cheap",   "name": "Le Casseur de prix", "icon": "🪓", "color": "#e8833a", "desc": "Toujours moins cher que toi. Qualité bof.", "behavior": "undercut", "start_price": 6,  "price_floor_margin": 0.1, "behavior_param": 0.05, "quality": 1.0, "quality_step": 0.1,  "quality_max": 2.0, "prod_per_min": 250, "prod_growth": 0.06, "stock_cap": 200 },
-    { "id": "premium", "name": "Le Premium",         "icon": "🎩", "color": "#9b6bdf", "desc": "Cher, mais une qualité au top.",           "behavior": "premium",  "start_price": 18, "price_floor_margin": 0.3, "behavior_param": 0.03, "quality": 4.0, "quality_step": 0.1,  "quality_max": 5.0, "prod_per_min": 120, "prod_growth": 0.06, "stock_cap": 80 },
-    { "id": "follower","name": "Le Suiveur",         "icon": "🦎", "color": "#4aa3c7", "desc": "Copie le prix du leader, à ±5 %.",          "behavior": "follow",   "start_price": 10, "price_floor_margin": 0.1, "behavior_param": 0.05, "quality": 2.5, "quality_step": 0.1,  "quality_max": 3.5, "prod_per_min": 200, "prod_growth": 0.06, "stock_cap": 150 }
+    { "id": "cheap",   "name": "Le Casseur de prix", "icon": "🪓", "color": "#e8833a", "desc": "Toujours moins cher que toi. Qualité bof.", "behavior": "undercut", "start_price": 6,  "price_floor_margin": 0.1, "behavior_param": 0.05, "quality": 1.0, "quality_step": 0.05, "quality_max": 1.5, "prod_per_min": 250, "prod_growth": 0.06, "stock_cap": 200 },
+    { "id": "premium", "name": "Le Premium",         "icon": "🎩", "color": "#9b6bdf", "desc": "Cher, mais une qualité au top.",           "behavior": "premium",  "start_price": 18, "price_floor_margin": 0.3, "behavior_param": 0.03, "quality": 4.0, "quality_step": 0.05, "quality_max": 4.5, "prod_per_min": 120, "prod_growth": 0.06, "stock_cap": 80 },
+    { "id": "follower","name": "Le Suiveur",         "icon": "🦎", "color": "#4aa3c7", "desc": "Copie le prix du leader, à ±5 %.",          "behavior": "follow",   "start_price": 10, "price_floor_margin": 0.1, "behavior_param": 0.05, "quality": 2.5, "quality_step": 0.05, "quality_max": 3.0, "prod_per_min": 200, "prod_growth": 0.06, "stock_cap": 150 }
   ],
   "ai": { "price_interval_s": 8, "upgrade_interval_s": 60 },
   "goal": { "share_target": 0.6, "hold_s": 60 },

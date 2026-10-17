@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#14161c">
+  <title>Market Ultimatum v2</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header id="hud">
+    <div id="goal">
+      <div class="goal-head">
+        <span class="goal-title">🎯 <b id="goal-text">Contrôle 60 % du marché pendant 60 s</b></span>
+        <button id="debug-toggle" title="Debug" aria-label="Debug">🐞</button>
+      </div>
+      <div class="goal-bar" id="goal-bar">
+        <div class="goal-fill" id="goal-fill"></div>
+        <div class="goal-mark" id="goal-mark"></div>
+      </div>
+      <div class="goal-sub"><span id="goal-share">Ta part : 0 %</span><span id="goal-hold"></span></div>
+    </div>
+    <div class="hud-row">
+      <div id="money-box"><span class="coin">💰</span><span id="money">0 $</span></div>
+      <div id="income">+0 $/min</div>
+    </div>
+    <div id="hint">👉 …</div>
+  </header>
+
+  <main>
+    <section id="screen-factory" class="screen active">
+      <canvas id="floor" height="180"></canvas>
+      <div class="card" id="stock-card">
+        <div class="row">
+          <span class="label">📦 Entrepôt</span>
+          <span id="stock-text">0 / 30</span>
+        </div>
+        <div class="bar"><div class="bar-fill" id="stock-fill"></div></div>
+        <button class="btn up hidden" id="stock-btn"></button>
+      </div>
+      <div id="stations"></div>
+    </section>
+
+    <section id="screen-market" class="screen">
+      <div class="card" id="price-card">
+        <div class="row">
+          <span class="label">🏷️ Ton prix</span>
+          <span id="price-value" class="big">8 $</span>
+        </div>
+        <div class="price-ctrl">
+          <button class="btn round" id="price-minus" aria-label="Baisser le prix">−</button>
+          <input type="range" id="price-slider" min="1" max="40" step="0.5">
+          <button class="btn round" id="price-plus" aria-label="Monter le prix">+</button>
+        </div>
+        <div class="kv">
+          <span>Coût <b id="unit-cost">3 $</b></span>
+          <span>Marge <b id="margin">+5 $</b></span>
+          <span>Qualité <b id="quality">★1</b></span>
+        </div>
+        <div class="kv">
+          <span>Ventes <b id="sales-rate">0/min</b></span>
+          <span>Part prévue <b id="pred-share">0 %</b></span>
+        </div>
+        <div id="price-advice" class="advice"></div>
+      </div>
+
+      <div class="card" id="share-card">
+        <div class="label">📊 Parts de marché</div>
+        <div class="stack" id="share-stack"></div>
+        <div class="legend" id="share-legend"></div>
+      </div>
+
+      <div class="card hidden" id="seg-card">
+        <div class="label">👥 Qui achète chez toi ?</div>
+        <div id="segments"></div>
+      </div>
+
+      <div class="card" id="rivals-card">
+        <div class="label">⚔️ Tes rivaux</div>
+        <div id="rivals"></div>
+      </div>
+    </section>
+  </main>
+
+  <nav id="tabs">
+    <button class="tab active" data-tab="factory">🏭 Usine</button>
+    <button class="tab locked" data-tab="market"><span class="tab-label">🔒 Marché</span><span class="dot hidden"></span></button>
+  </nav>
+
+  <div id="fx"></div>
+  <div id="toasts"></div>
+
+  <div id="debug" class="hidden">
+    <div class="row"><b>Debug</b><button class="btn small" id="debug-close">✕</button></div>
+    <div class="row">Vitesse
+      <span class="seg-btns" id="speed-btns">
+        <button class="btn small" data-speed="1">×1</button>
+        <button class="btn small" data-speed="10">×10</button>
+        <button class="btn small" data-speed="50">×50</button>
+      </span>
+    </div>
+    <div class="row">Température <input type="number" id="dbg-temp" step="0.05" min="0.05"></div>
+    <div id="dbg-segments"></div>
+    <div class="row">
+      <button class="btn small" id="dbg-money">+1K $</button>
+      <button class="btn small danger" id="dbg-reset">Reset</button>
+    </div>
+  </div>
+
+  <div id="win" class="overlay hidden">
+    <div class="win-box">
+      <div class="win-crown">👑</div>
+      <h1>Marché contrôlé</h1>
+      <p id="win-text"></p>
+      <button class="btn primary" id="win-replay">Rejouer</button>
+    </div>
+  </div>
+</div>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

@@ -39,14 +39,15 @@ export function segmentChoice(seg, sellers, refPrice, temperature, needStock = t
 // consumed in place. A seller asked for more than it holds serves every segment
 // pro rata; the customers it could not serve pick again among those who still
 // have stock.
+// `demandMult` scales every segment's demand (rush hours).
 // Returns { sold: {id: units}, seg: {segId: {by: {id: units}, refused, noStock, demand}} }.
-export function stepMarket(cfg, product, sellers, dt) {
+export function stepMarket(cfg, product, sellers, dt, demandMult = 1) {
   const T = cfg.market.temperature, ref = product.ref_price;
   const out = { sold: {}, seg: {} };
   const left = {};
   for (const s of sellers) out.sold[s.id] = 0;
   for (const seg of cfg.segments) {
-    const row = { by: {}, refused: 0, noStock: 0, demand: seg.demand_per_min * dt / 60 };
+    const row = { by: {}, refused: 0, noStock: 0, demand: seg.demand_per_min * demandMult * dt / 60 };
     for (const s of sellers) row.by[s.id] = 0;
     out.seg[seg.id] = row;
     left[seg.id] = row.demand;
@@ -97,6 +98,12 @@ export function previewPreference(cfg, product, sellers) {
   const res = {};
   for (const seg of cfg.segments) res[seg.id] = segmentChoice(seg, sellers, product.ref_price, cfg.market.temperature, false);
   return res;
+}
+
+// Rush hours: demand oscillates around its average, so a bigger stock sells more at the peaks.
+export function demandMultiplier(cfg, t) {
+  const { demand_wave_amp: amp = 0, demand_wave_period_s: period = 60 } = cfg.market;
+  return 1 + amp * Math.sin(2 * Math.PI * t / period);
 }
 
 // --- Share tracking: exponential moving average of sales flows --------------
