@@ -2,16 +2,14 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "ultimatum-web",
+      "name": "market-ultimatum",
       "runtimeExecutable": "python",
       "runtimeArgs": [
-        "-m",
-        "http.server",
-        "8792",
-        "--directory",
-        "Ultimatum Game/web"
+        "tools/serve.py",
+        "8795",
+        "."
       ],
-      "port": 8792
+      "port": 8795
     },
     {
       "name": "donjon-chaton",
@@ -24,15 +22,6 @@
         "/Users/teliausimontroalen/Donjon & Chaton/app"
       ],
       "port": 8793
-    },
-    {
-      "name": "level-designer",
-      "runtimeExecutable": "python",
-      "runtimeArgs": [
-        "Ultimatum Game/tools/level-designer/serve.py",
-        "8791"
-      ],
-      "port": 8791
     },
     {
       "name": "colo-web",
